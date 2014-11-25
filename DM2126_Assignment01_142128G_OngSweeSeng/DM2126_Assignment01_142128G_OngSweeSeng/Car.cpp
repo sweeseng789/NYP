@@ -12,14 +12,17 @@ using std::getline;
 using std::ofstream;
 using std::string;
 
-
+unsigned int CCar::count = 0;
 CCar::CCar(void)
 {
+	count ++;
+	cout << "CCar created" << endl;
 }
-
 
 CCar::~CCar(void)
 {
+	count --;
+	cout << "CCar deltetd" << endl;
 }
 
 
@@ -41,15 +44,15 @@ void CCar::printTest(void)
 {
 	cout << CCar::returnVehicleType() << endl;
 	cout << CCar::returnLicensePlate() << endl;
-	cout << CCar::returnYear() << '/' << CCar::returnMonth() << '/' << CCar::returnDay() << endl;
+	cout << CCar::returnVyear() << '/' << CCar::returnVmonth() << '/' << CCar::returnVday() << endl;
 	cout << CCar::returnEngineCapacity() << endl;
 	cout << CCar::returnEcoFriendly() << endl;
-	cout << CCar::returnCount() << "count" << endl;
+	cout << CCar::returnCount() << "car count" << endl;
 }
 
 void CCar::calculateRoadTax(void)
 {
-	if(age < 5 && EngineCapacity < 1600 && Eco_Friendly == false)
+/*	if(age < 5 && EngineCapacity < 1600 && Eco_Friendly == false)
 	{
 		AnnualRoadTax = 1;
 	}
@@ -80,10 +83,15 @@ void CCar::calculateRoadTax(void)
 	else if (age >= 5 && EngineCapacity >= 1600 && Eco_Friendly == true)
 	{
 		AnnualRoadTax = 1 * 1.2 * 2 * 0.8;
-	}
+	}*/
 }
 
 double CCar::returnRoadTax() const
 {
 	return AnnualRoadTax;
+}
+
+unsigned int CCar::returnCount() const
+{
+	return count;
 }

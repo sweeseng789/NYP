@@ -12,14 +12,18 @@ using std::getline;
 using std::ofstream;
 using std::string;
 
-
+unsigned int CBus::count = 0;
 CBus::CBus(void)
 {
+	count ++;
+	cout << "CBus created" << endl;
 }
 
 
 CBus::~CBus(void)
 {
+	count --;
+	cout << "CBus deleted" << endl;
 }
 
 
@@ -37,15 +41,15 @@ void CBus::printTest(void)
 {
 	cout << CBus::returnVehicleType() << endl;
 	cout << CBus::returnLicensePlate() << endl;
-	cout << CBus::returnYear() << '/' << CBus::returnMonth() << '/' << CBus::returnDay() << endl;
+	cout << CBus::returnVyear() << '/' << CBus::returnVmonth() << '/' << CBus::returnVday() << endl;
 	cout << CBus::returnEngineCapacity() << endl;
 	cout << CBus::returnSeatingCapacity() << endl;
-	cout << CBus::returnCount() << "count" << endl;
+	cout << CBus::returnCount() << "bus count" << endl;
 }
 
 void CBus::calculateRoadTax()
 {
-	if (age < 5 && SeatingCapacity < 40)
+/*	if (age < 5 && SeatingCapacity < 40)
 	{
 		AnnualRoadTax = 1;
 	}
@@ -60,10 +64,14 @@ void CBus::calculateRoadTax()
 	else if (age >= 5 && SeatingCapacity >= 40)
 	{
 		AnnualRoadTax = 1 * 1.2 * 2;
-	}
+	}*/
 }
 
 double CBus::returnRoadTax() const
 {
 	return AnnualRoadTax;
+}
+unsigned int CBus::returnCount() const
+{
+	return count;
 }

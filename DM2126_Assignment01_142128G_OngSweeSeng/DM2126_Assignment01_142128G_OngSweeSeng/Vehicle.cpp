@@ -12,18 +12,13 @@ using std::getline;
 using std::ofstream;
 using std::string;
 
-unsigned int CVehicle::count = 0;
 
 CVehicle::CVehicle(void)
 {
-	count++;
 }
-
 
 CVehicle::~CVehicle(void)
 {
-	count--;
-	cout << "delete" << endl;
 }
 
 void CVehicle::setVehicleType(string VehicleTypeM)
@@ -65,12 +60,34 @@ void CVehicle::calculateRoadTax(void)
 	cout << "Undefined" << endl;
 }
 
-unsigned int CVehicle::returnCount() const
-{
-	return count;
-}
-
 double CVehicle::returnRoadTax() const
 {
 	return 0;
+}
+
+unsigned int CVehicle::returnCount() const
+{
+	return 0;
+}
+
+int CVehicle::returnVyear() const
+{
+	return Vyear;
+}
+S
+int CVehicle::returnVmonth() const
+{
+	return Vmonth;
+}
+
+int CVehicle::returnVday() const
+{
+	return Vday;
+}
+
+void CVehicle::setVDate(int VyearM, int VmonthM, int VdayM)
+{
+	//Vyear = VyearM;
+	Vmonth = VmonthM;
+	Vday = VdayM;
 }

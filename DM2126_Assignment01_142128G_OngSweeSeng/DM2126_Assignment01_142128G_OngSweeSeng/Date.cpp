@@ -21,11 +21,21 @@ CDate::CDate(void)
 	day = 0;
 }
 
+CDate::CDate(int yearM, int monthM, int dayD)
+{
+	year = yearM;
+	month = monthM;
+	day = dayD;
+}
 
 CDate::~CDate(void)
 {
 }
 
+void CDate::printData()
+{
+	cout << year << '/' << month << '/' << day << endl;
+}
 void CDate::setDate(int yearM, int monthM, int dayM)
 {
 	year = yearM;
@@ -35,46 +45,23 @@ void CDate::setDate(int yearM, int monthM, int dayM)
 
 void CDate::calcDateDifference() 
 {
-	if (year > 2014)
+	if (year < 2014)
 	{
-		yearD = year - 2014;
+		dateDiff = 2014 - year;
 	}
-	else if (year < 2014)
+	else if (year == 2014)
 	{
-		yearD = 2014 - year;
-	}
-	else
-	{
-		yearD = 0;
+		dateDiff = 0;
 	}
 
-	if (month > 11)
+	if (month <= 11)
 	{
-		monthD = month - 11;
+		dateDiff += 0;
 	}
-	else if (month < 11)
+	else if (month > 11)
 	{
-		monthD = 11 - month;
+		dateDiff += 1;
 	}
-	else
-	{
-		monthD = 0;
-	}
-
-	if (day > 1)
-	{
-		dayD = day - 1;
-	}
-	else if (day < 1)
-	{
-		dayD = 1 - day;
-	}
-	else
-	{
-		dayD = 0;
-	}
-
-	age = yearD;
 }
 
 int CDate::returnYear() const
@@ -82,12 +69,17 @@ int CDate::returnYear() const
 	return year;
 }
 
+int CDate::returnDay() const
+{
+	return day;
+}
+
 int CDate::returnMonth() const
 {
 	return month;
 }
 
-int CDate::returnDay() const
+int CDate::returnDateDiff() const
 {
-	return day;
+	return dateDiff;
 }

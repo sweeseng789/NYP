@@ -1,0 +1,28 @@
+﻿Build started 29/10/2014 12:15:01 PM.
+     1>Project "c:\Users\Eng\documents\visual studio 2010\Projects\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"c:\users\eng\documents\visual studio 2010\Projects\Graphics\\glew\include" /I"c:\users\eng\documents\visual studio 2010\Projects\Graphics\\glfw\include" /I"c:\users\eng\documents\visual studio 2010\Projects\Graphics\\Common\Source" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\main.cpp Source\Scene1.cpp Source\shader.cpp
+         Application.cpp
+         main.cpp
+         Scene1.cpp
+         shader.cpp
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\Release\Application.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\Release" /LIBPATH:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\\glew\lib" /LIBPATH:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\\glfw\lib-msvc100" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\Application.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\Release\Application.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\Release\Application.lib" /MACHINE:X86 Release\Application.obj
+         Release\main.obj
+         Release\Scene1.obj
+         Release\shader.obj
+         Generating code
+         Finished generating code
+         Application.vcxproj -> c:\users\eng\documents\visual studio 2010\Projects\Graphics\Release\Application.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"c:\users\eng\documents\visual studio 2010\Projects\Graphics\Release\Application.exe;#1" /manifest Release\Application.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\Application.unsuccessfulbuild".
+         Touching "Release\Application.lastbuildstate".
+     1>Done Building Project "c:\Users\Eng\documents\visual studio 2010\Projects\Graphics\Application\Application.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.34

@@ -12,8 +12,10 @@ public:
 
 	int returnSeatingCapacity () const;
 	double returnRoadTax(void) const;
+	unsigned int returnCount() const;
 protected:
 	int SeatingCapacity;
+	static unsigned int count;
 private:
 	
 };

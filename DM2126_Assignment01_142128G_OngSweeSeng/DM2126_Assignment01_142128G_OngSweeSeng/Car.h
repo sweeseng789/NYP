@@ -1,5 +1,8 @@
 #pragma once
 #include "Vehicle.h"
+#include <string>
+
+using std::string;
 class CCar : public CVehicle
 {
 public:
@@ -12,9 +15,11 @@ public:
 
 	bool returnEcoFriendly(void) const;//Accessor
 	double returnRoadTax(void) const;
+	unsigned int returnCount() const;
 
 
 protected:
+	static unsigned int count;
 	bool Eco_Friendly;
 	
 };

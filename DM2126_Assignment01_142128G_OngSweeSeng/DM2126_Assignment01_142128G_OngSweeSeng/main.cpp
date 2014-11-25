@@ -17,8 +17,9 @@ using std::istringstream;
 using std::boolalpha;
 int main()
 {
-	CVehicle * a;
+	CVehicle * a;		
 	string something[7];
+	CVehicle * sizeOfVehicle[100];
 
 	ifstream openFile("BY.txt");
 	while (openFile.good())
@@ -27,7 +28,6 @@ int main()
 		if (something[0] == "car")
 		{
 			a = new CCar();
-
 			a ->setVehicleType(something[0]);
 
 			getline(openFile, something[1], ',');
@@ -39,7 +39,11 @@ int main()
 			getline(openFile, something[3], ',');
 
 			getline(openFile, something[4], ',');
-			a ->setDate(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+
+			CDate testing(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+			CVehicle setDate(testing);
+			a ->setVDate(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+
 
 			getline(openFile, something[5], ',');
 			a ->setEngineCapacity(stoi(something[5]));
@@ -47,11 +51,10 @@ int main()
 			getline(openFile, something[6]);
 			int boolean = stoi(something[6]);
 			((CCar *) a)->setEcoFriendly(boolean);
+				
+			sizeOfVehicle[a ->returnCount()] = a;
 
-			a ->calcDateDifference();
-			a ->calculateRoadTax();
-			cout << a->returnVehicleType() << ' ' << a->returnCount() << " need to pay " << "$" << a->returnRoadTax() << " as annual road tax" << endl;
-
+			sizeOfVehicle[a ->returnCount()] ->printTest();
 		}
 		else if (something[0] == "bus")
 		{
@@ -68,7 +71,8 @@ int main()
 
 			getline(openFile, something[4], ',');
 
-			a ->setDate(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+			CDate testing(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+			CVehicle setDate(testing);
 
 			getline(openFile, something[5], ',');
 			a ->setEngineCapacity(stoi(something[5]));
@@ -76,12 +80,11 @@ int main()
 			getline(openFile, something[6]);
 			((CBus *) a)->setSeatingCapacity(stoi(something[6]));
 
-			a ->calcDateDifference();
-			a ->calculateRoadTax();
-			cout << a->returnVehicleType() << ' ' << a->returnCount() << " need to pay " << "$" << a->returnRoadTax() << " as annual road tax" << endl;
-
+			sizeOfVehicle[a ->returnCount()] = a;
+			sizeOfVehicle[a ->returnCount()] ->printTest();
 		}
 	}
 	openFile.close();
-	delete a;
+
+	//delete a;
 }

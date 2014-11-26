@@ -15,5 +15,6 @@ public:
 	string returnAdminNo() const;
 protected:
 	string adminNo;
+	static unsigned int count;
 };
 

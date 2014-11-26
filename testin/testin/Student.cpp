@@ -5,6 +5,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+unsigned int CStudent::count = 0;
 
 CStudent::CStudent(void)
 {

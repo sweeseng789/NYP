@@ -19,5 +19,6 @@ public:
 protected:
 	string department;
 	string designation;
+	static unsigned int count;
 };
 

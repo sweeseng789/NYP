@@ -3,7 +3,7 @@
   <Class Name="CVehicle" Collapsed="true">
     <Position X="5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIFAgAAAAAAAaAAAAAAAQAIABSAAAgAAAAACCQAA=</HashCode>
+      <HashCode>gAAAIFAgAAAAwAAbAAIAAAAQAIABSAAAgAAACADCQAA=</HashCode>
       <FileName>Vehicle.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -19,6 +19,13 @@
     <TypeIdentifier>
       <HashCode>AAEAABAAAAAAAAAABIIAAAAAAAABQgAAgAAAIAAAAAA=</HashCode>
       <FileName>Bus.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDate" Collapsed="true">
+    <Position X="1.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ECAkEAAAEABAAAAAASAAAAAAAAQQAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Date.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -1,37 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="CEmployee">
-    <Position X="1.75" Y="1.75" Width="1.5" />
+  <Class Name="CEmployee" Collapsed="true">
+    <Position X="4.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAQAgAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAQADAAAAAAAAAAAEAAAASAgAAAAAAAAAACAA=</HashCode>
       <FileName>Employee.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CLecturer">
-    <Position X="6.25" Y="3.25" Width="1.5" />
+  <Class Name="CLecturer" Collapsed="true">
+    <Position X="6.75" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEAAAAAAAAIAAAAASAAAAQQBAAAAAAAAAAAA=</HashCode>
+      <HashCode>ECAAAAQgEAAAAAAAAIAAAAASAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Lecturer.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CPerson">
+  <Class Name="CPerson" Collapsed="true">
     <Position X="4.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAQAAAAAAAACAAAAAEYAAAAAAAAAAAAAE=</HashCode>
+      <HashCode>ABAAABAAIAAAQAIABAAAACAAAAAEYQBEAAAAAAAAAAE=</HashCode>
       <FileName>Person.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CStudent">
-    <Position X="6.25" Y="1.25" Width="1.5" />
+  <Class Name="CStudent" Collapsed="true">
+    <Position X="8.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ICAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>ICAAAAgAAAAAAAAAIAAAAAgAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Student.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CTechnicalOfficer">
-    <Position X="0.5" Y="4" Width="1.5" />
+  <Class Name="CTechnicalOfficer" Collapsed="true">
+    <Position X="2" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAgCAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>TechnicalOfficer.h</FileName>
     </TypeIdentifier>
   </Class>

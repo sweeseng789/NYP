@@ -5,6 +5,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+unsigned int CTechnicalOfficer::count = 0;
 CTechnicalOfficer::CTechnicalOfficer(void)
 {
 	cout << "TO called" << endl;

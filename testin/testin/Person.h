@@ -17,6 +17,7 @@ public:
 	virtual string returnNRIC(void) const;
 	string returnName(void) const;
 	virtual int returnAge(void) const;
+	virtual int returnCount(void) const;
 protected:
 	string name;
 	int age;

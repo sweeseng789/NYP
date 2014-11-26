@@ -5,7 +5,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-
 CPerson::CPerson(void)
 {
 }
@@ -48,4 +47,9 @@ void CPerson::setName(string nameM)
 string CPerson::returnName() const
 {
 	return name;
+}
+
+int CPerson::returnCount() const
+{
+	return 0;
 }

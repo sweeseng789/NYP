@@ -9,5 +9,7 @@ public:
 	~CTechnicalOfficer(void);
 
 	virtual void printTest();
+protected:
+	static unsigned int count;
 };
 

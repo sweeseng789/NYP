@@ -17,5 +17,6 @@ public:
 protected:
 	string employeeID;
 	string qualification;
+	static unsigned int count;
 };
 

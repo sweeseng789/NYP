@@ -74,7 +74,7 @@ int CVehicle::returnVyear() const
 {
 	return Vyear;
 }
-S
+
 int CVehicle::returnVmonth() const
 {
 	return Vmonth;

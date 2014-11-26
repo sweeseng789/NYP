@@ -7,6 +7,8 @@ using std::cout;
 using std::endl;
 using std::string;
 
+unsigned int CLecturer::count = 0;
+
 CLecturer::CLecturer(void)
 {
 	cout << "Lecturer called" << endl;

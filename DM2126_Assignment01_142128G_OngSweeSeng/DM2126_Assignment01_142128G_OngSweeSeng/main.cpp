@@ -43,8 +43,7 @@ int main()
 			CDate testing(stoi(something[2]), stoi(something[3]), stoi(something[4]));
 			CVehicle setDate(testing);
 			a ->setVDate(stoi(something[2]), stoi(something[3]), stoi(something[4]));
-
-
+			//cout << setDate.returnVyear() << '/' << setDate.returnVmonth() << '/' << setDate.returnVday() << endl;
 			getline(openFile, something[5], ',');
 			a ->setEngineCapacity(stoi(something[5]));
 
@@ -54,7 +53,10 @@ int main()
 				
 			sizeOfVehicle[a ->returnCount()] = a;
 
-			sizeOfVehicle[a ->returnCount()] ->printTest();
+			cout << sizeOfVehicle[a ->returnCount()] ->returnVehicleType() << endl;
+			cout << sizeOfVehicle[a ->returnCount()] ->returnLicensePlate() << endl;
+			cout << sizeOfVehicle[a ->returnCount()] ->returnEngineCapacity() << endl;
+			cout << ((CCar *) sizeOfVehicle[a ->returnCount()]) ->returnEcoFriendly() << endl;
 		}
 		else if (something[0] == "bus")
 		{
@@ -81,10 +83,8 @@ int main()
 			((CBus *) a)->setSeatingCapacity(stoi(something[6]));
 
 			sizeOfVehicle[a ->returnCount()] = a;
-			sizeOfVehicle[a ->returnCount()] ->printTest();
 		}
 	}
 	openFile.close();
-
 	//delete a;
 }

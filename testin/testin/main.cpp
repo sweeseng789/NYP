@@ -57,12 +57,10 @@ int main()
 			((CLecturer*) person) ->setNRIC(NRICM);
 
 			cout << "Please enter Employee ID" << endl;
-			///cin.ignore();
 			getline (cin, employeeIDM);
 			((CLecturer*) person)->setEmployeeID(employeeIDM);
 
 			cout << "Please enter qualification" << endl;
-			//cin.ignore();
 			getline(cin, qualificationM);
 			((CLecturer*) person)->setQualification(qualificationM);
 
@@ -77,6 +75,7 @@ int main()
 
 
 			person -> printTest();
+			cout << person->returnCount() << endl;
 		}
 		else if (decision == 2)
 		{
@@ -110,6 +109,7 @@ int main()
 			getline(cin, qualificationM);
 			((CTechnicalOfficer*) person)->setQualification(qualificationM);
 			person ->printTest();
+			cout << person->returnCount() << endl;
 		}
 		else if (decision == 3)
 		{
@@ -140,6 +140,7 @@ int main()
 			((CStudent*) person) ->setAdminNo(adminNoM);
 
 			person ->printTest();
+			cout << person->returnCount() << endl;
 		}
 		else if (decision == 4)
 		{
@@ -151,6 +152,5 @@ int main()
 		}
 		cout << "Do you want to continue?" << endl;
 		cin >> Continue;
-
 	} while(Continue == "Y" || Continue == "y");
 }

@@ -17,9 +17,11 @@ public:
 	CVehicle(CDate dorM) : testingP2(dorM) 
 	{
 		Vyear = testingP2.returnYear();
-		std::cout << testingP2.returnYear() << "year" << std::endl;
 		Vmonth = testingP2.returnMonth();
 		Vday = testingP2.returnDay();
+		testingP2.calcDateDifference();
+		age =testingP2.returnDateDiff();
+	
 	}
 
 	string returnVehicleType(void) const;//Accessor

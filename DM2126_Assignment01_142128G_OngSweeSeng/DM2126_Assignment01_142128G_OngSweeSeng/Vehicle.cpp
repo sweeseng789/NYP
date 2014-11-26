@@ -87,7 +87,7 @@ int CVehicle::returnVday() const
 
 void CVehicle::setVDate(int VyearM, int VmonthM, int VdayM)
 {
-	//Vyear = VyearM;
+	Vyear = VyearM;
 	Vmonth = VmonthM;
 	Vday = VdayM;
 }

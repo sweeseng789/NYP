@@ -49,22 +49,22 @@ void CBus::printTest(void)
 
 void CBus::calculateRoadTax()
 {
-/*	if (age < 5 && SeatingCapacity < 40)
+	if (age < 5 && SeatingCapacity < 40)
 	{
-		AnnualRoadTax = 1;
+		AnnualRoadTax = (1 * CBus::returnEngineCapacity());
 	}
 	else if (age < 5 && SeatingCapacity >= 40)
 	{
-		AnnualRoadTax = 1 * 2;
+		AnnualRoadTax = (1 * CBus::returnEngineCapacity()) * 2;
 	}
 	else if (age >= 5 && SeatingCapacity < 40)
 	{
-		AnnualRoadTax = 1 * 1.2;
+		AnnualRoadTax = (1 * CBus::returnEngineCapacity()) * 1.2;
 	}
 	else if (age >= 5 && SeatingCapacity >= 40)
 	{
-		AnnualRoadTax = 1 * 1.2 * 2;
-	}*/
+		AnnualRoadTax = (1 * CBus::returnEngineCapacity()) * 1.2 * 2;
+	}
 }
 
 double CBus::returnRoadTax() const

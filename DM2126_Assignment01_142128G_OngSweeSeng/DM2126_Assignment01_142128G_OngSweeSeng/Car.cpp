@@ -52,38 +52,38 @@ void CCar::printTest(void)
 
 void CCar::calculateRoadTax(void)
 {
-/*	if(age < 5 && EngineCapacity < 1600 && Eco_Friendly == false)
+	if(age < 5 && EngineCapacity < 1600 && Eco_Friendly == false)
 	{
-		AnnualRoadTax = 1;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity());
 	}
 	else if(age < 5 && EngineCapacity < 1600 && Eco_Friendly == true)
 	{
-		AnnualRoadTax = 1 * 0.8;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 0.8;
 	}
 	else if (age < 5 && EngineCapacity >= 1600 && Eco_Friendly == false)
 	{
-		AnnualRoadTax = 1 * 2;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 2;
 	}
 	else if(age < 5 && EngineCapacity >= 1600 && Eco_Friendly == true)
 	{
-		AnnualRoadTax = 1 * 2 * 0.8;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 2 * 0.8;
 	}
 	else if(age >= 5 && EngineCapacity < 1600 && Eco_Friendly == false)
 	{
-		AnnualRoadTax = 1 * 1.2;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 1.2;
 	}
 	else if (age >= 5 && EngineCapacity < 1600 && Eco_Friendly == true)
 	{
-		AnnualRoadTax = 1 * 1.2 * 0.8;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 1.2 * 0.8;
 	}
 	else if(age >= 5 && EngineCapacity >= 1600 && Eco_Friendly == false)
 	{
-		AnnualRoadTax = 1 * 1.2 * 2;
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 1.2 * 2;
 	}
 	else if (age >= 5 && EngineCapacity >= 1600 && Eco_Friendly == true)
 	{
-		AnnualRoadTax = 1 * 1.2 * 2 * 0.8;
-	}*/
+		AnnualRoadTax = (1 * CCar::returnEngineCapacity()) * 1.2 * 2 * 0.8;
+	}
 }
 
 double CCar::returnRoadTax() const

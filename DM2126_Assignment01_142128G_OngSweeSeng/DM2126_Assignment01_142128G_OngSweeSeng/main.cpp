@@ -55,7 +55,7 @@ int main()
 			int boolean = stoi(something[6]);
 			((CCar *) a)->setEcoFriendly(boolean);
 				
-			sizeOfVehicleC[a ->returnCount()] = a;
+			sizeOfVehicleC[((CCar *)a) ->returnCountC()] = a;
 
 		}
 		else if (something[0] == "bus")
@@ -83,19 +83,20 @@ int main()
 			getline(openFile, something[6]);
 			((CBus *) a)->setSeatingCapacity(stoi(something[6]));
 
-			sizeOfVehicleB[a ->returnCount()] = a;
+			sizeOfVehicleB[((CBus *)a) ->returnCountB()] = a;
+
 		}
 	}
 	openFile.close();
 
-	totalcount = ((CBus *) a) ->returnCount() + ((CCar *) a) ->returnCount();
-	cout << "1) The total amount of cars on the road is:" << totalcount << endl;
+	totalcount = ((CBus *) a) ->returnCountB() + ((CCar *) a) ->returnCountC();
 
+	cout << "1) The total amount of cars on the road is:" << totalcount << endl;
 	cout << endl;
 
 	cout << "2) Printing of all car and bus details" << endl;
 	//car
-	for (int b = 1; b <= ((CCar *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++)
 	{
 		cout << sizeOfVehicleC[b]->returnVehicleType() << ' ' << b << endl;
 		cout << "License plate:" << ' ' << sizeOfVehicleC[b] ->returnLicensePlate() << endl;
@@ -105,7 +106,7 @@ int main()
 		cout << endl;
 	}
 	//bus
-	for (int b = 1; b <= ((CBus *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CBus *) a) ->returnCountB(); b++)
 	{
 		cout << sizeOfVehicleB[b]->returnVehicleType() << ' ' << b << endl;
 		cout << "License plate:" << ' ' << sizeOfVehicleB[b] ->returnLicensePlate() << endl;
@@ -118,7 +119,7 @@ int main()
 	cout << "3) Print out all bus that are eco-frindly or not eco-friendly" << endl;
 	//car
 	cout << "Eco-friendly car" << endl;
-	for (int b = 1; b <= ((CCar *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++)
 	{
 		if (((CCar *) sizeOfVehicleC[b]) ->returnEcoFriendly() == true)
 		{
@@ -131,7 +132,7 @@ int main()
 		}
 	}
 	cout << "Not eco-friendly car" << endl;
-	for (int b = 1; b <= ((CCar *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++)
 	{
 		if (((CCar *) sizeOfVehicleC[b]) ->returnEcoFriendly() == false)
 		{
@@ -146,28 +147,28 @@ int main()
 
 	//Bus
 	cout << "Bus above or equal 40 seating capacity " << endl;
-	for (int b = 1; b <= ((CCar *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CBus *) a) ->returnCountB(); b++)
 	{
 		if (((CBus *) sizeOfVehicleB[b]) ->returnSeatingCapacity() >= 40)
 		{
-			cout << sizeOfVehicleC[b]->returnVehicleType() << ' ' << b << endl;
-			cout << "License plate:" << ' ' << sizeOfVehicleC[b] ->returnLicensePlate() << endl;
-			cout << "DOR:" << ' ' << sizeOfVehicleC[b] ->returnVyear() <<'/' << sizeOfVehicleC[b] ->returnVmonth() << '/' << sizeOfVehicleC[b] ->returnVday() << endl;
-			cout << "Engine Capacity:" << ' ' << sizeOfVehicleC[b] ->returnEngineCapacity() << endl;
+			cout << sizeOfVehicleB[b]->returnVehicleType() << ' ' << b << endl;
+			cout << "License plate:" << ' ' << sizeOfVehicleB[b] ->returnLicensePlate() << endl;
+			cout << "DOR:" << ' ' << sizeOfVehicleB[b] ->returnVyear() <<'/' << sizeOfVehicleB[b] ->returnVmonth() << '/' << sizeOfVehicleB[b] ->returnVday() << endl;
+			cout << "Engine Capacity:" << ' ' << sizeOfVehicleB[b] ->returnEngineCapacity() << endl;
 			cout << "Seating Capacity:" << ' ' << ((CBus *) sizeOfVehicleB[b]) ->returnSeatingCapacity() << endl;
 			cout << endl;
 		}
 	}
 
 	cout << "Bus below 40 seating capacity " << endl;
-	for (int b = 1; b <= ((CCar *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CBus *) a) ->returnCountB(); b++)
 	{
 		if (((CBus *) sizeOfVehicleB[b]) ->returnSeatingCapacity() < 40)
 		{
-			cout << sizeOfVehicleC[b]->returnVehicleType() << ' ' << b << endl;
-			cout << "License plate:" << ' ' << sizeOfVehicleC[b] ->returnLicensePlate() << endl;
-			cout << "DOR:" << ' ' << sizeOfVehicleC[b] ->returnVyear() <<'/' << sizeOfVehicleC[b] ->returnVmonth() << '/' << sizeOfVehicleC[b] ->returnVday() << endl;
-			cout << "Engine Capacity:" << ' ' << sizeOfVehicleC[b] ->returnEngineCapacity() << endl;
+			cout << sizeOfVehicleB[b]->returnVehicleType() << ' ' << b << endl;
+			cout << "License plate:" << ' ' << sizeOfVehicleB[b] ->returnLicensePlate() << endl;
+			cout << "DOR:" << ' ' << sizeOfVehicleB[b] ->returnVyear() <<'/' << sizeOfVehicleB[b] ->returnVmonth() << '/' << sizeOfVehicleB[b] ->returnVday() << endl;
+			cout << "Engine Capacity:" << ' ' << sizeOfVehicleB[b] ->returnEngineCapacity() << endl;
 			cout << "Seating Capacity:" << ' ' << ((CBus *) sizeOfVehicleB[b]) ->returnSeatingCapacity() << endl;
 			cout << endl;
 		}
@@ -176,7 +177,7 @@ int main()
 
 	cout << "5) Calculate road tax" << endl;
 	//car
-	for (int b = 1; b <= ((CCar *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++)
 	{
 		
 		sizeOfVehicleC[b] ->calculateRoadTax();
@@ -186,7 +187,7 @@ int main()
 	}
 
 	//bus
-	for (int b = 1; b <= ((CBus *) a) ->returnCount(); b++)
+	for (int b = 1; b <= ((CBus *) a) ->returnCountB(); b++)
 	{
 		sizeOfVehicleB[b] ->calculateRoadTax();
 		cout << sizeOfVehicleB[b]->returnVehicleType() << ' ' << b << " need to pay $" << ((CBus *) sizeOfVehicleB[b]) ->returnRoadTax() << " as road tax" << endl;
@@ -198,4 +199,14 @@ int main()
 	cout << "Total road tax for cars is:" << "$" << carTotalTax << endl;
 	cout << "Total road tax for buses is:" << "$" << busTotalTax << endl;
 	cout << "Total road tax for buses and car is:" << "$" << carTotalTax + busTotalTax << endl;
+
+	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++) //Delete Car data
+	{
+		delete sizeOfVehicleC[b];
+	}
+
+	for (int b = 1; b <= ((CBus *) a) ->returnCountB(); b++) //Delete bus Data
+	{
+		delete sizeOfVehicleB[b];
+	}
 }

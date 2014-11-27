@@ -12,17 +12,17 @@ using std::getline;
 using std::ofstream;
 using std::string;
 
-unsigned int CBus::count = 0;
+unsigned int CBus::countB = 0;
 CBus::CBus(void)
 {
-	count ++;
+	countB ++;
 	cout << "CBus created" << endl;
 }
 
 
 CBus::~CBus(void)
 {
-	count --;
+	countB --;
 	cout << "CBus deleted" << endl;
 }
 
@@ -71,7 +71,7 @@ double CBus::returnRoadTax() const
 {
 	return AnnualRoadTax;
 }
-unsigned int CBus::returnCount() const
+unsigned int CBus::returnCountB() const
 {
-	return count;
+	return countB;
 }

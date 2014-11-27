@@ -12,16 +12,16 @@ using std::getline;
 using std::ofstream;
 using std::string;
 
-unsigned int CCar::count = 0;
+unsigned int CCar::countC = 0;
 CCar::CCar(void)
 {
-	count ++;
+	countC ++;
 	cout << "CCar created" << endl;
 }
 
 CCar::~CCar(void)
 {
-	count --;
+	countC --;
 	cout << "CCar deltetd" << endl;
 }
 
@@ -91,7 +91,7 @@ double CCar::returnRoadTax() const
 	return AnnualRoadTax;
 }
 
-unsigned int CCar::returnCount() const
+unsigned int CCar::returnCountC() const
 {
-	return count;
+	return countC;
 }

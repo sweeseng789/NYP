@@ -15,11 +15,11 @@ public:
 
 	bool returnEcoFriendly(void) const;//Accessor
 	double returnRoadTax(void) const;
-	unsigned int returnCount() const;
+	unsigned int returnCountC() const;
 
 
 protected:
-	static unsigned int count;
+	static unsigned int countC;
 	bool Eco_Friendly;
 	
 };

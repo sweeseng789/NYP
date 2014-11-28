@@ -50,8 +50,11 @@ void Scene3::Init()
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	//meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", 1, 1);
+	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color (0, 1, 0), 1);
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 5);
+	meshList[GEO_CIRCLE] = MeshBuilder::GenerateCircle("circle", Color(1, 0, 1), 36, 1);
+	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 36, 1.f, 0.5f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0),18, 36, 1.f);
 }
 
 static float ROT_LIMIT = 45.f;
@@ -98,7 +101,7 @@ void Scene3::Render()
 		camera.position.x, camera.position.y, camera.position.z,
 		camera.target.x, camera.target.y, camera.target.z,
 		camera.up.x, camera.up.y, camera.up.z
-		);
+					);
 
 	//Set projection matrix to perspective mode
 	projection.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f); //FOV, Aspect Ratio, Near plane, Far plane
@@ -120,7 +123,7 @@ void Scene3::Render()
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]); //update the shader with new MVP
 
 	//meshList[GEO_QUAD]->Render();
-	meshList[GEO_CUBE]->Render();
+	meshList[GEO_RING]->Render();
 }
 
 void Scene3::Exit()

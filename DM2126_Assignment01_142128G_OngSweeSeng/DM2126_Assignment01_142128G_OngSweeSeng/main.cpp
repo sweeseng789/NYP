@@ -17,8 +17,8 @@ using std::istringstream;
 using std::boolalpha;
 int main()
 {
-	CVehicle * a;		
-	string something[7];
+	CVehicle * a;
+	string readFile[7];
 	CVehicle * sizeOfVehicleC[100];
 	CVehicle * sizeOfVehicleB[100];
 	int totalcount;
@@ -28,60 +28,58 @@ int main()
 	ifstream openFile("BY.txt");
 	while (openFile.good())
 	{
-		getline (openFile, something[0], ',');
-		if (something[0] == "car")
+		getline (openFile, readFile[0], ',');
+		if (readFile[0] == "car")
 		{
-			a = new CCar();
-			a ->setVehicleType(something[0]);
+			a = new CCar;
+			a ->setVehicleType(readFile[0]);
 
-			getline(openFile, something[1], ',');
-			something[1].erase(0, 1);
-			a->setLicensePlate(something[1]);
+			getline(openFile, readFile[1], ',');
+			readFile[1].erase(0, 1);
+			a->setLicensePlate(readFile[1]);
 
-			getline(openFile, something[2], ',');
+			getline(openFile, readFile[2], ',');
 
-			getline(openFile, something[3], ',');
+			getline(openFile, readFile[3], ',');
 
-			getline(openFile, something[4], ',');
+			getline(openFile, readFile[4], ',');
 
-			CDate testing(stoi(something[2]), stoi(something[3]), stoi(something[4]));
-			CVehicle setDate(testing);
-			a ->setVDate(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+			CDate dateSetting(stoi(readFile[2]), stoi(readFile[3]), stoi(readFile[4]));
+			a ->setDOR(dateSetting);
 
-			getline(openFile, something[5], ',');
-			a ->setEngineCapacity(stoi(something[5]));
+			getline(openFile, readFile[5], ',');
+			a ->setEngineCapacity(stoi(readFile[5]));
 
-			getline(openFile, something[6]);
-			int boolean = stoi(something[6]);
+			getline(openFile, readFile[6]);
+			int boolean = stoi(readFile[6]);
 			((CCar *) a)->setEcoFriendly(boolean);
 				
 			sizeOfVehicleC[((CCar *)a) ->returnCountC()] = a;
 
 		}
-		else if (something[0] == "bus")
+		else if (readFile[0] == "bus")
 		{
-			a = new CBus();
-			a ->setVehicleType(something[0]);
+			a = new CBus;
+			a ->setVehicleType(readFile[0]);
 
-			getline(openFile, something[1], ',');
-			something[1].erase(0, 1);
-			a->setLicensePlate(something[1]);
+			getline(openFile, readFile[1], ',');
+			readFile[1].erase(0, 1);
+			a->setLicensePlate(readFile[1]);
 
-			getline(openFile, something[2], ',');
+			getline(openFile, readFile[2], ',');
 
-			getline(openFile, something[3], ',');
+			getline(openFile, readFile[3], ',');
 
-			getline(openFile, something[4], ',');
+			getline(openFile, readFile[4], ',');
 
-			CDate testing(stoi(something[2]), stoi(something[3]), stoi(something[4]));
-			CVehicle setDate(testing);
-			a ->setVDate(stoi(something[2]), stoi(something[3]), stoi(something[4]));
+			CDate dateSetting(stoi(readFile[2]), stoi(readFile[3]), stoi(readFile[4]));
+			a->setDOR(dateSetting);
 
-			getline(openFile, something[5], ',');
-			a ->setEngineCapacity(stoi(something[5]));
+			getline(openFile, readFile[5], ',');
+			a ->setEngineCapacity(stoi(readFile[5]));
 
-			getline(openFile, something[6]);
-			((CBus *) a)->setSeatingCapacity(stoi(something[6]));
+			getline(openFile, readFile[6]);
+			((CBus *) a)->setSeatingCapacity(stoi(readFile[6]));
 
 			sizeOfVehicleB[((CBus *)a) ->returnCountB()] = a;
 
@@ -93,7 +91,7 @@ int main()
 
 	cout << "1) The total amount of cars on the road is:" << totalcount << endl;
 	cout << endl;
-
+	cout << ((CDate *) a) ->returnYear() << " year" << endl;
 	cout << "2) Printing of all car and bus details" << endl;
 	//car
 	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++)
@@ -175,7 +173,7 @@ int main()
 	}
 
 
-	cout << "5) Calculate road tax" << endl;
+	/*cout << "5) Calculate road tax" << endl;
 	//car
 	for (int b = 1; b <= ((CCar *) a) ->returnCountC(); b++)
 	{
@@ -208,5 +206,5 @@ int main()
 	for (int b = 1; b <= ((CBus *) a) ->returnCountB(); b++) //Delete bus Data
 	{
 		delete sizeOfVehicleB[b];
-	}
+	}*/
 }

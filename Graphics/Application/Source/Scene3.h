@@ -17,6 +17,9 @@ class Scene3 : public Scene
 		GEO_AXES,
 		GEO_QUAD,
 		GEO_CUBE,
+		GEO_CIRCLE,
+		GEO_RING,
+		GEO_SPHERE,
 		NUM_GEOMETRY,
 	};
 public:

@@ -58,11 +58,11 @@ To be called every frame. Camera will get user inputs and update its position an
 void Camera::Update(double dt)
 {
 	if(Application::IsKeyPressed(VK_UP))
-		position.y += 10.f * dt;
+		position.y += 50.f * dt;
 	if(Application::IsKeyPressed(VK_DOWN))
-		position.y -= 10.f * dt;
+		position.y -= 50.f * dt;
 	if(Application::IsKeyPressed(VK_LEFT))
-		position.x -= 10.f * dt;
+		position.x -= 50.f * dt;
 	if(Application::IsKeyPressed(VK_RIGHT))
-		position.x += 10.f * dt;
+		position.x += 50.f * dt;
 }

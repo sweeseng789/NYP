@@ -36,12 +36,12 @@ void CDate::printData()
 {
 	cout << year << '/' << month << '/' << day << endl;
 }
-void CDate::setDate(int yearM, int monthM, int dayM)
+/*void CDate::setDate(int yearM, int monthM, int dayM)
 {
 	year = yearM;
 	month = monthM;
 	day = dayM;
-}
+}*/
 
 void CDate::calcDateDifference() 
 {

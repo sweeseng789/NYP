@@ -17,6 +17,8 @@ CVehicle::CVehicle(void)
 {
 }
 
+
+
 CVehicle::~CVehicle(void)
 {
 }
@@ -90,4 +92,9 @@ void CVehicle::setVDate(int VyearM, int VmonthM, int VdayM)
 	Vyear = VyearM;
 	Vmonth = VmonthM;
 	Vday = VdayM;
+}
+
+void CVehicle::setDOR(CDate d)
+{
+	year = d;
 }

@@ -14,15 +14,16 @@ public:
 	void setLicensePlate(string licensePlateM);
 	virtual void calculateRoadTax();
 	void setVDate(int VyearM, int VmonthM, int VdayM);
-	CVehicle(CDate dorM) : testingP2(dorM) 
+	void setDOR(CDate date);
+	/*CVehicle(CDate dorM) : DOR(dorM) 
 	{
-		Vyear = testingP2.returnYear();
-		Vmonth = testingP2.returnMonth();
-		Vday = testingP2.returnDay();
-		testingP2.calcDateDifference();
-		age =testingP2.returnDateDiff();
+		Vyear = DOR.returnYear();
+		Vmonth = DOR.returnMonth();
+		Vday = DOR.returnDay();
+		DOR.calcDateDifference();
+		age =DOR.returnDateDiff();
 	
-	}
+	}*/
 
 	string returnVehicleType(void) const;//Accessor
 	int returnEngineCapacity(void) const;
@@ -39,7 +40,7 @@ protected:
 	string LicensePlate;
 	int EngineCapacity;
 	double AnnualRoadTax;
-	CDate testingP2;
+	CDate DOR;
 
 	int Vyear;
 	int Vday;

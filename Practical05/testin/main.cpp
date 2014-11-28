@@ -22,13 +22,15 @@ int main()
 	int studentM = 0;
 	int lecturerM = 0;
 	int TOM = 0;
+	CPerson * person;
 
 	string Continue;
-	string goOn;
-	cout << "Personal Data Adminstrator" << endl;
-	cout << "1. Lecturer \n" << "2. Technical Officer \n" << "3. Student \n" << "4. Print all data \n" << endl; 
+	bool goOn = true;
+
 	do
 	{
+		cout << "Personal Data Adminstrator" << endl;
+		cout << "1. Lecturer \n" << "2. Technical Officer \n" << "3. Student \n" << "4. Print all data \n" << "5. Exit \n" << endl; 
 		cout << "Please enter number 1-4" << endl;
 		cin >> decision;
 		while(decision >= 5)
@@ -36,7 +38,7 @@ int main()
 			cout << "Error, please enter again" << endl;
 			cin >> decision;
 		}
-		CPerson * person;
+		
 		
 		if (decision == 1)
 		{
@@ -83,8 +85,11 @@ int main()
 			lecturerData[((CLecturer *) person) ->returnLcount()] = person;
 			lecturerM ++;
 			cout << endl;
+
+			system("pause");
+			system("cls");
 		}
-		else if (decision == 2)
+		if (decision == 2)
 		{
 			string nameM;
 			int ageM;
@@ -119,8 +124,10 @@ int main()
 			technicalOfficerData[((CTechnicalOfficer *) person) ->returnTOcount()] = person;
 			TOM ++;
 			cout << endl;
+			system("pause");
+			system("cls");
 		}
-		else if (decision == 3)
+		if (decision == 3)
 		{
 			cout << "Student" << endl;
 			person = new CStudent;
@@ -151,10 +158,12 @@ int main()
 			studentData[((CStudent *) person) ->returnStudentCount()] = person;
 			studentM ++;
 			cout << endl;
+			system("pause");
+			system("cls");
 		}
 		totalcount = studentM + lecturerM + TOM;
 
-		if (decision == 4 || totalcount == 5)
+		if (decision == 4)
 		{
 			cout << "Print all data" << endl;
 			if ( studentM >= 1 || lecturerM >= 1 || TOM >= 1)
@@ -174,8 +183,15 @@ int main()
 					((CStudent *) studentData[a]) ->printTest();
 				}
 			}
+			system("pause");
+			system("cls");
 		}
-	} while(totalcount != 5);	
+
+		if (decision == 5)
+		{
+			goOn = false;
+		}
+	} while(goOn == true);	
 
 	//delete
 		for (int a = 1; a <= lecturerM; a++)

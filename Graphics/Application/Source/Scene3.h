@@ -20,6 +20,7 @@ class Scene3 : public Scene
 		GEO_CIRCLE,
 		GEO_RING,
 		GEO_SPHERE,
+		GEO_CYLINDER,
 		NUM_GEOMETRY,
 	};
 public:

@@ -65,4 +65,6 @@ void Camera::Update(double dt)
 		position.x -= 50.f * dt;
 	if(Application::IsKeyPressed(VK_RIGHT))
 		position.x += 50.f * dt;
+	
+	std::cout << position.y << " y" << ' ' << position.x << " x" << ' ' << position.z << " z" << std::endl;
 }

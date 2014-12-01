@@ -1,17 +1,17 @@
-﻿Build started 26/11/2014 2:00:52 PM.
-     1>Project "C:\Users\swees_000\Desktop\Graphics\Common\Common.vcxproj" on node 2 (build target(s)).
+﻿Build started 1/12/2014 8:16:46 AM.
+     1>Project "C:\Users\User\Desktop\NYP\Graphics\Common\Common.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Common.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
        Lib:
          All outputs are up-to-date.
-         Common.vcxproj -> C:\Users\swees_000\Desktop\Graphics\Debug\Common.lib
+         Common.vcxproj -> C:\Users\User\Desktop\NYP\Graphics\Debug\Common.lib
        FinalizeBuildStatus:
          Deleting file "Debug\Common.unsuccessfulbuild".
          Touching "Debug\Common.lastbuildstate".
-     1>Done Building Project "C:\Users\swees_000\Desktop\Graphics\Common\Common.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\User\Desktop\NYP\Graphics\Common\Common.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.05
+Time Elapsed 00:00:00.03

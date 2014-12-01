@@ -55,6 +55,7 @@ void Scene3::Init()
 	meshList[GEO_CIRCLE] = MeshBuilder::GenerateCircle("circle", Color(1, 0, 1), 36, 1);
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 36, 1.f, 0.5f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0),18, 36, 1.f);
+	meshList[GEO_CYLINDER] = MeshBuilder::GenerateCylinder("circle", Color(1, 0, 1), 36, 1, 4);
 }
 
 static float ROT_LIMIT = 45.f;
@@ -122,8 +123,9 @@ void Scene3::Render()
 	MVP = projection * view * model; // Remember, matrix multiplication is the other way around
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]); //update the shader with new MVP
 
-	//meshList[GEO_QUAD]->Render();
-	meshList[GEO_RING]->Render();
+	//meshList[GEO_CIRCLE]->Render();
+	//meshList[GEO_RING]->Render();
+	meshList[GEO_CYLINDER]->Render();
 }
 
 void Scene3::Exit()

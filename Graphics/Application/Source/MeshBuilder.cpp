@@ -79,28 +79,19 @@ Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, Color color, float 
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 
-	v.pos.Set(-0.5f,-0.5f,-0.5f);
+	v.pos.Set(-0.5f,-0.5f,-0);
 	v.color = color;
 	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f,-0.5f,-0.5f);
+
+	v.pos.Set(0.5f,-0.5f,-0);
 	v.color = color;
 	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, 0.5f,-0.5f);
+
+	v.pos.Set(0.5f, 0.5f,-0);
 	v.color = color;
 	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, 0.5f,-0.5f);
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f,-0.5f, 0.5f);
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f,-0.5f, 0.5f);
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, 0.5f, 0.5f);
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, 0.5f, 0.5f);
+
+	v.pos.Set(-0.5f, 0.5f,-0);
 	v.color = color;
 	vertex_buffer_data.push_back(v);
 	
@@ -254,6 +245,10 @@ Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, unsi
 		index_buffer_data.push_back(slice * 3 + 0);
 		index_buffer_data.push_back(slice * 3 + 1);
 		index_buffer_data.push_back(slice * 3 + 2);
+
+		index_buffer_data.push_back(slice * 3 + 2);
+		index_buffer_data.push_back(slice * 3 + 1);
+		index_buffer_data.push_back(slice * 3 + 0);
 	}
 
 	Mesh *mesh = new Mesh(meshName);
@@ -268,62 +263,66 @@ Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, unsi
 
 	return mesh;
 }
+
 Mesh* MeshBuilder::GenerateRing(const std::string &meshName, Color color, unsigned numSlice, float outerR, float innerR)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
-	float degreePerSlice = 360.0f / numSlice;
-	
-	for(unsigned slice = 0; slice < numSlice; ++slice)
-	{
-		float theta = slice * degreePerSlice;
+	float degreePerSlice = 360.f / numSlice;
+	for(unsigned slice = 0; slice < numSlice; ++slice) {
 
-		//v0
-		v.pos.Set(outerR * cos(Math::DegreeToRadian(theta)), 0, outerR * sin(Math::DegreeToRadian(theta)));
+		float theta = slice * degreePerSlice;
+/*v0*/	v.pos.Set(outerR * cos(Math::DegreeToRadian(theta)), 0, outerR * sin(Math::DegreeToRadian(theta)));
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 
-		//v1
-		v.pos.Set(innerR * cos(Math::DegreeToRadian(theta)), 0, innerR * sin(Math::DegreeToRadian(theta)));
+/*v1*/	v.pos.Set(innerR * cos(Math::DegreeToRadian(theta)), 0, innerR * sin(Math::DegreeToRadian(theta)));
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 
 		float theta2 = (slice + 1) * degreePerSlice;
-		//v2
-		v.pos.Set(outerR * cos(Math::DegreeToRadian(theta2)), 0, outerR * sin(Math::DegreeToRadian(theta2)));
+/*v2*/	v.pos.Set(outerR * cos(Math::DegreeToRadian(theta2)), 0, outerR * sin(Math::DegreeToRadian(theta2)));
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 
-		//v3
-		v.pos.Set(innerR * cos(Math::DegreeToRadian(theta2)), 0, innerR * cos(Math::DegreeToRadian(theta2)));
+/*v3*/	v.pos.Set(innerR * cos(Math::DegreeToRadian(theta2)), 0, innerR * sin(Math::DegreeToRadian(theta2)));
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 	}
-
-	for (unsigned slice = 0; slice< numSlice; ++slice)
-	{
+	for(unsigned slice = 0; slice < numSlice; ++slice) {
 		index_buffer_data.push_back(slice * 4 + 0);
 		index_buffer_data.push_back(slice * 4 + 1);
 		index_buffer_data.push_back(slice * 4 + 2);
-
+		
 		index_buffer_data.push_back(slice * 4 + 3);
 		index_buffer_data.push_back(slice * 4 + 2);
 		index_buffer_data.push_back(slice * 4 + 1);
-	}
 
+
+		//bOTTOM
+		index_buffer_data.push_back(slice * 4 + 2);
+		index_buffer_data.push_back(slice * 4 + 1);
+		index_buffer_data.push_back(slice * 4 + 0);
+
+		index_buffer_data.push_back(slice * 4 + 1);
+		index_buffer_data.push_back(slice * 4 + 2);
+		index_buffer_data.push_back(slice * 4 + 3);
+
+	}
 	Mesh *mesh = new Mesh(meshName);
-	
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
 
-	mesh->indexSize = index_buffer_data.size();
-	mesh->mode = Mesh::DRAW_TRIANGLES;
-
 	return mesh;
 }
+
+
 float sphereX(float phi, float theta){
 	return cos(Math::DegreeToRadian(phi)) * cos(Math::DegreeToRadian(theta));
 }
@@ -374,6 +373,80 @@ Mesh* MeshBuilder::GenerateSphere(const std::string &meshName, Color color, unsi
 
 	mesh->indexSize = index_buffer_data.size();
 	mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
+
+	return mesh;
+}
+
+
+//Cylinder does not work
+Mesh* MeshBuilder::GenerateCylinder(const std::string &meshName, Color color, unsigned numSlice, float radius, float height)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	float degreePerSlice = 360.0f / numSlice;
+	
+	for(unsigned slice = 0; slice < numSlice; ++slice)
+	{
+		float theta = slice * degreePerSlice;
+
+		//v0
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), 0, radius * sin(Math::DegreeToRadian(theta)));
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+
+		//v1
+		v.pos.Set(0, 0, 0);
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		float theta2 = (slice + 1) * degreePerSlice;
+
+		//v2
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta2)), height, radius * sin(Math::DegreeToRadian(theta2)));
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+
+		//v0
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), height, radius * sin(Math::DegreeToRadian(theta)));
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+
+		//v1
+		v.pos.Set(0, height, 0);
+		v.color = color;
+		//vertex_buffer_data.push_back(v);
+	
+
+		//v2
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta2)), height, radius * sin(Math::DegreeToRadian(theta2)));
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+	}
+
+	for (unsigned slice = 0; slice< numSlice; ++slice)
+	{
+		index_buffer_data.push_back(slice * 6 + 0);
+		index_buffer_data.push_back(slice * 6 + 1);
+		index_buffer_data.push_back(slice * 6 + 4);
+	
+
+		/*index_buffer_data.push_back(slice * 6 + 3);
+		index_buffer_data.push_back(slice * 6 + 4);
+		index_buffer_data.push_back(slice * 6 + 5);
+		index_buffer_data.push_back(slice * 6 + 5);
+		index_buffer_data.push_back(slice * 6 + 4);
+		index_buffer_data.push_back(slice * 6 + 3);*/
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
 
 	return mesh;
 }

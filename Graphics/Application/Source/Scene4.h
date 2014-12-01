@@ -19,7 +19,16 @@ class Scene4 : public Scene
 		GEO_QUAD,
 		GEO_CUBE,
 		GEO_SPHERE,
+		GEO_RING,
 		GEO_SUN,
+		GEO_MERCURY,
+		GEO_VENUS,
+		GEO_EARTH,
+		GEO_EARTH_MOON,
+		GEO_MARS,
+		GEO_JUPITER,
+		GEO_SATURN,
+		GEO_SATURN_RING,
 		NUM_GEOMETRY,
 	};
 public:
@@ -37,6 +46,11 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	float rotateAngle;
+	float rotateSun;
+	float rotateEarth;
+	float rotateMars;
+	float rotateJupiter;
+	float rotateSaturn;
 	Camera camera;
 
 	MS modelStack, viewStack, projectionStack;

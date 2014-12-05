@@ -43,12 +43,14 @@ void Mesh::Render()
 {
 	glEnableVertexAttribArray(0); // 1st attribute buffer : vertices
 	glEnableVertexAttribArray(1); // 2nd attribute buffer : colors
+	glEnableVertexAttribArray(2); // 3rd attribute : normals
+
 
 	//Render call setup
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	//glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color))); //Hewllo world
 	//Actual render call
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	if(mode == DRAW_TRIANGLES)
@@ -60,4 +62,5 @@ void Mesh::Render()
 	
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 }

@@ -81,18 +81,22 @@ Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, Color color, float 
 
 	v.pos.Set(-0.5f,-0.5f,-0);
 	v.color = color;
+	v.normal.Set(0, 0 ,1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f,-0.5f,-0);
 	v.color = color;
+	v.normal.Set(0, 0 ,1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f, 0.5f,-0);
 	v.color = color;
+	v.normal.Set(0, 0 ,1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(-0.5f, 0.5f,-0);
 	v.color = color;
+	v.normal.Set(0, 0 ,1);
 	vertex_buffer_data.push_back(v);
 	
 	std::vector<GLuint> index_buffer_data;
@@ -275,19 +279,23 @@ Mesh* MeshBuilder::GenerateRing(const std::string &meshName, Color color, unsign
 		float theta = slice * degreePerSlice;
 /*v0*/	v.pos.Set(outerR * cos(Math::DegreeToRadian(theta)), 0, outerR * sin(Math::DegreeToRadian(theta)));
 		v.color = color;
+		v.normal.Set(0 ,1, 0);
 		vertex_buffer_data.push_back(v);
 
 /*v1*/	v.pos.Set(innerR * cos(Math::DegreeToRadian(theta)), 0, innerR * sin(Math::DegreeToRadian(theta)));
 		v.color = color;
+		v.normal.Set(0 ,1, 0);
 		vertex_buffer_data.push_back(v);
 
 		float theta2 = (slice + 1) * degreePerSlice;
 /*v2*/	v.pos.Set(outerR * cos(Math::DegreeToRadian(theta2)), 0, outerR * sin(Math::DegreeToRadian(theta2)));
 		v.color = color;
+		v.normal.Set(0 ,1, 0);
 		vertex_buffer_data.push_back(v);
 
 /*v3*/	v.pos.Set(innerR * cos(Math::DegreeToRadian(theta2)), 0, innerR * sin(Math::DegreeToRadian(theta2)));
 		v.color = color;
+		v.normal.Set(0 ,1, 0);
 		vertex_buffer_data.push_back(v);
 	}
 	for(unsigned slice = 0; slice < numSlice; ++slice) {
@@ -350,6 +358,7 @@ Mesh* MeshBuilder::GenerateSphere(const std::string &meshName, Color color, unsi
 
 			v.pos.Set(radius * sphereX(phi, theta), radius * sphereY(phi, theta), radius * sphereZ(phi, theta));
 			v.color = color;
+			v.normal.Set(sphereX(phi, theta), sphereY(phi, theta), sphereZ(phi, theta));
 			vertex_buffer_data.push_back(v);
 		}
 	}

@@ -1,5 +1,6 @@
 #ifndef VERTEX_H
 #define VERTEX_H
+#include "Vector3.h"
 
 struct Position
 {
@@ -17,6 +18,7 @@ struct Vertex
 {
 	Position pos;
 	Color color;
+	Vector3 normal;
 };
 
 #endif

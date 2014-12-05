@@ -12,9 +12,9 @@ public:
 
 	Camera();
 	~Camera();
-	void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
-	void Reset();
-	void Update(double dt);
+	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
+	virtual void Reset();
+	virtual void Update(double dt);
 };
 
 #endif

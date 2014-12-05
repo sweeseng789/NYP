@@ -400,51 +400,31 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string &meshName, Color color, un
 		float theta = slice * degreePerSlice;
 
 		//v0
-		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), 0, radius * sin(Math::DegreeToRadian(theta)));
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta))-10, 0, radius * sin(Math::DegreeToRadian(theta)));
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 
 		//v1
-		v.pos.Set(0, 0, 0);
+		v.pos.Set(0, 10, 0);
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 		float theta2 = (slice + 1) * degreePerSlice;
 
 		//v2
-		v.pos.Set(radius * cos(Math::DegreeToRadian(theta2)), height, radius * sin(Math::DegreeToRadian(theta2)));
-		v.color = color;
-		vertex_buffer_data.push_back(v);
-
-		//v0
-		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), height, radius * sin(Math::DegreeToRadian(theta)));
-		v.color = color;
-		vertex_buffer_data.push_back(v);
-
-		//v1
-		v.pos.Set(0, height, 0);
-		v.color = color;
-		//vertex_buffer_data.push_back(v);
-	
-
-		//v2
-		v.pos.Set(radius * cos(Math::DegreeToRadian(theta2)), height, radius * sin(Math::DegreeToRadian(theta2)));
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta2))- 10, 0, radius * sin(Math::DegreeToRadian(theta2)));
 		v.color = color;
 		vertex_buffer_data.push_back(v);
 	}
 
 	for (unsigned slice = 0; slice< numSlice; ++slice)
 	{
-		index_buffer_data.push_back(slice * 6 + 0);
-		index_buffer_data.push_back(slice * 6 + 1);
-		index_buffer_data.push_back(slice * 6 + 4);
-	
+		index_buffer_data.push_back(slice * 3 + 0);
+		index_buffer_data.push_back(slice * 3 + 1);
+		index_buffer_data.push_back(slice * 3 + 2);
 
-		/*index_buffer_data.push_back(slice * 6 + 3);
-		index_buffer_data.push_back(slice * 6 + 4);
-		index_buffer_data.push_back(slice * 6 + 5);
-		index_buffer_data.push_back(slice * 6 + 5);
-		index_buffer_data.push_back(slice * 6 + 4);
-		index_buffer_data.push_back(slice * 6 + 3);*/
+		index_buffer_data.push_back(slice * 3 + 2);
+		index_buffer_data.push_back(slice * 3 + 1);
+		index_buffer_data.push_back(slice * 3 + 0);
 	}
 
 	Mesh *mesh = new Mesh(meshName);

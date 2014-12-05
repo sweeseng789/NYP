@@ -31,6 +31,7 @@ class SceneLight : public Scene
 		GEO_SATURN,
 		GEO_SATURN_RING,
 		GEO_LIGHTBALL,
+		GEO_CYLINDER,
 		NUM_GEOMETRY,
 	};
 

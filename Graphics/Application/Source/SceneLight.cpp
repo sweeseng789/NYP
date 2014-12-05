@@ -89,6 +89,7 @@ void SceneLight::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 0, 0), 1);
+	meshList[GEO_CYLINDER] = MeshBuilder::GenerateCylinder("Sun", Color(1, 1, 1), 18, 36, 1.f);
 	/*//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 5);
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 36, 1.f, 0.5f);
 	meshList[GEO_SUN] = MeshBuilder::GenerateSphere("Sun", Color(1, 1, 0), 18, 36, 1.f);
@@ -104,7 +105,7 @@ void SceneLight::Init()
 	meshList[GEO_SPHERE]->material.kAmbient.Set(1.f, 0.f, 0.f);
 	meshList[GEO_SPHERE]->material.kDiffuse.Set(0.f, 1.f, 0.f);
 	meshList[GEO_SPHERE]->material.kSpecular.Set(0.f, 0.f, 1.f);
-	meshList[GEO_SPHERE]->material.kShininess = 0.5f;
+	meshList[GEO_SPHERE]->material.kShininess = 1.f;
 
 	meshList[GEO_QUAD]->material.kAmbient.Set(1.f, 0.f, 0.f);
 	meshList[GEO_QUAD]->material.kDiffuse.Set(0.f, 1.f, 0.f);
@@ -175,18 +176,22 @@ void SceneLight::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 	
 	modelStack.PushMatrix();
-	modelStack.Scale(5,5,5);
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	modelStack.Scale(1,1,1);
+	modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Scale(50, 50, 50);
+	modelStack.Scale(10000, 10000, 10000);
 	modelStack.Rotate(90, -90, 0, 1);
-	modelStack.Translate(0, 0, -0.5);
+	modelStack.Translate(0, 0, -0.02);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Scale(0.5, 0.5, 0.5);
+	RenderMesh(meshList[GEO_CYLINDER], false);
+	modelStack.PopMatrix();
 
 }
 

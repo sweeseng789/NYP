@@ -1,10 +1,10 @@
-﻿Build started 5/12/2014 10:25:47 AM.
+﻿Build started 5/12/2014 2:55:10 PM.
      1>Project "C:\Users\swees_000\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\swees_000\Desktop\NYP\Graphics\\glew\include /IC:\Users\swees_000\Desktop\NYP\Graphics\\glfw\include /IC:\Users\swees_000\Desktop\NYP\Graphics\\Common\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneLight.cpp
-         SceneLight.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\swees_000\Desktop\NYP\Graphics\\glew\include /IC:\Users\swees_000\Desktop\NYP\Graphics\\glfw\include /IC:\Users\swees_000\Desktop\NYP\Graphics\\Common\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MeshBuilder.cpp
+         MeshBuilder.cpp
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -40,4 +40,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.30
+Time Elapsed 00:00:00.92

@@ -55,7 +55,7 @@ void Scene3::Init()
 	meshList[GEO_CIRCLE] = MeshBuilder::GenerateCircle("circle", Color(1, 0, 1), 36, 1);
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 36, 1.f, 0.5f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0),18, 36, 1.f);
-	meshList[GEO_CYLINDER] = MeshBuilder::GenerateCylinder("circle", Color(1, 0, 1), 36, 1, 4);
+	//meshList[GEO_CYLINDER] = MeshBuilder::GenerateCylinder("circle", Color(1, 0, 1), 36, 1, 4);
 }
 
 static float ROT_LIMIT = 45.f;

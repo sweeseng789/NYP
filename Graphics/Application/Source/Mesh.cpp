@@ -18,6 +18,8 @@ Mesh::Mesh(const std::string &meshName)
 	// Generate buffers
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indexBuffer);
+
+	textureID = 0;
 }
 
 /******************************************************************************/
@@ -31,6 +33,11 @@ Mesh::~Mesh()
 	// Cleanup VBO here
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &indexBuffer);
+
+	if(textureID > 0)
+	{
+		glDeleteTextures(1, &textureID);
+	}
 }
 
 /******************************************************************************/
@@ -48,11 +55,23 @@ void Mesh::Render()
 
 	//Render call setup
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+	
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color))); //Hewllo world
+	if(textureID > 0)
+	{
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color) + sizeof(Vector3)));
+	}
 	//Actual render call
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+	
+
+
 	if(mode == DRAW_TRIANGLES)
 		glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 	else if(mode == DRAW_TRIANGLE_STRIP)
@@ -60,6 +79,14 @@ void Mesh::Render()
 	else if(mode == DRAW_LINES)
 		glDrawElements(GL_LINES, indexSize, GL_UNSIGNED_INT, 0);
 	
+	
+
+	if(textureID > 0)
+	{
+		glDisableVertexAttribArray(3);
+	}
+
+
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);

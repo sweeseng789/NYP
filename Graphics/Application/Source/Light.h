@@ -9,6 +9,13 @@
 #include "Mesh.h"
 #include"MatrixStack.h"
 
+/******************************************************************************/
+/*!
+		Class Light:
+\brief	Provides methods to setup the light source
+*/
+/******************************************************************************/
+
 struct Light
 {
 	Position position;

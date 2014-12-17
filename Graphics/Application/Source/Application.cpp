@@ -17,6 +17,8 @@
 #include "Scene4.h"
 #include "Scene5.h"
 #include "SceneLight.h"
+#include "SceneLight2.h"
+#include "SceneTexture.h"
 #include "Application.h"
 
 GLFWwindow* m_window;

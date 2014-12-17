@@ -48,7 +48,7 @@ void Scene4::Init()
 	rotateEarth = 0;
 	rotateMars = 0;
 	rotateJupiter = 0;
-	rotateSaturn = 0;
+	rotateTail = 0;
 
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -91,7 +91,7 @@ void Scene4::Update(double dt)
 	rotateEarth += (float)(50 * dt);
 	rotateMars += (float)(40 * dt);
 	rotateJupiter += (float)(60 * dt);
-	rotateSaturn += (float)(55 * dt);
+	rotateTail += (float)(55 * dt);
 
 	camera.Update(dt);
 }
@@ -212,7 +212,7 @@ void Scene4::Render()
 
 	modelStack.PushMatrix();// push Saturn
 	modelStack.Translate(0,0,0);
-	modelStack.Rotate(rotateSaturn, 0 , 1, 0);
+	modelStack.Rotate(rotateTail, 0 , 1, 0);
 	modelStack.Scale(5, 5, 5);
 	modelStack.Translate(12,0,12);
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
@@ -223,7 +223,7 @@ void Scene4::Render()
 
 	modelStack.PushMatrix();// push Saturn rinf
 	modelStack.Translate(0,0,0);
-	modelStack.Rotate(rotateSaturn, 0 , 1, 0);
+	modelStack.Rotate(rotateTail, 0 , 1, 0);
 	modelStack.Scale(12, 12, 12);
 	modelStack.Translate(5,0,5);
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();

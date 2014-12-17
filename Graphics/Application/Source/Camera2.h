@@ -3,6 +3,13 @@
 
 #include "Camera.h"
 
+/******************************************************************************/
+/*!
+		Class Camera2:
+\brief	Provides methods to rotate around model. This is preferred as it rotates around the model in a circle
+*/
+/******************************************************************************/
+
 class Camera2 : public Camera
 {
 public:

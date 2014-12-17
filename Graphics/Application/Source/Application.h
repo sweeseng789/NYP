@@ -3,6 +3,13 @@
 
 #include "timer.h"
 
+/******************************************************************************/
+/*!
+		Class Application:
+\brief	Provides methods to detect user input
+*/
+/******************************************************************************/
+
 class Application
 {
 public:

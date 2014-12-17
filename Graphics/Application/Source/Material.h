@@ -3,6 +3,13 @@
 
 #include "Vertex.h"
 
+/******************************************************************************/
+/*!
+		Class Material:
+\brief	Provides methods to set the lighting of primitive shapes
+*/
+/******************************************************************************/
+
 struct Component
 {
 	float r, g, b;

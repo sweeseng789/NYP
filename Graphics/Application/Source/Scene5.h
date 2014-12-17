@@ -50,7 +50,7 @@ private:
 	float rotateEarth;
 	float rotateMars;
 	float rotateJupiter;
-	float rotateSaturn;
+	float rotateTail;
 	Camera camera;
 
 	MS modelStack, viewStack, projectionStack;

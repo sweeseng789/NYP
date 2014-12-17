@@ -3,6 +3,13 @@
 
 #include "Vector3.h"
 
+/******************************************************************************/
+/*!
+		Class Camera:
+\brief	Provides to rotate around model to view it, but as it have issues Camera2 is generally preferred
+*/
+/******************************************************************************/
+
 class Camera
 {
 public:

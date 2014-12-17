@@ -1,0 +1,279 @@
+﻿Build started 16/12/2014 11:52:25 PM.
+     1>Project "C:\Users\User\Desktop\New folder (2)\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\User\Desktop\New folder (2)\Graphics\\glew\include" /I"C:\Users\User\Desktop\New folder (2)\Graphics\\glfw\include" /I"C:\Users\User\Desktop\New folder (2)\Graphics\\Common\Source" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Common\Source\MatrixStack.cpp ..\Common\Source\Mtx44.cpp ..\Common\Source\timer.cpp ..\Common\Source\Vector3.cpp Source\Application.cpp Source\Camera.cpp Source\Camera2.cpp Source\main.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\SceneLight.cpp Source\shader.cpp Source\Utility.cpp
+         Utility.cpp
+         shader.cpp
+         SceneLight.cpp
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(115): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(115): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(115): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(116): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(118): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(118): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(118): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(127): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(127): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(127): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(128): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(130): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(151): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(151): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(151): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(152): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(154): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(154): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(154): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(157): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(157): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(157): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(170): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(170): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(170): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(176): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(176): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(176): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(177): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(179): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(179): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(179): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(182): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(182): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(182): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(183): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(185): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(185): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(185): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(195): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(195): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(195): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(196): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(196): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(196): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(198): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(198): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(198): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(201): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(201): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(201): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(202): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(204): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(204): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(204): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(207): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(207): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(207): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(210): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(210): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(210): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(213): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(219): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(368): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(372): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(394): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(395): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(474): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(474): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(480): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(480): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(490): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(490): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(496): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(516): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(529): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(529): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(529): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(533): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(535): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(535): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(562): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(562): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(569): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(570): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(570): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(602): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(609): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(609): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(614): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(617): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(619): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(624): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(625): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(631): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(631): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(631): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(634): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(634): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(634): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(635): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(635): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(651): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(656): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(661): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(679): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(692): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(692): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(692): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(694): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(694): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(698): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(724): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(727): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(727): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(727): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(733): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(733): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(734): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(738): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(743): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(755): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(758): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(758): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(758): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(764): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(764): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(765): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(769): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(774): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(800): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(800): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(800): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(806): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(806): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(807): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(811): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(816): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(830): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(830): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(830): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(836): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(836): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(837): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(841): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(846): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(868): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(868): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(898): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(902): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(902): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(902): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(911): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(911): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(915): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(915): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(922): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(926): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(926): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(926): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(933): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(937): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(946): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(946): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(947): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(947): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(952): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(982): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(985): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(985): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(986): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(986): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(991): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1044): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1044): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1044): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1045): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1045): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1055): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1076): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1095): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1095): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1095): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1100): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1103): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1103): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1103): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1104): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1109): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1109): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1109): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1116): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1135): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1135): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1135): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1141): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1141): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1141): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1142): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1160): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1163): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\new folder (2)\graphics\application\source\scenelight.cpp(1203): warning C4305: 'argument' : truncation from 'double' to 'float'
+         MeshBuilder.cpp
+         Mesh.cpp
+         main.cpp
+         Camera2.cpp
+         Camera.cpp
+         Application.cpp
+         Vector3.cpp
+         timer.cpp
+         Mtx44.cpp
+         MatrixStack.cpp
+         Generating Code...
+       ManifestResourceCompile:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\Application.exe.embed.manifest.res" Debug\Application_manifest.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug" /LIBPATH:"C:\Users\User\Desktop\New folder (2)\Graphics\\glew\lib" /LIBPATH:"C:\Users\User\Desktop\New folder (2)\Graphics\\glfw\lib-msvc100" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Application.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.lib" /MACHINE:X86 Debug\Application.exe.embed.manifest.res
+         Debug\MatrixStack.obj
+         Debug\Mtx44.obj
+         Debug\timer.obj
+         Debug\Vector3.obj
+         Debug\Application.obj
+         Debug\Camera.obj
+         Debug\Camera2.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\SceneLight.obj
+         Debug\shader.obj
+         Debug\Utility.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+       Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Application.exe.embed.manifest" /manifest Debug\Application.exe.intermediate.manifest
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\Application.exe.embed.manifest.res" Debug\Application_manifest.rc 
+       LinkEmbedManifest:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug" /LIBPATH:"C:\Users\User\Desktop\New folder (2)\Graphics\\glew\lib" /LIBPATH:"C:\Users\User\Desktop\New folder (2)\Graphics\\glfw\lib-msvc100" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Application.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.lib" /MACHINE:X86 Debug\Application.exe.embed.manifest.res
+         Debug\MatrixStack.obj
+         Debug\Mtx44.obj
+         Debug\timer.obj
+         Debug\Vector3.obj
+         Debug\Application.obj
+         Debug\Camera.obj
+         Debug\Camera2.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\SceneLight.obj
+         Debug\shader.obj
+         Debug\Utility.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+         Application.vcxproj -> C:\Users\User\Desktop\New folder (2)\Graphics\Debug\Application.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\Application.unsuccessfulbuild".
+         Touching "Debug\Application.lastbuildstate".
+     1>Done Building Project "C:\Users\User\Desktop\New folder (2)\Graphics\Application\Application.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.65

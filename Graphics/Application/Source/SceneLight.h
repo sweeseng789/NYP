@@ -2,7 +2,6 @@
 #define LIGHT_H
 
 #include "Mesh.h"
-//#include "Camera.h"
 #include "Camera2.h"
 #include "Light.h"
 #include "Scene.h"
@@ -10,6 +9,13 @@
 #include "Mesh.h"
 #include"MatrixStack.h"
 #include "Utility.h"
+
+/******************************************************************************/
+/*!
+		Class SceneLight:
+\brief	Provides methods to create variables and functions to use for modelling
+*/
+/******************************************************************************/
 
 class SceneLight : public Scene
 {
@@ -34,15 +40,18 @@ class SceneLight : public Scene
 		GEO_PIKACHUNOSE,
 		GEO_PIKACHUBROWN,
 		GEO_PIKACHUSPHEREYELLOW,
-		GEO_BALL1,
-		GEO_BALL2,
-		GEO_BALL3,
-		GEO_BALL4,
-		GEO_BALL5,
-		GEO_BALL6,
-		GEO_BALL7,
-		GEO_BALL8,
-		GEO_BALL9,
+		GEO_REALPIKACHUSPHERE,
+		GEO_BACKSTRIP,
+		GEO_TAILBROWN,
+		GEO_TAILYELLOW,
+
+		GEO_POKEBALLRED,
+		GEO_POKEBALLBLACK,
+		GEO_POKEBALLBLACK2,
+		GEO_POKEBALLWHITE,
+		GEO_POKEBALLWHITE2,
+
+		GEO_TESTING,
 		NUM_GEOMETRY,
 	};
 
@@ -62,6 +71,14 @@ class SceneLight : public Scene
 		U_LIGHT0_KL,
 		U_LIGHT0_KQ,
 		U_LIGHTENABLED,
+
+		U_LIGHT0_TYPE,
+		U_LIGHT0_SPOTDIRECTION,
+		U_LIGHT0_COSCUTOFF,
+		U_LIGHT0_COSINNER,
+		U_LIGHT0_EXPONENT,
+		U_NUMLIGHTS,
+
 		U_TOTAL,
 	};
 public:
@@ -80,9 +97,30 @@ public:
 	void PikachuLeftEars();
 	void PikachuRightEars();
 	void PikachuHead();
-	void PikachuRightEyes();
+	void PikachuEyes();
 	void PikachuNose();
 	void PikachuMouth();
+
+	void PikachuBody(); //Finally
+
+	void PikachuLeftHands();
+	void PikachuRightHands();
+
+	void PikachuLeftFeet();
+	void PikachuRightFeet();
+
+	void PikachuBackstrip();
+
+	void PikachuTail();
+
+	void RenderPikachu();
+
+	void PokeBallTop();
+	void PokeballBottom();
+
+	void RenderPokeball();
+
+	void debugPrint();
 private:
 
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -91,14 +129,18 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	float rotateAngle;
-	float rotateSun;
-	float rotateEarth;
+	float rotateLeftFeet;
+	float rotateRightFeet;
+	float rotateLefthand;
 	float rotateMars;
 	float rotateJupiter;
-	float rotateSaturn;
+	float rotateTail;
 	Camera2 camera;
 
+	Vector3 charPosition;
+	Vector3 charDirection; //might be useful i think
+
+	Vector3 PokeballPosition;
 	Light light[1];
 
 	MS modelStack, viewStack, projectionStack;

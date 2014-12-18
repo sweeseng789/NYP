@@ -379,38 +379,22 @@ void SceneLight::Update(double dt)
 	
 	if (Application::IsKeyPressed('W'))
 	{
-		/*charPosition.z += 0.5 * dt;*/
-		/*speed += 0.1;*/
-		charPosition.z = charPosition.z + sin(Math::RadianToDegree(angle) * speed);
-		charPosition.x = charPosition.x + cos(Math::RadianToDegree(angle) * speed);
+		charPosition.z += cos(Math::DegreeToRadian(angle)) * 10 * dt;
+		charPosition.x += sin(Math::DegreeToRadian(angle)) * 10 * dt;
 	}
 	if (Application::IsKeyPressed('S'))
 	{
-		/*charPosition.z -= 0.5 * dt;*/
-		/*speed -= 0.1;*/
-		charPosition.z = charPosition.z + sin(Math::RadianToDegree(-angle) * speed);
-		charPosition.x = charPosition.x + cos(Math::RadianToDegree(-angle) * speed);
+		charPosition.z -= cos(Math::DegreeToRadian(angle)) * 10 * dt;
+		charPosition.x -= sin(Math::DegreeToRadian(angle)) * 10 * dt;
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		/*charDirection.y -= ROTATE_SPEED * dt;*/
-		angle -= 1;
+		angle += 100 * dt;
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		/*charDirection.y += ROTATE_SPEED * dt;*/
-		angle += 1;
+		angle -= 100 * dt;
 	}
-
-	if (speed > 10)
-	{
-		speed = 10;
-	}
-	std::cout << "angle: "<< angle << std::endl;
-	std::cout << "charPosition.x: " << charPosition.x << std::endl;
-	std::cout << "charPosition.z: " << charPosition.z << std::endl;
-	std::cout << "speed: " << speed << std::endl;
-	system("cls");
 	/****************************************************************************/
 	/*!
 	\brief
@@ -1230,12 +1214,12 @@ void SceneLight::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Scale(10000, 10000, 10000);
-	modelStack.Rotate(90, -90, 0, 1);
-	modelStack.Translate(0, 0, -0.02);
-	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Scale(10000, 10000, 10000);
+	//modelStack.Rotate(90, -90, 0, 1);
+	//modelStack.Translate(0, 0, -0.02);
+	//RenderMesh(meshList[GEO_QUAD], true);
+	//modelStack.PopMatrix();
 
 	RenderPikachu();
 	
@@ -1243,6 +1227,10 @@ void SceneLight::Render()
 	modelStack.Translate(PokeballPosition.x, PokeballPosition.y, PokeballPosition.z);
 	RenderPokeball();
 	modelStack.PopMatrix();
+
+	/*modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_CUBE], true);
+	modelStack.PopMatrix();*/
 }
 
 void SceneLight::RenderMesh(Mesh *mesh, bool enableLight)

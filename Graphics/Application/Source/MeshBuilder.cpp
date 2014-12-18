@@ -215,47 +215,134 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float 
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 
-	v.pos.Set(-0.5f,-0.5f,-0.5f);
+	v.pos.Set(-0.5f,-0.5f,-0.5f);//back start
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, -1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f,-0.5f,-0.5f);
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, -1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f, 0.5f,-0.5f);
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, -1);
 	vertex_buffer_data.push_back(v);
 
-	v.pos.Set(-0.5f, 0.5f,-0.5f);
+	v.pos.Set(-0.5f, 0.5f,-0.5f); //back end
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, -1);
 	vertex_buffer_data.push_back(v);
 
-	v.pos.Set(-0.5f,-0.5f, 0.5f);
+	v.pos.Set(-0.5f,-0.5f, 0.5f);//front start
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, 1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f,-0.5f, 0.5f);
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
-	v.normal.Set(0, 1, 0);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, 1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f, 0.5f, 0.5f);
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, 1);
 	vertex_buffer_data.push_back(v);
 
-	v.pos.Set(-0.5f, 0.5f, 0.5f);
+	v.pos.Set(-0.5f, 0.5f, 0.5f);//front end
 	v.color = color;
-	v.normal.Set(0.707, 0.707, 0.707);
+	//v.normal.Set(0.707, 0.707, 0.707);
+	v.normal.Set(0, 0, 1);
 	vertex_buffer_data.push_back(v);
-	
+
+	v.pos.Set(0.5f, 0.5f, -0.5f);//right start
+	v.color = color;
+	v.normal.Set(1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, 0.5f, 0.5f);
+	v.color = color;
+	v.normal.Set(1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, -0.5f, 0.5f);
+	v.color = color;
+	v.normal.Set(1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, -0.5f, -0.5f);//right end
+	v.color = color;
+	v.normal.Set(1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, -0.5f, -0.5f);//bottom start
+	v.color = color;
+	v.normal.Set(0, -1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, -0.5f, -0.5f);
+	v.color = color;
+	v.normal.Set(0, -1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, -0.5f, 0.5f);
+	v.color = color;
+	v.normal.Set(0, -1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, -0.5f, 0.5f);//bottom end
+	v.color = color;
+	v.normal.Set(0, -1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, 0.5f, 0.5f);//top statr
+	v.color = color;
+	v.normal.Set(0, 1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f, 0.5f, -0.5f);
+	v.color = color;
+	v.normal.Set(0, 1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, 0.5f, -0.5f);
+	v.color = color;
+	v.normal.Set(0, 1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, 0.5f, 0.5f);//topend
+	v.color = color;
+	v.normal.Set(0, 1, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, 0.5f, 0.5f);//left start
+	v.color = color;
+	v.normal.Set(-1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, 0.5f, -0.5f);
+	v.color = color;
+	v.normal.Set(-1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, -0.5f, -0.5f);
+	v.color = color;
+	v.normal.Set(-1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f, -0.5f, 0.5f);
+	v.color = color;
+	v.normal.Set(-1, 0, 0);
+	vertex_buffer_data.push_back(v);
+
 	std::vector<GLuint> index_buffer_data;
 	index_buffer_data.push_back(7);
 	index_buffer_data.push_back(4);

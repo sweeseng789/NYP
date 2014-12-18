@@ -1,19 +1,11 @@
-﻿Build started 17/12/2014 11:36:15 PM.
+﻿Build started 18/12/2014 1:13:34 PM.
      1>Project "C:\Users\swees_000\Desktop\NYP\Graphics\Common\Common.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Common.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MatrixStack.cpp Source\Mtx44.cpp Source\timer.cpp Source\Vector3.cpp
-         Vector3.cpp
-         timer.cpp
-         Mtx44.cpp
-         MatrixStack.cpp
-         Generating Code...
+         All outputs are up-to-date.
        Lib:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\swees_000\Desktop\NYP\Graphics\Debug\Common.lib" /NOLOGO Debug\MatrixStack.obj
-         Debug\Mtx44.obj
-         Debug\timer.obj
-         Debug\Vector3.obj
+         All outputs are up-to-date.
          Common.vcxproj -> C:\Users\swees_000\Desktop\NYP\Graphics\Debug\Common.lib
        FinalizeBuildStatus:
          Deleting file "Debug\Common.unsuccessfulbuild".
@@ -22,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.12
+Time Elapsed 00:00:00.06

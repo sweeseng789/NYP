@@ -133,12 +133,17 @@ private:
 	float rotateRightFeet;
 	float rotateLefthand;
 	float rotateMars;
-	float rotateJupiter;
+	float rotateJupiter;	
 	float rotateTail;
+
+	float speed;
+	float angle;
 	Camera2 camera;
 
 	Vector3 charPosition;
 	Vector3 charDirection; //might be useful i think
+
+	Mtx44 doingSomething;
 
 	Vector3 PokeballPosition;
 	Light light[1];

@@ -91,7 +91,19 @@ void SceneLight::Init()
 	rotateJupiter = 1;
 	rotateTail = 0;
 
-	charPosition.x = 3600;
+	/*charPosition.x = 36000;
+	charPosition.z = 1;
+	charPosition.y = 0;*/
+	//charPosition(36000, 0, 1);
+
+
+	/*charDirection.x = charPosition.z = 0;
+	charDirection.y = 1;*/
+	//charPositon(0, 1, 0);
+
+	speed = 0.1;
+	angle = 3600;
+
 	PokeballPosition.x  = PokeballPosition.z = 30;
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -360,27 +372,45 @@ void SceneLight::Update(double dt)
 	/****************************************************************************/
 	/*!
 	\brief
-	when player pressed W or S, Pikachu will move in their current direction
-	to rotate or change the direction, user will have to press A or D
+	when player pressed W or S, Pikachu will move in their current angle
+	to rotate or change the angle, user will have to press A or D
 	*/
 	/****************************************************************************/
+	
 	if (Application::IsKeyPressed('W'))
 	{
-		charPosition.z += 0.1;
+		/*charPosition.z += 0.5 * dt;*/
+		/*speed += 0.1;*/
+		charPosition.z = charPosition.z + sin(Math::RadianToDegree(angle) * speed);
+		charPosition.x = charPosition.x + cos(Math::RadianToDegree(angle) * speed);
 	}
 	if (Application::IsKeyPressed('S'))
 	{
-		charPosition.z -= 0.1;
+		/*charPosition.z -= 0.5 * dt;*/
+		/*speed -= 0.1;*/
+		charPosition.z = charPosition.z + sin(Math::RadianToDegree(-angle) * speed);
+		charPosition.x = charPosition.x + cos(Math::RadianToDegree(-angle) * speed);
 	}
 	if (Application::IsKeyPressed('A'))
 	{
-		charPosition.x -= 1;
+		/*charDirection.y -= ROTATE_SPEED * dt;*/
+		angle -= 1;
 	}
 	if (Application::IsKeyPressed('D'))
 	{
-		charPosition.x += 1;
+		/*charDirection.y += ROTATE_SPEED * dt;*/
+		angle += 1;
 	}
 
+	if (speed > 10)
+	{
+		speed = 10;
+	}
+	std::cout << "angle: "<< angle << std::endl;
+	std::cout << "charPosition.x: " << charPosition.x << std::endl;
+	std::cout << "charPosition.z: " << charPosition.z << std::endl;
+	std::cout << "speed: " << speed << std::endl;
+	system("cls");
 	/****************************************************************************/
 	/*!
 	\brief
@@ -395,7 +425,7 @@ void SceneLight::Update(double dt)
 			PokeballPosition.z -= 0.1;
 			PokeballPosition.x -= 0.1;
 		}
-	}
+	}	
 	/*if (rotateLefthand * Lefthand < 0)
 	{
 		Lefthand = 0;
@@ -1033,8 +1063,10 @@ Functions Called: PikachuHead, PikachuBody, PikachuLeftFeet, PikachuRightFeet, P
 void SceneLight::RenderPikachu()
 {
 	modelStack.PushMatrix(); //ppikachu as a whole
-	modelStack.Translate(0, charPosition.y, charPosition.z);
-	modelStack.Rotate(charPosition.x, 0, charPosition.x, 1);	
+	//modelStack.Translate(0, charPosition.y, charPosition.z);
+	//modelStack.Rotate(charDirection.y, 0, charDirection.y, 1);
+	modelStack.Translate(charPosition.x, 0, charPosition.z);
+	modelStack.Rotate(angle, 0, angle, 1);
 
 	modelStack.PushMatrix();
 	modelStack.Scale(rotateJupiter, rotateJupiter, rotateJupiter);

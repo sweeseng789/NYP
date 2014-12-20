@@ -90,21 +90,18 @@ void SceneLight::Init()
 	rotateMars = 0;
 	rotateJupiter = 1;
 	rotateTail = 0;
-
-	/*charPosition.x = 36000;
-	charPosition.z = 1;
-	charPosition.y = 0;*/
-	//charPosition(36000, 0, 1);
-
-
-	/*charDirection.x = charPosition.z = 0;
-	charDirection.y = 1;*/
-	//charPositon(0, 1, 0);
-
+	touch = false;
+	scaleBall = 12;
+	openBall = 0;
 	speed = 0.1;
 	angle = 3600;
-
+	ballAtGround = false;
+	rotateBallSideWays = 1;
+	rotateBallCount = 0;
+	Catching = false;
+	returnSize = false;
 	PokeballPosition.x  = PokeballPosition.z = 30;
+	PokeballPosition.y = 0;
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -359,14 +356,24 @@ void SceneLight::Update(double dt)
 		Lefthand = -Lefthand;
 	}
 
-	if (Application::IsKeyPressed('2'))
+	/*if (Application::IsKeyPressed('2'))
 	{
-		rotateTail += (float)(pokeball * ROTATE_SPEED * dt * 5);
-	}
-	if (rotateTail > 45)
+		openBall += (float)(pokeball * ROTATE_SPEED * dt * 5);
+	}*/
+	
+	if (touch == true && pokeballOpened == false)
 	{
-		rotateTail = -rotateTail;
+		openBall += (float)(pokeball * ROTATE_SPEED * dt * 30);
+		if (openBall > 45)
+		{
+			openBall = 45;
+			pokeballOpened = true;
+		}
 	}
+	/*if (openBall > 45)
+	{
+		openBall = -openBall;
+	}*/
 
 
 	/****************************************************************************/
@@ -395,6 +402,10 @@ void SceneLight::Update(double dt)
 	{
 		angle -= 100 * dt;
 	}
+	if (Catching == true)
+	{
+		charPosition.z = charPosition.x = 0;
+	}
 	/****************************************************************************/
 	/*!
 	\brief
@@ -404,12 +415,92 @@ void SceneLight::Update(double dt)
 	/****************************************************************************/
 	if (Application::IsKeyPressed('9'))
 	{
-		if(PokeballPosition.z > charPosition.z)
-		{
-			PokeballPosition.z -= 0.1;
-			PokeballPosition.x -= 0.1;
-		}
+		Catching = true;
 	}	
+	if (Catching == true)
+	{
+		if(PokeballPosition.z > charPosition.z && charPosition.z == 0)
+		{
+			PokeballPosition.z -= 20 * (float)dt;
+			PokeballPosition.x -= 20 * (float)dt;
+		}
+
+		if (PokeballPosition.z <= 0)
+		{
+			Catching = false;
+			touch = true;
+		}
+	}
+
+	if (openBall == 45)
+	{
+		scaleBall -= 50 * (float)dt;
+		if(scaleBall <= 1)
+		{
+			scaleBall = 1;
+			touch2 = true;
+		}
+	}
+
+	if (pokeballOpened = true && touch2 == true)
+	{
+		openBall -= (float)(pokeball * ROTATE_SPEED * dt * 30);
+		if (openBall <= 0)
+		{
+			openBall = 0;
+			pokeballOpened = false;
+		}
+	}
+
+	if (pokeballOpened == false && touch2 == true)
+	{
+		PokeballPosition.y -= (float)(ROTATE_SPEED * dt * 2);
+		if (PokeballPosition.y <= -9.5)
+		{
+			PokeballPosition.y = -9.5;
+			ballAtGround = true;
+		}
+	}
+
+	if (ballAtGround == true && touch == true)
+	{
+		rotateBallSideWays += (float)(ROTATE_SPEED * dt * 2);
+		if (rotateBallSideWays > 30)
+		{
+			rotateBallSideWays = -rotateBallSideWays;
+			rotateBallCount++;
+		}
+	}
+	if (rotateBallCount >= 2 && ballAtGround == true)
+	{
+		//touch = false;
+		PokeballPosition.y = 0;
+		returnSize = true;
+		ballAtGround = false;
+	}
+
+	if (returnSize == true && ballAtGround == false)
+	{
+		scaleBall += 50 * (float)dt;
+		if (scaleBall > 12)
+		{
+			touch = false;
+			scaleBall = 12;
+			openBall = 0;
+			angle = 3600;
+			ballAtGround = false;
+			rotateBallSideWays = 1;
+			rotateBallCount = 0;
+			Catching = false;
+			returnSize = false;
+			PokeballPosition.x  = PokeballPosition.z = 30;
+			//PokeballPosition.y = 0;
+		}
+	}
+	if (touch == false)
+	{
+		PokeballPosition.y = 0;
+	}
 	/*if (rotateLefthand * Lefthand < 0)
 	{
 		Lefthand = 0;
@@ -1047,8 +1138,6 @@ Functions Called: PikachuHead, PikachuBody, PikachuLeftFeet, PikachuRightFeet, P
 void SceneLight::RenderPikachu()
 {
 	modelStack.PushMatrix(); //ppikachu as a whole
-	//modelStack.Translate(0, charPosition.y, charPosition.z);
-	//modelStack.Rotate(charDirection.y, 0, charDirection.y, 1);
 	modelStack.Translate(charPosition.x, 0, charPosition.z);
 	modelStack.Rotate(angle, 0, angle, 1);
 
@@ -1175,7 +1264,7 @@ void SceneLight::RenderPokeball()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0.05, -1);
-	modelStack.Rotate(rotateTail, -rotateTail, 0 ,1);
+	modelStack.Rotate(openBall, -openBall, 0 ,1);
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -0.05, 1);
 	PokeBallTop();
@@ -1187,7 +1276,19 @@ void SceneLight::RenderPokeball()
 
 void SceneLight::debugPrint()
 {
-	std::cout << rotateLefthand << std::endl;
+	std::cout << "touch: " << touch << std::endl;
+	std::cout << "scaleBall: " << scaleBall << std::endl;
+	std::cout << "openBall: " << openBall << std::endl;
+	std::cout << "angle: " << angle << std::endl;
+	std::cout << "ballAtGround: " << ballAtGround << std::endl;
+	std::cout << "rotateBallSideways: " << rotateBallSideWays << std::endl;
+	std::cout << "rotateBallCount: " << rotateBallCount << std::endl;
+	std::cout << "Catching: " << Catching << std::endl;
+	std::cout << "returnSize: " << returnSize << std::endl;
+	std::cout << "PokeballPosition.x: " << PokeballPosition.x << std::endl;
+	std::cout << "PokeballPosition.z: " << PokeballPosition.z << std::endl;
+	std::cout << "PokeballPosition.y: " << PokeballPosition.y << std::endl;
+	system("cls");
 }
 
 void SceneLight::Render()
@@ -1214,23 +1315,38 @@ void SceneLight::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Scale(10000, 10000, 10000);
-	//modelStack.Rotate(90, -90, 0, 1);
-	//modelStack.Translate(0, 0, -0.02);
-	//RenderMesh(meshList[GEO_QUAD], true);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Scale(10000, 10000, 10000);
+	modelStack.Rotate(90, -90, 0, 1);
+	modelStack.Translate(0, 0, -0.0011);
+	RenderMesh(meshList[GEO_QUAD], true);
+	modelStack.PopMatrix();
 
-	RenderPikachu();
+	if (touch == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, PokeballPosition.y, 0);
+		modelStack.Rotate(rotateBallSideWays, 0, 0, rotateBallSideWays);
+		modelStack.Scale(scaleBall, scaleBall, scaleBall);
+		RenderMesh(meshList[GEO_SPHERE], true);
+		modelStack.PopMatrix();
+	}
+	else if(touch == false)
+	{
+		RenderPikachu();
+	}
 	
 	modelStack.PushMatrix();
 	modelStack.Translate(PokeballPosition.x, PokeballPosition.y, PokeballPosition.z);
-	RenderPokeball();
+	modelStack.Rotate(rotateBallSideWays, 0, 0, rotateBallSideWays);
+	modelStack.Scale(1.5, 1.5, 1.5);
+	if (Catching == true || touch == true)
+	{
+		RenderPokeball();
+	}
 	modelStack.PopMatrix();
 
-	/*modelStack.PushMatrix();
-	RenderMesh(meshList[GEO_CUBE], true);
-	modelStack.PopMatrix();*/
+	debugPrint();
 }
 
 void SceneLight::RenderMesh(Mesh *mesh, bool enableLight)
@@ -1258,8 +1374,6 @@ void SceneLight::RenderMesh(Mesh *mesh, bool enableLight)
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
 	mesh->Render();
-
-
 }
 
 

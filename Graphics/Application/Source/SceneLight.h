@@ -136,16 +136,26 @@ private:
 	float rotateJupiter;	
 	float rotateTail;
 
+	float scaleBall;
+	float openBall;
+
 	float speed;
 	float angle;
+	bool touch;
+	bool touch2;
+	bool pokeballOpened;
+	bool ballAtGround;
+	float rotateBallSideWays;
+	int rotateBallCount;
+	bool Catching;
+	bool returnSize;
 	Camera2 camera;
 
 	Vector3 charPosition;
 	Vector3 charDirection; //might be useful i think
 
-	Mtx44 doingSomething;
-
 	Vector3 PokeballPosition;
+
 	Light light[1];
 
 	MS modelStack, viewStack, projectionStack;

@@ -176,6 +176,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>PikachuRightFeet</b> 
 <tr class="memitem:a3e2e9d713c572bd248ebfa3bfa176004"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_scene_light.html#a3e2e9d713c572bd248ebfa3bfa176004">RenderPokeball</a> ()</td></tr>
 <tr class="memdesc:a3e2e9d713c572bd248ebfa3bfa176004"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderPokeball is a function used to accomdate all the other Pokeball's parts that i have created before it it called in render so as to keep the code clean.  <a href="#a3e2e9d713c572bd248ebfa3bfa176004">More...</a><br /></td></tr>
 <tr class="separator:a3e2e9d713c572bd248ebfa3bfa176004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9b40305e46c16c06ab157ef9a24c562"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9b40305e46c16c06ab157ef9a24c562"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>RenderTrees</b> ()</td></tr>
+<tr class="separator:ab9b40305e46c16c06ab157ef9a24c562"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab21debc8928012f3f824df19aa7a2c35"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab21debc8928012f3f824df19aa7a2c35"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>debugPrint</b> ()</td></tr>
 <tr class="separator:ab21debc8928012f3f824df19aa7a2c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -507,10 +510,66 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>debugPrint</b> ()</td
 </div><div class="memdoc">
 <p>If user pressed spacebar, the left feet will move first. If the left feet have reached 30 degree it will increment a count. For the right feet if count is more than zero, it would then start moving also, this is used to create a walking animation without both feet moving simultaneously</p>
 <p>This is used to rotate the tail, when it reached 20 degree, it would then become a minus variable and minus off the total value to create a recuring rotating tail</p>
-<p>when player pressed W or S, Pikachu will move in their current direction to rotate or change the direction, user will have to press A or D</p>
+<p>when player pressed W or S, Pikachu will move in their current angle to rotate or change the angle, user will have to press A or D</p>
 <p>When players pressed the button for the pokeball, if the position of the pokeball is more than the position of pikachu it will keep minusing off the value till it reaches pikachu</p>
-<p>*if (left == true)</p>
-<p>*if(right == true) </p>
+<p>if the pokeball touches pikachu and pokeball is not open, it will rotate the top of the pokeball to 45 and pokeballopened will become true</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">touch</td><td></td></tr>
+    <tr><td class="paramname">pokeballOpened</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if the touched pikachua nad it have opened, it will scale the ball of light to 1 and then set touch2 to true</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">touch2</td><td></td></tr>
+    <tr><td class="paramname">scaleBall</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if the pokeball is open and it the ball of light is scaled to 1 plus the ball have touched pikachu it will close up the pokeball by setting openBall = 0 and pokeballOpened to false</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">openBall</td><td></td></tr>
+    <tr><td class="paramname">pokeballOpened</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if the pokeball have closed with the ball of light init, it will set the pokeball's position to fall down to -9.5 once it reaches -9.5, it will be setted -9.5 with ballAtGround to false</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">PokeballPosition.y</td><td></td></tr>
+    <tr><td class="paramname">ballAtGround</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if the pokeball have touched the ground with the ball of light init, it will rotate the ball when rotating the ball and it rotates to about 30 degree, it will be a negative value minusing the value away and incrementing rotateBallCount by 1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rotateBallCount</td><td></td></tr>
+    <tr><td class="paramname">rotateBallSideWays</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Once rotateBallCount reaches 2, it will place the pokeball at 0 before changing returnSize to true and ballAtGround to false;</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">PokeballPosition.y</td><td></td></tr>
+    <tr><td class="paramname">returnSize</td><td></td></tr>
+    <tr><td class="paramname">ballAtGround</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if returnSize is true and ballAtGround is 0, mreaning that its at 0, it will rescale the ball of light to 12</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scaleBall</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if the ball of light size is 12 and returnSize is true and ballAtGround = false it will reset everything so that user can reuse the animation again</p>
+<p>if the pokeball touch Pikachu, the camera will then have the coordinates of the pokeball with the z axis placed further away then when pikachu is releasesd from teh pokeball the camera will then resets itself back</p>
 
 <p>Implements <a class="el" href="class_scene.html">Scene</a>.</p>
 
@@ -523,7 +582,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>debugPrint</b> ()</td
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 16 2014 23:46:09 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 21 2014 23:53:30 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

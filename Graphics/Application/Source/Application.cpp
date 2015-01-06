@@ -19,6 +19,7 @@
 #include "SceneLight.h"
 #include "SceneLight2.h"
 #include "SceneTexture.h"
+#include "GameOfLife.h"
 #include "Application.h"
 
 GLFWwindow* m_window;

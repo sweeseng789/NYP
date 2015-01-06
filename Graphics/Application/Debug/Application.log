@@ -1,5 +1,5 @@
-﻿Build started 19/12/2014 4:45:56 PM.
-     1>Project "C:\Users\swees_000\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
+﻿Build started 7/1/2015 12:35:17 AM.
+     1>Project "C:\Users\User\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -13,8 +13,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\Application.unsuccessfulbuild".
          Touching "Debug\Application.lastbuildstate".
-     1>Done Building Project "C:\Users\swees_000\Desktop\NYP\Graphics\Application\Application.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\User\Desktop\NYP\Graphics\Application\Application.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.07
+Time Elapsed 00:00:00.05

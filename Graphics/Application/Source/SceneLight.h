@@ -51,6 +51,9 @@ class SceneLight : public Scene
 		GEO_POKEBALLWHITE,
 		GEO_POKEBALLWHITE2,
 
+		GEO_BARK,
+		GEO_LEAFS,
+
 		GEO_TESTING,
 		NUM_GEOMETRY,
 	};
@@ -120,6 +123,8 @@ public:
 
 	void RenderPokeball();
 
+	void RenderTrees();
+
 	void debugPrint();
 private:
 
@@ -149,12 +154,15 @@ private:
 	int rotateBallCount;
 	bool Catching;
 	bool returnSize;
+
 	Camera2 camera;
 
 	Vector3 charPosition;
 	Vector3 charDirection; //might be useful i think
 
 	Vector3 PokeballPosition;
+
+	Vector3 CameraPosition;
 
 	Light light[1];
 

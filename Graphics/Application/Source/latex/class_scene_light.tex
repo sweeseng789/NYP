@@ -77,6 +77,9 @@ void \hyperlink{class_scene_light_a35bb7ede9ffd535ca637a521ce472a16}{Pokeball\+B
 \begin{DoxyCompactList}\small\item\em Pokeball\+Bottom is a function used to create the bottom part of the pokeball. \end{DoxyCompactList}\item 
 void \hyperlink{class_scene_light_a3e2e9d713c572bd248ebfa3bfa176004}{Render\+Pokeball} ()
 \begin{DoxyCompactList}\small\item\em Render\+Pokeball is a function used to accomdate all the other Pokeball's parts that i have created before it it called in render so as to keep the code clean. \end{DoxyCompactList}\item 
+\hypertarget{class_scene_light_ab9b40305e46c16c06ab157ef9a24c562}{void {\bfseries Render\+Trees} ()}\label{class_scene_light_ab9b40305e46c16c06ab157ef9a24c562}
+
+\item 
 \hypertarget{class_scene_light_ab21debc8928012f3f824df19aa7a2c35}{void {\bfseries debug\+Print} ()}\label{class_scene_light_ab21debc8928012f3f824df19aa7a2c35}
 
 \end{DoxyCompactItemize}
@@ -309,13 +312,76 @@ If user pressed spacebar, the left feet will move first. If the left feet have r
 
 This is used to rotate the tail, when it reached 20 degree, it would then become a minus variable and minus off the total value to create a recuring rotating tail
 
-when player pressed W or S, Pikachu will move in their current direction to rotate or change the direction, user will have to press A or D
+when player pressed W or S, Pikachu will move in their current angle to rotate or change the angle, user will have to press A or D
 
 When players pressed the button for the pokeball, if the position of the pokeball is more than the position of pikachu it will keep minusing off the value till it reaches pikachu
 
-$\ast$if (left == true)
+if the pokeball touches pikachu and pokeball is not open, it will rotate the top of the pokeball to 45 and pokeballopened will become true
 
-$\ast$if(right == true) 
+
+\begin{DoxyParams}{Parameters}
+{\em touch} & \\
+\hline
+{\em pokeball\+Opened} & \\
+\hline
+\end{DoxyParams}
+if the touched pikachua nad it have opened, it will scale the ball of light to 1 and then set touch2 to true
+
+
+\begin{DoxyParams}{Parameters}
+{\em touch2} & \\
+\hline
+{\em scale\+Ball} & \\
+\hline
+\end{DoxyParams}
+if the pokeball is open and it the ball of light is scaled to 1 plus the ball have touched pikachu it will close up the pokeball by setting open\+Ball = 0 and pokeball\+Opened to false
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Ball} & \\
+\hline
+{\em pokeball\+Opened} & \\
+\hline
+\end{DoxyParams}
+if the pokeball have closed with the ball of light init, it will set the pokeball's position to fall down to -\/9.\+5 once it reaches -\/9.\+5, it will be setted -\/9.\+5 with ball\+At\+Ground to false
+
+
+\begin{DoxyParams}{Parameters}
+{\em Pokeball\+Position.\+y} & \\
+\hline
+{\em ball\+At\+Ground} & \\
+\hline
+\end{DoxyParams}
+if the pokeball have touched the ground with the ball of light init, it will rotate the ball when rotating the ball and it rotates to about 30 degree, it will be a negative value minusing the value away and incrementing rotate\+Ball\+Count by 1.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rotate\+Ball\+Count} & \\
+\hline
+{\em rotate\+Ball\+Side\+Ways} & \\
+\hline
+\end{DoxyParams}
+Once rotate\+Ball\+Count reaches 2, it will place the pokeball at 0 before changing return\+Size to true and ball\+At\+Ground to false;
+
+
+\begin{DoxyParams}{Parameters}
+{\em Pokeball\+Position.\+y} & \\
+\hline
+{\em return\+Size} & \\
+\hline
+{\em ball\+At\+Ground} & \\
+\hline
+\end{DoxyParams}
+if return\+Size is true and ball\+At\+Ground is 0, mreaning that its at 0, it will rescale the ball of light to 12
+
+
+\begin{DoxyParams}{Parameters}
+{\em scale\+Ball} & \\
+\hline
+\end{DoxyParams}
+if the ball of light size is 12 and return\+Size is true and ball\+At\+Ground = false it will reset everything so that user can reuse the animation again
+
+if the pokeball touch Pikachu, the camera will then have the coordinates of the pokeball with the z axis placed further away then when pikachu is releasesd from teh pokeball the camera will then resets itself back
 
 Implements \hyperlink{class_scene}{Scene}.
 

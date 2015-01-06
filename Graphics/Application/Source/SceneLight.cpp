@@ -68,7 +68,7 @@ void SceneLight::Init()
 	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
 	glUseProgram(m_programID);
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	light[0].position.Set(0, 10, 0);
+	light[0].position.Set(10, 12, 5);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 1; //0 will shut off lighting
 	light[0].kC = 1.f;
@@ -87,7 +87,6 @@ void SceneLight::Init()
 	rotateLeftFeet = 0;
 	rotateRightFeet = 0;
 	rotateLefthand = 1;
-	rotateMars = 0;
 	rotateJupiter = 1;
 	rotateTail = 0;
 	touch = false;
@@ -102,8 +101,12 @@ void SceneLight::Init()
 	returnSize = false;
 	PokeballPosition.x  = PokeballPosition.z = 30;
 	PokeballPosition.y = 0;
+
+	CameraPosition.x = 1;
+	CameraPosition.y = 5;
+	CameraPosition.z = 30;
 	//Initialize camera settings
-	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	//camera.Init(Vector3(CameraPosition.x, CameraPosition.y, CameraPosition.z), Vector3(1, 0, 0), Vector3(0, 1, 0));
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
@@ -198,7 +201,7 @@ void SceneLight::Init()
 	
 	meshList[GEO_BACKSTRIP] = MeshBuilder::GenerateSphere("mouth", Color(1, 1, 1), 18, 36, 1.f);
 	meshList[GEO_BACKSTRIP]->material.kAmbient.Set(0.36078431372f, 0.21176470588f, 0.07450980392f);
-	meshList[GEO_BACKSTRIP]->material.kDiffuse.Set(0.f, 1.f, 0.f);
+	meshList[GEO_BACKSTRIP]->material.kDiffuse.Set(0.36078431372f, 0.21176470588f, 0.07450980392f);
 	meshList[GEO_BACKSTRIP]->material.kSpecular.Set(0.36078431372f, 0.21176470588f, 0.07450980392f);
 	meshList[GEO_BACKSTRIP]->material.kShininess = 1.f;
 	
@@ -331,18 +334,18 @@ void SceneLight::Update(double dt)
 			RightFeet = -RightFeet;
 		}
 	
-		if (count > 1)
+		if (count >= 1)
 		{
 			rotateRightFeet += (float)(RightFeet * ROTATE_SPEED * dt * 5);
 		}
 	
 		rotateLeftFeet += (float)(LeftFeet * ROTATE_SPEED * dt * 5);
 	}
-	else if (pressing = false)
+	else if (pressing == false)
 	{
-		count = 0;                                
+		count = 0;
+		rotateRightFeet = rotateLeftFeet = 0;
 	}
-	
 	/****************************************************************************/
 	/*!
 	\brief
@@ -355,26 +358,6 @@ void SceneLight::Update(double dt)
 	{
 		Lefthand = -Lefthand;
 	}
-
-	/*if (Application::IsKeyPressed('2'))
-	{
-		openBall += (float)(pokeball * ROTATE_SPEED * dt * 5);
-	}*/
-	
-	if (touch == true && pokeballOpened == false)
-	{
-		openBall += (float)(pokeball * ROTATE_SPEED * dt * 30);
-		if (openBall > 45)
-		{
-			openBall = 45;
-			pokeballOpened = true;
-		}
-	}
-	/*if (openBall > 45)
-	{
-		openBall = -openBall;
-	}*/
-
 
 	/****************************************************************************/
 	/*!
@@ -413,7 +396,7 @@ void SceneLight::Update(double dt)
 	it will keep minusing off the value till it reaches pikachu
 	*/
 	/****************************************************************************/
-	if (Application::IsKeyPressed('9'))
+	if (Application::IsKeyPressed('C'))
 	{
 		Catching = true;
 	}	
@@ -421,18 +404,48 @@ void SceneLight::Update(double dt)
 	{
 		if(PokeballPosition.z > charPosition.z && charPosition.z == 0)
 		{
-			PokeballPosition.z -= 20 * (float)dt;
-			PokeballPosition.x -= 20 * (float)dt;
+			PokeballPosition.z -= 35 * (float)dt;
+			PokeballPosition.x -= 35 * (float)dt;
 		}
 
 		if (PokeballPosition.z <= 0)
 		{
-			Catching = false;
+			PokeballPosition.z = 0;
 			touch = true;
 		}
 	}
 
-	if (openBall == 45)
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if the pokeball touches pikachu and pokeball is not open, it will rotate the top of the pokeball to 45 and pokeballopened will become true
+
+	\param touch
+	\param pokeballOpened
+	*/
+	/****************************************************************************/
+	if (touch == true && pokeballOpened == false)
+	{
+		openBall += (float)(pokeball * ROTATE_SPEED * dt * 30);
+		if (openBall > 45)
+		{
+			openBall = 45;
+			pokeballOpened = true;
+		}
+	}
+
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if the touched pikachua nad it have opened, it will scale the ball of light to 1 and then set touch2 to true
+
+	\param touch2
+	\param scaleBall
+	*/
+	/****************************************************************************/
+	if (pokeballOpened == true && touch == true)
 	{
 		scaleBall -= 50 * (float)dt;
 		if(scaleBall <= 1)
@@ -442,7 +455,19 @@ void SceneLight::Update(double dt)
 		}
 	}
 
-	if (pokeballOpened = true && touch2 == true)
+
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if the pokeball is open and it the ball of light is scaled to 1 plus the ball have touched pikachu
+	it will close up the pokeball by setting openBall = 0 and pokeballOpened to false
+
+	\param openBall
+	\param pokeballOpened
+	*/
+	/****************************************************************************/
+	if (pokeballOpened = true && touch2 == true && touch == true)
 	{
 		openBall -= (float)(pokeball * ROTATE_SPEED * dt * 30);
 		if (openBall <= 0)
@@ -452,7 +477,18 @@ void SceneLight::Update(double dt)
 		}
 	}
 
-	if (pokeballOpened == false && touch2 == true)
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if the pokeball have closed with the ball of light init, it will set the pokeball's position to fall down to -9.5
+	once it reaches -9.5, it will be setted -9.5 with ballAtGround to false
+
+	\param PokeballPosition.y
+	\param ballAtGround
+	*/
+	/****************************************************************************/
+	if (pokeballOpened == false && touch2 == true && touch == true)
 	{
 		PokeballPosition.y -= (float)(ROTATE_SPEED * dt * 2);
 		if (PokeballPosition.y <= -9.5)
@@ -462,104 +498,116 @@ void SceneLight::Update(double dt)
 		}
 	}
 
-	if (ballAtGround == true && touch == true)
+
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if the pokeball have touched the ground with the ball of light init, it will rotate the ball
+	when rotating the ball and it rotates to about 30 degree, it will be a negative value minusing 
+	the value away and incrementing rotateBallCount by 1.
+
+	\param rotateBallCount
+	\param rotateBallSideWays
+	*/
+	/****************************************************************************/
+	if (ballAtGround == true && touch == true && touch2 == true)
 	{
-		rotateBallSideWays += (float)(ROTATE_SPEED * dt * 2);
+		rotateBallSideWays += (float)(ROTATE_SPEED * dt * 3);
 		if (rotateBallSideWays > 30)
 		{
 			rotateBallSideWays = -rotateBallSideWays;
 			rotateBallCount++;
 		}
 	}
+
+
+
+	/****************************************************************************/
+	/*!
+	\brief
+	Once rotateBallCount reaches 2, it will place the pokeball at 0 before changing returnSize to true
+	and ballAtGround to false;
+
+	\param PokeballPosition.y
+	\param returnSize
+	\param ballAtGround
+	*/
+	/****************************************************************************/
 	if (rotateBallCount >= 2 && ballAtGround == true)
 	{
-		//touch = false;
 		PokeballPosition.y = 0;
 		returnSize = true;
 		ballAtGround = false;
 	}
 
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if returnSize is true and ballAtGround is 0, mreaning that its at 0, it will rescale
+	the ball of light to 12
+
+	\param scaleBall
+	*/
+	/****************************************************************************/
 	if (returnSize == true && ballAtGround == false)
 	{
 		scaleBall += 50 * (float)dt;
 		if (scaleBall > 12)
 		{
-			touch = false;
 			scaleBall = 12;
-			openBall = 0;
-			angle = 3600;
-			ballAtGround = false;
-			rotateBallSideWays = 1;
-			rotateBallCount = 0;
-			Catching = false;
-			returnSize = false;
-			PokeballPosition.x  = PokeballPosition.z = 30;
-			//PokeballPosition.y = 0;
 		}
 	}
-	if (touch == false)
+
+
+
+	/****************************************************************************/
+	/*!
+	\brief
+	if the ball of light size is 12 and returnSize is true and ballAtGround = false
+	it will reset everything so that user can reuse the animation again
+	*/
+	/****************************************************************************/
+	if (scaleBall == 12 && returnSize == true && ballAtGround == false)
 	{
+		Catching = false;
+		touch = false; 
+		touch2 = false;
+		PokeballPosition.x = PokeballPosition.z = 30;
 		PokeballPosition.y = 0;
+		openBall = 0;
+		angle = 3600;
+		pokeballOpened = false;	
+		rotateBallSideWays = 1;
+		rotateBallCount = 0;
+		returnSize = false;
 	}
-	/*if (rotateLefthand * Lefthand < 0)
-	{
-		Lefthand = 0;
-	}*/
-	//rotateRightFeet += (float)(50 * dt);
-	/*rotateLeftFeet += (float)(100 * dt);*/
 
-	//Scaling Pikachu
-	/////////////////////////////////////////////////////////////////////////////////left button
-	//if(Application::IsKeyPressed(VK_LBUTTON))
-	//{
-	//	left = true;
-	//}
 
-	///*if (left == true)
-	//{
-	//	
-	//}*/
-	//
-	//if (left == true)
-	//{
-	//	rotateJupiter -= (float)(dt);
-	//	if (Application::IsKeyPressed(VK_RBUTTON))
-	//	{
-	//		right = false;
-	//	}
-	//}
-
-	//if (rotateJupiter < 0.472949 && left == true)
-	//{
-	//	rotateJupiter = 0.472948;
-	//	left = false;
-	//}
-	/////////////////////////////////////////////////////////////////////////////////Right button
-	//if(Application::IsKeyPressed(VK_RBUTTON))
-	//{
-	//	right = true;
-	//}
-
-	///*if(right == true)
-	//{
-	//	
-	//}*/
-
-	//if (right == true)
-	//{
-	//	rotateJupiter += (float)(dt);
-	//	if (Application::IsKeyPressed(VK_LBUTTON))
-	//	{
-	//		left == false;
-	//	}
-	//}
-
-	//if (rotateJupiter > 1 && right == true)
-	//{
-	//	rotateJupiter = 1;
-	//	right = false;
-	//}
+	/****************************************************************************/
+	/*!
+	\brief
+	if the pokeball touch Pikachu, the camera will then have the coordinates of the pokeball with the z axis placed further away
+	then when pikachu is releasesd from teh pokeball the camera will then resets itself back
+	*/
+	/****************************************************************************/
 	camera.Update(dt);
+	camera.Init(Vector3(CameraPosition.x, CameraPosition.y, CameraPosition.z), Vector3(1, 0, 0), Vector3(0, 1, 0)); //camera control
+	if (touch == true)
+	{
+		CameraPosition.x = PokeballPosition.x;
+		CameraPosition.y = PokeballPosition.y;
+		CameraPosition.z = PokeballPosition.z + 30;
+	}
+	else
+	{
+		CameraPosition.x = 1;
+		CameraPosition.y = 5;
+		CameraPosition.z = 30;
+	}
+
+	
 }
 
 
@@ -1346,7 +1394,7 @@ void SceneLight::Render()
 	}
 	modelStack.PopMatrix();
 
-	debugPrint();
+	//debugPrint();
 }
 
 void SceneLight::RenderMesh(Mesh *mesh, bool enableLight)

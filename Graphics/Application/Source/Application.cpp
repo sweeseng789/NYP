@@ -19,6 +19,7 @@
 #include "SceneLight.h"
 #include "SceneLight2.h"
 #include "SceneTexture.h"
+#include "SceneSkybox.h"
 #include "GameOfLife.h"
 #include "Application.h"
 
@@ -110,7 +111,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SceneLight();
+	Scene *scene = new SceneSkybox();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

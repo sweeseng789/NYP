@@ -1,20 +1,104 @@
-﻿Build started 7/1/2015 12:35:17 AM.
-     1>Project "C:\Users\User\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
+﻿Build started 7/1/2015 2:52:47 PM.
+     1>Project "C:\Users\swees_000\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\swees_000\Desktop\NYP\Graphics\\glew\include /IC:\Users\swees_000\Desktop\NYP\Graphics\\glfw\include /IC:\Users\swees_000\Desktop\NYP\Graphics\\Common\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneSkybox.cpp
+         SceneSkybox.cpp
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(124): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(124): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(124): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(125): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(127): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(127): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(127): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(137): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(139): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(139): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(139): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(151): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(153): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(153): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(153): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(158): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(160): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(160): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(160): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(165): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(167): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(167): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(167): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(172): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(179): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(181): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(181): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(181): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(234): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(234): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(234): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(235): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(240): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(240): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(240): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(242): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(247): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(247): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(247): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(249): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(249): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(254): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(254): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(254): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(256): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(256): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(266): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(266): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(266): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(280): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(280): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(280): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\swees_000\desktop\nyp\graphics\application\source\sceneskybox.cpp(314): warning C4305: 'argument' : truncation from 'double' to 'float'
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\swees_000\Desktop\NYP\Graphics\Debug\Application.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\swees_000\Desktop\NYP\Graphics\Debug /LIBPATH:C:\Users\swees_000\Desktop\NYP\Graphics\\glew\lib /LIBPATH:"C:\Users\swees_000\Desktop\NYP\Graphics\\glfw\lib-msvc100" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Application.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\swees_000\Desktop\NYP\Graphics\Debug\Application.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\swees_000\Desktop\NYP\Graphics\Debug\Application.lib" /MACHINE:X86 Debug\Application.exe.embed.manifest.res
+         Debug\MatrixStack.obj
+         Debug\Mtx44.obj
+         Debug\timer.obj
+         Debug\Vector3.obj
+         Debug\Application.obj
+         Debug\Camera.obj
+         Debug\Camera2.obj
+         Debug\GameOfLife.obj
+         Debug\LoadTGA.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\Scene1.obj
+         Debug\Scene2.obj
+         Debug\Scene3.obj
+         Debug\Scene4.obj
+         Debug\Scene5.obj
+         Debug\SceneLight.obj
+         Debug\SceneLight2.obj
+         Debug\SceneSkybox.obj
+         Debug\SceneTexture.obj
+         Debug\shader.obj
+         Debug\Utility.obj
        Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Application.exe.embed.manifest" /manifest Debug\Application.exe.intermediate.manifest
          All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         Application.vcxproj -> C:\Users\swees_000\Desktop\NYP\Graphics\Debug\Application.exe
        FinalizeBuildStatus:
          Deleting file "Debug\Application.unsuccessfulbuild".
          Touching "Debug\Application.lastbuildstate".
-     1>Done Building Project "C:\Users\User\Desktop\NYP\Graphics\Application\Application.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\swees_000\Desktop\NYP\Graphics\Application\Application.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.05
+Time Elapsed 00:00:01.55

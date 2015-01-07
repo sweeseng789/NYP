@@ -96,19 +96,19 @@ Mesh* MeshBuilder::GenerateQuad(const std::string &meshName, Color color, float 
 	v.pos.Set(0.5f,-0.5f,-0);
 	v.color = color;
 	v.normal.Set(0, 0 ,1);
-	v.texCoord.Set(10, 0);
+	v.texCoord.Set(1, 0);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(0.5f, 0.5f,-0);
 	v.color = color;
 	v.normal.Set(0, 0 ,1);
-	v.texCoord.Set(10, 10);
+	v.texCoord.Set(1, 1);
 	vertex_buffer_data.push_back(v);
 
 	v.pos.Set(-0.5f, 0.5f,-0);
 	v.color = color;
 	v.normal.Set(0, 0 ,1);
-	v.texCoord.Set(0, 10);
+	v.texCoord.Set(0, 1);
 	vertex_buffer_data.push_back(v);
 	
 	std::vector<GLuint> index_buffer_data;

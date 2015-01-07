@@ -70,13 +70,13 @@ void Camera2::Update(double dt)
 		if(direction.Length() > 5)
 		{
 			Vector3 view = (target - position).Normalized();
-			position += view * (float)(100.f * dt);
+			position += view * (float)(1000.f * dt);
 		}
 	}
 	if(Application::IsKeyPressed('M'))
 	{
 		Vector3 view = (target - position).Normalized();
-		position -= view * (float)(100.f * dt);
+		position -= view * (float)(1000.f * dt);
 	}
 	if(Application::IsKeyPressed('R'))
 	{

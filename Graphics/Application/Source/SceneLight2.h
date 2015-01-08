@@ -2,7 +2,6 @@
 #define LIGHT2_H
 
 #include "Mesh.h"
-//#include "Camera.h"
 #include "Camera2.h"
 #include "Light.h"
 #include "Scene.h"
@@ -24,16 +23,7 @@ class SceneLight2 : public Scene
 		GEO_SPHERE,
 		GEO_RING,
 		GEO_LIGHTBALL,
-		GEO_CYLINDER,
-		GEO_CONEYellow,
-		GEO_CONEBlack,
-		GEO_PIKACHUEYES,
-		GOE_PIKACHUEYESWHITE,
-		GEO_PIKACHUHEADPARTS,
-		GEO_PIKACHUHEADPARTS3,
-		GEO_PIKACHUNOSE,
-		GEO_PIKACHUBROWN,
-		GEO_PIKACHUSPHEREYELLOW,
+
 		NUM_GEOMETRY,
 	};
 
@@ -53,6 +43,13 @@ class SceneLight2 : public Scene
 		U_LIGHT0_KL,
 		U_LIGHT0_KQ,
 		U_LIGHTENABLED,
+			U_LIGHT0_TYPE,
+		U_LIGHT0_SPOTDIRECTION,
+		U_LIGHT0_COSCUTOFF,
+		U_LIGHT0_COSINNER,
+		U_LIGHT0_EXPONENT,
+		U_NUMLIGHTS,
+
 		U_TOTAL,
 	};
 public:
@@ -64,25 +61,6 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
-	void RenderBody();
-	void RenderLimb();
-	void RenderRobot();
-
-	void PikachuLeftEars();
-	void PikachuRightEars();
-	void PikachuHead();
-	void PikachuRightEyes();
-	void PikachuNose();
-	void PikachuMouth();
-
-	void PikachuBody(); //Finally
-
-	void PikcahuHands();
-
-	void PikachuLeftFeet();
-	void PikachuRightFeet();
-
-	void RenderPikachu();
 private:
 
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -91,12 +69,6 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	float rotateAngle;
-	float rotateSun;
-	float rotateEarth;
-	float rotateMars;
-	float rotateJupiter;
-	float rotateTail;
 	Camera2 camera;
 
 	Light light[1];

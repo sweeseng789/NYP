@@ -36,14 +36,17 @@ void SceneLight2::Init()
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
-	
-	/*//Load vertex and fragment shaders
-	m_programID = LoadShaders( "Shader//TransformVertexShader.vertexshader", "Shader//SimpleFragmentShader.fragmentshader" );
-	// Use our shader
-	glUseProgram(m_programID);
-	// Get a handle for our "MVP" uniform
-	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");*/
-		m_programID = LoadShaders( "Shader//Shading.vertexshader", "Shader//Shading.fragmentshader" );
+
+		/*m_programID = LoadShaders( "Shader//Shading.vertexshader", "Shader//Shading.fragmentshader" );*/
+
+		m_programID = LoadShaders( "Shader//Shading.vertexshader", "Shader//LightSource.fragmentshader" );
+	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
+	m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
+	m_parameters[U_LIGHT0_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[0].spotDirection");
+	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
+	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
+	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
+
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 	m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
 	m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE] = glGetUniformLocation(m_programID, "MV_inverse_transpose");
@@ -73,15 +76,11 @@ void SceneLight2::Init()
 	glUniform1f(m_parameters[U_LIGHT0_KC], light[0].kC);
 	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
 	glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 
 
 	//variable to rotate geometry
-	rotateAngle = 0;
-	rotateSun = 0;
-	rotateEarth = 0;
-	rotateMars = 0;
-	rotateJupiter = 1;
-	rotateTail = 0;
+
 
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -92,16 +91,6 @@ void SceneLight2::Init()
 	//meshList[GEO_CYLINDER] = MeshBuilder::GenerateCylinder("Cylinder", Color(0.95686274509, 0.86274509803, 0.14901960784), 18, 36, 1.f);
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 5);
 	meshList[GEO_CUBE1] = MeshBuilder::GenerateCube("cube1", Color(1, 0, 1), 5);
-	/*//meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 36, 1.f, 0.5f);
-	meshList[GEO_SUN] = MeshBuilder::GenerateSphere("Sun", Color(1, 1, 0), 18, 36, 1.f);
-	meshList[GEO_MERCURY] = MeshBuilder::GenerateSphere("Mercury", Color(0.50196078431, 0.50196078431, 0.50196078431), 18, 36, 1.f);
-	meshList[GEO_EARTH] = MeshBuilder::GenerateSphere("Earth", Color(0.2, 0.6, 1), 18, 36, 1.f);
-	meshList[GEO_EARTH_MOON] = MeshBuilder::GenerateSphere("Earth moon", Color(0.75294117647, 0.75294117647, 0.75294117647), 18, 36, 1.f);
-	meshList[GEO_VENUS] = MeshBuilder::GenerateSphere("Venus", Color(1, 0.50196078431, 0), 18, 36, 1.f);
-	meshList[GEO_MARS] = MeshBuilder::GenerateSphere("Mars", Color(0.6, 0.29803921568, 0), 18, 36, 1.f);
-	meshList[GEO_JUPITER] = MeshBuilder::GenerateSphere("Jupiter", Color(0.2, 0.09803921568, 0), 18, 36, 1.f);
-	meshList[GEO_SATURN] = MeshBuilder::GenerateSphere("Jupiter", Color(0.2, 0.09803921568, 0), 18, 36, 1.f);
-	meshList[GEO_SATURN_RING] = MeshBuilder::GenerateRing("ring", Color(0, 1, 1), 36, 1.f, 0.5f);*/
 
 
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("Sphere", Color(0.95686274509, 0.86274509803, 0.14901960784), 18, 36, 1.f);
@@ -115,61 +104,6 @@ void SceneLight2::Init()
 	meshList[GEO_QUAD]->material.kDiffuse.Set(0.f, 1.f, 0.f);
 	meshList[GEO_QUAD]->material.kSpecular.Set(0.f, 0.f, 1.f);
 	meshList[GEO_QUAD]->material.kShininess = 1.f;
-
-	meshList[GEO_CONEYellow] = MeshBuilder::GenerateCone("Cone", Color(0.95686274509, 0.86274509803, 0.14901960784), 18, 36, 1.f);
-	meshList[GEO_CONEYellow]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_CONEYellow]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_CONEYellow]->material.kSpecular.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_CONEYellow]->material.kShininess = 1.f;
-
-	meshList[GEO_CONEBlack] = MeshBuilder::GenerateCone("Cone", Color(0, 0, 0), 18, 36, 1.f);
-	meshList[GEO_CONEBlack]->material.kAmbient.Set(0.f, 0.f, 0.f);
-	meshList[GEO_CONEBlack]->material.kDiffuse.Set(0.f, 0.f, 0.f);
-	meshList[GEO_CONEBlack]->material.kSpecular.Set(0.f, 0.f, 0.f);
-	meshList[GEO_CONEBlack]->material.kShininess = 1.f;
-
-	meshList[GOE_PIKACHUEYESWHITE] = MeshBuilder::GenerateHemisphere("eyes white", Color(1, 1, 1), 18, 36, 1.f);
-	meshList[GOE_PIKACHUEYESWHITE]->material.kAmbient.Set(1.f, 1.f, 1.f);
-	meshList[GOE_PIKACHUEYESWHITE]->material.kDiffuse.Set(0.f, 0.f, 0.f);
-	meshList[GOE_PIKACHUEYESWHITE]->material.kSpecular.Set(1.f, 1.f, 1.f);
-	meshList[GOE_PIKACHUEYESWHITE]->material.kShininess = 1.f;
-
-	meshList[GEO_PIKACHUEYES] = MeshBuilder::GenerateSphere("eyes black", Color(0, 0, 0), 18, 36, 1.f);
-	meshList[GEO_PIKACHUEYES]->material.kAmbient.Set(0, 0, 0);
-	meshList[GEO_PIKACHUEYES]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_PIKACHUEYES]->material.kSpecular.Set(0, 0, 0);
-	meshList[GEO_PIKACHUEYES]->material.kShininess = 1.f;
-
-	meshList[GEO_PIKACHUHEADPARTS] = MeshBuilder::GenerateHemisphere("head parts", Color(0.95686274509, 0.86274509803, 0.14901960784), 18, 36, 1.f);
-	meshList[GEO_PIKACHUHEADPARTS]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_PIKACHUHEADPARTS]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_PIKACHUHEADPARTS]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_PIKACHUHEADPARTS]->material.kShininess = 1.f;
-	
-	meshList[GEO_PIKACHUHEADPARTS3] = MeshBuilder::GenerateSphere("Cheeks", Color(0.90588235294, 0.29019607843, 0.27058823529), 18, 36, 1.f);
-	meshList[GEO_PIKACHUHEADPARTS3]->material.kAmbient.Set(0.84705882352f, 0.41176470588f, 0.43529411764f);
-	meshList[GEO_PIKACHUHEADPARTS3]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_PIKACHUHEADPARTS3]->material.kSpecular.Set(0.84705882352f, 0.41176470588f, 0.43529411764f);
-	meshList[GEO_PIKACHUHEADPARTS3]->material.kShininess = 1.f;
-
-	meshList[GEO_PIKACHUNOSE] = MeshBuilder::GenerateSphere("nose", Color(0, 0, 0), 18, 36, 1.f);
-	meshList[GEO_PIKACHUNOSE]->material.kAmbient.Set(0.f, 0.f, 0.f);
-	meshList[GEO_PIKACHUNOSE]->material.kDiffuse.Set(0.f, 0.f, 0.f);
-	meshList[GEO_PIKACHUNOSE]->material.kSpecular.Set(0.f, 0.f, 0.f);
-	meshList[GEO_PIKACHUNOSE]->material.kShininess = 1.f;
-
-
-	meshList[GEO_PIKACHUBROWN] = MeshBuilder::GenerateSphere("mouth", Color(0.36078431372, 0.21176470588, 0.07450980392), 18, 36, 1.f);
-	meshList[GEO_PIKACHUBROWN]->material.kAmbient.Set(0.36078431372, 0.21176470588, 0.07450980392);
-	meshList[GEO_PIKACHUBROWN]->material.kDiffuse.Set(0.f, 0.f, 0.f);
-	meshList[GEO_PIKACHUBROWN]->material.kSpecular.Set(0.36078431372, 0.21176470588, 0.07450980392);
-	meshList[GEO_PIKACHUBROWN]->material.kShininess = 1.f;
-
-	meshList[GEO_PIKACHUSPHEREYELLOW] = MeshBuilder::GenerateHemisphere("mouth", Color(0.95686274509, 0.86274509803, 0.14901960784), 18, 36, 1.f);
-	meshList[GEO_PIKACHUSPHEREYELLOW]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_PIKACHUSPHEREYELLOW]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_PIKACHUSPHEREYELLOW]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_PIKACHUSPHEREYELLOW]->material.kShininess = 1.f;
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Lightball", Color(1, 1 ,1),18, 36, 1.f);
 
@@ -208,428 +142,27 @@ void SceneLight2::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
-	static int rotateDir = 1;
-	static int rotateDir2 = 1;
-	static int count = 1;
-	static bool pressing;
 
-	static bool left = false;
-	static int right = false;
-
-	if (Application::IsKeyPressed(VK_SPACE))
+	 
+	if(Application::IsKeyPressed('9'))
 	{
-		pressing = true;
+		//to do: switch light type to POINT and pass the information to shader
+		light[0].type = Light::LIGHT_POINT;
 	}
-	else
+	else if(Application::IsKeyPressed('8'))
 	{
-		pressing = false;
+		//to do: switch light type to DIRECTIONAL and pass the information to shader
+		light[0].type = Light::LIGHT_DIRECTIONAL;
 	}
-
-	if(pressing == true)
+	else if(Application::IsKeyPressed('7'))
 	{
-		if (rotateAngle * rotateDir > 30)
-		{
-			rotateDir = -rotateDir;
-			count ++;
-		}
+		//to do: switch light type to SPOT and pass the information to shader
+		light[0].type = Light::LIGHT_SPOT;
+	}	 
 
-		if (rotateSun * rotateDir2 > 30)
-		{
-			rotateDir2 = -rotateDir2;
-		}
-	
-		if (count > 1)
-		{
-			rotateSun += (float)(rotateDir2 * ROTATE_SPEED * dt * 5);
-		}
-	
-		rotateAngle += (float)(rotateDir * ROTATE_SPEED * dt * 5);
-	}
-	else if (pressing = false)
-	{
-		count = 0;
-	}
-	/*rotateAngle += (float)(100 * dt);*/
+	std::cout << light[0].type << std::endl;
 
-	//Scaling Pikachu
-	/////////////////////////////////////////////////////////////////////////////////left button
-	//if(Application::IsKeyPressed(VK_LBUTTON))
-	//{
-	//	left = true;
-	//}
-
-	//if (left == true && Application::IsKeyPressed(VK_RBUTTON))
-	//{
-	//	right = false;
-	//}
-	//
-	//if (left == true)
-	//{
-	//	rotateJupiter -= (float)(dt);
-	//}
-
-	//if (rotateJupiter < 0.472949 && left == true)
-	//{
-	//	rotateJupiter = 0.472948;
-	//	left = false;
-	//}
-	/////////////////////////////////////////////////////////////////////////////////Right button
-	//if(Application::IsKeyPressed(VK_RBUTTON))
-	//{
-	//	right = true;
-	//}
-
-	//if(right == true && Application::IsKeyPressed(VK_LBUTTON))
-	//{
-	//	left == false;
-	//}
-
-	//if (right == true && left == false)
-	//{
-	//	rotateJupiter += (float)(dt);
-	//}
-
-	//if (rotateJupiter > 1 && right == true)
-	//{
-	//	rotateJupiter = 1;
-	//	right = false;
-	//}
 	camera.Update(dt);
-}
-
-void SceneLight2::RenderBody()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(30, 25, 10);
-	//modelStack.Translate(0, -7.5, 0);
-	RenderMesh(meshList[GEO_CUBE], false);
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::RenderLimb()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 20, 10);
-	//modelStack.Translate(0, -7.5, 0);
-	RenderMesh(meshList[GEO_CUBE1], false);
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::RenderRobot()
-{
-	modelStack.PushMatrix();
-	RenderBody();
-	modelStack.PushMatrix(); // right upper arm
-	modelStack.Translate(20, 0 , 0);
-	modelStack.Rotate(rotateAngle, 1, 0, 0);
-	RenderLimb();
-	modelStack.PushMatrix(); //rigth lower arm
-	modelStack.Translate(0, -20, 0);
-	modelStack.Rotate(-30 + rotateAngle, 1, 0, 0);
-	RenderLimb();
-	modelStack.PopMatrix(); //right lower arm
-	modelStack.PopMatrix();//right upper arm
-
-
-	modelStack.PushMatrix(); // left upper arm
-	modelStack.Translate(-20, 0 , 0);
-	modelStack.Rotate(rotateAngle, 1, 0, 0);
-	RenderLimb();
-	modelStack.PushMatrix(); //left lower arm
-	modelStack.Translate(0, -20, 0);
-	modelStack.Rotate(-30 + rotateAngle, 1, 0, 0);
-	RenderLimb();
-	modelStack.PopMatrix(); //left lower arm
-	modelStack.PopMatrix();//left upper arm
-
-
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::PikachuLeftEars()
-{
-	modelStack.PushMatrix();//Pikachu yelow ears
-	modelStack.Scale(0.05, 0.5, 0.03);
-	modelStack.Rotate(4, 1, 1, 1);
-	modelStack.Translate(-35, 7, 0);
-	RenderMesh(meshList[GEO_CONEYellow], true);
-
-	modelStack.PushMatrix(); //left black ear
-	modelStack.Scale(0.51, 0.5, 0.51);
-	modelStack.Translate(0, 21, 0);
-	RenderMesh(meshList[GEO_CONEBlack], true);
-
-	modelStack.PopMatrix(); //black ears
-	modelStack.PopMatrix();//Yellow ears
-}
-
-void SceneLight2::PikachuRightEars()
-{
-	modelStack.PushMatrix();//Pikachu yelow ears
-	modelStack.Scale(0.05, 0.5, 0.03);
-	modelStack.Rotate(-5, 1, 0, 1);
-	modelStack.Translate(40, 12, -60);
-	RenderMesh(meshList[GEO_CONEYellow], true);
-
-	modelStack.PushMatrix(); //left black ear
-	modelStack.Scale(0.5, 0.5, 0.51);
-	modelStack.Translate(0, 21, 0);
-	RenderMesh(meshList[GEO_CONEBlack], true);
-
-	modelStack.PopMatrix(); //black ears
-	modelStack.PopMatrix();//Yellow ears
-}
-
-void SceneLight2::PikachuRightEyes()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(1, 1, 0.3);
-	modelStack.Rotate(90, 90, 0, 1);
-
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-3, 0, 0);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(0.4, 0.4, 0.4);
-	modelStack.Rotate(10, 0, -45, 90);
-
-	modelStack.PushMatrix();
-	modelStack.Scale(1, 1, 0.3);
-	modelStack.Rotate(90, 90, 0, 1);
-	modelStack.Translate(-0.8, 1.4, -1);
-	RenderMesh(meshList[GOE_PIKACHUEYESWHITE], true);
-	
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(-5.5, 1.5, -1);
-	RenderMesh(meshList[GOE_PIKACHUEYESWHITE], true);
-	
-	modelStack.PopMatrix();
-	
-	modelStack.PopMatrix();
-	
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::PikachuNose()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(0.5, 0.3, 0.3);
-	RenderMesh(meshList[GEO_PIKACHUNOSE], true);
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::PikachuMouth()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(0.5, 0.5, 0.2);
-	modelStack.Translate(0, -0.1, 0.2);
-	RenderMesh(meshList[GEO_PIKACHUBROWN], true);
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::PikachuHead()
-{
-	modelStack.PushMatrix();
-	modelStack.Rotate(-50, 0, 0, 50);
-	modelStack.Translate(-2, 0, 0);
-	PikachuRightEars();
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(15, 0, 0, 1);
-	modelStack.Translate(0, -0.5, -2);
-	PikachuLeftEars();
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix(); //head parts back
-	modelStack.Scale(4.5, 4.5, 4.5);
-	modelStack.Rotate(90, -100, 0 ,1);
-	modelStack.Translate(0, 0, 0.2);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	modelStack.PopMatrix();//head parts back
-
-	modelStack.PushMatrix(); //head parts middle
-	modelStack.Scale(4.5, 4.5,2);
-	modelStack.Rotate(90, 10, 0 ,1);
-	modelStack.Translate(0, -0.22, -0.2);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	modelStack.PopMatrix();//head parts middle
-
-	modelStack.PushMatrix();//lower
-	modelStack.Scale(1, 1, 0.8);
-
-	modelStack.PushMatrix(); //head parts jaw
-	modelStack.Scale(4.5, 4.5, 4.3);
-	modelStack.Rotate(180, -190, 0 ,1);
-	modelStack.Translate(0, -0.2, 0);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	modelStack.PopMatrix();//head parts jaw
-
-	modelStack.PushMatrix(); //head parts nose
-	modelStack.Scale(4.5, 2,4.3);
-	modelStack.Translate(0, 0.3, 0);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	modelStack.PopMatrix();//head parts nose
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();//push cheek as a whole
-	modelStack.Scale(0.6, 0.6, 0.6);
-
-	modelStack.PushMatrix(); //head parts cheek
-	modelStack.Scale(2.3, 2.3, 2.3);
-	modelStack.Translate(-2.3, -0.1, 0.5);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS3], true);
-
-	modelStack.PushMatrix(); //head parts cheek
-
-	modelStack.Translate(4.7, 0, -0.2);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS3], true);
-
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();//head parts cheek
-	modelStack.PopMatrix(); //pop cheek as a whole
-
-	
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(10, -10, 0, 1);
-	modelStack.Translate(1.5, 3, 1.6);
-	PikachuRightEyes();
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 1, 3.3);
-	PikachuNose();
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 3.3);
-	PikachuMouth();
-	modelStack.PopMatrix();
-}
-
-void SceneLight2::PikachuBody()
-{
-	modelStack.PushMatrix(); //body as a whole
-	modelStack.Scale(2, 2, 2);
-	modelStack.Translate(0, -2.5, -0.2);
-	modelStack.PushMatrix(); //front
-	modelStack.Scale(2, 2.5, 1.5);
-	modelStack.Rotate(90, 90, 0, 1);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-
-	modelStack.PushMatrix();//back
-	modelStack.Rotate(180, 180, 0, 1);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	modelStack.PopMatrix();//back
-	modelStack.PopMatrix();//front
-
-	modelStack.PushMatrix(); //leg left
-	modelStack.Scale(1.15, 1.9, 1.1);
-	modelStack.Rotate(180, 180, 0, 1);
-	modelStack.Translate(-0.6, 0.4, 0);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(1.2, 0, 0);
-	RenderMesh(meshList[GEO_PIKACHUHEADPARTS], true);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix(); //leg left
-
-
-	modelStack.PopMatrix(); //body as a whole
-
-}
-
-void SceneLight2::PikachuLeftFeet()
-{
-	modelStack.PushMatrix();//feet as a whole
-	modelStack.Rotate(rotateAngle, -rotateAngle, 0, 1);
-	modelStack.Translate(-0.1, 0, 0);
-
-	modelStack.PushMatrix();//feet back left
-	modelStack.Scale(0.4, 0.2, 1.1);
-	modelStack.Rotate(270, 270, 0, 1);
-	RenderMesh(meshList[GEO_SPHERE], true);
-	modelStack.PopMatrix();//feet back left
-
-	modelStack.PushMatrix();//middle line
-	modelStack.Scale(0.1, 0.189, 1);
-	modelStack.Translate(0, 0, .12);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-
-	modelStack.PushMatrix();//left line
-	modelStack.Translate(-1, 0, -0.05);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-	modelStack.PopMatrix();//left line
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1, 0, -0.05);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();//middle line
-
-	modelStack.PopMatrix(); //feet as a whole
-}
-
-void SceneLight2::PikachuRightFeet()
-{
-	modelStack.PushMatrix();//feet as a whole
-	modelStack.Rotate(rotateSun, -rotateSun, 0, 1);
-	modelStack.Translate(1.1, 0, 0);
-
-	modelStack.PushMatrix();//feet back left
-	modelStack.Scale(0.4, 0.2, 1.1);
-	modelStack.Rotate(270, 270, 0, 1);
-	RenderMesh(meshList[GEO_SPHERE], true);
-	modelStack.PopMatrix();//feet back left
-
-	modelStack.PushMatrix();//middle line
-	modelStack.Scale(0.1, 0.189, 1);
-	modelStack.Translate(0, 0, .12);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-
-	modelStack.PushMatrix();//left line
-	modelStack.Translate(-1, 0, -0.05);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-	modelStack.PopMatrix();//left line
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1, 0, -0.05);
-	RenderMesh(meshList[GEO_PIKACHUEYES], true);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();//middle line
-
-	modelStack.PopMatrix(); //feet as a whole
-}
-
-void SceneLight2::RenderPikachu()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(rotateJupiter, rotateJupiter, rotateJupiter);
-	PikachuHead();
-	PikachuBody();
-
-	modelStack.PushMatrix(); //Feet
-	modelStack.Scale(2.6, 2.7, 2.6);
-	modelStack.Translate(-0.5, -3.85, 0.2);
-	PikachuLeftFeet();
-	PikachuRightFeet();
-	modelStack.PopMatrix(); //feet
-
-	modelStack.PopMatrix();
-
-
 }
 
 void SceneLight2::Render()
@@ -659,11 +192,14 @@ void SceneLight2::Render()
 	modelStack.PushMatrix();
 	modelStack.Scale(10000, 10000, 10000);
 	modelStack.Rotate(90, -90, 0, 1);
-	modelStack.Translate(0, 0, -0.02);
-	RenderMesh(meshList[GEO_QUAD], true);
+	modelStack.Translate(0, 0, 0);
+	//RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 
-	RenderPikachu();
+	modelStack.PushMatrix();
+	modelStack.Scale(3, 3, 3);
+	RenderMesh(meshList[GEO_SPHERE], true);
+	modelStack.PopMatrix();
 
 }
 
@@ -691,6 +227,28 @@ void SceneLight2::RenderMesh(Mesh *mesh, bool enableLight)
 	{	
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
+		
+	
+	if(light[0].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[0].position.x, light[0].position.y, light[0].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if(light[0].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[0].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
+		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	}	 
+
+
 	mesh->Render();
 
 

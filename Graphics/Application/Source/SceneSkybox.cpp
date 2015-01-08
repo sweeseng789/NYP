@@ -141,46 +141,25 @@ void SceneSkybox::Init()
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//color2.tga");
 
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
-	/*meshList[GEO_FRONT]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_FRONT]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_FRONT]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_FRONT]->material.kShininess = 1.f;*/
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_BACK]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_BACK]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_BACK]->material.kShininess = 1.f;
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_BOTTOM]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_BOTTOM]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_BOTTOM]->material.kShininess = 1.f;
 	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_TOP]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_TOP]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_TOP]->material.kShininess = 1.f;
 	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_RIGHT]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_RIGHT]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_RIGHT]->material.kShininess = 1.f;
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
-	meshList[GEO_LEFT]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[GEO_LEFT]->material.kSpecular.Set(0.95686274509, 0.86274509803, 0.14901960784);
-	meshList[GEO_LEFT]->material.kShininess = 1.f;
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+
+	meshList[GEO_EXIA] = MeshBuilder::GenerateQuad("exia", Color(1, 1, 1), 1.f);
+	meshList[GEO_EXIA]->textureID = LoadTGA("Image//Exia.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Lightball", Color(1, 1 ,1),18, 36, 1.f);
 
@@ -311,8 +290,13 @@ void SceneSkybox::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Scale(10, 10, 10);
-	modelStack.Translate(0, 0, 0.2);
+	modelStack.Translate(0, 0, -0.5);
 	RenderSkybox();
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_EXIA], false);
 	modelStack.PopMatrix();
 }
 

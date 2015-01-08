@@ -33,6 +33,8 @@ class SceneSkybox : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 
+		GEO_EXIA,
+
 		NUM_GEOMETRY,
 	};
 

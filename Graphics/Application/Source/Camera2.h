@@ -20,6 +20,12 @@ public:
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
+	int mousex;
+	int mousey;
+	int oldMousex;
+	int oldMousey;
+
+	Vector3 mouse;
 
 	Camera2();
 	~Camera2();

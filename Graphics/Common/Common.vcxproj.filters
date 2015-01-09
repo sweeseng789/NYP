@@ -40,5 +40,8 @@
     <ClInclude Include="Source\Vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\program files (x86)\microsoft sdks\windows\v7.0a\include\windows.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

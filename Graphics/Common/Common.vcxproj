@@ -17,6 +17,7 @@
     <ClCompile Include="Source\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\program files (x86)\microsoft sdks\windows\v7.0a\include\windows.h" />
     <ClInclude Include="Source\MatrixStack.h" />
     <ClInclude Include="Source\Mtx44.h" />
     <ClInclude Include="Source\MyMath.h" />

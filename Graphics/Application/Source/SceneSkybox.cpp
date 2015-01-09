@@ -164,7 +164,7 @@ void SceneSkybox::Init()
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Lightball", Color(1, 1 ,1),18, 36, 1.f);
 
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 50000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 500000.f);
 	projectionStack.LoadMatrix(projection);
 }
 
@@ -203,7 +203,7 @@ void SceneSkybox::Update(double dt)
 	if (Application::IsKeyPressed('8'))
 		moving -= (float)(10 * dt);
 
-	std::cout << moving << std::endl;
+
 	camera.Update(dt);
 }
 
@@ -289,11 +289,10 @@ void SceneSkybox::Render()
 
 
 	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	modelStack.Translate(0, 0, -0.5);
+	modelStack.Scale(100, 100, 100);
+	modelStack.Translate(0, 0, -0.00001);
 	RenderSkybox();
 	modelStack.PopMatrix();
-
 
 	modelStack.PushMatrix();
 	RenderMesh(meshList[GEO_EXIA], false);

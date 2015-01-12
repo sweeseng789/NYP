@@ -25,6 +25,8 @@ public:
 	int oldMousex;
 	int oldMousey;
 
+	float angleS;
+
 	Vector3 mouse;
 
 	float testing;

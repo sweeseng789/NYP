@@ -199,71 +199,11 @@ void SceneSkybox::Update(double dt)
 		light[0].position.y += (float)(LSPEED * dt);
 
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(10 * dt);
+		moving += (float)(0.1 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(10 * dt);
+		moving -= (float)(0.1 * dt);
 
-
-	camera.Update(dt);
-}
-
-void SceneSkybox::RenderSkybox()
-{
-	modelStack.PushMatrix();
-	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Translate(0, 0, 0.1);
-	RenderMesh(meshList[GEO_FRONT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Rotate(180, 0, 180, 0);
-	modelStack.Translate(0, 0, 0.887591);
-	RenderMesh(meshList[GEO_BACK], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Rotate(270, 0, 270, 0);
-	modelStack.Translate(-0.389939, 0, 0.494799);
-	RenderMesh(meshList[GEO_LEFT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Rotate(90, 0, 90, 0);
-	modelStack.Translate(0.39593, 0, 0.496519);
-	RenderMesh(meshList[GEO_RIGHT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(90, 0, 90, 0);
-	modelStack.Translate(390, 996.5, -500);
-	modelStack.PushMatrix();
-	modelStack.Rotate(180, 180, 0, 0);
-	modelStack.PushMatrix();
-	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Rotate(90, 90, 0, 0);
-	modelStack.Translate(0, -0.5, -0.5);
-	RenderMesh(meshList[GEO_TOP], false);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-
-
-	modelStack.PushMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -497, -388);
-	modelStack.PushMatrix();
-	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Rotate(90, 90, 0, 0);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-
-	if (Application::IsKeyPressed('W'))
+	if (Application::IsKeyPressed('S'))
 	{
 		Vector3 moveC;
 		moveC.Set(-3, 0, 0);
@@ -274,7 +214,7 @@ void SceneSkybox::RenderSkybox()
 		camera.target += moveC;
 	}
 
-	if (Application::IsKeyPressed('S'))
+	if (Application::IsKeyPressed('W'))
 	{
 		Vector3 moveC;
 		moveC.Set(3, 0, 0);
@@ -284,6 +224,69 @@ void SceneSkybox::RenderSkybox()
 		camera.position += moveC;
 		camera.target += moveC;
 	}
+
+	std::cout << moving << std::endl;
+
+	camera.Update(dt);
+}
+
+void SceneSkybox::RenderSkybox()
+{
+	modelStack.PushMatrix();
+	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	RenderMesh(meshList[GEO_FRONT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	modelStack.Rotate(90, 0, -90, 0);
+	modelStack.Translate(-0.49814095, 0, 0.49649683);
+	RenderMesh(meshList[GEO_LEFT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	modelStack.Rotate(90, 0, 180, 0);
+	modelStack.Translate(0.498585 , 0, 0.49649683);
+	RenderMesh(meshList[GEO_RIGHT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(180, 0, 180, 0);
+	modelStack.PushMatrix();
+	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	modelStack.Translate(0, 0, 0.991158);
+	RenderMesh(meshList[GEO_BACK], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.PushMatrix();
+	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	modelStack.Rotate(270, 270, 0, 0);
+	modelStack.Translate(0.491462 + 0.00678009, 0, 0.499845 -0.00340081);
+	RenderMesh(meshList[GEO_TOP], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	//modelStack.Rotate(90, 90, 0, 0);
+	//modelStack.Translate(0, moving, 0.503292);
+	//RenderMesh(meshList[GEO_BOTTOM], false);
+	//modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.PushMatrix();
+	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	modelStack.Rotate(270, 270, 0, 0);
+	modelStack.Translate(0.49824209, 0, -0.49644419);
+	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 }
 
 void SceneSkybox::Render()
@@ -309,10 +312,9 @@ void SceneSkybox::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-
 	modelStack.PushMatrix();
-	modelStack.Scale(100, 100, 100);
-	modelStack.Translate(0, 0, -0.00001);
+	modelStack.Scale(20, 20 ,20);
+	modelStack.Translate(0, 0, 100);
 	RenderSkybox();
 	modelStack.PopMatrix();
 

@@ -18,6 +18,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+
 }
 
 void Camera3::Update(double dt)
@@ -37,6 +38,7 @@ void Camera3::Update(double dt)
 		target = rotation * (target - position) + position;
 		up = rotation * up;
 		testing += yaw;
+		angleS += 100 * dt;
 		/*Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		position -= right * CAMERA_SPEED * dt;*/
@@ -56,6 +58,8 @@ void Camera3::Update(double dt)
 		target = rotation * (target - position) + position;
 		up = rotation * up;
 		testing += yaw;
+		angleS -= 100 * dt;
+
 	}
 	if(Application::IsKeyPressed(VK_UP))
 	{
@@ -120,6 +124,7 @@ void Camera3::Update(double dt)
 		Reset();
 	}
 
+	std::cout << angleS << std::endl;
 }
 
 void Camera3::Reset()

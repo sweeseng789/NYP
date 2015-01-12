@@ -24,7 +24,7 @@ public:
 	int mousey;
 	int oldMousex;
 	int oldMousey;
-
+	float testing;
 	Vector3 mouse;
 
 	Camera2();

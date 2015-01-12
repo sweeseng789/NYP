@@ -262,6 +262,28 @@ void SceneSkybox::RenderSkybox()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
+
+	if (Application::IsKeyPressed('W'))
+	{
+		Vector3 moveC;
+		moveC.Set(-3, 0, 0);
+		Mtx44 rotateC;
+		rotateC.SetToRotation(camera.testing, 0, 1, 0);
+		moveC = rotateC * moveC;
+		camera.position += moveC;
+		camera.target += moveC;
+	}
+
+	if (Application::IsKeyPressed('S'))
+	{
+		Vector3 moveC;
+		moveC.Set(3, 0, 0);
+		Mtx44 rotateC;
+		rotateC.SetToRotation(camera.testing, 0, 1, 0);
+		moveC = rotateC * moveC;
+		camera.position += moveC;
+		camera.target += moveC;
+	}
 }
 
 void SceneSkybox::Render()

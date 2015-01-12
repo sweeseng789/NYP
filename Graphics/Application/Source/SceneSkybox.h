@@ -3,7 +3,8 @@
 
 #include "Mesh.h"
 //#include "Camera.h"
-#include "Camera2.h"
+//#include "Camera2.h"
+#include "Camera3.h"
 #include "Light.h"
 #include "Scene.h"
 
@@ -83,7 +84,7 @@ private:
 
 	float moving;
 
-	Camera2 camera;
+	Camera3 camera;
 
 	Light light[1];
 

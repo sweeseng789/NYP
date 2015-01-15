@@ -178,6 +178,9 @@ void SceneModel::Init()
 	meshList[GEO_MODEL6] = MeshBuilder::GenerateOBJ("model6", "OBJ//winebottle.obj");
 	meshList[GEO_MODEL6]->textureID = LoadTGA("Image//winebottle.tga");
 
+	meshList[GEO_CHAIRSS] = MeshBuilder::GenerateOBJ("model6", "OBJ//ChairSS.obj");
+	meshList[GEO_CHAIRSS]->textureID = LoadTGA("Image//ChairSS.tga");
+
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Lightball", Color(1, 1 ,1),18, 36, 1.f);
 
 	Mtx44 projection;
@@ -333,7 +336,7 @@ void SceneModel::Render()
 	RenderSkybox();
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	RenderMesh(meshList[GEO_MODEL1], false);
 	modelStack.PopMatrix();
 
@@ -355,6 +358,10 @@ void SceneModel::Render()
 
 	modelStack.PushMatrix();
 	RenderMesh(meshList[GEO_MODEL6], false);
+	modelStack.PopMatrix();*/
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_CHAIRSS], false);
 	modelStack.PopMatrix();
 }
 

@@ -41,6 +41,7 @@ class SceneModel : public Scene
 		GEO_MODEL4,
 		GEO_MODEL5,
 		GEO_MODEL6,
+		GEO_CHAIRSS,
 		NUM_GEOMETRY,
 	};
 

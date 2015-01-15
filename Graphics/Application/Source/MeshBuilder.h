@@ -2,6 +2,7 @@
 #define MESH_BUILDER_H
 
 #include "Mesh.h"
+#include "LoadOBJ.h"
 #include "Vertex.h"
 
 /****************************************************************************/
@@ -32,6 +33,7 @@ public:
 	static Mesh* GenerateHemisphere(const std::string &meshName, Color color,unsigned numStack, unsigned numSlice, float radius);
 	static Mesh* GenerateCone(const std::string &meshname, Color color, unsigned numSlice, float radius, float height);
 	static Mesh* GenerateCylinder(const std::string &meshName, Color color, unsigned numStack, unsigned numSlice, unsigned stackHeight, float height, float radius);
+	static Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &file_path);
 };
 
 #endif

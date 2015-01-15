@@ -123,8 +123,6 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
-
-	std::cout << angleS << std::endl;
 }
 
 void Camera3::Reset()

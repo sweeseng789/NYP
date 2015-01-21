@@ -34,6 +34,7 @@ public:
 	static Mesh* GenerateCone(const std::string &meshname, Color color, unsigned numSlice, float radius, float height);
 	static Mesh* GenerateCylinder(const std::string &meshName, Color color, unsigned numStack, unsigned numSlice, unsigned stackHeight, float height, float radius);
 	static Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &file_path);
+	static Mesh* MeshBuilder::GenerateText(const std::string &meshName, unsigned numRow, unsigned numCol);
 };
 
 #endif

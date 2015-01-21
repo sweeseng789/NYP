@@ -91,3 +91,44 @@ void Mesh::Render()
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 }
+
+void Mesh::Render(unsigned offset, unsigned count)
+{
+	glEnableVertexAttribArray(0); // 1st attribute buffer : vertices
+	glEnableVertexAttribArray(1); // 2nd attribute buffer : colors
+	glEnableVertexAttribArray(2); // 3rd attribute : normals
+
+
+	//Render call setup
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+	
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color)));
+	if(textureID > 0)
+	{
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color) + sizeof(Vector3)));
+	}
+	//Actual render call
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+	if(mode == DRAW_LINES)
+		glDrawElements(GL_LINES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+	else if(mode == DRAW_TRIANGLE_STRIP)
+		glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+	else
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+
+	if(textureID > 0)
+	{
+		glDisableVertexAttribArray(3);
+	}
+
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+}

@@ -44,9 +44,12 @@ void SceneText::Init()
 	glBindVertexArray(m_vertexArrayID);
 	
 	//Load vertex and fragment shaders
-	//m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Blending.fragmentshader" );
+	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Blending.fragmentshader" );
+	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader" );
 	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights"); //in case you missed out practical 7
+
+
 	// Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -95,6 +98,18 @@ void SceneText::Init()
 	//variable to rotate geometry
 	scaleSize = 1000;
 	moving = 0;
+	FPS = 0;
+
+	unsigned ArialFontArray[256] = {
+		41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,	41,	41,	41,	41,	41,	41,	41,	15,	17,	20,	31,	31,						
+		49,	37,	11,	18,	18,	21,	32,	15,	18,	15,	15,	31,	31,	31,	31,	31,	31,	31,	31,	31,	31,	15,	15,	32,	32,	32,	31,	56,	37,	37,	40,	40,	37,	34,	43,	40,	15,							
+		28,	37,	31,	45,	40,	43,	37,	43,	40,	37,	33,	40,	37,	54,	35,	35,	34,	15,	15,	15,	24,	31,	18,	31,	31,	28,	31,	31,	15,	31,	31,	11,	13,	28,	11,	47,	31,							
+		31,	31,	31,	18,	28,	15,	31,	29,	39,	27,	27,	27,	18,	14,	18,	32, 41,	31,	41,	12,	31,	18,	55,	31,	31,	18,	56,	37,	18,	55,	41,	34,	41,	41,	12,	12,	18,							
+		18,	19,	31,	55,	16,	55,	28,	18,	52,	41,	27,	37,	15,	17,	31,	31,	31,	31,	14,	31,	18,	41,	20,	31,	32,	18,	41,	30,	22,	30,	18,	18,	18,	32,	30,	18,	18,							
+		18,	20,	31,	46,	46,	46,	34,	37,	37,	37,	37,	37,	37,	55,	40,	37,	37,	37,	37,	15,	15,	15,	15,	40,	40,	43,	43,	43,	43,	43,	32,	43,	40,	40,	40,	40,	37,
+		37,	34,	31,	31,	31,	31,	31,	31,	49,	28,	31,	31,	31,	31,	15,	15,	15,	15,	31,	31,	31,	31,	31,	31,	31,	30,	34,	31,	31,	31,	31,	28,	31,	28
+	};
+
 	//Initialize camera settings
 	camera.Init(Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -161,7 +176,7 @@ void SceneText::Init()
 	meshList[GEO_CHAIRSS]->textureID = LoadTGA("Image//ChairSS.tga");*/
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Arial.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Lightball", Color(1, 1 ,1),18, 36, 1.f);
 
@@ -204,6 +219,12 @@ void SceneText::Update(double dt)
 		moving += (float)(1000 * dt);
 	if (Application::IsKeyPressed('8'))
 		moving -= (float)(1000 * dt);
+
+	FPS = 1/dt;
+
+	renderFPS = "FPS: " + std::to_string((long double) FPS); 
+
+
 
 	camera.Update(dt);
 }
@@ -281,19 +302,66 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for(unsigned i = 0; i < text.length(); ++i)
-	{						
-		//For Debug chaneg text.length() to 256
+	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f + 5.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.5f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
 		mesh->Render((unsigned)text[i] * 6, 6);
-		//change (unsigned)text[i] to i to debug
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	glEnable(GL_DEPTH_TEST);
+}
 
+void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+{
+	if(!mesh || mesh->textureID <= 0) //Proper error check
+		return;
+	
+	glDisable(GL_DEPTH_TEST);
+
+
+	 
+	//Add these code just after glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);	 
+
+
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	for(unsigned i = 0; i < text.length(); ++i)
+	{
+		Mtx44 characterSpacing;
+		characterSpacing.SetToTranslation(i * 0.5f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	
+		mesh->Render((unsigned)text[i] * 6, 6);
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+
+	//Add these code just before glEnable(GL_DEPTH_TEST);
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneText::Render()
@@ -327,10 +395,12 @@ void SceneText::Render()
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
-	//modelStack.Translate(moving, 0, 0);
 	modelStack.Scale(10, 10, 10);
-	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
+	RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
 	modelStack.PopMatrix();
+
+
+	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
 }
 
 void SceneText::RenderMesh(Mesh *mesh, bool enableLight)

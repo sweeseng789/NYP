@@ -24,6 +24,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 void Camera3::Update(double dt)
 {
 	static const float CAMERA_SPEED = 50.f;
+
 	if(Application::IsKeyPressed(VK_LEFT))
 	{
 		float yaw = (float)(CAMERA_SPEED * dt);
@@ -34,6 +35,7 @@ void Camera3::Update(double dt)
 		testing += yaw;
 		angleS += 100 * dt;
 	}
+
 	if(Application::IsKeyPressed(VK_RIGHT))
 	{
 		float yaw = (float)(-CAMERA_SPEED * dt);
@@ -45,6 +47,7 @@ void Camera3::Update(double dt)
 		angleS -= 100 * dt;
 
 	}
+
 	if(Application::IsKeyPressed(VK_UP))
 	{
 		float pitch = (float)(CAMERA_SPEED * dt);
@@ -57,6 +60,7 @@ void Camera3::Update(double dt)
 		rotation.SetToRotation(pitch, right.x, right.y, right.z);
 		target = rotation * (target - position) + position;
 	}
+
 	if(Application::IsKeyPressed(VK_DOWN))
 	{
 		float pitch = (float)(-CAMERA_SPEED * dt);
@@ -70,26 +74,30 @@ void Camera3::Update(double dt)
 		target = rotation * (target - position) + position;
 
 	}
-	if(Application::IsKeyPressed('D'))
+
+	if(Application::IsKeyPressed('A'))
 	{
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		position -= right * CAMERA_SPEED * dt;
 		target -= right * CAMERA_SPEED* dt;
 	}
-	if(Application::IsKeyPressed('A'))
+
+	if(Application::IsKeyPressed('D'))
 	{
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		position += right * CAMERA_SPEED * dt;
 		target += right * CAMERA_SPEED* dt;
 	}
+
 	if(Application::IsKeyPressed('W'))
 	{
 		Vector3 view = (target - position).Normalize();
 		position += view * CAMERA_SPEED * dt;
 		target += view * CAMERA_SPEED * dt;
 	}
+
 	if(Application::IsKeyPressed('S'))
 	{
 		Vector3 view = (target - position).Normalize();
@@ -103,14 +111,16 @@ void Camera3::Update(double dt)
 		if(direction.Length() > 5)
 		{
 			Vector3 view = (target - position).Normalized();
-			position += view * (float)(1000.f * dt);
+			position += view * (float)(CAMERA_SPEED * dt);
 		}
 	}
+
 	if(Application::IsKeyPressed('M'))
 	{
 		Vector3 view = (target - position).Normalized();
-		position -= view * (float)(1000.f * dt);
+		position -= view * (float)(CAMERA_SPEED * dt);
 	}
+
 	if(Application::IsKeyPressed('R'))
 	{
 		Reset();

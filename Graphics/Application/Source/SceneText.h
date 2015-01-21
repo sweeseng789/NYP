@@ -87,8 +87,11 @@ private:
 	
 	void RenderSkybox();
 	int scaleSize;
-
+	float FPS;
 	float moving;
+	std::string renderFPS;
+
+	unsigned ArialFontArray[256];
 
 	Camera3 camera;
 

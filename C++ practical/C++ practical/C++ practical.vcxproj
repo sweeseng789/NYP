@@ -10,6 +10,15 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LinkList.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LinkList.h" />
+    <ClInclude Include="Node.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{68B8D1FE-7F5C-4379-B745-6AA1A0D4A394}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -73,15 +82,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\LinkList.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\main.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\Node.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\LinkList.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\Node.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -34,6 +34,8 @@ class SceneText : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 
+		GEO_CROSSHAIR,
+
 		GEO_EXIA,
 		GEO_TEXT,
 		NUM_GEOMETRY,

@@ -55,36 +55,60 @@ void CLinkList::Insert(int newValue)
 	}
 	else//head != NULL
 	{
+	//	current = head;
+	//	while(current != NULL)
+	//	{
+	//		if (current->data > newNode->data)
+	//		{
+	//			/*prev = current;
+	//			current = current->next;
+	//			prev->next = newNode;
+	//			newNode->next = current;*/
+	//			prev = current;
+	//			current = current->next;
+	//			prev->next = newNode;
+	//			newNode->next = current;
+	//			break;
+	//		}
+	//		else if(current->next == NULL)
+	//		{
+	//			tail->next = newNode;
+	//			tail = newNode;
+	//			break;
+	//		}
+	//		else if(current == head)
+	//		{
+	//			newNode->next = head;
+	//			head = newNode;
+	//			break;
+	//		}
+	//		newNode->next = current;
+	//		prev->next = newNode;
+	//		
+	//	}
+	//}
+
+		//check if newValue is bigger or smaller
+		if (newValue >= head->data)
+		{
+			//insert to front
+		}
+		else if(newValue >= tail->data)
+		{
+			//insert to back
+		}
+		//transverse till find the correct place to insert
+		
 		current = head;
 		while(current != NULL)
 		{
-			if (current->data > newNode->data)
+			if(current->data > newNode->data)
 			{
-				/*prev = current;
-				current = current->next;
-				prev->next = newNode;
-				newNode->next = current;*/
-				prev = current;
-				current = current->next;
-				prev->next = newNode;
-				newNode->next = current;
-				break;
-			}
-			else if(current->next == NULL)
-			{
-				tail->next = newNode;
-				tail = newNode;
-				break;
-			}
-			else if(current == head)
-			{
-				newNode->next = head;
-				head = newNode;
+				//do middle insertion
 				break;
 			}
 			newNode->next = current;
 			prev->next = newNode;
-			
 		}
 	}
 }

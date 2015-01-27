@@ -1,20 +1,29 @@
-﻿Build started 26/1/2015 7:29:55 AM.
-     1>Project "C:\Users\User\Desktop\NYP\C++ practical\C++ practical\C++ practical.vcxproj" on node 2 (build target(s)).
+﻿Build started 27/1/2015 12:19:00 PM.
+     1>Project "C:\Users\swees_000\Desktop\NYP\C++ practical\C++ practical\C++ practical.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\C++ practical.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\C++ practical.unsuccessfulbuild".
        ClCompile:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt LinkList.cpp
+         LinkList.cpp
        ManifestResourceCompile:
-         All outputs are up-to-date.
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\C++ practical.exe.embed.manifest.res" "Debug\C++ practical_manifest.rc" 
        Link:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\swees_000\Desktop\NYP\C++ practical\Debug\C++ practical.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\C++ practical.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\swees_000\Desktop\NYP\C++ practical\Debug\C++ practical.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\swees_000\Desktop\NYP\C++ practical\Debug\C++ practical.lib" /MACHINE:X86 "Debug\C++ practical.exe.embed.manifest.res"
+         Debug\LinkList.obj
+         Debug\main.obj
+         Debug\Node.obj
+         LINK : C:\Users\swees_000\Desktop\NYP\C++ practical\Debug\C++ practical.exe not found or not built by the last incremental link; performing full link
        Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\C++ practical.exe.embed.manifest" /manifest "Debug\C++ practical.exe.intermediate.manifest"
          All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         C++ practical.vcxproj -> C:\Users\swees_000\Desktop\NYP\C++ practical\Debug\C++ practical.exe
        FinalizeBuildStatus:
          Deleting file "Debug\C++ practical.unsuccessfulbuild".
          Touching "Debug\C++ practical.lastbuildstate".
-     1>Done Building Project "C:\Users\User\Desktop\NYP\C++ practical\C++ practical\C++ practical.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\swees_000\Desktop\NYP\C++ practical\C++ practical\C++ practical.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:01.23

@@ -111,7 +111,7 @@ void SceneText::Init()
 	};
 
 	//Initialize camera settings
-	camera.Init(Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
@@ -175,13 +175,16 @@ void SceneText::Init()
 	meshList[GEO_CHAIRSS] = MeshBuilder::GenerateOBJ("model6", "OBJ//ChairSS.obj");
 	meshList[GEO_CHAIRSS]->textureID = LoadTGA("Image//ChairSS.tga");*/
 
+	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
+	meshList[GEO_CROSSHAIR]->textureID = LoadTGA("Image//Crosshair.tga");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Arial.tga");
 
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("Lightball", Color(1, 1 ,1),18, 36, 1.f);
 
 	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 500000.f);
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 5000.f);
 	projectionStack.LoadMatrix(projection);
 }
 
@@ -396,9 +399,12 @@ void SceneText::Render()
 	modelStack.PushMatrix();
 	//scale, translate, rotate
 	modelStack.Scale(10, 10, 10);
-	RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
+	//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_CROSSHAIR], false);
+	modelStack.PopMatrix();
 
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
 }

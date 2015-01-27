@@ -1,4 +1,4 @@
-﻿Build started 22/1/2015 10:53:51 AM.
+﻿Build started 27/1/2015 5:59:42 PM.
      1>Project "C:\Users\swees_000\Desktop\NYP\Graphics\Common\Common.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Common.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -14,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.49
+Time Elapsed 00:00:00.05

@@ -86,13 +86,12 @@ private:
 	
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	
+
 	void RenderSkybox();
 	int scaleSize;
 	float FPS;
 	float moving;
 	std::string renderFPS;
-
 	unsigned ArialFontArray[256];
 
 	Camera3 camera;

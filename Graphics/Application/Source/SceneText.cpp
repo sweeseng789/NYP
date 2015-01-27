@@ -11,6 +11,8 @@
 #include "Vertex.h"
 #include "LoadTGA.h"
 
+#include"Camera3.h"
+
 SceneText::SceneText()
 {
 }
@@ -22,7 +24,7 @@ SceneText::~SceneText()
 void SceneText::Init()
 {
 	// Init VBO here
-	
+
 	// Set background color to dark blue
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
@@ -111,14 +113,13 @@ void SceneText::Init()
 	};
 
 	//Initialize camera settings
-	camera.Init(Vector3(0, 0, 50), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 0), 5);
 	meshList[GEO_CUBE1] = MeshBuilder::GenerateCube("cube1", Color(1, 0, 1), 5);
-
 
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("Sphere", Color(0.95686274509, 0.86274509803, 0.14901960784), 18, 36, 1.f);
 	meshList[GEO_SPHERE]->material.kAmbient.Set(1.0f, 0.90196078431f, 0.17647058823);
@@ -134,22 +135,22 @@ void SceneText::Init()
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//color2.tga");
 
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//Front2.tga");
 
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//Back2.tga");
 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//Bottom2.tga");
 
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//Top2.tga");
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//Right2.tga");
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//Left2.tga");
 
 	meshList[GEO_EXIA] = MeshBuilder::GenerateQuad("exia", Color(1, 1, 1), 1.f);
 	meshList[GEO_EXIA]->textureID = LoadTGA("Image//Exia.tga");
@@ -204,6 +205,8 @@ void SceneText::Update(double dt)
 
 	int LSPEED = 100;
 	int ROTATE_SPEED = 10;
+	int SPEED  = 3;
+	int SPEED2 = 12;
 
 	if(Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(LSPEED * dt);
@@ -218,10 +221,11 @@ void SceneText::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
+
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(1000 * dt);
+		moving += (float)(0.05 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(1000 * dt);
+		moving -= (float)(0.05 * dt);
 
 	FPS = 1/dt;
 
@@ -236,20 +240,21 @@ void SceneText::RenderSkybox()
 {
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
+	modelStack.Translate(0, 0, -0.00340054);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(90, 0, -90, 0);
-	modelStack.Translate(-0.49814095, 0, 0.49649683);
+	modelStack.Translate(-0.49814095 , 0, 0.49649683 + -0.00170516);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(90, 0, 180, 0);
-	modelStack.Translate(0.498585 , 0, 0.49649683);
+	modelStack.Translate(0.498585 , 0, 0.49649683 + -0.00510058);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
@@ -257,11 +262,10 @@ void SceneText::RenderSkybox()
 	modelStack.Rotate(180, 0, 180, 0);
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Translate(0, 0, 0.991158);
+	modelStack.Translate(moving, 0, 0.991158 +-0.00594854);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(90, 0, 90, 0);
@@ -273,22 +277,14 @@ void SceneText::RenderSkybox()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	//modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	//modelStack.Rotate(90, 90, 0, 0);
-	//modelStack.Translate(0, moving, 0.503292);
-	//RenderMesh(meshList[GEO_BOTTOM], false);
-	//modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(90, 0, 90, 0);
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Rotate(270, 270, 0, 0);
-	modelStack.Translate(0.49824209, 0, -0.49644419);
+	modelStack.Rotate(90, 90, 0, 0);
+	modelStack.Translate(0, -0.510025 + 0.0135941, 0.503292 + -0.00170143);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
-	modelStack.PopMatrix();
+
+	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
@@ -384,6 +380,9 @@ void SceneText::Render()
 
 	RenderMesh(meshList[GEO_AXES], false);
 	
+	modelStack.PushMatrix(); //rotate the world
+	modelStack.Rotate(360, camera.angleX, camera.angleY, 0);
+
 	modelStack.PushMatrix();
 	modelStack.Scale(1,1,1);
 	modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
@@ -391,8 +390,8 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Scale(20, 20 ,20);
-	modelStack.Translate(0, 0, 100);
+	modelStack.Scale(0.01, 0.01, 0.01);
+	//modelStack.Translate(0, 0, 100);
 	RenderSkybox();
 	modelStack.PopMatrix();
 
@@ -406,6 +405,8 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_CROSSHAIR], false);
 	modelStack.PopMatrix();
 
+
+	modelStack.PopMatrix();//world
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
 }
 

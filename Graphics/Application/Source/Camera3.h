@@ -1,6 +1,5 @@
 #ifndef CAMERA_3_H
 #define CAMERA_3_H
-
 #include "Camera.h"
 
 /******************************************************************************/
@@ -20,19 +19,17 @@ public:
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
-	int mousex;
-	int mousey;
-	int oldMousex;
-	int oldMousey;
-
-	float angleS;
 
 	Vector3 mouse;
+	Vector3 CrossHair;
+	float angleX;
+	float angleY;
 
 	float testing;
 
 	Camera3();
 	~Camera3();
+	void UpdateCrossHair();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
 	virtual void Reset();

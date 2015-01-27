@@ -52,6 +52,7 @@ void CLinkList::Insert(int newValue)
 	{
 		//LL is empty
 		head = tail = newNode;
+		count++;
 	}
 	else//head != NULL
 	{
@@ -89,28 +90,36 @@ void CLinkList::Insert(int newValue)
 	//}
 
 		//check if newValue is bigger or smaller
-		if (newValue >= head->data)
+		if (newValue <= head->data)
 		{
 			//insert to front
+			newNode->next = head;
+			head = newNode;
 		}
 		else if(newValue >= tail->data)
 		{
 			//insert to back
+			tail->next = newNode;
+			tail = newNode;
 		}
 		//transverse till find the correct place to insert
-		
-		current = head;
-		while(current != NULL)
-		{
-			if(current->data > newNode->data)
+			current = head;
+			while(current != NULL)
 			{
-				//do middle insertion
-				break;
+				if(current->data <= newNode->data)
+				{
+					//do middle insertion]
+					prev = current;
+					current = current->next;
+					break;
+				}
+				
+				newNode->next = current;
+				prev->next = newNode;
 			}
-			newNode->next = current;
-			prev->next = newNode;
-		}
 	}
+	cout << "head:" << head->data << endl;
+	cout << "tail:" << tail->data << endl;
 }
 
 void CLinkList::PrintAll(void)

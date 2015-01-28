@@ -11,12 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LinkList.cpp" />
+    <ClCompile Include="Database.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LinkList.h" />
+    <ClInclude Include="Database.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -8,6 +8,6 @@ public:
 
 	int data;
 	CNode* next;
-	CNode* previous;
+	CNode* back;
 };
 

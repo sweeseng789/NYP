@@ -1,0 +1,1 @@
+http://www.algolist.net/Data_structures/Singly-linked_list/Insertion

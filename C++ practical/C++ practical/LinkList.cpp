@@ -51,7 +51,7 @@ void CLinkList::Insert(int newValue)
 	if (head == NULL)
 	{
 		//LL is empty
-		head = tail = newNode;
+		prev = current = head = tail = newNode;
 		count++;
 	}
 	else//head != NULL
@@ -106,20 +106,24 @@ void CLinkList::Insert(int newValue)
 			current = head;
 			while(current != NULL)
 			{
-				if(current->data <= newNode->data)
-				{
+				if(current->data >= newNode->data)
+				{	
 					//do middle insertion]
-					prev = current;
-					current = current->next;
 					break;
 				}
+				prev = current;
+				cout << "prev: " << prev->data << endl;
 				
-				newNode->next = current;
+				current = current->next;
+				cout << "current:" << current->data << endl;
+
 				prev->next = newNode;
+				newNode ->next = current;
 			}
 	}
 	cout << "head:" << head->data << endl;
 	cout << "tail:" << tail->data << endl;
+	cout << endl;
 }
 
 void CLinkList::PrintAll(void)

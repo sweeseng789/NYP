@@ -51,80 +51,48 @@ void CLinkList::Insert(int newValue)
 	if (head == NULL)
 	{
 		//LL is empty
-		prev = current = head = tail = newNode;
+		prev = head = tail = newNode;
 		count++;
 	}
 	else//head != NULL
 	{
-	//	current = head;
-	//	while(current != NULL)
-	//	{
-	//		if (current->data > newNode->data)
-	//		{
-	//			/*prev = current;
-	//			current = current->next;
-	//			prev->next = newNode;
-	//			newNode->next = current;*/
-	//			prev = current;
-	//			current = current->next;
-	//			prev->next = newNode;
-	//			newNode->next = current;
-	//			break;
-	//		}
-	//		else if(current->next == NULL)
-	//		{
-	//			tail->next = newNode;
-	//			tail = newNode;
-	//			break;
-	//		}
-	//		else if(current == head)
-	//		{
-	//			newNode->next = head;
-	//			head = newNode;
-	//			break;
-	//		}
-	//		newNode->next = current;
-	//		prev->next = newNode;
-	//		
-	//	}
-	//}
-
 		//check if newValue is bigger or smaller
 		if (newValue <= head->data)
 		{
 			//insert to front
 			newNode->next = head;
 			head = newNode;
+			
 		}
 		else if(newValue >= tail->data)
 		{
 			//insert to back
 			tail->next = newNode;
-			tail = newNode;
+			tail = newNode;	
 		}
-		//transverse till find the correct place to insert
-			current = head;
-			while(current != NULL)
-			{
-				if(current->data >= newNode->data)
-				{	
-					//do middle insertion]
-					break;
-				}
-				prev = current;
-				cout << "prev: " << prev->data << endl;
-				
-				current = current->next;
-				cout << "current:" << current->data << endl;
 
+		//transverse till find the correct place to insert
+		current = head;
+		while (current != NULL)
+		{
+			if(current->data > newNode->data && prev->data < newNode->data)
+			{	
+				//do middle insertion
 				prev->next = newNode;
-				newNode ->next = current;
+				newNode->next = current;
+				break;
 			}
+			else if(newNode->data == current->data)
+			{
+				
+				break;
+			}
+			prev = current;
+			current = current->next;
+		}
 	}
-	cout << "head:" << head->data << endl;
-	cout << "tail:" << tail->data << endl;
-	cout << endl;
 }
+	
 
 void CLinkList::PrintAll(void)
 {

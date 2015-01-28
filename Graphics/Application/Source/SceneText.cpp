@@ -135,22 +135,22 @@ void SceneText::Init()
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//color2.tga");
 
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//Front2.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front3.tga");
 
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//Back2.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//back3.tga");
 
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//Bottom2.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom3.tga");
 
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//Top2.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//top3.tga");
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//Right2.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right3.tga");
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//Left2.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left3.tga");
 
 	meshList[GEO_EXIA] = MeshBuilder::GenerateQuad("exia", Color(1, 1, 1), 1.f);
 	meshList[GEO_EXIA]->textureID = LoadTGA("Image//Exia.tga");
@@ -223,9 +223,9 @@ void SceneText::Update(double dt)
 
 
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(0.05 * dt);
+		moving += (float)(0.5 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(0.05 * dt);
+		moving -= (float)(0.5 * dt);
 
 	FPS = 1/dt;
 
@@ -240,21 +240,21 @@ void SceneText::RenderSkybox()
 {
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Translate(0, 0, -0.00340054);
+	modelStack.Translate(0, 0, -0.00169619);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(90, 0, -90, 0);
-	modelStack.Translate(-0.49814095 , 0, 0.49649683 + -0.00170516);
+	modelStack.Translate(-0.49814095  , 0, 0.49649683 + -0.00170516 + -0.0286548);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(90, 0, 180, 0);
-	modelStack.Translate(0.498585 , 0, 0.49649683 + -0.00510058);
+	modelStack.Translate(0.498585 , 0.00254769, 0.49649683 + -0.00510058);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 
@@ -262,29 +262,32 @@ void SceneText::RenderSkybox()
 	modelStack.Rotate(180, 0, 180, 0);
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
-	modelStack.Translate(moving, 0, 0.991158 +-0.00594854);
+	modelStack.Translate(-0.0286548, 0, 0.991158 +-0.00594854);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-
+	
 	modelStack.PushMatrix();
 	modelStack.Rotate(90, 0, 90, 0);
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(180, 0, 180, 0);
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(270, 270, 0, 0);
-	modelStack.Translate(0.491462 + 0.00678009, 0, 0.499845 -0.00340081);
+	//modelStack.Translate(0.491462 + 0.00678009, 0, 0.499845 -0.00340081);
+	modelStack.Translate(-0.493089, -0.00648329, 0.49309);
 	RenderMesh(meshList[GEO_TOP], false);
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(90, 90, 0, 0);
-	modelStack.Translate(0, -0.510025 + 0.0135941, 0.503292 + -0.00170143);
+	modelStack.Translate(0.017004, -0.510025 + 0.0135941, 0.503292 + -0.00170143);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
-
-	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
@@ -372,16 +375,12 @@ void SceneText::Render()
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 
 	modelStack.LoadIdentity();
-	
 
 	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 
 
 	RenderMesh(meshList[GEO_AXES], false);
-	
-	modelStack.PushMatrix(); //rotate the world
-	modelStack.Rotate(360, camera.angleX, camera.angleY, 0);
 
 	modelStack.PushMatrix();
 	modelStack.Scale(1,1,1);
@@ -390,10 +389,14 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Scale(0.01, 0.01, 0.01);
-	//modelStack.Translate(0, 0, 100);
+	modelStack.Translate(camera.World.x, camera.World.y, camera.World.z);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 350, 150);
 	RenderSkybox();
 	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	std::cout << moving << std::endl;
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -402,11 +405,10 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(camera.CrossHair.x, camera.CrossHair.y, 0);
 	RenderMesh(meshList[GEO_CROSSHAIR], false);
 	modelStack.PopMatrix();
 
-
-	modelStack.PopMatrix();//world
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
 }
 

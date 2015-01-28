@@ -15,6 +15,7 @@ void main(void)
 		myLL.Insert(insChoice);
 
 		myLL.PrintAll();
+		cout << endl;
 	}	
 		
 }

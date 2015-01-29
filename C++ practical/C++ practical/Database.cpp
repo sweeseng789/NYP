@@ -72,7 +72,6 @@ void CDatabase::PrintAll(void)
 	if (head != NULL)
 	{
 		current = head;
-		cout << "Ascending Order" << endl;
 		while (current != NULL)
 		{
 			cout << "Rank: " << current->data << endl;
@@ -90,7 +89,6 @@ void CDatabase::PrintD()
 	if (head != NULL)
 	{
 		current = tail;
-		cout << "Descending Order" << endl;
 		while(current != NULL)
 		{
 			cout << "Rank: " << current->data << endl;
@@ -169,16 +167,16 @@ bool CDatabase::RecordValidation(int newValue)
 		current = head;
 		while(current != NULL)
 		{
-			if (newValue == current->data)
+			if (current->data == newValue)
 			{
 				return true;
-				break;
 			}
 			else
 			{
 				return false;
-				break;
 			}
+			prev = current;
+			current = current->next;
 		}
 	}
 }
@@ -257,4 +255,43 @@ void CDatabase::EditMonsterHealth(int newValue, int newHealth )
 	}
 	else
 		cout << "LinkList is Empty" << endl;
+}
+
+void CDatabase::SearchFunction(string SearchWords)
+{
+	if (head != NULL)
+	{
+		current = head;
+		string str1, str2;
+		str2 = SearchWords;
+		while (current != NULL)
+		{
+			str1 = current->parameters->getName();
+			if (str1.find(str2) != string::npos)
+			{
+				cout << "Rank: " << current->data << endl;
+				current->parameters->printAll();
+			}
+			else
+			{
+				cout << "Nothing found" << endl;
+			}
+			current = current->next;
+		}
+		cout << endl;
+	}
+	else
+		cout << "LinkList is Empty" << endl;
+}
+
+bool CDatabase::detectFirstNode()
+{
+	if (head == NULL)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

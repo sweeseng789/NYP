@@ -13,7 +13,7 @@ private:
 	string name;
 	int level;
 	int health;
-
+		
 public:
 	CMonster(void);
 	~CMonster(void);

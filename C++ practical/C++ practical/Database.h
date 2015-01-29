@@ -13,21 +13,18 @@ private:
 public:
 	CDatabase(void);
 	~CDatabase(void);
-	CMonster * Try;
+	
+	bool RecordValidation(int newValue);
+	bool Delete(int toDelete);
+	bool detectFirstNode();
+
+	void PrintAll(void);
+	void PrintD();
+	void SearchFunction(string SearchWords);
 	void Insert(int newValue, int newLevel, int newHealth, string newName);
 	void EditRecord(int newValue, int newLevel, int newHealth, string newName);
 	void EditMonsterName(int newValue, string newName);
 	void EditMonsterHealth(int newValue, int newHealth);
 	void EditMonsterLevel(int newValue, int newLevel);
-	bool RecordValidation(int newValue);
-
-	CMonster monsterStuff;
-
-	int count;
-
-	bool Delete(int toDelete);
-
-	void PrintAll(void);
-	void PrintD();
 };
 

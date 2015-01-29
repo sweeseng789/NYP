@@ -3,7 +3,7 @@
 
 CMonster::CMonster(void)
 {
-	level = health = 0;
+
 }
 
 
@@ -11,7 +11,7 @@ CMonster::~CMonster(void)
 {
 }
 
-void CMonster::set(const string newname, const int newlevel, const int newhealth)
+void CMonster::set(string newname,  int newlevel,  int newhealth)
 {
 	name = newname;
 	level = newlevel;
@@ -53,4 +53,5 @@ void CMonster::printAll()
 	cout << "Monster's name: " << name << endl;
 	cout << "Monster's level: " << level << endl;
 	cout << "Monster's health: " << health << endl;
+	cout << endl;
 }

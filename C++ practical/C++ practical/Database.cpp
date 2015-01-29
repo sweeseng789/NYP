@@ -12,7 +12,7 @@ CDatabase::~CDatabase(void)
 {
 }
 
-void CDatabase::Insert(int newValue)
+void CDatabase::Insert(int newValue, int newLevel, int newHealth, string newName)
 {
 	newNode = new CNode(newValue);
 	if (head == NULL)
@@ -23,6 +23,7 @@ void CDatabase::Insert(int newValue)
 		tail = newNode;
 		newNode->back = NULL;
 		newNode->next = NULL;
+		head->parameters->set(newName, newLevel, newHealth);
 	}
 	else//head != NULL
 	{
@@ -30,6 +31,7 @@ void CDatabase::Insert(int newValue)
 		{
 			newNode->back = NULL;
 			newNode->next = head;
+			newNode->parameters->set(newName, newLevel, newHealth);
 			head->back = newNode;
 			head = newNode;
 		}
@@ -37,8 +39,10 @@ void CDatabase::Insert(int newValue)
 		{
 			newNode->back = NULL;
 			newNode->back = tail;
+			newNode->parameters->set(newName, newLevel, newHealth);
 			tail->next = newNode;
 			tail = newNode;
+
 		}
 		else //Middle insertion
 		{
@@ -48,6 +52,7 @@ void CDatabase::Insert(int newValue)
 				if(current->data >= newNode->data && prev->data < newNode->data)
 				{
 					prev->next = newNode;
+					newNode->parameters->set(newName, newLevel, newHealth);
 					newNode->back = prev;
 					newNode->next = current;
 					current->back = newNode;
@@ -67,15 +72,14 @@ void CDatabase::PrintAll(void)
 	if (head != NULL)
 	{
 		current = head;
-		cout << "Single: ";
+		cout << "Ascending Order" << endl;
 		while (current != NULL)
 		{
-			cout << current->data << " ";
+			cout << "Rank: " << current->data << endl;
+			current->parameters->printAll();
 			current = current->next;
 		}
-	
 		cout << endl;
-			monsterStuff.printAll();
 	}
 	else
 		cout << "LL Empty." << endl;
@@ -86,10 +90,11 @@ void CDatabase::PrintD()
 	if (head != NULL)
 	{
 		current = tail;
-		cout << "Doubly: ";
+		cout << "Descending Order" << endl;
 		while(current != NULL)
 		{
-			cout << current->data << " ";
+			cout << "Rank: " << current->data << endl;
+			current->parameters->printAll();
 			current = current->back;
 		}
 
@@ -155,4 +160,101 @@ bool CDatabase::Delete(int toDelete)
 	}
 	else
 		return false;
+}
+
+bool CDatabase::RecordValidation(int newValue)
+{
+	if (head != NULL)
+	{
+		current = head;
+		while(current != NULL)
+		{
+			if (newValue == current->data)
+			{
+				return true;
+				break;
+			}
+			else
+			{
+				return false;
+				break;
+			}
+		}
+	}
+}
+
+void CDatabase::EditRecord(int newValue, int newLevel, int newHealth, string newName)
+{
+	if (head != NULL)
+	{
+		current = head;
+		while (current != NULL)
+		{
+			if (newValue == current->data)
+			{
+				current->parameters->set(newName, newLevel, newHealth);
+			}
+			current = current->next;
+		}
+		cout << endl;
+	}
+	else
+		cout << "LinkList is Empty" << endl;
+}
+
+void CDatabase::EditMonsterName(int newValue, string newName)
+{
+	if (head != NULL)
+	{
+		current = head;
+		while (current != NULL)
+		{
+			if (newValue == current->data)
+			{
+				current->parameters->setName(newName);
+			}
+			current = current->next;
+		}
+		cout << endl;
+	}
+	else
+		cout << "LinkList is Empty" << endl;
+}
+
+void CDatabase::EditMonsterLevel(int newValue, int newLevel)
+{
+	if (head != NULL)
+	{
+		current = head;
+		while (current != NULL)
+		{
+			if (newValue == current->data)
+			{
+				current->parameters->setLevel(newLevel);
+			}
+			current = current->next;
+		}
+		cout << endl;
+	}
+	else
+		cout << "LinkList is Empty" << endl;
+}
+
+void CDatabase::EditMonsterHealth(int newValue, int newHealth )
+{
+	if (head != NULL)
+	{
+		current = head;
+		while (current != NULL)
+		{
+			if (newValue == current->data)
+			{
+				current->parameters->setHealth(newHealth);
+			}
+			current = current->next;
+		}
+		cout << endl;
+	}
+	else
+		cout << "LinkList is Empty" << endl;
 }

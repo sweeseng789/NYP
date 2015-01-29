@@ -8,38 +8,41 @@ void main(void)
 	//CDatabase myLL;
 
 	CDatabase linkList;
+	int choice1;
+	int choice2;
+	int choice3;
+	int monsterHealth;
+	int monsterLevel;
+	string monsterName;
+	string searchList;
+	string found;
 
 	while (true)
 	{
-		int choice1;
-		int choice2;
-		int choice3;
-		int monsterHealth;
-		int monsterLevel;
-		string monsterName;
-
-
-		cout << "Enter your choice\n1)Add \n2)Delete" << endl;
+		cout << "Enter your choice\n \n1)Add \n2)Delete \n3)Search record \n4)Edit Record \n5)Print All Record \n6)Exit program" << endl;
 		cin >> choice1;
 
-		if (choice1 == 1)
+		while(choice1 < 1 || choice1 > 6)
+		{
+			cout << "Error, please enter again" << endl;
+			cin >> choice1;
+		}
+		if (choice1 == 1)//add value
 		{
 			cout << "Please enter an integer to add: ";
 			cin >> choice2;
-			linkList.Insert(choice2);
-			cout << "Please enter a level" << endl;
-			cin >> monsterLevel;
-			cout << "Please enter a name" << endl;
 			cin.ignore();
-			std::getline(cin, monsterName);
-			cout << "Please enter health" << endl;
+			cout << "Please enter a name: ";
+			getline(cin, monsterName);
+			cout << "Please enter a level: ";
+			cin >> monsterLevel;
+			cout << "Please enter health: ";
 			cin >> monsterHealth;
-
-			linkList.monsterStuff.set(monsterName, monsterLevel, monsterHealth);
+			linkList.Insert(choice2, monsterLevel, monsterHealth, monsterName);
 		}
-		/*else if (choice1 == 2)
+		else if (choice1 == 2)//delete value
 		{
-			cout << "Please enter a value to delete" << endl;
+			cout << "Please enter a value to delete: ";
 			cin >> choice3;
 			if (linkList.Delete(choice3) == true)
 			{
@@ -47,13 +50,78 @@ void main(void)
 			}
 			else
 			{
-				cout << "Erorr " << choice3 << " cannot be found" << endl;
+				cout << "Error " << choice3 << " cannot be found" << endl;
 			}
 		}
+		else if (choice1 == 3)//search record
+		{
+			cout << "Please enter what you want to search" << endl;
+			cin.ignore();
+			getline(cin, searchList);
 
-		linkList.PrintAll();
-		linkList.PrintD();*/
-		linkList.PrintAll();
+		}
+		else if (choice1 == 4)//edit record
+		{
+			cout << "Please enter the record that you want to edit" << endl;
+			cin >> choice3;
+
+			if(linkList.RecordValidation(choice3) == true)
+			{
+				cout << "Please enter what you want to edit \n1)Monster name \n2)Monster Level \n3)Monster Health \n4)All" << endl;
+				cin >> choice2;
+				while (choice2 < 1 || choice2 > 4)
+				{
+					cout << "Error, please enter again" <<endl;
+					cin >> choice2;
+				}
+
+				if (choice2 == 1)
+				{
+					cin.ignore();
+					cout << "Please enter a name: ";
+					getline(cin, monsterName);
+					linkList.EditMonsterName(choice3, monsterName);
+				}
+				else if (choice2 == 2)
+				{
+					cout << "Please enter a level: ";
+					cin >> monsterLevel;
+					linkList.EditMonsterLevel(choice3, monsterLevel);
+				}
+				else if(choice2 == 3)
+				{
+					cout << "Please enter health: ";
+					cin >> monsterHealth;
+					linkList.EditMonsterHealth(choice3, monsterHealth);
+				}
+				else if(choice2 == 4)
+				{
+					cin.ignore();
+					cout << "Please enter a name: ";
+					getline(cin, monsterName);
+					cout << "Please enter a level: ";
+					cin >> monsterLevel;
+					cout << "Please enter health: ";
+					cin >> monsterHealth;
+					linkList.EditRecord(choice3, monsterLevel, monsterHealth, monsterName);
+				}
+			}
+			else
+			{
+				cout << "Linklist is empty" << endl;
+			}
+		}
+		else if (choice1 == 5)//print record
+		{
+			linkList.PrintAll();
+			linkList.PrintD();
+		}
+		else if (choice1 == 6)//exit program
+		{
+			break;
+		}
+		system("pause");
+		system("cls");
 	}	
 		
 }

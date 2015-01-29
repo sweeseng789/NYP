@@ -1,4 +1,5 @@
 #pragma once
+#include "Monster.h"
 class CNode
 {
 public:
@@ -9,5 +10,6 @@ public:
 	int data;
 	CNode* next;
 	CNode* back;
+	CMonster* parameters;
 };
 

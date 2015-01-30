@@ -179,6 +179,9 @@ void SceneText::Init()
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
 	meshList[GEO_CROSSHAIR]->textureID = LoadTGA("Image//Crosshair.tga");
 
+	meshList[GEO_EXIAHEAD] = MeshBuilder::GenerateOBJ("Exia Head", "OBJ//ExiaHead.obj");
+	meshList[GEO_EXIAHEAD]->textureID = LoadTGA("Image//ExiaHead.tga");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Arial.tga");
 
@@ -405,8 +408,8 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.CrossHair.x, camera.CrossHair.y, 0);
-	RenderMesh(meshList[GEO_CROSSHAIR], false);
+	modelStack.Scale(0.1, 0.1, 0.1);
+	RenderMesh(meshList[GEO_EXIAHEAD], false);
 	modelStack.PopMatrix();
 
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);

@@ -37,6 +37,7 @@ class SceneText : public Scene
 		GEO_CROSSHAIR,
 
 		GEO_EXIA,
+		GEO_EXIAHEAD,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};

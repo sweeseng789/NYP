@@ -81,7 +81,7 @@ void CDatabase::PrintAll(void)
 		cout << endl;
 	}
 	else
-		cout << "LL Empty." << endl;
+		cout << "Error, Linklist is empty" << endl;
 }
 
 void CDatabase::PrintD()
@@ -99,7 +99,7 @@ void CDatabase::PrintD()
 		cout << endl;
 	}
 	else
-		cout << "LL Empty." << endl;
+		cout << "Error, Linklist is empty" << endl;
 }
 
 bool CDatabase::Delete(int toDelete)
@@ -162,22 +162,23 @@ bool CDatabase::Delete(int toDelete)
 
 bool CDatabase::RecordValidation(int newValue)
 {
+	//Print all
 	if (head != NULL)
 	{
 		current = head;
-		while(current != NULL)
+		while (current != NULL)
 		{
-			if (current->data == newValue)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-			prev = current;
+			cout << "Rank: " << current->data << endl;
+			current->parameters->printAll();
 			current = current->next;
+			return true;
 		}
+		cout << endl;
+	}
+	else
+	{
+		cout << "Error, Linklist is empty" << endl;
+		return false;
 	}
 }
 

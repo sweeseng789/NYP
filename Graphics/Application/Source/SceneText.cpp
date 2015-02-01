@@ -99,8 +99,9 @@ void SceneText::Init()
 
 	//variable to rotate geometry
 	scaleSize = 1000;
-	moving = 0;
+	moving = 270;
 	FPS = 0;
+	rotateRightHand = rotateLeftHand = rotateLeftFeet = rotateRightFeet = 1;
 
 	unsigned ArialFontArray[256] = {
 		41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,	41,	41,	41,	41,	41,	41,	41,	15,	17,	20,	31,	31,						
@@ -113,7 +114,7 @@ void SceneText::Init()
 	};
 
 	//Initialize camera settings
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
@@ -155,7 +156,7 @@ void SceneText::Init()
 	meshList[GEO_EXIA] = MeshBuilder::GenerateQuad("exia", Color(1, 1, 1), 1.f);
 	meshList[GEO_EXIA]->textureID = LoadTGA("Image//Exia.tga");
 
-	/*meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("model1", "OBJ//chair.obj");
+	meshList[GEO_MODEL1] = MeshBuilder::GenerateOBJ("model1", "OBJ//chair.obj");
 	meshList[GEO_MODEL1]->textureID = LoadTGA("Image//chair.tga");
 
 	meshList[GEO_MODEL2] = MeshBuilder::GenerateOBJ("model2", "OBJ//dart.obj");
@@ -173,14 +174,29 @@ void SceneText::Init()
 	meshList[GEO_MODEL6] = MeshBuilder::GenerateOBJ("model6", "OBJ//winebottle.obj");
 	meshList[GEO_MODEL6]->textureID = LoadTGA("Image//winebottle.tga");
 
-	meshList[GEO_CHAIRSS] = MeshBuilder::GenerateOBJ("model6", "OBJ//ChairSS.obj");
-	meshList[GEO_CHAIRSS]->textureID = LoadTGA("Image//ChairSS.tga");*/
-
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
 	meshList[GEO_CROSSHAIR]->textureID = LoadTGA("Image//Crosshair.tga");
 
-	meshList[GEO_EXIAHEAD] = MeshBuilder::GenerateOBJ("Exia Head", "OBJ//ExiaHead.obj");
-	meshList[GEO_EXIAHEAD]->textureID = LoadTGA("Image//ExiaHead.tga");
+	meshList[DoraemonHead] = MeshBuilder::GenerateOBJ("Doraemon Head", "OBJ//DoraemonHead.obj");
+	meshList[DoraemonHead]->textureID = LoadTGA("Image//DoraemonHead.tga");
+
+	meshList[DoraemonBell] = MeshBuilder::GenerateOBJ("Doraemon Bell", "OBJ//DoraemonBell.obj");
+	meshList[DoraemonBell]->textureID = LoadTGA("Image//DoraemonBell.tga");
+
+	meshList[DoraemonBody] = MeshBuilder::GenerateOBJ("Doraemon Body", "OBJ//DoraemonBody.obj");
+	meshList[DoraemonBody]->textureID = LoadTGA("Image//DoraemonBody.tga");
+
+	meshList[DoraemonLeftHand] = MeshBuilder::GenerateOBJ("Doraemon Left Hand", "OBJ//DoraemonLeftHand.obj");
+	meshList[DoraemonLeftHand]->textureID = LoadTGA("Image//DoraemonHand.tga");
+
+	meshList[DoraemonRightHand] = MeshBuilder::GenerateOBJ("Doraemon Right Hand", "OBJ//DoraemonRightHand.obj");
+	meshList[DoraemonRightHand]->textureID = LoadTGA("Image//DoraemonHand.tga");
+
+	meshList[DoraemonLeftFeet] = MeshBuilder::GenerateOBJ("Doraemon Left Feet", "OBJ//DoraemonLeftLeg.obj");
+	meshList[DoraemonLeftFeet]->textureID = LoadTGA("Image//DoraemonHand.tga");
+
+	meshList[DoraemonRightFeet] = MeshBuilder::GenerateOBJ("Doraemon Right Feet", "OBJ//DoraemonRightLeg.obj");
+	meshList[DoraemonRightFeet]->textureID = LoadTGA("Image//DoraemonHand.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Arial.tga");
@@ -235,6 +251,54 @@ void SceneText::Update(double dt)
 	renderFPS = "FPS: " + std::to_string((long double) FPS); 
 
 
+	static int ROTATELEFTHAND = 1;
+	static int ROTATERIGHTHAND = 1;
+	static int ROTATELEFTFEET = 1;
+	static int ROTATERIGHTFEET = 1;
+	static int count, count2;
+	static int movement = false;
+
+	if(Application::IsKeyPressed('W') || Application::IsKeyPressed('S'))
+	{
+		movement = true;
+	}
+	else
+	{
+		movement = false;
+	}
+
+	if (movement == true)
+	{
+		if(rotateLeftHand * ROTATELEFTHAND >= 45)
+		{
+			ROTATELEFTHAND = -ROTATELEFTHAND;
+			count++;
+		}
+		if (rotateRightHand * ROTATERIGHTHAND >= 45)
+		{
+			ROTATERIGHTHAND = -ROTATERIGHTHAND;
+		}
+		if (rotateLeftFeet * ROTATELEFTFEET >= 45)
+		{
+			ROTATELEFTFEET =  -ROTATELEFTFEET;
+		}
+		if (rotateRightFeet * ROTATERIGHTFEET >= 45)
+		{
+			ROTATERIGHTFEET =  -ROTATERIGHTFEET;
+		}
+		if (count >= 1)
+		{
+			rotateRightHand += (float)(ROTATERIGHTHAND * ROTATE_SPEED * dt * 5);
+			rotateLeftFeet += (float)(ROTATELEFTFEET * ROTATE_SPEED * dt * 5);
+		}
+		rotateLeftHand += (float)(ROTATELEFTHAND * ROTATE_SPEED * dt * 5);
+		rotateRightFeet += (float)(ROTATERIGHTFEET * ROTATE_SPEED * dt * 5);
+	}
+	else//reset
+	{
+		ROTATERIGHTHAND = ROTATELEFTHAND = rotateLeftHand = rotateRightHand = ROTATELEFTFEET = ROTATERIGHTFEET = rotateLeftFeet = rotateRightFeet = 1;
+		count = 0;
+	}
 
 	camera.Update(dt);
 }
@@ -399,7 +463,6 @@ void SceneText::Render()
 	RenderSkybox();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
-	std::cout << moving << std::endl;
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -407,10 +470,57 @@ void SceneText::Render()
 	//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Scale(0.1, 0.1, 0.1);
-	RenderMesh(meshList[GEO_EXIAHEAD], false);
+	modelStack.PushMatrix(); //rotateDoraemon
+	modelStack.Rotate(moving, 0, moving, 0);
+	modelStack.Translate(1 + camera.CharacterMovement.x, -1 + camera.CharacterMovement.y, camera.CharacterMovement.z);
+
+	modelStack.PushMatrix();//Doraemon head
+
+	modelStack.Rotate(5, 0, 5, 0);
+	RenderMesh(meshList[DoraemonHead], false);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0.02312, 0 ,0);
+	RenderMesh(meshList[DoraemonBell], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -1.129767, 0);
+	RenderMesh(meshList[DoraemonBody], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix(); //rotate left hand
+	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
+	modelStack.PushMatrix();//Left hand
+	modelStack.Translate(0, -1.1050815, 0);
+	RenderMesh(meshList[DoraemonLeftHand], false);
+	modelStack.PopMatrix();//left hand
+	modelStack.PopMatrix(); //rotate left hadn
+
+	modelStack.PushMatrix(); //rotate right hadn
+	modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
+	modelStack.PushMatrix();//right hand
+	modelStack.Translate(0, -1.11358, -1.0931759);
+	RenderMesh(meshList[DoraemonRightHand], false);
+	modelStack.PopMatrix();//right hand
+	modelStack.PopMatrix(); //rotate rigth hand
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
+	modelStack.Translate(0, -1.82765, -2.32952);
+	RenderMesh(meshList[DoraemonLeftFeet], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
+	modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
+	RenderMesh(meshList[DoraemonRightFeet], false);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix(); // roatteDoraemon
+
+	
 
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
 }

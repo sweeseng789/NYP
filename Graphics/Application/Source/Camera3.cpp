@@ -31,7 +31,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera3::Update(double dt)
 {
-	static const float CAMERA_SPEED = 20.f;
+	static const float CAMERA_SPEED = 10.f;
 
 	if(Application::IsKeyPressed(VK_LEFT))
 	{
@@ -45,6 +45,7 @@ void Camera3::Update(double dt)
 		right.y = 0;
 		right.Normalize();
 		up = right.Cross(view).Normalized();
+		CharacterRotation = right.Cross(view).Normalized();
 	}
 
 	if(Application::IsKeyPressed(VK_RIGHT))
@@ -59,6 +60,7 @@ void Camera3::Update(double dt)
 		right.y = 0;
 		right.Normalize();
 		up = right.Cross(view).Normalized();
+		CharacterRotation = right.Cross(view).Normalized();
 	}
 
 	if(Application::IsKeyPressed(VK_UP))
@@ -100,6 +102,7 @@ void Camera3::Update(double dt)
 		//limit is -495
 		//Left = cameraWorldPos.x - Vector3(1.0f,0.0f,0.0f) * (skyBoxScale.x * 0.5f);
 		World = target;
+		CharacterMovement.z += (float)(CAMERA_SPEED * dt);
 	}
 
 	if(Application::IsKeyPressed('D'))
@@ -112,6 +115,7 @@ void Camera3::Update(double dt)
 		target += right * CAMERA_SPEED* dt;
 		//Limit is 49
 		World = target;
+		CharacterMovement.z -= (float)(CAMERA_SPEED * dt);
 	}
 
 	if(Application::IsKeyPressed('W'))
@@ -123,6 +127,7 @@ void Camera3::Update(double dt)
 		//Limit is -889
 		CrossHair += target;
 		World = position;
+		CharacterMovement.x -= (float)(CAMERA_SPEED * dt);
 	}
 
 	if(Application::IsKeyPressed('S'))
@@ -136,6 +141,7 @@ void Camera3::Update(double dt)
 		target -= view * CAMERA_SPEED * dt;
 		CrossHair -= target;
 		World = position;
+		CharacterMovement.x += (float)(CAMERA_SPEED * dt);
 	}
 
 	if(Application::IsKeyPressed('N'))

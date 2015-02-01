@@ -27,6 +27,14 @@ class SceneText : public Scene
 		GEO_LIGHTBALL,
 		GEO_CYLINDER,
 
+		GEO_MODEL1,
+		GEO_MODEL2,
+		GEO_MODEL3,
+		GEO_MODEL4,
+		GEO_MODEL5,
+		GEO_MODEL6,
+		GEO_MODEL7,
+
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
@@ -37,7 +45,13 @@ class SceneText : public Scene
 		GEO_CROSSHAIR,
 
 		GEO_EXIA,
-		GEO_EXIAHEAD,
+		DoraemonHead,
+		DoraemonBell,
+		DoraemonBody,
+		DoraemonRightHand,
+		DoraemonLeftHand,
+		DoraemonRightFeet,
+		DoraemonLeftFeet,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
@@ -94,6 +108,11 @@ private:
 	float moving;
 	std::string renderFPS;
 	unsigned ArialFontArray[256];
+
+	float rotateRightHand;
+	float rotateLeftHand;
+	float rotateRightFeet;
+	float rotateLeftFeet;
 
 	Camera3 camera;
 

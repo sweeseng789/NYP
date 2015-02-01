@@ -23,6 +23,8 @@ public:
 	Vector3 mouse;
 	Vector3 CrossHair;
 	Vector3 World;
+	Vector3 CharacterMovement;
+	Vector3 CharacterRotation;
 	float angleX;
 	float angleY;
 

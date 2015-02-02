@@ -100,7 +100,7 @@ void SceneText::Init()
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	light[0].position.Set(0, 10, 0);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 0; //0 will shut off lighting
+	light[0].power = 1; //0 will shut off lighting
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -108,7 +108,7 @@ void SceneText::Init()
 	light[1].type = Light::LIGHT_SPOT;
 	light[1].position.Set(0, 7.5, 7.8);
 	light[1].color.Set(1, 1, 1);
-	light[1].power = 1;
+	light[1].power = 0;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
 	light[1].kQ = 0.001f;
@@ -128,7 +128,7 @@ void SceneText::Init()
 	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
-	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
+	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL)S;
 	glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
@@ -313,9 +313,9 @@ void SceneText::Update(double dt)
 
 
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(0.5 * dt);
+		moving += (float)(10 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(0.5 * dt);
+		moving -= (float)(10 * dt);
 
 	FPS = 1/dt;
 
@@ -379,7 +379,7 @@ void SceneText::Update(double dt)
 	}
 
 	camera.Update(dt);
-	std::cout << light[1].power << std::endl;
+	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -582,17 +582,17 @@ void SceneText::Render()
 
 	RenderMesh(meshList[GEO_AXES], false);
 
-	//modelStack.PushMatrix();
-	//modelStack.Scale(1,1,1);
-	//modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
-	//RenderMesh(meshList[GEO_LIGHTBALL], false);
-	//modelStack.PopMatrix();
-
 	modelStack.PushMatrix();
-	modelStack.Scale(3, 3, 3);
-	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
-	RenderMesh(meshList[DoraemonLight1], false);
+	modelStack.Scale(1,1,1);
+	modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
+
+	/*modelStack.PushMatrix();
+	modelStack.Scale(3, 3, 3);
+	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z + moving);
+	RenderMesh(meshList[DoraemonLight1], false);
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	modelStack.Translate(camera.World.x, camera.World.y , camera.World.z);

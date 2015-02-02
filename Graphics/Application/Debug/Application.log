@@ -1,4 +1,4 @@
-﻿Build started 2/2/2015 8:14:24 PM.
+﻿Build started 2/2/2015 10:43:48 PM.
      1>Project "C:\Users\Ong\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -102,4 +102,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.90
+Time Elapsed 00:00:01.30

@@ -75,10 +75,26 @@ void SceneText::Init()
 	m_parameters[U_LIGHT0_KQ] = glGetUniformLocation(m_programID, "lights[0].kQ");
 	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
 
+
+	m_parameters[U_LIGHT1_POSITION] = glGetUniformLocation(m_programID, "lights[1].position_cameraspace");
+	m_parameters[U_LIGHT1_COLOR] = glGetUniformLocation(m_programID, "lights[1].color");
+	m_parameters[U_LIGHT1_POWER] = glGetUniformLocation(m_programID, "lights[1].power");
+	m_parameters[U_LIGHT1_KC] = glGetUniformLocation(m_programID, "lights[1].kC");
+	m_parameters[U_LIGHT1_KL] = glGetUniformLocation(m_programID, "lights[1].kL");
+	m_parameters[U_LIGHT1_KQ] = glGetUniformLocation(m_programID, "lights[1].kQ");
+	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
+	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
+	m_parameters[U_LIGHT1_TYPE] = glGetUniformLocation(m_programID, "lights[1].type");
+	m_parameters[U_LIGHT1_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[1].spotDirection");
+	m_parameters[U_LIGHT1_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[1].cosCutoff");
+	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
+	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");	 
+
+
 	glUseProgram(m_programID);
 
 	// Make sure you pass uniform parameters after glUseProgram()
-	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,6 +105,18 @@ void SceneText::Init()
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
 
+	light[1].type = Light::LIGHT_SPOT;
+	light[1].position.Set(0, 20, 0);
+	light[1].color.Set(1, 1, 1);
+	light[1].power = 1;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);
+
 		// Make sure you pass uniform parameters after glUseProgram()
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
@@ -96,10 +124,19 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT0_KL], light[0].kL);
 	glUniform1f(m_parameters[U_LIGHT0_KQ], light[0].kQ);
 
+	glUniform1i(m_parameters[U_LIGHT1_TYPE], light[1].type);
+	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
+	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
+	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
+	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
+	glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
+	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
+	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 
 	//variable to rotate geometry
 	scaleSize = 1000;
-	moving = 270;
+	moving = 0;
 	FPS = 0;
 	rotateRightHand = rotateLeftHand = rotateLeftFeet = rotateRightFeet = 1;
 
@@ -197,6 +234,40 @@ void SceneText::Init()
 
 	meshList[DoraemonRightFeet] = MeshBuilder::GenerateOBJ("Doraemon Right Feet", "OBJ//DoraemonRightLeg.obj");
 	meshList[DoraemonRightFeet]->textureID = LoadTGA("Image//DoraemonHand.tga");
+
+	meshList[DoraemonRoom] = MeshBuilder::GenerateOBJ("Doraemon room", "OBJ//DoraemonRoom.obj");
+	meshList[DoraemonRoom]->textureID = LoadTGA("Image//DoraemonRoom.tga");
+
+	meshList[DoaremonRoomWall] = MeshBuilder::GenerateQuad("DoaremonRoomWall", Color(1, 1, 1), 1.f);
+	meshList[DoaremonRoomWall]->textureID = LoadTGA("Image//DoraemonRoomWall.tga");
+	meshList[DoaremonRoomWall]->material.kAmbient.Set(1.0f, 0, 0);
+	meshList[DoaremonRoomWall]->material.kDiffuse.Set(0.f, 1.f, 0.f);
+	meshList[DoaremonRoomWall]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoaremonRoomWall]->material.kShininess = 1.f;
+
+	meshList[DoraemonRoomFloor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(1, 1, 1), 1.f);
+	meshList[DoraemonRoomFloor]->textureID = LoadTGA("Image//DoraemonRoomFloor.tga");
+	meshList[DoraemonRoomFloor]->material.kAmbient.Set(1.0f, 0, 0);
+	meshList[DoraemonRoomFloor]->material.kDiffuse.Set(0.f, 1.f, 0.f);
+	meshList[DoraemonRoomFloor]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoraemonRoomFloor]->material.kShininess = 1.f;
+
+	meshList[DoraemonRoomWallWithDoor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(1, 1, 1), 1.f);
+	meshList[DoraemonRoomWallWithDoor]->textureID = LoadTGA("Image//DoraemonRoomWallWithDoor.tga");
+	meshList[DoraemonRoomWallWithDoor]->material.kAmbient.Set(1.0f, 1, 1);
+	meshList[DoraemonRoomWallWithDoor]->material.kDiffuse.Set(0.f, 1.f, 0.f);
+	meshList[DoraemonRoomWallWithDoor]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoraemonRoomWallWithDoor]->material.kShininess = 1.f;
+
+	meshList[DoraemonDoor] = MeshBuilder::GenerateOBJ("Doraemon door", "OBJ//DoraemonDoor.obj");
+	meshList[DoraemonDoor]->textureID = LoadTGA("Image//Door.tga");
+	meshList[DoraemonDoor]->material.kAmbient.Set(1.0f, 1, 1);
+	meshList[DoraemonDoor]->material.kDiffuse.Set(0.f, 1.f, 0.f);
+	meshList[DoraemonDoor]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoraemonDoor]->material.kShininess = 1.f;
+
+	meshList[DoraemonLight1] = MeshBuilder::GenerateOBJ("Doraemon light 1", "OBJ//Light1.obj");
+	meshList[DoraemonLight1]->textureID = LoadTGA("Image//Light1.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//Arial.tga");
@@ -300,7 +371,15 @@ void SceneText::Update(double dt)
 		count = 0;
 	}
 
+	//light[1].type = Light::LIGHT_SPOT;
+
+	if (Application::IsKeyPressed('E'))
+	{
+		light[1].power = 0;
+	}
+
 	camera.Update(dt);
+	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -355,6 +434,57 @@ void SceneText::RenderSkybox()
 	modelStack.Translate(0.017004, -0.510025 + 0.0135941, 0.503292 + -0.00170143);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
+}
+
+void SceneText::RenderDoraemonRoom()
+{
+	modelStack.PushMatrix(); // front
+	modelStack.Scale(50, 50, 50);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // front
+
+	modelStack.PushMatrix(); // left
+	modelStack.Scale(50, 50, 50);
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.Translate(-0.5, 0, -0.5);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // left
+
+	modelStack.PushMatrix(); // right
+	modelStack.Scale(50, 50, 50);
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.Translate(-0.5, 0, 0.5);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // right
+
+	modelStack.PushMatrix(); // back
+	modelStack.Scale(50, 50, 50);
+	modelStack.Translate(0, 0, 1);
+	RenderMesh(meshList[DoraemonRoomWallWithDoor], false);
+	modelStack.PopMatrix(); // back
+
+	modelStack.PushMatrix(); // bottom
+	modelStack.Scale(50, 50, 50);
+	modelStack.Rotate(90, 90, 0, 0);
+	modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17);
+	RenderMesh(meshList[DoraemonRoomFloor], true);
+	modelStack.PopMatrix(); // bottom
+
+	modelStack.PushMatrix(); // top
+	modelStack.Scale(50, 50, 50);
+	modelStack.Rotate(90, 90, 0, 0);
+	modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17 + -0.926676);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // top
+
+	modelStack.PushMatrix();//rotate Door
+
+	modelStack.PushMatrix();
+	modelStack.Scale(7, 7, 7);
+	modelStack.Translate(0.5, -3.46836, 7.30332);
+	RenderMesh(meshList[DoraemonDoor], true);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();// rotate door
 }
 
 void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
@@ -446,17 +576,26 @@ void SceneText::Render()
 	Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 
+	Position lightPosition_cameraspace1 = viewStack.Top() * light[1].position;
+	glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace1.x);
+
 
 	RenderMesh(meshList[GEO_AXES], false);
 
-	modelStack.PushMatrix();
-	modelStack.Scale(1,1,1);
-	modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Scale(1,1,1);
+	//modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
+	//RenderMesh(meshList[GEO_LIGHTBALL], false);
+	//modelStack.PopMatrix();
+
+	/*modelStack.PushMatrix();
+	modelStack.Scale(3, 3, 3);
+	modelStack.Translate(light[1].position.x, light[1].position.y -12.5, light[1].position.z + 7.8);
+	RenderMesh(meshList[DoraemonLight1], false);
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.World.x, camera.World.y, camera.World.z);
+	modelStack.Translate(camera.World.x, camera.World.y , camera.World.z);
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 350, 150);
@@ -470,55 +609,60 @@ void SceneText::Render()
 	//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix(); //rotateDoraemon
-	modelStack.Rotate(moving, 0, moving, 0);
-	modelStack.Translate(1 + camera.CharacterMovement.x, -1 + camera.CharacterMovement.y, camera.CharacterMovement.z);
+	//modelStack.PushMatrix(); //rotateDoraemon
+	//modelStack.Rotate(moving, 0, moving, 0);
+	//modelStack.Translate(1 + camera.CharacterMovement.x, -1 + camera.CharacterMovement.y, camera.CharacterMovement.z);
 
-	modelStack.PushMatrix();//Doraemon head
+	//modelStack.PushMatrix();//Doraemon head
 
-	modelStack.Rotate(5, 0, 5, 0);
-	RenderMesh(meshList[DoraemonHead], false);
-	modelStack.PopMatrix();
+	//modelStack.Rotate(5, 0, 5, 0);
+	//RenderMesh(meshList[DoraemonHead], false);
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.02312, 0 ,0);
+	//RenderMesh(meshList[DoraemonBell], false);
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, -1.129767, 0);
+	//RenderMesh(meshList[DoraemonBody], false);
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix(); //rotate left hand
+	//modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
+	//modelStack.PushMatrix();//Left hand
+	//modelStack.Translate(0, -1.1050815, 0);
+	//RenderMesh(meshList[DoraemonLeftHand], false);
+	//modelStack.PopMatrix();//left hand
+	//modelStack.PopMatrix(); //rotate left hadn
+
+	//modelStack.PushMatrix(); //rotate right hadn
+	//modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
+	//modelStack.PushMatrix();//right hand
+	//modelStack.Translate(0, -1.11358, -1.0931759);
+	//RenderMesh(meshList[DoraemonRightHand], false);
+	//modelStack.PopMatrix();//right hand
+	//modelStack.PopMatrix(); //rotate rigth hand
+
+	//modelStack.PushMatrix();
+	//modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
+	//modelStack.Translate(0, -1.82765, -2.32952);
+	//RenderMesh(meshList[DoraemonLeftFeet], false);
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
+	//modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
+	//RenderMesh(meshList[DoraemonRightFeet], false);
+	//modelStack.PopMatrix();
+
+	//modelStack.PopMatrix(); // roatteDoraemon
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0.02312, 0 ,0);
-	RenderMesh(meshList[DoraemonBell], false);
+	modelStack.Scale(1, 1, 1);
+	RenderDoraemonRoom();
 	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.129767, 0);
-	RenderMesh(meshList[DoraemonBody], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix(); //rotate left hand
-	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
-	modelStack.PushMatrix();//Left hand
-	modelStack.Translate(0, -1.1050815, 0);
-	RenderMesh(meshList[DoraemonLeftHand], false);
-	modelStack.PopMatrix();//left hand
-	modelStack.PopMatrix(); //rotate left hadn
-
-	modelStack.PushMatrix(); //rotate right hadn
-	modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
-	modelStack.PushMatrix();//right hand
-	modelStack.Translate(0, -1.11358, -1.0931759);
-	RenderMesh(meshList[DoraemonRightHand], false);
-	modelStack.PopMatrix();//right hand
-	modelStack.PopMatrix(); //rotate rigth hand
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
-	modelStack.Translate(0, -1.82765, -2.32952);
-	RenderMesh(meshList[DoraemonLeftFeet], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
-	modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
-	RenderMesh(meshList[DoraemonRightFeet], false);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix(); // roatteDoraemon
 
 	
 
@@ -561,6 +705,26 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 	{
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
 	}
+
+
+	if(light[1].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if(light[1].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
+		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+	}	
 
 	mesh->Render(); //this line should only be called once 
 	

@@ -36,7 +36,7 @@ void Camera3::Update(double dt)
 	if(Application::IsKeyPressed(VK_LEFT))
 	{
 		Vector3 view = (target - position).Normalized();
-		float yaw = (float)(CAMERA_SPEED * dt);
+		float yaw = (float)(100 * dt);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);//rotate by Y
 		view = rotation * view;//transient value
@@ -51,7 +51,7 @@ void Camera3::Update(double dt)
 	if(Application::IsKeyPressed(VK_RIGHT))
 	{
 		Vector3 view = (target - position).Normalized();
-		float yaw = (float)(-CAMERA_SPEED * dt);
+		float yaw = (float)(-100 * dt);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		view = rotation * view;
@@ -65,7 +65,7 @@ void Camera3::Update(double dt)
 
 	if(Application::IsKeyPressed(VK_UP))
 	{
-		float pitch = (float)(CAMERA_SPEED * dt);
+		float pitch = (float)(100 * dt);
 		Vector3 view = (target - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
@@ -79,7 +79,7 @@ void Camera3::Update(double dt)
 
 	if(Application::IsKeyPressed(VK_DOWN))
 	{
-		float pitch = (float)(-CAMERA_SPEED * dt);
+		float pitch = (float)(-100 * dt);
 		Vector3 view = (target - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;

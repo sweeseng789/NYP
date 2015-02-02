@@ -52,6 +52,13 @@ class SceneText : public Scene
 		DoraemonLeftHand,
 		DoraemonRightFeet,
 		DoraemonLeftFeet,
+		DoraemonRoom,
+		DoraemonRoomFloor,
+		DoaremonRoomWall,
+		DoraemonRoomWallWithDoor,
+		DoraemonDoor,
+		DoraemonLight1,
+
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
@@ -67,19 +74,31 @@ class SceneText : public Scene
 		U_MATERIAL_SHININESS,
 		U_LIGHT0_POSITION,
 		U_LIGHT0_COLOR,
+		U_LIGHT0_SPOTDIRECTION,
 		U_LIGHT0_POWER,
 		U_LIGHT0_KC,
 		U_LIGHT0_KL,
 		U_LIGHT0_KQ,
+
+		U_LIGHT1_POSITION,
+		U_LIGHT1_COLOR,
+		U_LIGHT1_SPOTDIRECTION,
+		U_LIGHT1_POWER,
+		U_LIGHT1_KC,
+		U_LIGHT1_KL,
+		U_LIGHT1_KQ,
 		U_LIGHTENABLED,
 
+		U_LIGHT1_TYPE,
+		U_LIGHT1_COSCUTOFF,
+		U_LIGHT1_COSINNER,
+		U_LIGHT1_EXPONENT,
 		U_NUMLIGHTS, //in case you missed out practical 7
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
 
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
-
 
 		U_TOTAL,
 	};
@@ -103,6 +122,7 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
 	void RenderSkybox();
+	void RenderDoraemonRoom();
 	int scaleSize;
 	float FPS;
 	float moving;
@@ -116,7 +136,7 @@ private:
 
 	Camera3 camera;
 
-	Light light[1];
+	Light light[8];
 
 	MS modelStack, viewStack, projectionStack;
 };

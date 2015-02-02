@@ -158,7 +158,11 @@ void SceneLight2::Update(double dt)
 	{
 		//to do: switch light type to SPOT and pass the information to shader
 		light[0].type = Light::LIGHT_SPOT;
-	}	 
+	}
+	if (Application::IsKeyPressed('6'))
+	{
+		light[0].power = 0;
+	}
 
 	std::cout << light[0].type << std::endl;
 
@@ -183,11 +187,11 @@ void SceneLight2::Render()
 
 	RenderMesh(meshList[GEO_AXES], false);
 	
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Scale(1,1,1);
 	modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	modelStack.Scale(10000, 10000, 10000);

@@ -8,8 +8,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Application\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{8CD73CAC-3EBF-4503-B957-9449BF2B5FCA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoogleTest", "GoogleTest\GoogleTest.vcxproj", "{A676334E-FAB2-402C-9612-69F3493FF402}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -24,10 +22,6 @@ Global
 		{8CD73CAC-3EBF-4503-B957-9449BF2B5FCA}.Debug|Win32.Build.0 = Debug|Win32
 		{8CD73CAC-3EBF-4503-B957-9449BF2B5FCA}.Release|Win32.ActiveCfg = Release|Win32
 		{8CD73CAC-3EBF-4503-B957-9449BF2B5FCA}.Release|Win32.Build.0 = Release|Win32
-		{A676334E-FAB2-402C-9612-69F3493FF402}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A676334E-FAB2-402C-9612-69F3493FF402}.Debug|Win32.Build.0 = Debug|Win32
-		{A676334E-FAB2-402C-9612-69F3493FF402}.Release|Win32.ActiveCfg = Release|Win32
-		{A676334E-FAB2-402C-9612-69F3493FF402}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -128,6 +128,7 @@ private:
 	float moving;
 	std::string renderFPS;
 	unsigned ArialFontArray[256];
+	bool turnOffLight;
 
 	float rotateRightHand;
 	float rotateLeftHand;

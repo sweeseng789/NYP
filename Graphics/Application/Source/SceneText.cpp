@@ -45,9 +45,10 @@ void SceneText::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 	
+	
 	//Load vertex and fragment shaders
-	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Blending.fragmentshader" );
-	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader" );
+	//m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Blending.fragmentshader" );
+	//m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader" );
 	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights"); //in case you missed out practical 7
 
@@ -98,14 +99,15 @@ void SceneText::Init()
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	light[0].position.Set(0, 10, 0);
+	light[0].type = Light::LIGHT_DIRECTIONAL;
+	light[0].position.Set(0, 7.5, 7.8);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 1; //0 will shut off lighting
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
 
-	light[1].type = Light::LIGHT_SPOT;
+	light[1].type = Light::LIGHT_POINT;
 	light[1].position.Set(0, 7.5, 7.8);
 	light[1].color.Set(1, 1, 1);
 	light[1].power = 0;
@@ -128,7 +130,7 @@ void SceneText::Init()
 	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], light[1].power);
 	glUniform1f(m_parameters[U_LIGHT1_KC], light[1].kC);
-	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL)S;
+	glUniform1f(m_parameters[U_LIGHT1_KL], light[1].kL);
 	glUniform1f(m_parameters[U_LIGHT1_KQ], light[1].kQ);
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], light[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
@@ -139,6 +141,7 @@ void SceneText::Init()
 	moving = 0;
 	FPS = 0;
 	rotateRightHand = rotateLeftHand = rotateLeftFeet = rotateRightFeet = 1;
+	turnOffLight = false;
 
 	unsigned ArialFontArray[256] = {
 		41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,	41,	41,	41,	41,	41,	41,	41,	15,	17,	20,	31,	31,						
@@ -243,13 +246,13 @@ void SceneText::Init()
 	meshList[DoaremonRoomWall]->material.kAmbient.Set(1.0f, 0, 0);
 	meshList[DoaremonRoomWall]->material.kDiffuse.Set(0.f, 1.f, 0.f);
 	meshList[DoaremonRoomWall]->material.kSpecular.Set(0, 0, 1);
-	meshList[DoaremonRoomWall]->material.kShininess = 1.f;
+	meshList[DoaremonRoomWall]->material.kShininess = 0.5f;
 
-	meshList[DoraemonRoomFloor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(1, 1, 1), 1.f);
+	meshList[DoraemonRoomFloor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(0, 0, 0), 1.f);
 	meshList[DoraemonRoomFloor]->textureID = LoadTGA("Image//DoraemonRoomFloor.tga");
-	meshList[DoraemonRoomFloor]->material.kAmbient.Set(178/255, 192/255, 97/255);
-	meshList[DoraemonRoomFloor]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[DoraemonRoomFloor]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoraemonRoomFloor]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonRoomFloor]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[DoraemonRoomFloor]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoraemonRoomFloor]->material.kShininess = 0.5f;
 
 	meshList[DoraemonRoomWallWithDoor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(1, 1, 1), 1.f);
@@ -360,10 +363,10 @@ void SceneText::Update(double dt)
 		if (count >= 1)
 		{
 			rotateRightHand += (float)(ROTATERIGHTHAND * ROTATE_SPEED * dt * 5);
-			rotateLeftFeet += (float)(ROTATELEFTFEET * ROTATE_SPEED * dt * 5);
+			rotateRightFeet += (float)(ROTATERIGHTFEET * ROTATE_SPEED * dt * 5);
 		}
 		rotateLeftHand += (float)(ROTATELEFTHAND * ROTATE_SPEED * dt * 5);
-		rotateRightFeet += (float)(ROTATERIGHTFEET * ROTATE_SPEED * dt * 5);
+		rotateLeftFeet += (float)(ROTATELEFTFEET * ROTATE_SPEED * dt * 5);
 	}
 	else//reset
 	{
@@ -371,13 +374,15 @@ void SceneText::Update(double dt)
 		count = 0;
 	}
 
-	//light[1].type = Light::LIGHT_SPOT;
-
-	if (Application::IsKeyPressed('E'))
+	if (Application::IsKeyPressed('E') && turnOffLight == false)
 	{
-		light[1].power = 0;
+		turnOffLight = true;
 	}
-
+	
+	if (Application::IsKeyPressed('F') && turnOffLight == true)
+	{
+		turnOffLight = false;
+	}
 	camera.Update(dt);
 	std::cout << moving << std::endl;
 }
@@ -459,16 +464,30 @@ void SceneText::RenderDoraemonRoom()
 
 	//modelStack.PushMatrix(); // back
 	//modelStack.Scale(50, 50, 50);
+
+
 	//modelStack.Translate(0, 0, 1);
 	//RenderMesh(meshList[DoraemonRoomWallWithDoor], false);
 	//modelStack.PopMatrix(); // back
 
-	modelStack.PushMatrix(); // bottom
-	modelStack.Scale(50, 50, 50);
-	modelStack.Rotate(90, 90, 0, 0);
-	modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17);
-	RenderMesh(meshList[DoraemonRoomFloor], true);
-	modelStack.PopMatrix(); // bottom
+	if (turnOffLight == true)
+	{
+		modelStack.PushMatrix(); // bottom
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 90, 0, 0);
+		modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17);
+		RenderMesh(meshList[DoraemonRoomFloor], false);
+		modelStack.PopMatrix(); // bottom
+	}
+	else if (turnOffLight == false)
+	{
+		modelStack.PushMatrix(); // bottom
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 90, 0, 0);
+		modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17);
+		RenderMesh(meshList[DoraemonRoomFloor], true);
+		modelStack.PopMatrix(); // bottom
+	}
 
 	//modelStack.PushMatrix(); // top
 	//modelStack.Scale(50, 50, 50);
@@ -480,7 +499,7 @@ void SceneText::RenderDoraemonRoom()
 	modelStack.PushMatrix();//rotate Door
 
 	modelStack.PushMatrix();
-	modelStack.Scale(7, 7, 7);
+	modelStack.Scale(2, 2, 2);
 	modelStack.Translate(0.5, -3.46836, 7.30332);
 	RenderMesh(meshList[DoraemonDoor], true);
 	modelStack.PopMatrix();
@@ -585,12 +604,12 @@ void SceneText::Render()
 	modelStack.PushMatrix();
 	modelStack.Scale(1,1,1);
 	modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	RenderMesh(meshList[DoraemonLight1], false);
 	modelStack.PopMatrix();
 
 	/*modelStack.PushMatrix();
 	modelStack.Scale(3, 3, 3);
-	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z + moving);
+	modelStack.Translate(light[1].position.x, light[1].position.y + moving, light[1].position.z);
 	RenderMesh(meshList[DoraemonLight1], false);
 	modelStack.PopMatrix();*/
 
@@ -609,59 +628,60 @@ void SceneText::Render()
 	//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
 	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix(); //rotateDoraemon
-	//modelStack.Rotate(moving, 0, moving, 0);
+	modelStack.PushMatrix(); //rotateDoraemo
+	modelStack.Rotate(270 + moving, 0, 270 + moving, 0);
 	//modelStack.Translate(1 + camera.CharacterMovement.x, -1 + camera.CharacterMovement.y, camera.CharacterMovement.z);
 
-	//modelStack.PushMatrix();//Doraemon head
+	modelStack.PushMatrix();//Doraemon head
 
-	//modelStack.Rotate(5, 0, 5, 0);
-	//RenderMesh(meshList[DoraemonHead], false);
-	//modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.02312, 0 ,0);
-	//RenderMesh(meshList[DoraemonBell], false);
-	//modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, -1.129767, 0);
-	//RenderMesh(meshList[DoraemonBody], false);
-	//modelStack.PopMatrix();
-
-	//modelStack.PushMatrix(); //rotate left hand
-	//modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
-	//modelStack.PushMatrix();//Left hand
-	//modelStack.Translate(0, -1.1050815, 0);
-	//RenderMesh(meshList[DoraemonLeftHand], false);
-	//modelStack.PopMatrix();//left hand
-	//modelStack.PopMatrix(); //rotate left hadn
-
-	//modelStack.PushMatrix(); //rotate right hadn
-	//modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
-	//modelStack.PushMatrix();//right hand
-	//modelStack.Translate(0, -1.11358, -1.0931759);
-	//RenderMesh(meshList[DoraemonRightHand], false);
-	//modelStack.PopMatrix();//right hand
-	//modelStack.PopMatrix(); //rotate rigth hand
-
-	//modelStack.PushMatrix();
-	//modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
-	//modelStack.Translate(0, -1.82765, -2.32952);
-	//RenderMesh(meshList[DoraemonLeftFeet], false);
-	//modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
-	//modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
-	//RenderMesh(meshList[DoraemonRightFeet], false);
-	//modelStack.PopMatrix();
-
-	//modelStack.PopMatrix(); // roatteDoraemon
+	modelStack.Rotate(5, 0, 5, 0);
+	RenderMesh(meshList[DoraemonHead], false);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Scale(1, 1, 1);
+	modelStack.Translate(0.02312, 0 ,0);
+	RenderMesh(meshList[DoraemonBell], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -1.129767, 0);
+	RenderMesh(meshList[DoraemonBody], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix(); //rotate left hand
+	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
+	modelStack.PushMatrix();//Left hand
+	modelStack.Translate(0, -1.1050815, 0);
+	RenderMesh(meshList[DoraemonLeftHand], false);
+	modelStack.PopMatrix();//left hand
+	modelStack.PopMatrix(); //rotate left hadn
+
+	modelStack.PushMatrix(); //rotate right hadn
+	modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
+	modelStack.PushMatrix();//right hand
+	modelStack.Translate(0, -1.11358, -1.0931759);
+	RenderMesh(meshList[DoraemonRightHand], false);
+	modelStack.PopMatrix();//right hand
+	modelStack.PopMatrix(); //rotate rigth hand
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
+	modelStack.Translate(0, -1.82765, -2.32952);
+	RenderMesh(meshList[DoraemonLeftFeet], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
+	modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
+	RenderMesh(meshList[DoraemonRightFeet], false);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix(); // roatteDoraemon
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 6.9713 + 0.170095, -2);
 	RenderDoraemonRoom();
+
 	modelStack.PopMatrix();
 
 	
@@ -691,7 +711,8 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 	}
 	else
 	{	
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+		
+		(m_parameters[U_LIGHTENABLED], 0);
 	}
 	
 	if(mesh->textureID > 0)

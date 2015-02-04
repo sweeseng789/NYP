@@ -1,0 +1,14 @@
+//w
+pos += dir * speed * dt;
+
+//s
+pos -= dir * speed * dt;
+
+//a
+yaw += rotate_speed * dt;
+
+//d
+yaw -= rotate_speed * dt;
+
+mtx44.settorotation(yaw, 0, 1, 0);
+dir = rot * dir;

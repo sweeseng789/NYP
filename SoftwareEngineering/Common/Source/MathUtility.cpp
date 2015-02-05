@@ -39,20 +39,38 @@ int nPr(int n, int r)
 
 int nTermAP(int a, int d, int n)
 {
-	return 0;
+	//a = first term
+	// d = difference
+	int AP = 0;
+	AP = a + (n - 1) * d;
+	return AP;
 }
 
 int summationAP(int a, int d, int n)
 {
-	return 0;
+	//S = (n/2) * (2a + (n-1) d)
+	int APS = 0;
+	APS = (n/2) * ((2*a) + (n-1) * d);
+	return APS;
 }
 
 int nTermGP(int a, int r, int n)
-{
-	return 0;
+{//9, 3, 10
+	//term = a * r^n-1
+	int term = 0;
+	int temp = 0;
+	temp = pow((double)r, n -1);
+	term = a * temp;
+	return term;
 }
 
 int summationGP(int a, int r, int n)
 {
-	return 0;
+	//9 ,3, 19
+	//a(1 - r^n) / (1 - r)
+	int term = 0;
+	int temp = 0;
+	temp  = pow((double)r, n);
+	term = (a * (1-temp)) / (1 - r);
+	return term;
 }

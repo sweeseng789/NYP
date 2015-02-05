@@ -29,3 +29,27 @@ TEST(nPrTest, NumbersOfCombinations)
 {
 	EXPECT_EQ(20, nPr(5, 2));
 }
+
+//Testing AP
+TEST(APTest, TermDifferences)
+{
+	EXPECT_EQ(83, nTermAP(5, 3, 27));
+}
+
+//Testig APS
+TEST(APSTest, SummationAP)
+{
+	EXPECT_EQ(225, summationAP(9, 3, 10));
+}
+
+//Testig nTermGP
+TEST(nTermGPTest, TermOfGP)
+{
+	EXPECT_EQ(177147, nTermGP(9, 3, 10));
+}
+
+//Testig SumOfGP
+TEST(SumOfGPTest, SumOfGP)
+{
+	EXPECT_EQ(265716, summationGP(9, 3, 10));
+}

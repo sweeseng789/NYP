@@ -316,9 +316,9 @@ void SceneText::Update(double dt)
 
 
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(10 * dt);
+		moving += (float)(100 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(10 * dt);
+		moving -= (float)(100 * dt);
 
 	FPS = 1/dt;
 

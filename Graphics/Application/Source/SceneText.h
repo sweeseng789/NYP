@@ -56,7 +56,9 @@ class SceneText : public Scene
 		DoraemonRoomFloor,
 		DoaremonRoomWall,
 		DoraemonRoomWallWithDoor,
+		DoraemonRoomWallWithWindows,
 		DoraemonDoor,
+		DoraemonSlidingDoor,
 		DoraemonLight1,
 
 		GEO_TEXT,
@@ -123,6 +125,7 @@ private:
 
 	void RenderSkybox();
 	void RenderDoraemonRoom();
+	void RenderDoraemon();
 	int scaleSize;
 	float FPS;
 	float moving;

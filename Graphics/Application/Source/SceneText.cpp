@@ -154,7 +154,7 @@ void SceneText::Init()
 	};
 
 	//Initialize camera settings
-	camera.Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
@@ -241,11 +241,11 @@ void SceneText::Init()
 	meshList[DoraemonRoom] = MeshBuilder::GenerateOBJ("Doraemon room", "OBJ//DoraemonRoom.obj");
 	meshList[DoraemonRoom]->textureID = LoadTGA("Image//DoraemonRoom.tga");
 
-	meshList[DoaremonRoomWall] = MeshBuilder::GenerateQuad("DoaremonRoomWall", Color(1, 1, 1), 1.f);
+	meshList[DoaremonRoomWall] = MeshBuilder::GenerateQuad("DoaremonRoomWall", Color(0, 0, 0), 1.f);
 	meshList[DoaremonRoomWall]->textureID = LoadTGA("Image//DoraemonRoomWall.tga");
-	meshList[DoaremonRoomWall]->material.kAmbient.Set(1.0f, 0, 0);
-	meshList[DoaremonRoomWall]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[DoaremonRoomWall]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoaremonRoomWall]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoaremonRoomWall]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[DoaremonRoomWall]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoaremonRoomWall]->material.kShininess = 0.5f;
 
 	meshList[DoraemonRoomFloor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(0, 0, 0), 1.f);
@@ -255,19 +255,33 @@ void SceneText::Init()
 	meshList[DoraemonRoomFloor]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoraemonRoomFloor]->material.kShininess = 0.5f;
 
-	meshList[DoraemonRoomWallWithDoor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(1, 1, 1), 1.f);
+	meshList[DoraemonRoomWallWithDoor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(0, 0, 0), 1.f);
 	meshList[DoraemonRoomWallWithDoor]->textureID = LoadTGA("Image//DoraemonRoomWallWithDoor.tga");
-	meshList[DoraemonRoomWallWithDoor]->material.kAmbient.Set(1.0f, 1, 1);
-	meshList[DoraemonRoomWallWithDoor]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[DoraemonRoomWallWithDoor]->material.kSpecular.Set(0, 0, 1);
-	meshList[DoraemonRoomWallWithDoor]->material.kShininess = 1.f;
+	meshList[DoraemonRoomWallWithDoor]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonRoomWallWithDoor]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[DoraemonRoomWallWithDoor]->material.kSpecular.Set(0, 0, 0);
+	meshList[DoraemonRoomWallWithDoor]->material.kShininess = 0.5f;
+
+	meshList[DoraemonRoomWallWithWindows] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(0, 0, 0), 1.f);
+	meshList[DoraemonRoomWallWithWindows]->textureID = LoadTGA("Image//DoraemonRoomWallWithWindows.tga");
+	meshList[DoraemonRoomWallWithWindows]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonRoomWallWithWindows]->material.kDiffuse.Set(0, 0, 0);
+	meshList[DoraemonRoomWallWithWindows]->material.kSpecular.Set(0, 0, 0);
+	meshList[DoraemonRoomWallWithWindows]->material.kShininess = 0.5f;
 
 	meshList[DoraemonDoor] = MeshBuilder::GenerateOBJ("Doraemon door", "OBJ//DoraemonDoor.obj");
 	meshList[DoraemonDoor]->textureID = LoadTGA("Image//Door.tga");
-	meshList[DoraemonDoor]->material.kAmbient.Set(1.0f, 1, 1);
-	meshList[DoraemonDoor]->material.kDiffuse.Set(0.f, 1.f, 0.f);
-	meshList[DoraemonDoor]->material.kSpecular.Set(0, 0, 1);
+	meshList[DoraemonDoor]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonDoor]->material.kDiffuse.Set(0, 0, 0);
+	meshList[DoraemonDoor]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoraemonDoor]->material.kShininess = 0.5f;
+
+	meshList[DoraemonSlidingDoor] = MeshBuilder::GenerateOBJ("Doraemon door", "OBJ//DoraemonSlidingDoor.obj");
+	meshList[DoraemonSlidingDoor]->textureID = LoadTGA("Image//DoraemonSlidingDoor.tga");
+	meshList[DoraemonSlidingDoor]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonSlidingDoor]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[DoraemonSlidingDoor]->material.kSpecular.Set(0, 0, 0);
+	meshList[DoraemonSlidingDoor]->material.kShininess = 0.5f;
 
 	meshList[DoraemonLight1] = MeshBuilder::GenerateOBJ("Doraemon light 1", "OBJ//Light1.obj");
 	meshList[DoraemonLight1]->textureID = LoadTGA("Image//Light1.tga");
@@ -316,9 +330,9 @@ void SceneText::Update(double dt)
 
 
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(100 * dt);
+		moving += (float)(10 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(100 * dt);
+		moving -= (float)(10 * dt);
 
 	FPS = 1/dt;
 
@@ -337,6 +351,7 @@ void SceneText::Update(double dt)
 		movement = true;
 	}
 	else
+
 	{
 		movement = false;
 	}
@@ -384,7 +399,6 @@ void SceneText::Update(double dt)
 		turnOffLight = false;
 	}
 	camera.Update(dt);
-	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -443,67 +457,136 @@ void SceneText::RenderSkybox()
 
 void SceneText::RenderDoraemonRoom()
 {
-	//modelStack.PushMatrix(); // front
-	//modelStack.Scale(50, 50, 50);
-	//RenderMesh(meshList[DoaremonRoomWall], false);
-	//modelStack.PopMatrix(); // front
-
-	//modelStack.PushMatrix(); // left
-	//modelStack.Scale(50, 50, 50);
-	//modelStack.Rotate(90, 0, 90, 0);
-	//modelStack.Translate(-0.5, 0, -0.5);
-	//RenderMesh(meshList[DoaremonRoomWall], false);
-	//modelStack.PopMatrix(); // left
-
-	//modelStack.PushMatrix(); // right
-	//modelStack.Scale(50, 50, 50);
-	//modelStack.Rotate(90, 0, 90, 0);
-	//modelStack.Translate(-0.5, 0, 0.5);
-	//RenderMesh(meshList[DoaremonRoomWall], false);
-	//modelStack.PopMatrix(); // right
-
-	//modelStack.PushMatrix(); // back
-	//modelStack.Scale(50, 50, 50);
-
-
-	//modelStack.Translate(0, 0, 1);
-	//RenderMesh(meshList[DoraemonRoomWallWithDoor], false);
-	//modelStack.PopMatrix(); // back
-
-	if (turnOffLight == true)
+	if (turnOffLight == false)
 	{
+		modelStack.PushMatrix(); // front
+		modelStack.Scale(20, 20, 20);
+		RenderMesh(meshList[DoraemonRoomWallWithWindows], false);
+		modelStack.PopMatrix(); // front
+
+		modelStack.PushMatrix(); // left
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 0, 90, 0);
+		modelStack.Translate(-0.5, 0, -0.5);
+		RenderMesh(meshList[DoaremonRoomWall], false);
+		modelStack.PopMatrix(); // left
+
+		modelStack.PushMatrix(); // right
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 0, 90, 0);
+		modelStack.Translate(-0.5, 0, 0.5);
+		RenderMesh(meshList[DoaremonRoomWall], false);
+		modelStack.PopMatrix(); // right
+
+		modelStack.PushMatrix(); // back
+		modelStack.Scale(20, 20, 20);
+		modelStack.Translate(0, 0, 1);
+		RenderMesh(meshList[DoraemonRoomWallWithDoor], false);
+		modelStack.PopMatrix(); // back
+
 		modelStack.PushMatrix(); // bottom
 		modelStack.Scale(20, 20, 20);
 		modelStack.Rotate(90, 90, 0, 0);
 		modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17);
 		RenderMesh(meshList[DoraemonRoomFloor], false);
 		modelStack.PopMatrix(); // bottom
+
+		modelStack.PushMatrix(); // top
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 90, 0, 0);
+		modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17 + -0.926676);
+		RenderMesh(meshList[DoaremonRoomWall], false);
+		modelStack.PopMatrix(); // top
+
+		modelStack.PushMatrix();//rotate Door
+
+		modelStack.PushMatrix();
+		modelStack.Scale(3, 3, 3);
+		modelStack.Translate(0.5, -3.46836, 7.30332 - 0.498328);
+		RenderMesh(meshList[DoraemonDoor], false);
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();// rotate door
+
+		modelStack.PushMatrix(); //rotate bothdoor
+		modelStack.Translate(0, 0, 2.38039);
+		modelStack.PushMatrix(); // SD1
+		modelStack.Scale(2, 4, 3);
+		modelStack.Translate(5.33049, -2.6983, 1.9);
+		RenderMesh(meshList[DoraemonSlidingDoor], false);
+		modelStack.PopMatrix(); // SD1
+
+		modelStack.PushMatrix(); // SD2
+		modelStack.Scale(2, 4, 3);
+		modelStack.Translate(5.33049 + 0.120509, -2.6983, 1.9 + 2.20991);
+		RenderMesh(meshList[DoraemonSlidingDoor], false);
+		modelStack.PopMatrix(); // SD2
+		modelStack.PopMatrix(); //rotate both door
 	}
-	else if (turnOffLight == false)
+	else
 	{
+		modelStack.PushMatrix(); // front
+		modelStack.Scale(20, 20, 20);
+		RenderMesh(meshList[DoraemonRoomWallWithWindows], true);
+		modelStack.PopMatrix(); // front
+
+		modelStack.PushMatrix(); // left
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 0, 90, 0);
+		modelStack.Translate(-0.5, 0, -0.5);
+		RenderMesh(meshList[DoaremonRoomWall], true);
+		modelStack.PopMatrix(); // left
+
+		modelStack.PushMatrix(); // right
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 0, 90, 0);
+		modelStack.Translate(-0.5, 0, 0.5);
+		RenderMesh(meshList[DoaremonRoomWall], true);
+		modelStack.PopMatrix(); // right
+
+		modelStack.PushMatrix(); // back
+		modelStack.Scale(20, 20, 20);
+		modelStack.Translate(0, 0, 1);
+		RenderMesh(meshList[DoraemonRoomWallWithDoor], true);
+		modelStack.PopMatrix(); // back
+
 		modelStack.PushMatrix(); // bottom
 		modelStack.Scale(20, 20, 20);
 		modelStack.Rotate(90, 90, 0, 0);
 		modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17);
 		RenderMesh(meshList[DoraemonRoomFloor], true);
 		modelStack.PopMatrix(); // bottom
+
+		modelStack.PushMatrix(); // top
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(90, 90, 0, 0);
+		modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17 + -0.926676);
+		RenderMesh(meshList[DoaremonRoomWall], true);
+		modelStack.PopMatrix(); // top
+
+		modelStack.PushMatrix();//rotate Door
+
+		modelStack.PushMatrix();
+		modelStack.Scale(3, 3, 3);
+		modelStack.Translate(0.5, -3.46836, 7.30332 - 0.498328);
+		RenderMesh(meshList[DoraemonDoor], true);
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();// rotate door
+
+		modelStack.PushMatrix(); //rotate bothdoor
+		modelStack.Translate(0, 0, 2.38039);
+		modelStack.PushMatrix(); // SD1
+		modelStack.Scale(2, 4, 3);
+		modelStack.Translate(5.33049, -2.6983, 1.9);
+		RenderMesh(meshList[DoraemonSlidingDoor], true);
+		modelStack.PopMatrix(); // SD1
+
+		modelStack.PushMatrix(); // SD2
+		modelStack.Scale(2, 4, 3);
+		modelStack.Translate(5.33049 + 0.120509, -2.6983, 1.9 + 2.20991);
+		RenderMesh(meshList[DoraemonSlidingDoor], true);
+		modelStack.PopMatrix(); // SD2
+		modelStack.PopMatrix(); //rotate both door
 	}
-
-	//modelStack.PushMatrix(); // top
-	//modelStack.Scale(50, 50, 50);
-	//modelStack.Rotate(90, 90, 0, 0);
-	//modelStack.Translate(0, 0.34 + 0.161635, 0.6 + -0.17 + -0.926676);
-	//RenderMesh(meshList[DoaremonRoomWall], false);
-	//modelStack.PopMatrix(); // top
-
-	modelStack.PushMatrix();//rotate Door
-
-	modelStack.PushMatrix();
-	modelStack.Scale(2, 2, 2);
-	modelStack.Translate(0.5, -3.46836, 7.30332);
-	RenderMesh(meshList[DoraemonDoor], true);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();// rotate door
 }
 
 void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
@@ -582,6 +665,53 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
+void SceneText::RenderDoraemon()
+{
+	modelStack.PushMatrix();//Doraemon head
+
+	modelStack.Rotate(5, 0, 5, 0);
+	RenderMesh(meshList[DoraemonHead], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0.02312, 0 ,0);
+	RenderMesh(meshList[DoraemonBell], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -1.129767, 0);
+	RenderMesh(meshList[DoraemonBody], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix(); //rotate left hand
+	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
+	modelStack.PushMatrix();//Left hand
+	modelStack.Translate(0, -1.1050815, 0);
+	RenderMesh(meshList[DoraemonLeftHand], false);
+	modelStack.PopMatrix();//left hand
+	modelStack.PopMatrix(); //rotate left hadn
+
+	modelStack.PushMatrix(); //rotate right hadn
+	modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
+	modelStack.PushMatrix();//right hand
+	modelStack.Translate(0, -1.11358, -1.0931759);
+	RenderMesh(meshList[DoraemonRightHand], false);
+	modelStack.PopMatrix();//right hand
+	modelStack.PopMatrix(); //rotate rigth hand
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
+	modelStack.Translate(0, -1.82765, -2.32952);
+	RenderMesh(meshList[DoraemonLeftFeet], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
+	modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
+	RenderMesh(meshList[DoraemonRightFeet], false);
+	modelStack.PopMatrix();
+}
+
 void SceneText::Render()
 {
 	// Render VBO here
@@ -628,61 +758,20 @@ void SceneText::Render()
 	//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix(); //whole room with doraemon
+	modelStack.Translate(0, -3.23059, 0);
+
 	modelStack.PushMatrix(); //rotateDoraemo
+	modelStack.Scale(1.5, 1.5, 1.5);
 	modelStack.Rotate(270 + moving, 0, 270 + moving, 0);
-	//modelStack.Translate(1 + camera.CharacterMovement.x, -1 + camera.CharacterMovement.y, camera.CharacterMovement.z);
-
-	modelStack.PushMatrix();//Doraemon head
-
-	modelStack.Rotate(5, 0, 5, 0);
-	RenderMesh(meshList[DoraemonHead], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0.02312, 0 ,0);
-	RenderMesh(meshList[DoraemonBell], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.129767, 0);
-	RenderMesh(meshList[DoraemonBody], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix(); //rotate left hand
-	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
-	modelStack.PushMatrix();//Left hand
-	modelStack.Translate(0, -1.1050815, 0);
-	RenderMesh(meshList[DoraemonLeftHand], false);
-	modelStack.PopMatrix();//left hand
-	modelStack.PopMatrix(); //rotate left hadn
-
-	modelStack.PushMatrix(); //rotate right hadn
-	modelStack.Rotate(rotateRightHand, 0, rotateRightHand, 0);
-	modelStack.PushMatrix();//right hand
-	modelStack.Translate(0, -1.11358, -1.0931759);
-	RenderMesh(meshList[DoraemonRightHand], false);
-	modelStack.PopMatrix();//right hand
-	modelStack.PopMatrix(); //rotate rigth hand
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-rotateLeftFeet, 0, 0, rotateLeftFeet);
-	modelStack.Translate(0, -1.82765, -2.32952);
-	RenderMesh(meshList[DoraemonLeftFeet], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-rotateRightFeet, 0, 0, rotateRightFeet);
-	modelStack.Translate(0, -1.82765, -2.32952 + 0.85077);
-	RenderMesh(meshList[DoraemonRightFeet], false);
-	modelStack.PopMatrix();
-
+	RenderDoraemon();
 	modelStack.PopMatrix(); // roatteDoraemon
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 6.9713 + 0.170095, -2);
+	modelStack.Translate(0, 6.9713 + 0.170095 - 0.679906, -2);
 	RenderDoraemonRoom();
-
 	modelStack.PopMatrix();
+	modelStack.PopMatrix();//whole room with doraemon
 
 	
 

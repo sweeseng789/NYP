@@ -291,6 +291,14 @@ void SceneText::Init()
 	meshList[DoraemonSlidingDoor]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoraemonSlidingDoor]->material.kShininess = 0.5f;
 
+	meshList[DoraemonCeiling] = MeshBuilder::GenerateQuad("DOraemon cilling", (0, 0, 0), 1);
+	meshList[DoraemonCeiling]->textureID = LoadTGA("Image//Ceiling2.tga");
+	meshList[DoraemonCeiling]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonCeiling]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[DoraemonCeiling]->material.kSpecular.Set(0, 0, 0);
+	meshList[DoraemonCeiling]->material.kShininess = 0.5f;
+
+
 	meshList[DoraemonLight1] = MeshBuilder::GenerateOBJ("Doraemon light 1", "OBJ//Light1.obj");
 	meshList[DoraemonLight1]->textureID = LoadTGA("Image//Light1.tga");
 
@@ -418,7 +426,6 @@ void SceneText::Update(double dt)
 		turnOffLight = false;
 	}
 	camera.Update(dt);
-	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -734,14 +741,15 @@ void SceneText::RenderDoraemon()
 
 void SceneText::DoraemonSceondRoom()
 {
-	modelStack.PushMatrix();
+	modelStack.PushMatrix(); //bottom
 	modelStack.Translate(-10.0307, -5.95027, 27 + 1.02014);
 	modelStack.PushMatrix();
 	modelStack.Scale(40, 20, 20);
 	modelStack.Rotate(90, 90, 0, 0);
 	RenderMesh(meshList[DoraemonSecondFloor], false);
 	modelStack.PopMatrix();
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();//bottom
+
 
 	modelStack.PushMatrix(); // right
 	modelStack.Scale(20, 20, 22);
@@ -755,6 +763,22 @@ void SceneText::DoraemonSceondRoom()
 	modelStack.Translate(-0.884079, 0, 0.9);
 	RenderMesh(meshList[DoaremonRoomWall], false);
 	modelStack.PopMatrix(); // right
+
+	modelStack.PushMatrix(); // right
+	modelStack.Scale(20, 20, 22);
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.Translate(-0.5 - 0.781, 0.170052, 0.5 - 2.00628);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // right
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-10.0307, -5.95027 + 15.9147, 27 + 1.02014);
+	modelStack.PushMatrix();
+	modelStack.Scale(40, 20, 20);
+	modelStack.Rotate(90, 90, 0, 0);
+	RenderMesh(meshList[DoraemonCeiling], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 }
 
 void SceneText::Render()
@@ -820,7 +844,11 @@ void SceneText::Render()
 
 	DoraemonSceondRoom();
 
-	
+	modelStack.PushMatrix();
+	modelStack.Translate(-29.5, 0, 30);
+	modelStack.Rotate(90, 0, 90, 0);
+	RenderText(meshList[GEO_TEXT], "World Edge Reached", Color(1, 0, 0));
+	modelStack.PopMatrix();
 
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
 }

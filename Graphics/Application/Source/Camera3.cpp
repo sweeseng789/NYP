@@ -70,7 +70,7 @@ void Camera3::Update(double dt)
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
-		up = right.Cross(view).Normalized();
+//		up = right.Cross(view).Normalized();
 		Mtx44 rotation;
 		rotation.SetToRotation(pitch, right.x, right.y, right.z);
 		view = rotation * view;
@@ -84,7 +84,7 @@ void Camera3::Update(double dt)
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
-		up = right.Cross(view).Normalized();
+	//	up = right.Cross(view).Normalized();
 		Mtx44 rotation;
 		rotation.SetToRotation(pitch, right.x, right.y, right.z);
 		view = rotation * view;
@@ -96,7 +96,7 @@ void Camera3::Update(double dt)
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
-		right.Normalize();
+		//right.Normalize();
 		position -= right * CAMERA_SPEED * dt;
 		target -= right * CAMERA_SPEED* dt;
 		//limit is -495
@@ -110,7 +110,7 @@ void Camera3::Update(double dt)
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
-		right.Normalize();
+		//right.Normalize();
 		position += right * CAMERA_SPEED * dt;
 		target += right * CAMERA_SPEED* dt;
 		//Limit is 49
@@ -164,7 +164,9 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
-	//Left = cameraWorldPos.x - Vector3(1.0f,0.0f,0.0f) * (skyBoxScale.x * 0.5f);
+	std::cout << "Target: " << target << std::endl;
+	std::cout << "Position: " << position << std::endl;
+	system("cls");
 }
 
 void Camera3::Reset()

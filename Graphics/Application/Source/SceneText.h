@@ -61,6 +61,8 @@ class SceneText : public Scene
 		DoraemonSlidingDoor,
 		DoraemonLight1,
 		DoraemonSecondFloor,
+		DoraemonCeiling,
+		EdgeOfWorld,
 
 		GEO_TEXT,
 		NUM_GEOMETRY,

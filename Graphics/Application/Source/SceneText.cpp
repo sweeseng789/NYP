@@ -143,6 +143,11 @@ void SceneText::Init()
 	rotateRightHand = rotateLeftHand = rotateLeftFeet = rotateRightFeet = 1;
 	turnOffLight = false;
 	charDirection.x = charDirection.y = charDirection.z = 0;
+	nearDoor = false;
+	movingDoraemon = 6.2905;
+	rotateDoraemon = 180;
+	ActivateDoraemon = false;
+	moveDoor = 0;
 
 	unsigned ArialFontArray[256] = {
 		41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,	41,	41,	41,	41,	41,	41,	41,	15,	17,	20,	31,	31,						
@@ -298,6 +303,27 @@ void SceneText::Init()
 	meshList[DoraemonCeiling]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoraemonCeiling]->material.kShininess = 0.5f;
 
+	meshList[AnywhereDoor] = MeshBuilder::GenerateOBJ("AnywhereDoor", "OBJ//AnywhereDoor.obj");
+	meshList[AnywhereDoor]->textureID = LoadTGA("Image//AnywhereDoor.tga");
+	meshList[AnywhereDoor]->material.kAmbient.Set(0, 0, 0);
+	meshList[AnywhereDoor]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[AnywhereDoor]->material.kSpecular.Set(0, 0, 0);
+	meshList[AnywhereDoor]->material.kShininess = 0.5f;
+
+	meshList[Clock] = MeshBuilder::GenerateOBJ("DOraemon Clock", "OBJ//Clock.obj");
+	meshList[Clock]->textureID = LoadTGA("Image//Clock.tga");
+	meshList[Clock]->material.kAmbient.Set(0, 0, 0);
+	meshList[Clock]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[Clock]->material.kSpecular.Set(0, 0, 0);
+	meshList[Clock]->material.kShininess = 0.5f;
+
+	meshList[Cupboard] = MeshBuilder::GenerateOBJ("DOraemon Clock", "OBJ//Cupboard.obj");
+	meshList[Cupboard]->textureID = LoadTGA("Image//Cupboard.tga");
+	meshList[Cupboard]->material.kAmbient.Set(0, 0, 0);
+	meshList[Cupboard]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[Cupboard]->material.kSpecular.Set(0, 0, 0);
+	meshList[Cupboard]->material.kShininess = 0.5f;
+
 
 	meshList[DoraemonLight1] = MeshBuilder::GenerateOBJ("Doraemon light 1", "OBJ//Light1.obj");
 	meshList[DoraemonLight1]->textureID = LoadTGA("Image//Light1.tga");
@@ -346,9 +372,9 @@ void SceneText::Update(double dt)
 
 
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(2 * dt);
+		moving -= (float)(10 * dt);
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(2 * dt);
+		moving += (float)(10 * dt);
 
 	if (Application::IsKeyPressed('W'))
 	{
@@ -373,17 +399,7 @@ void SceneText::Update(double dt)
 	static int count, count2;
 	static int movement = false;
 
-	if(Application::IsKeyPressed('W') || Application::IsKeyPressed('S'))
-	{
-		movement = true;
-	}
-	else
-
-	{
-		movement = false;
-	}
-
-	if (movement == true)
+	if (ActivateDoraemon == true && movingDoraemon != 0)
 	{
 		if(rotateLeftHand * ROTATELEFTHAND >= 45)
 		{
@@ -416,7 +432,7 @@ void SceneText::Update(double dt)
 		count = 0;
 	}
 
-	if (Application::IsKeyPressed('E') && turnOffLight == false)
+	if (Application::IsKeyPressed('T') && turnOffLight == false)
 	{
 		turnOffLight = true;
 	}
@@ -425,7 +441,84 @@ void SceneText::Update(double dt)
 	{
 		turnOffLight = false;
 	}
+
+	if(camera.position.x >= -7 && camera.position.x <= 4.8)
+	{
+		if (camera.position.z >= -4.4 && camera.position.z <= 0.5)
+		{
+			camera.HaventOpenDoor = true;
+			if (Application::IsKeyPressed('E'))
+			{
+				ActivateDoraemon = true;
+			}
+		}
+		else
+		{
+			camera.HaventOpenDoor = false;
+		}
+	}
+
+	if (ActivateDoraemon == true && movingDoraemon != 0 && moveDoor != -3.5 && rotateDoraemon != 90)
+	{
+		movingDoraemon -= (float)(ROTATE_SPEED * dt * 0.1);
+		if (movingDoraemon <= 0)
+		{
+			movingDoraemon = 0;
+		}
+	}
+	if (movingDoraemon == 0 && ActivateDoraemon == true && rotateDoraemon != 90 && moveDoor != -3.5)
+	{
+		rotateDoraemon -= (float)(ROTATE_SPEED * dt * 5);
+		if (rotateDoraemon <= 90)
+		{
+			rotateDoraemon = 90;
+		}
+	}
+	if (movingDoraemon == 0 && ActivateDoraemon == true && rotateDoraemon == 90 && moveDoor != -3.5)
+	{
+		moveDoor -= (float)(ROTATE_SPEED * dt * 0.1);
+		if (moveDoor <= -3.5)
+		{
+			moveDoor = -3.5;
+		}
+	}
+	if (movingDoraemon == 0 && ActivateDoraemon == true && moveDoor == -3.5 && rotateDoraemon != 1)
+	{
+		rotateDoraemon -= (float)(ROTATE_SPEED * dt * 5);
+		if (rotateDoraemon <= 1)
+		{
+			rotateDoraemon = 1;
+		}
+	}
+	if (movingDoraemon != -5.5 && ActivateDoraemon == true && moveDoor == -3.5 && rotateDoraemon == 1)
+	{
+		movingDoraemon -= (float)(ROTATE_SPEED * dt * 0.1);
+		if (movingDoraemon <= -5.5)
+		{
+			movingDoraemon = -5.5;
+			//6.2905
+		}
+	}
+	if (movingDoraemon == -5.5 && ActivateDoraemon == true && moveDoor == -3.5 && rotateDoraemon != 180)
+	{
+		/*rotateDoraemon += (float)(ROTATE_SPEED * dt * 5);
+		if (rotateDoraemon >= 180)
+		{
+			rotateDoraemon = 180;
+		}*/
+		movingDoraemon = 6.2905;
+	rotateDoraemon = 180;
+	ActivateDoraemon = false;
+	//moveDoor = 0;
+	}
+	if (ActivateDoraemon == true)
+	{
+		camera.position.x = 0;
+		camera.position.z = 14;
+	}
 	camera.Update(dt);
+	//std::cout << moving << std::endl;
+	std::cout << movingDoraemon << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -548,6 +641,18 @@ void SceneText::RenderDoraemonRoom()
 		RenderMesh(meshList[DoraemonSlidingDoor], false);
 		modelStack.PopMatrix(); // SD2
 		modelStack.PopMatrix(); //rotate both door
+
+		modelStack.PushMatrix();
+		modelStack.Scale(2, 2, 1);
+		modelStack.Translate(-4.14218, -4.14828, 15.8);
+		RenderMesh(meshList[Cupboard], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Scale(1.5, 1.5, 1.5);
+		modelStack.Translate(0, moveDoor, 3.3 );
+		RenderMesh(meshList[AnywhereDoor], false);
+		modelStack.PopMatrix();
 	}
 	else
 	{
@@ -613,6 +718,18 @@ void SceneText::RenderDoraemonRoom()
 		RenderMesh(meshList[DoraemonSlidingDoor], true);
 		modelStack.PopMatrix(); // SD2
 		modelStack.PopMatrix(); //rotate both door
+
+		modelStack.PushMatrix();
+		modelStack.Scale(2, 2, 1);
+		modelStack.Translate(-4.14218, -4.14828, 15.8);
+		RenderMesh(meshList[Cupboard], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Scale(2, 2, 2);
+		modelStack.Translate(0, 0, 3.3);
+		RenderMesh(meshList[AnywhereDoor], true);
+		modelStack.PopMatrix();
 	}
 }
 
@@ -711,7 +828,7 @@ void SceneText::RenderDoraemon()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix(); //rotate left hand
-	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand, 0);
+	modelStack.Rotate(-rotateLeftHand, 0, rotateLeftHand , 0);
 	modelStack.PushMatrix();//Left hand
 	modelStack.Translate(0, -1.1050815, 0);
 	RenderMesh(meshList[DoraemonLeftHand], false);
@@ -771,6 +888,12 @@ void SceneText::DoraemonSceondRoom()
 	RenderMesh(meshList[DoaremonRoomWall], false);
 	modelStack.PopMatrix(); // right
 
+	modelStack.PushMatrix(); // right
+	modelStack.Scale(50, 20, 20);
+	modelStack.Translate(-0.204026, 0, 0.9 + 0.986214);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // right
+
 	modelStack.PushMatrix();
 	modelStack.Translate(-10.0307, -5.95027 + 15.9147, 27 + 1.02014);
 	modelStack.PushMatrix();
@@ -779,6 +902,13 @@ void SceneText::DoraemonSceondRoom()
 	RenderMesh(meshList[DoraemonCeiling], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();//clock
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.Translate(-28.0189, 6, 9.69088);
+	RenderMesh(meshList[Clock], false);
+	modelStack.PopMatrix();
+
 }
 
 void SceneText::Render()
@@ -832,7 +962,8 @@ void SceneText::Render()
 
 	modelStack.PushMatrix(); //rotateDoraemo
 	modelStack.Scale(1.5, 1.5, 1.5);
-	modelStack.Rotate(36270, 0, 36270, 0);
+	modelStack.Rotate(rotateDoraemon, 0, rotateDoraemon, 0);
+	modelStack.Translate(movingDoraemon, 0, 0);
 	RenderDoraemon();
 	modelStack.PopMatrix(); // roatteDoraemon
 
@@ -844,13 +975,21 @@ void SceneText::Render()
 
 	DoraemonSceondRoom();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-29.5, 0, 30);
-	modelStack.Rotate(90, 0, 90, 0);
-	RenderText(meshList[GEO_TEXT], "World Edge Reached", Color(1, 0, 0));
-	modelStack.PopMatrix();
+	if (camera.edgeOfWorld == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-29.5, 0, 30);
+		modelStack.Rotate(90, 0, 90, 0);
+		RenderText(meshList[GEO_TEXT], "World Edge Reached", Color(1, 0, 0));
+		modelStack.PopMatrix();
+	}
 
-	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 11);
+
+	if (camera.HaventOpenDoor == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact", Color(0.5, 0.5, 0.5), 2, 1, 1);
+	}
 }
 
 void SceneText::RenderMesh(Mesh *mesh, bool enableLight)

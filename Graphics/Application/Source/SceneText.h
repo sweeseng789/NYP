@@ -62,7 +62,9 @@ class SceneText : public Scene
 		DoraemonLight1,
 		DoraemonSecondFloor,
 		DoraemonCeiling,
-		EdgeOfWorld,
+		Clock,
+		Cupboard,
+		AnywhereDoor,
 
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -136,6 +138,11 @@ private:
 	std::string renderFPS;
 	unsigned ArialFontArray[256];
 	bool turnOffLight;
+	bool nearDoor;
+	float movingDoraemon;
+	float rotateDoraemon;
+	float moveDoor;
+	bool ActivateDoraemon;
 
 	float rotateRightHand;
 	float rotateLeftHand;

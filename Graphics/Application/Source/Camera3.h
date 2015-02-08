@@ -28,6 +28,12 @@ public:
 	float angleX;
 	float angleY;
 
+	bool nearDoor1;
+	bool nearDoor2;
+	bool boundCheckFront, boundCheckBack, boundCheckLeft, boundCheckRight;
+	bool HaventOpenDoor;
+	bool edgeOfWorld;
+
 	float testing;
 
 	Camera3();

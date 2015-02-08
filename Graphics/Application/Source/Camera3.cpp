@@ -120,7 +120,6 @@ void Camera3::Update(double dt)
 
 	if(Application::IsKeyPressed('W'))
 	{
-		
 		Vector3 view = (target - position).Normalize();
 		position += view * CAMERA_SPEED * dt;
 		target += view * CAMERA_SPEED * dt;
@@ -136,6 +135,7 @@ void Camera3::Update(double dt)
 		position -= view * CAMERA_SPEED * dt;
 		target -= view * CAMERA_SPEED * dt;*/
 		//Limit is 89
+		
 		Vector3 view = (target - position).Normalize();
 		position -= view * CAMERA_SPEED * dt;
 		target -= view * CAMERA_SPEED * dt;
@@ -164,6 +164,7 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
+	//Left = cameraWorldPos.x - Vector3(1.0f,0.0f,0.0f) * (skyBoxScale.x * 0.5f);
 }
 
 void Camera3::Reset()

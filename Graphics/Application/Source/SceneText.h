@@ -60,6 +60,7 @@ class SceneText : public Scene
 		DoraemonDoor,
 		DoraemonSlidingDoor,
 		DoraemonLight1,
+		DoraemonSecondFloor,
 
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -126,6 +127,7 @@ private:
 	void RenderSkybox();
 	void RenderDoraemonRoom();
 	void RenderDoraemon();
+	void DoraemonSceondRoom();
 	int scaleSize;
 	float FPS;
 	float moving;
@@ -137,7 +139,7 @@ private:
 	float rotateLeftHand;
 	float rotateRightFeet;
 	float rotateLeftFeet;
-
+	Vector3 charDirection;
 	Camera3 camera;
 
 	Light light[8];

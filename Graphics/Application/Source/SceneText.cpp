@@ -142,6 +142,7 @@ void SceneText::Init()
 	FPS = 0;
 	rotateRightHand = rotateLeftHand = rotateLeftFeet = rotateRightFeet = 1;
 	turnOffLight = false;
+	charDirection.x = charDirection.y = charDirection.z = 0;
 
 	unsigned ArialFontArray[256] = {
 		41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,	41,	41,	41,	41,	41,	41,	41,	15,	17,	20,	31,	31,						
@@ -255,6 +256,13 @@ void SceneText::Init()
 	meshList[DoraemonRoomFloor]->material.kSpecular.Set(0, 0, 0);
 	meshList[DoraemonRoomFloor]->material.kShininess = 0.5f;
 
+	meshList[DoraemonSecondFloor] = MeshBuilder::GenerateQuad("DoraemonSecondFloor", Color(0, 0, 0), 1.f);
+	meshList[DoraemonSecondFloor]->textureID = LoadTGA("Image//WoodenFloor.tga");
+	meshList[DoraemonSecondFloor]->material.kAmbient.Set(0, 0, 0);
+	meshList[DoraemonSecondFloor]->material.kDiffuse.Set(0.f, 0.f, 0.f);
+	meshList[DoraemonSecondFloor]->material.kSpecular.Set(0, 0, 0);
+	meshList[DoraemonSecondFloor]->material.kShininess = 0.5f;
+
 	meshList[DoraemonRoomWallWithDoor] = MeshBuilder::GenerateQuad("DoaremonRoomFloor", Color(0, 0, 0), 1.f);
 	meshList[DoraemonRoomWallWithDoor]->textureID = LoadTGA("Image//DoraemonRoomWallWithDoor.tga");
 	meshList[DoraemonRoomWallWithDoor]->material.kAmbient.Set(0, 0, 0);
@@ -329,10 +337,21 @@ void SceneText::Update(double dt)
 		light[0].position.y += (float)(LSPEED * dt);
 
 
-	if (Application::IsKeyPressed('9'))
-		moving += (float)(10 * dt);
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(10 * dt);
+		moving -= (float)(2 * dt);
+	if (Application::IsKeyPressed('9'))
+		moving += (float)(2 * dt);
+
+	if (Application::IsKeyPressed('W'))
+	{
+		charDirection.x -= cos(Math::DegreeToRadian(moving)) * 10 * dt;
+		charDirection.z -= sin(Math::DegreeToRadian(moving)) * 10 * dt;
+	}
+	if (Application::IsKeyPressed('S'))
+	{
+		charDirection.x += cos(Math::DegreeToRadian(moving)) * 10 * dt;
+		charDirection.z += sin(Math::DegreeToRadian(moving)) * 10 * dt;
+	}
 
 	FPS = 1/dt;
 
@@ -399,6 +418,7 @@ void SceneText::Update(double dt)
 		turnOffLight = false;
 	}
 	camera.Update(dt);
+	std::cout << moving << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -712,6 +732,31 @@ void SceneText::RenderDoraemon()
 	modelStack.PopMatrix();
 }
 
+void SceneText::DoraemonSceondRoom()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(-10.0307, -5.95027, 27 + 1.02014);
+	modelStack.PushMatrix();
+	modelStack.Scale(40, 20, 20);
+	modelStack.Rotate(90, 90, 0, 0);
+	RenderMesh(meshList[DoraemonSecondFloor], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix(); // right
+	modelStack.Scale(20, 20, 22);
+	modelStack.Rotate(90, 0, 90, 0);
+	modelStack.Translate(-0.5 - 0.781, 0.170052, 0.5);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // right
+
+	modelStack.PushMatrix(); // right
+	modelStack.Scale(25, 20, 20);
+	modelStack.Translate(-0.884079, 0, 0.9);
+	RenderMesh(meshList[DoaremonRoomWall], false);
+	modelStack.PopMatrix(); // right
+}
+
 void SceneText::Render()
 {
 	// Render VBO here
@@ -763,7 +808,7 @@ void SceneText::Render()
 
 	modelStack.PushMatrix(); //rotateDoraemo
 	modelStack.Scale(1.5, 1.5, 1.5);
-	modelStack.Rotate(270 + moving, 0, 270 + moving, 0);
+	modelStack.Rotate(36270, 0, 36270, 0);
 	RenderDoraemon();
 	modelStack.PopMatrix(); // roatteDoraemon
 
@@ -772,6 +817,8 @@ void SceneText::Render()
 	RenderDoraemonRoom();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();//whole room with doraemon
+
+	DoraemonSceondRoom();
 
 	
 

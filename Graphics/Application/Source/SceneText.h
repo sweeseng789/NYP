@@ -143,6 +143,7 @@ private:
 	float rotateDoraemon;
 	float moveDoor;
 	bool ActivateDoraemon;
+	bool showDoor;
 
 	float rotateRightHand;
 	float rotateLeftHand;

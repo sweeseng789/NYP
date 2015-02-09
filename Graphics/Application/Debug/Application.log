@@ -1,128 +1,35 @@
-﻿Build started 9/2/2015 2:08:25 AM.
+﻿Build started 9/2/2015 10:21:23 AM.
      1>Project "C:\Users\User\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\User\Desktop\NYP\Graphics\\glew\include /IC:\Users\User\Desktop\NYP\Graphics\\glfw\include /IC:\Users\User\Desktop\NYP\Graphics\\Common\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneText.cpp
-         SceneText.cpp
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(103): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(111): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(147): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(172): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(178): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(180): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(180): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(180): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(299): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(381): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(382): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(386): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(387): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(390): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(431): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(431): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(431): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(509): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(527): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(527): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(527): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(528): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(533): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(533): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(533): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(535): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(535): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(540): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(540): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(540): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(542): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(542): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(542): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(549): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(549): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(549): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(550): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(550): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(561): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(561): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(561): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(564): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(564): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(564): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(571): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(571): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(571): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(573): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(573): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(573): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(610): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(610): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(617): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(617): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(625): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(625): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(631): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(634): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(634): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(634): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(647): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(647): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(647): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(653): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(687): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(687): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(694): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(694): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(702): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(702): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(708): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(711): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(711): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(711): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(717): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(717): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(717): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(724): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(724): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(724): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(730): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(821): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(826): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(833): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(841): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(841): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(848): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(848): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(854): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(854): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(862): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(862): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(862): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(874): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(874): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(880): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(880): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(887): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(887): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(887): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(893): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(893): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(898): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(898): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(898): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(908): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(908): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(961): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\user\desktop\nyp\graphics\application\source\scenetext.cpp(971): warning C4305: 'argument' : truncation from 'double' to 'float'
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\User\Desktop\NYP\Graphics\\glew\include /IC:\Users\User\Desktop\NYP\Graphics\\glfw\include /IC:\Users\User\Desktop\NYP\Graphics\\Common\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Camera3.cpp
+         Camera3.cpp
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(22): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(102): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(106): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(152): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(153): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(154): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(155): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(191): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(192): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(207): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(208): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(210): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(211): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(223): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(225): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(226): warning C4552: '-' : operator has no effect; expected operator with side-effect
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(227): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(245): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(246): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(259): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(260): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(269): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(270): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(285): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\user\desktop\nyp\graphics\application\source\camera3.cpp(286): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -167,4 +74,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.10
+Time Elapsed 00:00:00.88

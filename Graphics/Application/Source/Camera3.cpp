@@ -27,10 +27,11 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
-	nearDoor1 = nearDoor2 = false;
+	nearDoor1 = nearDoor2 = nearDoor3 = nearDoor4 = false;
 	boundCheckFront = boundCheckBack = boundCheckLeft = boundCheckRight = false;
-	HaventOpenDoor = false;
+	HaventOpenDoor = HaventOpenDoor = false;
 	edgeOfWorld = false;
+	nearAnywhereDoor = false;
 }
 
 void Camera3::Update(double dt)
@@ -96,34 +97,38 @@ void Camera3::Update(double dt)
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////
-	if (position.x <= -8.8 && nearDoor1 == false) //left
+	if (position.x <= -8.8 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false) //left
 	{
 		position.x = -8.8;
-		boundCheckLeft = true;
 	}
-	if (position.x >= 8.8 && nearDoor1 == false)
+	if (position.x >= 8.8 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false)
 	{
 		position.x = 8.8;
-		boundCheckRight = true;
 	}
-	if (position.z <= -1 && nearDoor1 == false)
+	if (position.z <= -1 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false)
 	{
 		position.z = -1;
-		boundCheckFront = true;
 	}
-	if (position.z >= 15 && nearDoor1 == false)
+	if (position.z >= 15 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false)
 	{
 		position.z = 15;
-		boundCheckBack = true;
 	}
 
-	if (position.x > -8.8 && position.x < 8.8)
+	if (nearDoor1 == false && position.x >= -1.3 && position.x <= 1.5 && nearAnywhereDoor == true)
 	{
-		boundCheckLeft = boundCheckRight = false;
-	}
-	if (position.z > -1 && position.z < 15)
-	{
-		boundCheckBack = boundCheckFront = false;
+		if (position.z >= 3 && position.z <= 6 && nearDoor3 == false )
+		{
+			std::cout << "Near door" << std::endl;
+			HaventOpenDoor2 = true;
+			if (Application::IsKeyPressed('E'))
+			{
+				nearDoor3 = true;
+			}
+		}
+		else
+		{
+			HaventOpenDoor2 = false;
+		}
 	}
 
 	if (position.x <= 2.5 && position.x >= -2.5 && nearDoor1 == false)
@@ -141,16 +146,7 @@ void Camera3::Update(double dt)
 			HaventOpenDoor = false;
 		}
 	}
-	if (position.x >= 8 && position.x <= 8.8 && nearDoor1 == false)
-	{
-		if (position.z >= 1.8 && position.z <= 2.5)
-		{
-			if (Application::IsKeyPressed('E'))
-			{
-				std::cout << "Detected" << std::endl;
-			}
-		}
-	}
+
 	if (nearDoor1 == true && nearDoor2 == false)
 	{
 		position.x = -0.196141;
@@ -202,6 +198,40 @@ void Camera3::Update(double dt)
 		else
 		{
 			HaventOpenDoor = false;
+		}
+	}
+
+	if (nearDoor3 == true && nearDoor4 == false)
+	{
+		position.x = 0;
+		position.y = -141.995;
+		position.z = 4.23277;
+		target.x = 0;
+		target.y = -142.053;
+		target.z = 3.2345;
+		nearDoor4 = true;
+	}
+	if (nearDoor4 == true && nearDoor3 == true)
+	{
+		if (position.x >= -1.7 -2 && position.x <= 1.6)
+		{
+			if (position.z >= 0.5 && position.z <= 0.8)
+			{
+				HaventOpenDoor2 = true;
+				if (Application::IsKeyPressed('E'))
+				{
+					position.x = -0.218565;
+					position.y = target.y = 0;
+					position.z = 6.34415;
+					target.x -0.251697;
+					target.z = 7.3436;
+					nearDoor3 = nearDoor4 = false;
+				}
+			}
+			else
+			{
+				HaventOpenDoor2 = false;
+			}
 		}
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +309,8 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
-	//std::cout << position << std::endl;
+	std::cout << "Positiob" << position << std::endl;
+	std::cout << "target" << target << std::endl;
 }
 
 void Camera3::Reset()

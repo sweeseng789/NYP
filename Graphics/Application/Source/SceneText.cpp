@@ -148,6 +148,7 @@ void SceneText::Init()
 	rotateDoraemon = 180;
 	ActivateDoraemon = false;
 	moveDoor = 0;
+	showDoor = false;
 
 	unsigned ArialFontArray[256] = {
 		41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,	41,	41,	41,	41,	41,	41,	41,	15,	17,	20,	31,	31,						
@@ -442,7 +443,7 @@ void SceneText::Update(double dt)
 		turnOffLight = false;
 	}
 
-	if(camera.position.x >= -7 && camera.position.x <= 4.8)
+	if(camera.position.x >= -7 && camera.position.x <= 4.8 && moveDoor != -3.5 && camera.position.y == 0)
 	{
 		if (camera.position.z >= -4.4 && camera.position.z <= 0.5)
 		{
@@ -472,6 +473,8 @@ void SceneText::Update(double dt)
 		if (rotateDoraemon <= 90)
 		{
 			rotateDoraemon = 90;
+			showDoor = true;
+			camera.nearAnywhereDoor = true;
 		}
 	}
 	if (movingDoraemon == 0 && ActivateDoraemon == true && rotateDoraemon == 90 && moveDoor != -3.5)
@@ -501,24 +504,19 @@ void SceneText::Update(double dt)
 	}
 	if (movingDoraemon == -5.5 && ActivateDoraemon == true && moveDoor == -3.5 && rotateDoraemon != 180)
 	{
-		/*rotateDoraemon += (float)(ROTATE_SPEED * dt * 5);
-		if (rotateDoraemon >= 180)
-		{
-			rotateDoraemon = 180;
-		}*/
 		movingDoraemon = 6.2905;
-	rotateDoraemon = 180;
-	ActivateDoraemon = false;
-	//moveDoor = 0;
+		rotateDoraemon = 180;
+		ActivateDoraemon = false;
 	}
+
 	if (ActivateDoraemon == true)
 	{
 		camera.position.x = 0;
 		camera.position.z = 14;
 	}
+
 	camera.Update(dt);
 	//std::cout << moving << std::endl;
-	std::cout << movingDoraemon << std::endl;
 }
 
 void SceneText::RenderSkybox()
@@ -568,10 +566,13 @@ void SceneText::RenderSkybox()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(0, 2.21031 + 2.21017, 0);
+	modelStack.PushMatrix();
 	modelStack.Scale(scaleSize, scaleSize, scaleSize);
 	modelStack.Rotate(90, 90, 0, 0);
 	modelStack.Translate(0.017004, -0.510025 + 0.0135941, 0.503292 + -0.00170143);
 	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
 
@@ -648,11 +649,14 @@ void SceneText::RenderDoraemonRoom()
 		RenderMesh(meshList[Cupboard], false);
 		modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Scale(1.5, 1.5, 1.5);
-		modelStack.Translate(0, moveDoor, 3.3 );
-		RenderMesh(meshList[AnywhereDoor], false);
-		modelStack.PopMatrix();
+		if (showDoor == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Scale(1.5, 1.5, 1.5);
+			modelStack.Translate(0, moveDoor, 3.3 );
+			RenderMesh(meshList[AnywhereDoor], false);
+			modelStack.PopMatrix();
+		}
 	}
 	else
 	{
@@ -725,11 +729,14 @@ void SceneText::RenderDoraemonRoom()
 		RenderMesh(meshList[Cupboard], true);
 		modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Scale(2, 2, 2);
-		modelStack.Translate(0, 0, 3.3);
-		RenderMesh(meshList[AnywhereDoor], true);
-		modelStack.PopMatrix();
+		if (showDoor == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Scale(2, 2, 2);
+			modelStack.Translate(0, 0, 3.3);
+			RenderMesh(meshList[AnywhereDoor], true);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
@@ -943,7 +950,7 @@ void SceneText::Render()
 	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.World.x, camera.World.y , camera.World.z);
+	modelStack.Translate(camera.World.x, 0 , camera.World.z);
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 350, 150);
@@ -986,10 +993,16 @@ void SceneText::Render()
 
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 11);
 
-	if (camera.HaventOpenDoor == true)
+	if (camera.HaventOpenDoor == true || camera.HaventOpenDoor2 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact", Color(0.5, 0.5, 0.5), 2, 1, 1);
 	}
+
+	modelStack.PushMatrix(); //desert door
+	modelStack.Scale(1.5, 1.5, 1.5);
+	modelStack.Translate(0, -95, 3.3 );
+	RenderMesh(meshList[AnywhereDoor], false);
+	modelStack.PopMatrix(); // desert door
 }
 
 void SceneText::RenderMesh(Mesh *mesh, bool enableLight)

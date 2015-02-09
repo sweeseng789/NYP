@@ -30,9 +30,12 @@ public:
 
 	bool nearDoor1;
 	bool nearDoor2;
+	bool nearDoor3;
+	bool nearDoor4;
 	bool boundCheckFront, boundCheckBack, boundCheckLeft, boundCheckRight;
-	bool HaventOpenDoor;
+	bool HaventOpenDoor, HaventOpenDoor2;
 	bool edgeOfWorld;
+	bool nearAnywhereDoor;
 
 	float testing;
 

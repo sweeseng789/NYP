@@ -1,11 +1,11 @@
-﻿Build started 3/2/2015 1:33:34 AM.
-     1>Project "C:\Users\Ong\Desktop\NYP\SoftwareEngineering\Common\Common.vcxproj" on node 2 (build target(s)).
+﻿Build started 9/2/2015 8:24:02 PM.
+     1>Project "C:\Users\Ong\Desktop\NYP\SoftwareEngineering\Common\Common.vcxproj" on node 3 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Common.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MatrixStack.cpp Source\Mtx44.cpp Source\timer.cpp Source\Vector3.cpp
-         Vector3.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MatrixStack.cpp Source\Mtx44.cpp Source\Vector3.cpp Source\timer.cpp
          timer.cpp
+         Vector3.cpp
          Mtx44.cpp
          MatrixStack.cpp
          Generating Code...
@@ -22,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.07
+Time Elapsed 00:00:01.71

@@ -445,12 +445,13 @@ void SceneText::Update(double dt)
 
 	if(camera.position.x >= -7 && camera.position.x <= 4.8 && moveDoor != -3.5 && camera.position.y == 0)
 	{
-		if (camera.position.z >= -4.4 && camera.position.z <= 0.5)
+		if (camera.position.z >= -4.4 && camera.position.z <= 0.5 && moveDoor != -3.5)
 		{
 			camera.HaventOpenDoor = true;
 			if (Application::IsKeyPressed('E'))
 			{
 				ActivateDoraemon = true;
+				camera.DoraemonActivation = true;
 			}
 		}
 		else
@@ -507,12 +508,14 @@ void SceneText::Update(double dt)
 		movingDoraemon = 6.2905;
 		rotateDoraemon = 180;
 		ActivateDoraemon = false;
+		camera.DoraemonActivation = false;
 	}
 
 	if (ActivateDoraemon == true)
 	{
 		camera.position.x = 0;
 		camera.position.z = 14;
+		camera.target = 0;
 	}
 
 	camera.Update(dt);
@@ -982,20 +985,25 @@ void SceneText::Render()
 
 	DoraemonSceondRoom();
 
-	if (camera.edgeOfWorld == true)
+	/*if (camera.edgeOfWorld == true)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(-29.5, 0, 30);
 		modelStack.Rotate(90, 0, 90, 0);
 		RenderText(meshList[GEO_TEXT], "World Edge Reached", Color(1, 0, 0));
 		modelStack.PopMatrix();
-	}
+	}*/
 
 	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 11);
 
 	if (camera.HaventOpenDoor == true || camera.HaventOpenDoor2 == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact", Color(0.5, 0.5, 0.5), 2, 1, 1);
+	}
+
+	if (camera.edgeOfWorld == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Room Limit Reached", Color(1, 0, 0), 3, 9.5, 9.5);
 	}
 
 	modelStack.PushMatrix(); //desert door

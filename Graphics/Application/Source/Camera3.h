@@ -36,8 +36,10 @@ public:
 	bool HaventOpenDoor, HaventOpenDoor2;
 	bool edgeOfWorld;
 	bool nearAnywhereDoor;
-
+	bool DoraemonActivation;
+	float oldY;
 	float testing;
+	bool pressing;
 
 	Camera3();
 	~Camera3();

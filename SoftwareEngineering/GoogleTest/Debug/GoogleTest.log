@@ -1,4 +1,4 @@
-﻿Build started 3/2/2015 1:35:44 AM.
+﻿Build started 9/2/2015 8:24:02 PM.
      1>Project "C:\Users\Ong\Desktop\NYP\SoftwareEngineering\GoogleTest\GoogleTest.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GoogleTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -18,4 +18,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.19
+Time Elapsed 00:00:03.17

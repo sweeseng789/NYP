@@ -32,11 +32,15 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	HaventOpenDoor = HaventOpenDoor = false;
 	edgeOfWorld = false;
 	nearAnywhereDoor = false;
+	DoraemonActivation = false;
+	pressing = false;
 }
 
 void Camera3::Update(double dt)
 {
 	static const float CAMERA_SPEED = 10.f;
+	oldY = position.y;
+	
 
 	if(Application::IsKeyPressed(VK_LEFT))
 	{
@@ -172,13 +176,7 @@ void Camera3::Update(double dt)
 	if (nearDoor2 == true && position.x <= -25)
 	{
 		position.x = -25;
-		edgeOfWorld = true;
 	}
-	else
-	{
-		edgeOfWorld = false;
-	}
-
 	if (position.x > -2.3 && position.x < 2.3 && nearDoor2 == true)
 	{
 		if (position.z >= 21 && position.z < 22)
@@ -207,8 +205,8 @@ void Camera3::Update(double dt)
 		position.y = -141.995;
 		position.z = 4.23277;
 		target.x = 0;
-		target.y = -142.053;
-		target.z = 3.2345;
+		target.y = -141.905;
+		target.z = 3.23685;
 		nearDoor4 = true;
 	}
 	if (nearDoor4 == true && nearDoor3 == true)
@@ -223,8 +221,8 @@ void Camera3::Update(double dt)
 					position.x = -0.218565;
 					position.y = target.y = 0;
 					position.z = 6.34415;
-					target.x -0.251697;
-					target.z = 7.3436;
+					target.x -0.179445;
+					target.z = 7.34338;
 					nearDoor3 = nearDoor4 = false;
 				}
 			}
@@ -236,12 +234,12 @@ void Camera3::Update(double dt)
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 
-	if(Application::IsKeyPressed('A'))
+	if(Application::IsKeyPressed('A') && DoraemonActivation == false)
 	{
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
-		//right.Normalize();
+		right.Normalize();
 		position -= right * CAMERA_SPEED * dt;
 		target -= right * CAMERA_SPEED* dt;
 		//limit is -495
@@ -250,12 +248,12 @@ void Camera3::Update(double dt)
 		CharacterMovement.z += (float)(CAMERA_SPEED * dt);
 	}
 
-	if(Application::IsKeyPressed('D'))
+	if(Application::IsKeyPressed('D') && DoraemonActivation == false)
 	{
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
-		//right.Normalize();
+		right.Normalize();
 		position += right * CAMERA_SPEED * dt;
 		target += right * CAMERA_SPEED* dt;
 		//Limit is 49
@@ -263,9 +261,10 @@ void Camera3::Update(double dt)
 		CharacterMovement.z -= (float)(CAMERA_SPEED * dt);
 	}
 
-	if(Application::IsKeyPressed('W'))
+	if(Application::IsKeyPressed('W') && DoraemonActivation == false)
 	{
 		Vector3 view = (target - position).Normalize();
+		view.y = 0; 
 		position += view * CAMERA_SPEED * dt;
 		target += view * CAMERA_SPEED * dt;
 		//Limit is -889
@@ -274,7 +273,7 @@ void Camera3::Update(double dt)
 		CharacterMovement.x -= (float)(CAMERA_SPEED * dt);
 	}
 
-	if(Application::IsKeyPressed('S'))
+	if(Application::IsKeyPressed('S') && DoraemonActivation == false)
 	{
 		/*Vector3 view = (target - position).Normalize();
 		position -= view * CAMERA_SPEED * dt;
@@ -282,6 +281,7 @@ void Camera3::Update(double dt)
 		//Limit is 89
 		
 		Vector3 view = (target - position).Normalize();
+		view.y = 0;
 		position -= view * CAMERA_SPEED * dt;
 		target -= view * CAMERA_SPEED * dt;
 		CrossHair -= target;
@@ -309,8 +309,9 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
-	std::cout << "Positiob" << position << std::endl;
-	std::cout << "target" << target << std::endl;
+	//std::cout << "Position" << position << std::endl;
+	//std::cout << "target" << target << std::endl;
+	std::cout << 0x45 << std::endl;
 }
 
 void Camera3::Reset()

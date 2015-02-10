@@ -1,21 +1,17 @@
-﻿Build started 9/2/2015 8:24:02 PM.
-     1>Project "C:\Users\Ong\Desktop\NYP\SoftwareEngineering\GoogleTest\GoogleTest.vcxproj" on node 2 (build target(s)).
+﻿Build started 10/2/2015 11:02:04 PM.
+     1>Project "C:\Users\User\Desktop\NYP\SoftwareEngineering\GoogleTest\GoogleTest.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GoogleTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\Ong\Desktop\NYP\SoftwareEngineering\\gtest /IC:\Users\Ong\Desktop\NYP\SoftwareEngineering\\gtest\include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "..\gtest\src\gtest-all.cc" ..\gtest\src\gtest_main.cc
-         gtest_main.cc
-         gtest-all.cc
-         Generating Code...
+         All outputs are up-to-date.
        Lib:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\Ong\Desktop\NYP\SoftwareEngineering\Debug\GoogleTest.lib" /NOLOGO "Debug\gtest-all.obj"
-         Debug\gtest_main.obj
-         GoogleTest.vcxproj -> C:\Users\Ong\Desktop\NYP\SoftwareEngineering\Debug\GoogleTest.lib
+         All outputs are up-to-date.
+         GoogleTest.vcxproj -> C:\Users\User\Desktop\NYP\SoftwareEngineering\Debug\GoogleTest.lib
        FinalizeBuildStatus:
          Deleting file "Debug\GoogleTest.unsuccessfulbuild".
          Touching "Debug\GoogleTest.lastbuildstate".
-     1>Done Building Project "C:\Users\Ong\Desktop\NYP\SoftwareEngineering\GoogleTest\GoogleTest.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\User\Desktop\NYP\SoftwareEngineering\GoogleTest\GoogleTest.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.17
+Time Elapsed 00:00:00.03

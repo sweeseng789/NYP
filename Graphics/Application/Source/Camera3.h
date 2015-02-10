@@ -34,12 +34,12 @@ public:
 	bool nearDoor4;
 	bool boundCheckFront, boundCheckBack, boundCheckLeft, boundCheckRight;
 	bool HaventOpenDoor, HaventOpenDoor2;
-	bool edgeOfWorld;
+	bool edgeOfWorld1, edgeOfWorld2, edgeOfWorld3, edgeOfWorld4, edgeOfWorld5, edgeOfWorld6, edgeOfWorld7, edgeOfWorld8;
 	bool nearAnywhereDoor;
 	bool DoraemonActivation;
 	float oldY;
 	float testing;
-	bool pressing;
+	bool light;
 
 	Camera3();
 	~Camera3();

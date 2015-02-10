@@ -22,7 +22,7 @@
 #include "SceneSkybox.h"
 #include "GameOfLife.h"
 #include "SceneModel.h"
-#include "SceneText.h"
+#include "Assignment3.h"
 #include "Application.h"
 
 GLFWwindow* m_window;
@@ -113,7 +113,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SceneText();
+	Scene *scene = new Assignment3();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

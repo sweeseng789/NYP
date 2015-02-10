@@ -79,11 +79,9 @@
     <ClCompile Include="..\Common\Source\MathUtility.cpp" />
     <ClCompile Include="..\Common\Source\Vector2.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Vector2Test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.vcxproj">
-      <Project>{8cd73cac-3ebf-4503-b957-9449bf2b5fca}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\GoogleTest\GoogleTest.vcxproj">
       <Project>{5e5fa781-5f57-423e-b464-497e36e1b0c6}</Project>
     </ProjectReference>

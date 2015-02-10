@@ -30,10 +30,10 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	nearDoor1 = nearDoor2 = nearDoor3 = nearDoor4 = false;
 	boundCheckFront = boundCheckBack = boundCheckLeft = boundCheckRight = false;
 	HaventOpenDoor = HaventOpenDoor = false;
-	edgeOfWorld = false;
+	edgeOfWorld1 = edgeOfWorld2 = edgeOfWorld3 = edgeOfWorld4 = edgeOfWorld5 = edgeOfWorld6 = edgeOfWorld7 = edgeOfWorld8 = false;
 	nearAnywhereDoor = false;
 	DoraemonActivation = false;
-	pressing = false;
+	light = false;
 }
 
 void Camera3::Update(double dt)
@@ -104,18 +104,38 @@ void Camera3::Update(double dt)
 	if (position.x <= -8.8 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false) //left
 	{
 		position.x = -8.8;
+		edgeOfWorld1 = true;
+	}
+	else
+	{
+		edgeOfWorld1 = false;
 	}
 	if (position.x >= 8.8 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false)
 	{
 		position.x = 8.8;
+		edgeOfWorld2 = true;
+	}
+	else
+	{
+		edgeOfWorld2 = false;
 	}
 	if (position.z <= -1 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false)
 	{
 		position.z = -1;
+		edgeOfWorld3 = true;
+	}
+	else
+	{
+		edgeOfWorld3 = false;
 	}
 	if (position.z >= 15 && nearDoor1 == false && nearDoor3 == false && nearDoor4 == false)
 	{
 		position.z = 15;
+		edgeOfWorld4 = true;
+	}
+	else
+	{
+		edgeOfWorld4 = false;
 	}
 
 	if (nearDoor1 == false && position.x >= -1.3 && position.x <= 1.5 && nearAnywhereDoor == true)
@@ -124,7 +144,7 @@ void Camera3::Update(double dt)
 		{
 			std::cout << "Near door" << std::endl;
 			HaventOpenDoor2 = true;
-			if (Application::IsKeyPressed('E'))
+			if (GetKeyState('E') < 0)
 			{
 				nearDoor3 = true;
 			}
@@ -140,7 +160,7 @@ void Camera3::Update(double dt)
 		if (position.z >= 14.8 && position.z <= 15)
 		{
 			HaventOpenDoor = true;
-			if (Application::IsKeyPressed('E'))
+			if (GetKeyState('E') < 0)
 			{
 				nearDoor1 = true;
 			}
@@ -164,25 +184,45 @@ void Camera3::Update(double dt)
 	if (nearDoor2 == true && position.z <= 21)
 	{
 		position.z = 21;
+		edgeOfWorld5 = true;
+	}
+	else
+	{
+		edgeOfWorld5 = false;
 	}
 	if (nearDoor2 == true && position.x >= 8)
 	{
 		position.x = 8;
+		edgeOfWorld6 = true;
+	}
+	else
+	{
+		edgeOfWorld6 = false;
 	}
 	if (nearDoor2 == true && position.z >= 35)
 	{
 		position.z = 35;
+		edgeOfWorld7 = true;
+	}
+	else
+	{
+		edgeOfWorld7 = false;
 	}
 	if (nearDoor2 == true && position.x <= -25)
 	{
 		position.x = -25;
+		edgeOfWorld8 = true;
+	}
+	else
+	{
+		edgeOfWorld8 = false;
 	}
 	if (position.x > -2.3 && position.x < 2.3 && nearDoor2 == true)
 	{
 		if (position.z >= 21 && position.z < 22)
 		{
 			HaventOpenDoor = true;
-			if (Application::IsKeyPressed('E'))
+			if (GetKeyState('E') < 0)
 			{
 				position.x = 3;
 				position.z = 16;
@@ -216,7 +256,7 @@ void Camera3::Update(double dt)
 			if (position.z >= 0.5 && position.z <= 0.8)
 			{
 				HaventOpenDoor2 = true;
-				if (Application::IsKeyPressed('E'))
+				if (GetKeyState('E') < 0)
 				{
 					position.x = -0.218565;
 					position.y = target.y = 0;
@@ -234,7 +274,7 @@ void Camera3::Update(double dt)
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 
-	if(Application::IsKeyPressed('A') && DoraemonActivation == false)
+	if(Application::IsKeyPressed('A') && DoraemonActivation == false && light == false)
 	{
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
@@ -248,7 +288,8 @@ void Camera3::Update(double dt)
 		CharacterMovement.z += (float)(CAMERA_SPEED * dt);
 	}
 
-	if(Application::IsKeyPressed('D') && DoraemonActivation == false)
+
+	if(Application::IsKeyPressed('D') && DoraemonActivation == false && light == false)
 	{
 		Vector3 view = (target - position).Normalize();
 		Vector3 right = view.Cross(up);
@@ -261,7 +302,7 @@ void Camera3::Update(double dt)
 		CharacterMovement.z -= (float)(CAMERA_SPEED * dt);
 	}
 
-	if(Application::IsKeyPressed('W') && DoraemonActivation == false)
+	if(Application::IsKeyPressed('W') && DoraemonActivation == false && light == false )
 	{
 		Vector3 view = (target - position).Normalize();
 		view.y = 0; 
@@ -273,7 +314,7 @@ void Camera3::Update(double dt)
 		CharacterMovement.x -= (float)(CAMERA_SPEED * dt);
 	}
 
-	if(Application::IsKeyPressed('S') && DoraemonActivation == false)
+	if(Application::IsKeyPressed('S') && DoraemonActivation == false && light == false)
 	{
 		/*Vector3 view = (target - position).Normalize();
 		position -= view * CAMERA_SPEED * dt;
@@ -311,7 +352,6 @@ void Camera3::Update(double dt)
 	}
 	//std::cout << "Position" << position << std::endl;
 	//std::cout << "target" << target << std::endl;
-	std::cout << 0x45 << std::endl;
 }
 
 void Camera3::Reset()
@@ -319,6 +359,13 @@ void Camera3::Reset()
 	position = defaultPosition;
 	target = defaultTarget;
 	up = defaultUp;
+	nearDoor1 = nearDoor2 = nearDoor3 = nearDoor4 = false;
+	boundCheckFront = boundCheckBack = boundCheckLeft = boundCheckRight = false;
+	HaventOpenDoor = HaventOpenDoor = false;
+	edgeOfWorld1 = edgeOfWorld2 = edgeOfWorld3 = edgeOfWorld4 = edgeOfWorld5 = edgeOfWorld6 = edgeOfWorld7 = edgeOfWorld8 = false;
+	nearAnywhereDoor = false;
+	DoraemonActivation = false;
+	light = false;
 }
 
 void Camera3::UpdateCrossHair()

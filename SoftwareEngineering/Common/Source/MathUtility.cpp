@@ -6,6 +6,10 @@ int factorial(int n)
 	{
 		return 1;
 	}
+	else if (n < 0)
+	{
+		return NULL;
+	}
 	else
 	{
 		return n * factorial(n - 1);	
@@ -50,7 +54,8 @@ int summationAP(int a, int d, int n)
 {
 	//S = (n/2) * (2a + (n-1) d)
 	int APS = 0;
-	APS = (n/2) * ((2*a) + (n-1) * d);
+	APS = (n*(2*a+(n-1)*d))/2;
+	//APS = (n/2) * ((2*a) + (n-1) * d);
 	return APS;
 }
 

@@ -69,6 +69,12 @@ class Assignment3 : public Scene
 		DoraemonWallpaper,
 		DoraemonPoster1,
 		DoraemonPoster2,
+		modelHead,
+		modelTorso,
+		modelRightHand,
+		modelLeftHand,
+		modelLeftLeg,
+		modelRightLeg,
 
 		GEO_TEXT,
 		NUM_GEOMETRY,

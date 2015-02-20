@@ -163,7 +163,7 @@ void Assignment3::Init()
 	};
 
 	//Initialize camera settings
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(1, 1, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
@@ -353,6 +353,23 @@ void Assignment3::Init()
 	meshList[Cupboard]->material.kSpecular.Set(0, 0, 0);
 	meshList[Cupboard]->material.kShininess = 0.5f;
 
+	meshList[modelHead] = MeshBuilder::GenerateOBJ("Character Head", "OBJ//modelHead.obj");
+	meshList[modelHead]->textureID = LoadTGA("Image//modelHead.tga");
+
+	meshList[modelTorso] = MeshBuilder::GenerateOBJ("Character Head", "OBJ//modelTorso.obj");
+	meshList[modelTorso]->textureID = LoadTGA("Image//modelTorso.tga");
+
+	meshList[modelRightHand] = MeshBuilder::GenerateOBJ("Character Head", "OBJ//modelHand.obj");
+	meshList[modelRightHand]->textureID = LoadTGA("Image//modelHand.tga");
+
+	meshList[modelLeftHand] = MeshBuilder::GenerateOBJ("Character Head", "OBJ//modelHand.obj");
+	meshList[modelLeftHand]->textureID = LoadTGA("Image//modelHand.tga");
+
+	meshList[modelLeftLeg] = MeshBuilder::GenerateOBJ("Character Head", "OBJ//modelLeg.obj");
+	meshList[modelLeftLeg]->textureID = LoadTGA("Image//modelLeg.tga");
+
+	meshList[modelRightLeg] = MeshBuilder::GenerateOBJ("Character Head", "OBJ//modelLeg.obj");
+	meshList[modelRightLeg]->textureID = LoadTGA("Image//modelLeg.tga");
 
 	meshList[DoraemonLight1] = MeshBuilder::GenerateOBJ("Doraemon light 1", "OBJ//Light1.obj");
 	meshList[DoraemonLight1]->textureID = LoadTGA("Image//Light1.tga");
@@ -405,9 +422,10 @@ void Assignment3::Update(double dt)
 
 
 	if (Application::IsKeyPressed('8'))
-		moving -= (float)(10 * dt);
+		moving -= (float)(1 * dt);
 	if (Application::IsKeyPressed('9'))
-		moving += (float)(10 * dt);
+		moving += (float)(1 * dt);
+	std::cout << moving << std::endl;
 
 	if (Application::IsKeyPressed('W'))
 	{
@@ -616,14 +634,14 @@ void Assignment3::Update(double dt)
 		ShowControl = false;
 	}
 
-	if (camera.nearDoor2 == true)
+	/*if (camera.nearDoor2 == true)
 	{
 		moving = 20.4012;
 	}
 	else
 	{
 		moving = 0;
-	}
+	}*/
 }
 
 void Assignment3::RenderSkybox()
@@ -1117,103 +1135,132 @@ void Assignment3::Render()
 
 
 	RenderMesh(meshList[GEO_AXES], false);
-	if (camera.nearDoor3 == false)
-	{
-		if (turnOffLight == false)
-		{
-			modelStack.PushMatrix();
-			modelStack.Scale(1,1,1);
-			modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z + moving);
-			RenderMesh(meshList[DoraemonLight1], false);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelStack.PushMatrix();
-			modelStack.Scale(1,1,1);
-			modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z + moving);
-			RenderMesh(meshList[DoraemonLight1], true);
-			modelStack.PopMatrix();
-		}
-	}
-	/*modelStack.PushMatrix();
-	modelStack.Scale(3, 3, 3);
-	modelStack.Translate(light[1].position.x, light[1].position.y + moving, light[1].position.z);
-	RenderMesh(meshList[DoraemonLight1], false);
-	modelStack.PopMatrix();*/
+	//if (camera.nearDoor3 == false)
+	//{
+	//	if (turnOffLight == false)
+	//	{
+	//		modelStack.PushMatrix();
+	//		modelStack.Scale(1,1,1);
+	//		modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z + moving);
+	//		RenderMesh(meshList[DoraemonLight1], false);
+	//		modelStack.PopMatrix();
+	//	}
+	//	else
+	//	{
+	//		modelStack.PushMatrix();
+	//		modelStack.Scale(1,1,1);
+	//		modelStack.Translate(light[0].position.x, light[0].position.y + 2, light[0].position.z + moving);
+	//		RenderMesh(meshList[DoraemonLight1], true);
+	//		modelStack.PopMatrix();
+	//	}
+	//}
+	///*modelStack.PushMatrix();
+	//modelStack.Scale(3, 3, 3);
+	//modelStack.Translate(light[1].position.x, light[1].position.y + moving, light[1].position.z);
+	//RenderMesh(meshList[DoraemonLight1], false);
+	//modelStack.PopMatrix();*/
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(camera.World.x, 0 , camera.World.z);
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, 350, 150);
+	//RenderSkybox();
+	//modelStack.PopMatrix();
+	//modelStack.PopMatrix();
+	//if (camera.nearDoor3 == false)
+	//{
+	//	modelStack.PushMatrix();
+	//	//scale, translate, rotate
+	//	modelStack.Scale(10, 10, 10);
+	//	//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
+	//	modelStack.PopMatrix();
+
+	//	modelStack.PushMatrix(); //whole room with doraemon
+	//	modelStack.Translate(0, -3.23059, 0);
+
+	//	modelStack.PushMatrix(); //rotateDoraemo
+	//	modelStack.Scale(1.5, 1.5, 1.5);
+	//	modelStack.Rotate(rotateDoraemon, 0, rotateDoraemon, 0);
+	//	modelStack.Translate(movingDoraemon, 0, 0);
+	//	RenderDoraemon();
+	//	modelStack.PopMatrix(); // roatteDoraemon
+
+	//	modelStack.PushMatrix();
+	//	modelStack.Translate(0, 6.9713 + 0.170095 - 0.679906, -2);
+	//	RenderDoraemonRoom();
+	//	modelStack.PopMatrix();
+	//	modelStack.PopMatrix();//whole room with doraemon
+
+	//	DoraemonSceondRoom();
+	//}
+
+	//RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 11);
+
+	//if (camera.HaventOpenDoor == true || camera.HaventOpenDoor2 == true)
+	//{
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact", Color(0.5, 0.5, 0.5), 2, 1, 1);
+	//}
+
+	//if (camera.edgeOfWorld1 == true || camera.edgeOfWorld2 == true || camera.edgeOfWorld3 == true || camera.edgeOfWorld4 == true ||
+	//	camera.edgeOfWorld5 == true || camera.edgeOfWorld6 == true || camera.edgeOfWorld7 == true || camera.edgeOfWorld8 == true)
+	//{
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Room Limit Reached", Color(1, 0, 0), 3, 9.5, 9.5);
+	//}
+
+	//if (ShowControl == true)
+	//{
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Press P to hide controls", Color(0, 0, 1), 2, 28, 1);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "WASD: Player Control", Color(0, 0, 0), 2, 28, 10);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Arrow Key: Camera Control", Color(0, 0, 0), 2, 28, 9);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Q: Light Switch", Color(0, 0, 0), 2, 28, 8);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "E: Interaction", Color(0, 0, 0), 2, 28, 7);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "R: Reset", Color(0, 0, 0), 2, 28, 6);
+	//}
+	//else
+	//{
+	//	
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Press P to show controls", Color(0, 0, 1), 2, 28, 1);
+	//}
+
+	//if (camera.light == true && camera.nearDoor3 == false)
+	//{
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "It's too dark, turn on the lights!", Color(1, 0, 0), 3, 4.5, 10);
+	//}
+	//modelStack.PushMatrix(); //desert door
+	//modelStack.Scale(1.5, 1.5, 1.5);
+	//modelStack.Translate(0, -95, 3.3 );
+	//RenderMesh(meshList[AnywhereDoor], false);
+	//modelStack.PopMatrix(); // desert door
 
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.World.x, 0 , camera.World.z);
+	RenderMesh(meshList[modelHead], false);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 350, 150);
-	RenderSkybox();
+	modelStack.Translate(0, 0.15, 0);
+	RenderMesh(meshList[modelTorso], false);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1.2, 0.4, 0);
+	RenderMesh(meshList[modelRightHand], false);
 	modelStack.PopMatrix();
-	if (camera.nearDoor3 == false)
-	{
-		modelStack.PushMatrix();
-		//scale, translate, rotate
-		modelStack.Scale(10, 10, 10);
-		//RenderText(meshList[GEO_TEXT], "Bao Yin", Color(0, 0, 0));
-		modelStack.PopMatrix();
 
-		modelStack.PushMatrix(); //whole room with doraemon
-		modelStack.Translate(0, -3.23059, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(-1.2 - 1.6, 0.4, 0);
+	RenderMesh(meshList[modelLeftHand], false);
+	modelStack.PopMatrix();
 
-		modelStack.PushMatrix(); //rotateDoraemo
-		modelStack.Scale(1.5, 1.5, 1.5);
-		modelStack.Rotate(rotateDoraemon, 0, rotateDoraemon, 0);
-		modelStack.Translate(movingDoraemon, 0, 0);
-		RenderDoraemon();
-		modelStack.PopMatrix(); // roatteDoraemon
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0.23, 0);
+	RenderMesh(meshList[modelLeftLeg], false);
+	modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 6.9713 + 0.170095 - 0.679906, -2);
-		RenderDoraemonRoom();
-		modelStack.PopMatrix();
-		modelStack.PopMatrix();//whole room with doraemon
-
-		DoraemonSceondRoom();
-	}
-
-	RenderTextOnScreen(meshList[GEO_TEXT], renderFPS, Color(0, 1, 0), 5, 1, 11);
-
-	if (camera.HaventOpenDoor == true || camera.HaventOpenDoor2 == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press E to interact", Color(0.5, 0.5, 0.5), 2, 1, 1);
-	}
-
-	if (camera.edgeOfWorld1 == true || camera.edgeOfWorld2 == true || camera.edgeOfWorld3 == true || camera.edgeOfWorld4 == true ||
-		camera.edgeOfWorld5 == true || camera.edgeOfWorld6 == true || camera.edgeOfWorld7 == true || camera.edgeOfWorld8 == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Room Limit Reached", Color(1, 0, 0), 3, 9.5, 9.5);
-	}
-
-	if (ShowControl == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press P to hide controls", Color(0, 0, 1), 2, 28, 1);
-		RenderTextOnScreen(meshList[GEO_TEXT], "WASD: Player Control", Color(0, 0, 0), 2, 28, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Arrow Key: Camera Control", Color(0, 0, 0), 2, 28, 9);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Q: Light Switch", Color(0, 0, 0), 2, 28, 8);
-		RenderTextOnScreen(meshList[GEO_TEXT], "E: Interaction", Color(0, 0, 0), 2, 28, 7);
-		RenderTextOnScreen(meshList[GEO_TEXT], "R: Reset", Color(0, 0, 0), 2, 28, 6);
-	}
-	else
-	{
-		
-	RenderTextOnScreen(meshList[GEO_TEXT], "Press P to show controls", Color(0, 0, 1), 2, 28, 1);
-	}
-
-	if (camera.light == true && camera.nearDoor3 == false)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "It's too dark, turn on the lights!", Color(1, 0, 0), 3, 4.5, 10);
-	}
-	modelStack.PushMatrix(); //desert door
-	modelStack.Scale(1.5, 1.5, 1.5);
-	modelStack.Translate(0, -95, 3.3 );
-	RenderMesh(meshList[AnywhereDoor], false);
-	modelStack.PopMatrix(); // desert door
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.6, 0.23, 0);
+	RenderMesh(meshList[modelRightLeg], false);
+	modelStack.PopMatrix();
 }
 
 void Assignment3::RenderMesh(Mesh *mesh, bool enableLight)

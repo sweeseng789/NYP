@@ -74,7 +74,7 @@ void Application::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 	glfwGetCursorPos(m_window, NULL, NULL);
-
+	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(800, 600, "Computer Graphics", NULL, NULL);
 

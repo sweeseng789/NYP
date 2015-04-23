@@ -165,7 +165,21 @@ void SceneText::Init()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
-	
+	meshList[AvatarIcon] = MeshBuilder::GenerateQuad("Avatar Icon", Color(1, 1, 1), 1.0f);
+	meshList[AvatarIcon]->textureID = LoadTGA("Image//GGOHead.tga");
+
+	meshList[HudBackground] = MeshBuilder::GenerateQuad("Hud background", Color(1, 1, 1), 1.0f);
+	meshList[HudBackground]->textureID = LoadTGA("Image//HudBackground.tga");
+
+	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
+
+	//Variable
+	moving = 100;
+
+	for (unsigned a = 0; a < moving; ++a)
+	{
+		HealthbarValue.push_back(meshList[Healthbar]);
+	}
 	
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -231,6 +245,17 @@ void SceneText::Update(double dt)
 	camera.Update(dt);
 
 	fps = (float)(1.f / dt);
+
+	if (Application::IsKeyPressed('9'))
+		moving += 0.5;
+	if (Application::IsKeyPressed('8'))
+		moving -= 0.5;
+
+	if (moving < 0)
+		moving = 0;
+	if (moving > 100)
+		moving = 100;
+	std::cout << moving << std::endl;
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -302,7 +327,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, float y)
+void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -312,7 +337,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Scale(size, size, size);
+	modelStack.Scale(sizeX, sizeY, sizeX);
 	modelStack.Translate(x, y, 0);
 
 	Mtx44 MVP, modelview, modelView_inverse_transpose;
@@ -540,7 +565,16 @@ void SceneText::Render()
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 	
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], true);//, 5 ,0 ,0);
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], true, 3.0f, 3.0f, 0 , 0);
+
+	for (unsigned a = 0; a < moving; ++a)
+	{
+		RenderMeshIn2D(meshList[Healthbar], true, 0.8f, 2.0f, -76.0f + a, 26.0f);
+	}
+
+	RenderMeshIn2D(meshList[AvatarIcon], true, 13.0f, 13.0f, -5.5f, 4.0f);
+
+	RenderMeshIn2D(meshList[HudBackground], true, 85.0f, 13.0f, -0.25f, 4.0f);
 }
 
 void SceneText::Exit()

@@ -39,7 +39,7 @@ private:
 	StopWatch m_timer;
 
 	//Mouse
-	const static int m_window_deadzone = 100;
+	const static int m_window_deadzone = 1000;
 	const static int m_window_width = 800;
 	const static int m_window_height = 600;
 };

@@ -114,7 +114,7 @@ void Application::Init()
 	}
 
 	//Hide cursor
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 void Application::Run()
@@ -168,9 +168,9 @@ bool Application::GetMouseUpdate()
 		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 	}
 	if ((mouse_current_y < m_window_deadzone) ||
-		(mouse_current_y > m_window_width - m_window_deadzone))
+		(mouse_current_y > m_window_height - m_window_deadzone))
 	{
-		mouse_current_y = m_window_width >> 1;
+		mouse_current_y = m_window_height >> 1;
 		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 	}
 

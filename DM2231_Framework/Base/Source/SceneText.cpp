@@ -182,19 +182,19 @@ void SceneText::Init()
 
 	meshList[WeaponIcon_Sword] = MeshBuilder::GenerateQuad("Weapon Icon Sword", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sword]->textureID = LoadTGA("Image//WeaponIcon_Sword.tga");
-	weapon.setWeapon(WeaponIcon_Sword);
+	weapon[0].setWeapon(WeaponIcon_Sword, "Close Range");
 
 	meshList[WeaponIcon_Pistol] = MeshBuilder::GenerateQuad("Weapon Icon Pistol", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Pistol]->textureID = LoadTGA("Image//WeaponIcon_Pistol.tga");
-	weapon.setWeapon(WeaponIcon_Pistol);
+	weapon[1].setWeapon(WeaponIcon_Pistol, "Long Range");
 
 	meshList[WeaponIcon_Sniper] = MeshBuilder::GenerateQuad("Weapon Icon Sniper", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sniper]->textureID = LoadTGA("Image//WeaponIcon_Sniper.tga");
-	weapon.setWeapon(WeaponIcon_Sniper);
+	weapon[2].setWeapon(WeaponIcon_Sniper, "Long Range");
 
 	meshList[WeaponIcon_SMG] = MeshBuilder::GenerateQuad("Weapon Icon SMG", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_SMG]->textureID = LoadTGA("Image//WeaponIcon_SMG.tga");
-	weapon.setWeapon(WeaponIcon_SMG);
+	weapon[3].setWeapon(WeaponIcon_SMG, "Long Range");
 
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
 
@@ -214,14 +214,14 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
-	if(Application::IsKeyPressed('1'))
+	/*if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('2'))
 		glDisable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('3'))
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
 
 	if(Application::IsKeyPressed('5'))
 	{
@@ -275,7 +275,11 @@ void SceneText::Update(double dt)
 		moving = 0;
 	if (moving > 100)
 		moving = 100;
-	//std::cout << moving << std::endl;
+
+	for (int a = 0; a < 4; ++a)
+	{
+		weapon[a].update(dt);
+	}
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -494,25 +498,52 @@ void SceneText::RenderHUD()
 
 
 	//===============Weapon Chosen==============//
-	//SwordIcon for sword
-	//BulletIcon for bullet
-	RenderMeshIn2D(meshList[SwordIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);
-
-	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 2.9f);//Ammo
-
-	RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
-	RenderMeshIn2D(meshList[WeaponIcon_Sword], true, 40.5f, 40.5f, -0.7f, 0.925f);
-
-	//WeaponIcon_SMG for SMG
-	//WeaponIcon_Sword for sword
-	//WeaponIcon_Sniper for Sniper
-	//WeaponIcon_Pistol for Pistol
-	
-
+	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 2.9f);//bakcground for ammo
+	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 1.8f);//background for round
 	//==============Round============//
-	RenderMeshIn2D(meshList[RoundIcon], true, 13.0f, 13.0f, -5.5f, 1.8f);
-	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 1.8f);//Round
-	RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 40.0f);
+	RenderMeshIn2D(meshList[RoundIcon], true, 13.0f, 13.0f, -5.5f, 1.8f);//Round icon
+
+	//=====================SWORD=====================//
+	if (weapon[0].returnSwordConfirmation() == true)
+	{
+		RenderMeshIn2D(meshList[SwordIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Sword icon
+
+		RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//Sword got no bullet, so i used --
+
+		RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 40.0f);//Sword got no round, so i used --
+
+		RenderMeshIn2D(meshList[WeaponIcon_Sword], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for close ranged weapon
+	}//=====================PISTOL=====================//
+	else if (weapon[1].returnPistolConfirmation() == true)//player is using pistol
+	{
+		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[1].ammo[1].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//i am using 15 for now
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[1].ammo[1].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);//i am using 5 for now
+
+		RenderMeshIn2D(meshList[WeaponIcon_Pistol], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for long ranged weapon
+	}//=====================SNIPER=====================//
+	else if (weapon[2].returnSniperConfirmation() == true)//player is using sniper
+	{
+		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[2].ammo[2].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//i am using 10 for now
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[2].ammo[2].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);//i am using 2 for now
+
+		RenderMeshIn2D(meshList[WeaponIcon_Sniper], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
+	}//=====================SMG=====================//
+	else if (weapon[2].returnSMGConfirmation() == true)//player is using SMG
+	{
+		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[3].ammo[3].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//i am using 30 for now
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[3].ammo[3].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);//i am using 3 for now
+
+		RenderMeshIn2D(meshList[WeaponIcon_SMG], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
+	}
 }
 
 void SceneText::Render()

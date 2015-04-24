@@ -9,11 +9,13 @@
 #include "Light.h"
 #include "Weapon.h"
 #include <vector>
+#include <string>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::to_string;
 
 class SceneText : public Scene
 {
@@ -114,7 +116,11 @@ public:
 
 	double moving;
 
-	CWeapon weapon;
+	CWeapon weapon[4];
+	//1 = Sword
+	//2 = Pistol
+	//3 = Sniper
+	//4 = SMG
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];

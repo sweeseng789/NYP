@@ -2,10 +2,14 @@
 #define WEAPON_H
 
 #include <iostream>
+#include <Windows.h>
+#include <string>
+#include "Ammo.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
+using std::string;
 
 class CWeapon
 {
@@ -14,14 +18,26 @@ public:
 	~CWeapon();
 
 	void update(float dt);
-	void setWeapon(unsigned int newWeapon);
+	void setWeapon(unsigned int newWeapon, string newType);
 	bool returnSwordConfirmation();
 	bool returnPistolConfirmation();
 	bool returnSniperConfirmation();
 	bool returnSMGConfirmation();
+	bool returnAmmos();
+	bool returnRounds();
+
+	string returnWeaponType();
+
+	unsigned int returnSwordNumber();
+	unsigned int returnPistolNumber();
+	unsigned int returnSniperNumber();
+	unsigned int returnSMGNumber();
+
+	CAmmo ammo[4];
 private:
-	unsigned int swordNumber, pistolNumber, sniperNumber, SMGnumber;
+	unsigned int swordNumber, pistolNumber, sniperNumber, SMGnumber, bullet, rounds;
 	bool usingSword, usingPistol, usingSniper, usingSMG;
+	string type;
 };
 
 #endif

@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
+#include "Weapon.h"
 #include <vector>
 
 using std::cin;
@@ -83,6 +84,13 @@ class SceneText : public Scene
 		GEO_TEXT,
 		Healthbar,
 		AvatarIcon,
+		SwordIcon,
+		BulletIcon,
+		RoundIcon,
+		WeaponIcon_Sword,
+		WeaponIcon_Pistol,
+		WeaponIcon_Sniper,
+		WeaponIcon_SMG,
 		HudBackground,
 		NUM_GEOMETRY,
 	};
@@ -102,10 +110,11 @@ public:
 
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
+	void RenderHUD();
 
 	double moving;
 
-	vector <Mesh*> HealthbarValue;
+	CWeapon weapon;
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];

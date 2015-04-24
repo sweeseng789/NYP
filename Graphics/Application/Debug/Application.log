@@ -1,20 +1,196 @@
-﻿Build started 20/4/2015 12:30:26 PM.
-     1>Project "C:\Users\Ong\Desktop\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
+﻿Build started 24/4/2015 9:12:09 AM.
+     1>Project "C:\Users\Ong\Desktop\NYP\Graphics\Application\Application.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Application.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\Ong\Desktop\NYP\Graphics\\glew\include /IC:\Users\Ong\Desktop\NYP\Graphics\\glfw\include /IC:\Users\Ong\Desktop\NYP\Graphics\\Common\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\Assignment3.cpp
+         Assignment3.cpp
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(103): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(111): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(147): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(175): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(177): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(177): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(177): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(307): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(314): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(321): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(328): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(414): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(415): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(419): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(420): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(423): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(464): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(464): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(464): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(540): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(559): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(587): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(610): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(621): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(632): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(632): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(632): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(633): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(638): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(638): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(638): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(640): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(645): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(645): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(645): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(647): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(647): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(647): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(654): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(654): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(654): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(655): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(655): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(666): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(666): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(666): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(669): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(669): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(669): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(676): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(678): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(678): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(678): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(680): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(680): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(680): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(718): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(718): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(725): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(725): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(733): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(733): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(739): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(742): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(742): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(742): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(748): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(748): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(748): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(755): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(755): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(755): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(763): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(798): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(798): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(805): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(805): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(813): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(813): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(819): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(822): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(822): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(822): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(828): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(828): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(828): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(835): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(835): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(835): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(843): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(937): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(942): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(949): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(957): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(957): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(964): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(964): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(970): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(970): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(983): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(988): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(995): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1003): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1003): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1010): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1010): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1016): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1016): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1025): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1025): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1025): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1037): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1037): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1043): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1043): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1050): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1050): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1050): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1056): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1056): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1061): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1061): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1061): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1071): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1071): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1078): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1078): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1084): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1084): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1090): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1090): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1096): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1096): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1096): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1162): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1172): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\ong\desktop\nyp\graphics\application\source\assignment3.cpp(1214): warning C4305: 'argument' : truncation from 'double' to 'float'
+         Application.cpp
+         Generating Code...
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ong\Desktop\NYP\Graphics\Debug\Application.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Ong\Desktop\NYP\Graphics\Debug /LIBPATH:C:\Users\Ong\Desktop\NYP\Graphics\\glew\lib /LIBPATH:"C:\Users\Ong\Desktop\NYP\Graphics\\glfw\lib-msvc100" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Application.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Ong\Desktop\NYP\Graphics\Debug\Application.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ong\Desktop\NYP\Graphics\Debug\Application.lib" /MACHINE:X86 Debug\Application.exe.embed.manifest.res
+         Debug\MatrixStack.obj
+         Debug\Mtx44.obj
+         Debug\timer.obj
+         Debug\Vector3.obj
+         Debug\Application.obj
+         Debug\Camera.obj
+         Debug\Camera2.obj
+         Debug\Camera3.obj
+         Debug\GameOfLife.obj
+         Debug\LoadOBJ.obj
+         Debug\LoadTGA.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\Scene1.obj
+         Debug\Scene2.obj
+         Debug\Scene3.obj
+         Debug\Scene4.obj
+         Debug\Scene5.obj
+         Debug\SceneLight.obj
+         Debug\SceneLight2.obj
+         Debug\SceneModel.obj
+         Debug\SceneSkybox.obj
+         Debug\Assignment3.obj
+         Debug\SceneTexture.obj
+         Debug\shader.obj
+         Debug\Utility.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
        Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Application.exe.embed.manifest" /manifest Debug\Application.exe.intermediate.manifest
          All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         Application.vcxproj -> C:\Users\Ong\Desktop\NYP\Graphics\Debug\Application.exe
        FinalizeBuildStatus:
          Deleting file "Debug\Application.unsuccessfulbuild".
          Touching "Debug\Application.lastbuildstate".
-     1>Done Building Project "C:\Users\Ong\Desktop\Graphics\Application\Application.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Ong\Desktop\NYP\Graphics\Application\Application.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.13
+Time Elapsed 00:00:03.74

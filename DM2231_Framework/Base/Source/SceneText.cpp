@@ -24,9 +24,9 @@ void SceneText::Init()
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS); 
-	
+
 	glEnable(GL_CULL_FACE);
-	
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glEnable(GL_BLEND);
@@ -36,7 +36,7 @@ void SceneText::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
-	
+
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 	//m_parameters[U_MODEL] = glGetUniformLocation(m_programID, "M");
@@ -77,7 +77,7 @@ void SceneText::Init()
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-	
+
 	// Use our shader
 	glUseProgram(m_programID);
 
@@ -104,7 +104,7 @@ void SceneText::Init()
 	//lights[1].cosInner = cos(Math::DegreeToRadian(30));
 	//lights[1].exponent = 3.f;
 	//lights[1].spotDirection.Set(0.f, 1.f, 0.f);
-	
+
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 
@@ -117,7 +117,7 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], lights[0].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], lights[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], lights[0].exponent);
-	
+
 	glUniform1i(m_parameters[U_LIGHT1_TYPE], lights[1].type);
 	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &lights[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
@@ -151,7 +151,7 @@ void SceneText::Init()
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
-	
+
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
@@ -171,22 +171,42 @@ void SceneText::Init()
 	meshList[HudBackground] = MeshBuilder::GenerateQuad("Hud background", Color(1, 1, 1), 1.0f);
 	meshList[HudBackground]->textureID = LoadTGA("Image//HudBackground.tga");
 
+	meshList[BulletIcon] = MeshBuilder::GenerateQuad("Bullet Icon", Color(1, 1, 1), 1.0f);
+	meshList[BulletIcon]->textureID = LoadTGA("Image//GGOGun.tga");
+
+	meshList[SwordIcon] = MeshBuilder::GenerateQuad("Sword Icon", Color(1, 1, 1), 1.0f);
+	meshList[SwordIcon]->textureID = LoadTGA("Image//GGOSword.tga");
+
+	meshList[RoundIcon] = MeshBuilder::GenerateQuad("Round Icon", Color(1, 1, 1), 1.0f);
+	meshList[RoundIcon]->textureID = LoadTGA("Image//GGORound.tga");
+
+	meshList[WeaponIcon_Sword] = MeshBuilder::GenerateQuad("Weapon Icon Sword", Color(1, 1, 1), 1.0f);
+	meshList[WeaponIcon_Sword]->textureID = LoadTGA("Image//WeaponIcon_Sword.tga");
+	weapon.setWeapon(WeaponIcon_Sword);
+
+	meshList[WeaponIcon_Pistol] = MeshBuilder::GenerateQuad("Weapon Icon Pistol", Color(1, 1, 1), 1.0f);
+	meshList[WeaponIcon_Pistol]->textureID = LoadTGA("Image//WeaponIcon_Pistol.tga");
+	weapon.setWeapon(WeaponIcon_Pistol);
+
+	meshList[WeaponIcon_Sniper] = MeshBuilder::GenerateQuad("Weapon Icon Sniper", Color(1, 1, 1), 1.0f);
+	meshList[WeaponIcon_Sniper]->textureID = LoadTGA("Image//WeaponIcon_Sniper.tga");
+	weapon.setWeapon(WeaponIcon_Sniper);
+
+	meshList[WeaponIcon_SMG] = MeshBuilder::GenerateQuad("Weapon Icon SMG", Color(1, 1, 1), 1.0f);
+	meshList[WeaponIcon_SMG]->textureID = LoadTGA("Image//WeaponIcon_SMG.tga");
+	weapon.setWeapon(WeaponIcon_SMG);
+
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
 
 	//Variable
 	moving = 100;
 
-	for (unsigned a = 0; a < moving; ++a)
-	{
-		HealthbarValue.push_back(meshList[Healthbar]);
-	}
-	
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
-	
+
 	rotateAngle = 0;
 
 	bLightEnabled = true;
@@ -202,7 +222,7 @@ void SceneText::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
+
 	if(Application::IsKeyPressed('5'))
 	{
 		lights[0].type = Light::LIGHT_POINT;
@@ -247,15 +267,15 @@ void SceneText::Update(double dt)
 	fps = (float)(1.f / dt);
 
 	if (Application::IsKeyPressed('9'))
-		moving += 0.5;
+		moving += 1;
 	if (Application::IsKeyPressed('8'))
-		moving -= 0.5;
+		moving -= 1;
 
 	if (moving < 0)
 		moving = 0;
 	if (moving > 100)
 		moving = 100;
-	std::cout << moving << std::endl;
+	//std::cout << moving << std::endl;
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -264,7 +284,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if(!mesh || mesh->textureID <= 0)
 		return;
-	
+
 	glDisable(GL_DEPTH_TEST);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
@@ -279,7 +299,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	
+
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -291,7 +311,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 {
 	if(!mesh || mesh->textureID <= 0)
 		return;
-	
+
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -10, 10);
@@ -316,7 +336,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 		characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	
+
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -372,7 +392,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float 
 void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
-	
+
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 	if(enableLight && bLightEnabled)
@@ -382,7 +402,7 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
-		
+
 		//load material
 		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
 		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
@@ -420,27 +440,27 @@ void SceneText::RenderSkybox()
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
@@ -448,7 +468,7 @@ void SceneText::RenderSkybox()
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
@@ -458,6 +478,43 @@ void SceneText::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
+void SceneText::RenderHUD()
+{
+	//===============HEALTH===========//
+	for (unsigned a = 0; a < moving; ++a)//Healthbar
+	{
+		RenderMeshIn2D(meshList[Healthbar], true, 0.8f, 2.0f, -76.0f + a, 25.0f);
+	}
+
+	RenderMeshIn2D(meshList[AvatarIcon], true, 13.0f, 13.0f, -5.5f, 4.0f); //Avatar icon
+
+	RenderMeshIn2D(meshList[HudBackground], true, 85.0f, 13.0f, -0.25f, 4.0f);//background
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Setsuna", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 55.7f);//Name
+
+
+	//===============Weapon Chosen==============//
+	//SwordIcon for sword
+	//BulletIcon for bullet
+	RenderMeshIn2D(meshList[SwordIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);
+
+	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 2.9f);//Ammo
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
+	RenderMeshIn2D(meshList[WeaponIcon_Sword], true, 40.5f, 40.5f, -0.7f, 0.925f);
+
+	//WeaponIcon_SMG for SMG
+	//WeaponIcon_Sword for sword
+	//WeaponIcon_Sniper for Sniper
+	//WeaponIcon_Pistol for Pistol
+	
+
+	//==============Round============//
+	RenderMeshIn2D(meshList[RoundIcon], true, 13.0f, 13.0f, -5.5f, 1.8f);
+	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 1.8f);//Round
+	RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 40.0f);
+}
+
 void SceneText::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -465,14 +522,14 @@ void SceneText::Render()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
-	
+
 	// Camera matrix
 	viewStack.LoadIdentity();
 	viewStack.LookAt(
-						camera.position.x, camera.position.y, camera.position.z,
-						camera.target.x, camera.target.y, camera.target.z,
-						camera.up.x, camera.up.y, camera.up.z
-					);
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z
+		);
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
@@ -512,9 +569,9 @@ void SceneText::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * lights[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-	
+
 	RenderMesh(meshList[GEO_AXES], false);
-	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
@@ -539,7 +596,7 @@ void SceneText::Render()
 	modelStack.Translate(-20, 0, -20);
 	RenderMesh(meshList[GEO_OBJECT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(20, 0, -20);
 	RenderMesh(meshList[GEO_OBJECT], true);
@@ -557,24 +614,17 @@ void SceneText::Render()
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-	
+
 	std::ostringstream ss1;
 	ss1.precision(4);
 	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
-	
+
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], true, 3.0f, 3.0f, 0 , 0);
 
-	for (unsigned a = 0; a < moving; ++a)
-	{
-		RenderMeshIn2D(meshList[Healthbar], true, 0.8f, 2.0f, -76.0f + a, 26.0f);
-	}
-
-	RenderMeshIn2D(meshList[AvatarIcon], true, 13.0f, 13.0f, -5.5f, 4.0f);
-
-	RenderMeshIn2D(meshList[HudBackground], true, 85.0f, 13.0f, -0.25f, 4.0f);
+	RenderHUD();
 }
 
 void SceneText::Exit()

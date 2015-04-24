@@ -45,12 +45,14 @@ void Camera3::Update(double dt)
 	if(Application::IsKeyPressed('W'))
 	{
 		Vector3 view = (target - position).Normalized();
+		view.y = 0;
 		position += view * CAMERA_SPEED * (float)dt;
 		target += view * CAMERA_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed('S'))
 	{
 		Vector3 view = (target - position).Normalized();
+		view.y = 0;
 		position -= view * CAMERA_SPEED * (float)dt;
 		target -= view * CAMERA_SPEED * (float)dt;
 	}

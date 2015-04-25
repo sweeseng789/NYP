@@ -116,7 +116,7 @@ public:
 
 	double moving;
 
-	CWeapon weapon[4];
+	CWeapon weapon;
 	//1 = Sword
 	//2 = Pistol
 	//3 = Sniper

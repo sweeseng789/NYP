@@ -182,19 +182,19 @@ void SceneText::Init()
 
 	meshList[WeaponIcon_Sword] = MeshBuilder::GenerateQuad("Weapon Icon Sword", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sword]->textureID = LoadTGA("Image//WeaponIcon_Sword.tga");
-	weapon[0].setWeapon(WeaponIcon_Sword, "Close Range");
+	weapon.setWeapon(WeaponIcon_Sword, "Close Range");
 
 	meshList[WeaponIcon_Pistol] = MeshBuilder::GenerateQuad("Weapon Icon Pistol", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Pistol]->textureID = LoadTGA("Image//WeaponIcon_Pistol.tga");
-	weapon[1].setWeapon(WeaponIcon_Pistol, "Long Range");
+	weapon.setWeapon(WeaponIcon_Pistol, "Long Range");
 
 	meshList[WeaponIcon_Sniper] = MeshBuilder::GenerateQuad("Weapon Icon Sniper", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sniper]->textureID = LoadTGA("Image//WeaponIcon_Sniper.tga");
-	weapon[2].setWeapon(WeaponIcon_Sniper, "Long Range");
+	weapon.setWeapon(WeaponIcon_Sniper, "Long Range");
 
 	meshList[WeaponIcon_SMG] = MeshBuilder::GenerateQuad("Weapon Icon SMG", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_SMG]->textureID = LoadTGA("Image//WeaponIcon_SMG.tga");
-	weapon[3].setWeapon(WeaponIcon_SMG, "Long Range");
+	weapon.setWeapon(WeaponIcon_SMG, "Long Range");
 
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
 
@@ -215,13 +215,13 @@ void SceneText::Init()
 void SceneText::Update(double dt)
 {
 	/*if(Application::IsKeyPressed('1'))
-		glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('2'))
-		glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
 
 	if(Application::IsKeyPressed('5'))
 	{
@@ -276,10 +276,7 @@ void SceneText::Update(double dt)
 	if (moving > 100)
 		moving = 100;
 
-	for (int a = 0; a < 4; ++a)
-	{
-		weapon[a].update(dt);
-	}
+	weapon.update((float)dt);
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -496,6 +493,11 @@ void SceneText::RenderHUD()
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Setsuna", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 55.7f);//Name
 
+	if (weapon.returnSwordConfirmation() == false)
+	{
+		RenderMeshIn2D(meshList[HudBackground], true, 20.0f, 5.0f, 3.49f, -11.5f);//background for ready screen
+	}
+
 
 	//===============Weapon Chosen==============//
 	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 2.9f);//bakcground for ammo
@@ -504,7 +506,7 @@ void SceneText::RenderHUD()
 	RenderMeshIn2D(meshList[RoundIcon], true, 13.0f, 13.0f, -5.5f, 1.8f);//Round icon
 
 	//=====================SWORD=====================//
-	if (weapon[0].returnSwordConfirmation() == true)
+	if (weapon.returnSwordConfirmation() == true)
 	{
 		RenderMeshIn2D(meshList[SwordIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Sword icon
 
@@ -513,37 +515,97 @@ void SceneText::RenderHUD()
 		RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 40.0f);//Sword got no round, so i used --
 
 		RenderMeshIn2D(meshList[WeaponIcon_Sword], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for close ranged weapon
+
+		if (Application::IsKeyPressed('R'))
+		{
+			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderTextOnScreen(meshList[GEO_TEXT], "Error", Color(1.0f, 1.0f, 1.0f), 3.0f, 33.5f, 29.5f);
+		}
 	}//=====================PISTOL=====================//
-	else if (weapon[1].returnPistolConfirmation() == true)//player is using pistol
+	else if (weapon.returnPistolConfirmation() == true)//player is using pistol
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[1].ammo[1].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//i am using 15 for now
+		if (weapon.ammo[1].returnAmmos() < 10)
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
+		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
+		}
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[1].ammo[1].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);//i am using 5 for now
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
 		RenderMeshIn2D(meshList[WeaponIcon_Pistol], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for long ranged weapon
+
+		if (weapon.ammo[1].returnReloading() == true) //reloading
+		{
+			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnReloadTime_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+		}
+
+		if (weapon.ammo[1].returnReadyToShootPistol() == true)
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
+		}
 	}//=====================SNIPER=====================//
-	else if (weapon[2].returnSniperConfirmation() == true)//player is using sniper
+	else if (weapon.returnSniperConfirmation() == true)//player is using sniper
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[2].ammo[2].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//i am using 10 for now
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[2].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[2].ammo[2].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);//i am using 2 for now
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[2].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
 		RenderMeshIn2D(meshList[WeaponIcon_Sniper], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
+
+		if (weapon.ammo[2].returnReloading() == true)
+		{
+			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[2].returnReloadTime_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+		}
+
+		if (weapon.ammo[2].returnReadyToShootSniper() == true)
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
+		}
 	}//=====================SMG=====================//
-	else if (weapon[2].returnSMGConfirmation() == true)//player is using SMG
+	else if (weapon.returnSMGConfirmation() == true)//player is using SMG
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[3].ammo[3].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//i am using 30 for now
+		if (weapon.ammo[3].returnAmmos() < 10)//Arranging bullet number to middle if it is less than 10
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
+		}
+		else
+		{	
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
+		}
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon[3].ammo[3].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);//i am using 3 for now
+
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
 		RenderMeshIn2D(meshList[WeaponIcon_SMG], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
+
+		if (weapon.ammo[3].returnReloading() == true)//Reloading
+		{
+			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnReloadTime_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+		}
+
+		if (weapon.ammo[3].returnReadyToShootSMG() == true)
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
+		}
 	}
+
+	//==================CrossHair=============//
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], true, 3.0f, 3.0f, 0 , 0);
 }
 
 void SceneText::Render()
@@ -652,8 +714,6 @@ void SceneText::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
-
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], true, 3.0f, 3.0f, 0 , 0);
 
 	RenderHUD();
 }

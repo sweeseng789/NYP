@@ -24,14 +24,15 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 void Camera3::Update(double dt)
 {
 	static const float CAMERA_SPEED = 200.f;
+	static const float MOVEMENT_SPEED = 50.f;
 	if(Application::IsKeyPressed('A'))
 	{
 		Vector3 view = (target - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
-		position -= right * CAMERA_SPEED * (float)dt;
-		target -= right * CAMERA_SPEED * (float)dt;
+		position -= right * MOVEMENT_SPEED * (float)dt;
+		target -= right * MOVEMENT_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed('D'))
 	{
@@ -39,22 +40,22 @@ void Camera3::Update(double dt)
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
-		position += right * CAMERA_SPEED * (float)dt;
-		target += right * CAMERA_SPEED * (float)dt;
+		position += right * MOVEMENT_SPEED * (float)dt;
+		target += right * MOVEMENT_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed('W'))
 	{
 		Vector3 view = (target - position).Normalized();
 		view.y = 0;
-		position += view * CAMERA_SPEED * (float)dt;
-		target += view * CAMERA_SPEED * (float)dt;
+		position += view * MOVEMENT_SPEED * (float)dt;
+		target += view * MOVEMENT_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed('S'))
 	{
 		Vector3 view = (target - position).Normalized();
 		view.y = 0;
-		position -= view * CAMERA_SPEED * (float)dt;
-		target -= view * CAMERA_SPEED * (float)dt;
+		position -= view * MOVEMENT_SPEED * (float)dt;
+		target -= view * MOVEMENT_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed(VK_LEFT))
 	{
@@ -140,6 +141,53 @@ void Camera3::Update(double dt)
 	{
 		Reset();
 	}
+
+
+	//==============Jump Function==========//
+	static bool pressedSpace = false;
+	static bool currentlyJumping = false;
+	static bool currentlyFalling = false;
+	static float JUMP_SPEED = 7.0f;
+
+	if (Application::IsKeyPressed(VK_SPACE) && pressedSpace == false && currentlyJumping == false && currentlyFalling == false)
+	{
+		pressedSpace = true;
+	}
+
+	if (pressedSpace == true && currentlyFalling == false)
+	{
+		currentlyJumping = true;
+		if (position.y < 5.0f)
+		{
+			position.y += (float)(JUMP_SPEED * dt);
+			target.y += (float)(JUMP_SPEED * dt);
+			//JUMP_SPEED -= (float)(10.0f * dt);
+		}
+		else if (position.y >= 5.0f)
+		{
+			currentlyFalling = true;
+			currentlyJumping = false;
+		}
+	}
+
+	if (currentlyFalling == true && currentlyJumping == false && pressedSpace == true )
+	{
+		if (position.y >= 0.0f)
+		{
+			position.y -= (float)(JUMP_SPEED * dt);
+			target.y -= (float)(JUMP_SPEED * dt);
+			//JUMP_SPEED += (float)(15.0f * dt);
+		}
+		if (position.y <= 0.0f)
+		{
+			pressedSpace = false;
+			currentlyJumping = false;
+			currentlyFalling = false;
+			//position.y = target.y = 0.0f;
+		}
+	}
+
+	std::cout << position.y << std::endl;
 }
 
 void Camera3::Reset()

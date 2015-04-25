@@ -2,9 +2,9 @@
 
 CWeapon::CWeapon()
 {
-	swordNumber = pistolNumber = sniperNumber = SMGnumber = 0;
-	usingPistol = usingSniper = usingSMG = false;
-	usingSword = true;
+	this->swordNumber = this->pistolNumber = this->sniperNumber = this->SMGnumber = 0;
+	this->usingPistol = this->usingSniper = this->usingSMG = false;
+	this->usingSword = true;
 }
 
 CWeapon::~CWeapon()
@@ -19,102 +19,102 @@ void CWeapon::setWeapon(unsigned int newWeapon, string newType)
 	//smg is 32
 	if (newWeapon == 29)
 	{
-		swordNumber = newWeapon;
-		bullet = rounds = 0;
+		this->swordNumber = newWeapon;
 	}
 	else if (newWeapon == 30)
 	{
-		pistolNumber = newWeapon;
-		ammo[1].setBulletandRounds(15, 5);
+		this->pistolNumber = newWeapon;
+		this->ammo[1].setBulletandRounds(15, 5);
+		
 	}
 	else if (newWeapon == 31)
 	{
-		sniperNumber = newWeapon;
-		ammo[2].setBulletandRounds(8, 3);
+		this->sniperNumber = newWeapon;
+		this->ammo[2].setBulletandRounds(8, 2);
 	}
 	else
 	{
-		SMGnumber = newWeapon;
-		ammo[3].setBulletandRounds(30, 3);
+		this->SMGnumber = newWeapon;
+		this->ammo[3].setBulletandRounds(30, 3);
 	}
 
-	type = newType;
+	this->type = newType;
 }
 
 bool CWeapon::returnSwordConfirmation()
 {
-	return usingSword;
+	return this->usingSword;
 }
 bool CWeapon::returnPistolConfirmation()
 {
-	return usingPistol;
+	return this->usingPistol;
 }
 bool CWeapon::returnSniperConfirmation()
 {
-	return usingSniper;
+	return this->usingSniper;
 }
 bool CWeapon::returnSMGConfirmation()
 {
-	return usingSMG;
+	return this->usingSMG;
 }
 unsigned int CWeapon::returnSwordNumber()
 {
-	return swordNumber;
+	return this->swordNumber;
 }
 unsigned int CWeapon::returnPistolNumber()
 {
-	return pistolNumber;
+	return this->pistolNumber;
 }
 unsigned int CWeapon::returnSniperNumber()
 {
-	return sniperNumber;
+	return this->sniperNumber;
 }
 unsigned int CWeapon::returnSMGNumber()
 {
-	return SMGnumber;
+	return this->SMGnumber;
 }
 string CWeapon::returnWeaponType()
 {
-	return type;
+	return this->type;
 }
 
 void CWeapon::update(float dt)
 {
 	if (GetKeyState('1') < 0)
 	{
-		usingSword = true;
-		usingPistol = usingSniper = usingSMG = false;
+		this->usingSword = true;
+		this->usingPistol = this->usingSniper = this->usingSMG = false;
 	}
 	else if (GetKeyState('2') < 0)
 	{
-		usingPistol = true;
-		usingSword = usingSniper = usingSMG = false;
+		this->usingPistol = true;
+		this->usingSword = this->usingSniper = this->usingSMG = false;
 	}
 	else if(GetKeyState('3') < 0)
 	{
-		usingSniper = true;
-		usingSword = usingPistol = usingSMG = false;
+		this->usingSniper = true;
+		this->usingSword = this->usingPistol = this->usingSMG = false;
 	}
 	else if (GetKeyState('4') < 0)
 	{
-		usingSMG = true;
-		usingSword = usingPistol = usingSniper = false;
+		this->usingSMG = true;
+		this->usingSword = this->usingPistol = this->usingSniper = false;
 	}
 
 	//============Ammo Update===========//
 	//=============PISTOL=============//
-	if (usingSword == false && usingPistol == true && usingSniper == false && usingSMG == false)
+	if (this->usingSword == false && this->usingPistol == true && this->usingSniper == false && this->usingSMG == false)
 	{
-		ammo[1].update(dt, usingSword, usingPistol, usingSniper, usingSMG);
+		this->ammo[1].update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
 	}
 	//=============SNIPER=============//
-	else if (usingSword == false && usingPistol == false && usingSniper == true && usingSMG == false)
+	else if (this->usingSword == false && this->usingPistol == false && this->usingSniper == true && this->usingSMG == false)
 	{
-		ammo[2].update(dt, usingSword, usingPistol, usingSniper, usingSMG);
+		this->ammo[2].update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
 	}
 	//=============SMG=============//
-	else if (usingSword == false && usingPistol == false && usingSniper == false && usingSMG == true)
+	else if (this->usingSword == false && this->usingPistol == false && this->usingSniper == false && this->usingSMG == true)
 	{
-		ammo[3].update(dt, usingSword, usingPistol, usingSniper, usingSMG);
+		this->ammo[3].update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
 	}
 }

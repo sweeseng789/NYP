@@ -3715,7 +3715,7 @@ void StudioProject::Update(double dt)
 		//TIME ATTACK TIMER
 		if(TimeAttack == true)
 		{
-			TAtime -= (float)(dt);
+			TAtime += (float)(dt);
 		}
 		if(isTAwon == true || isGTPwon == true) 
 		{

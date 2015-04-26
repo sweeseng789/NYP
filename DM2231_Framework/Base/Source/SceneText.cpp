@@ -663,7 +663,13 @@ void SceneText::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
+	modelStack.PushMatrix();//Use this method to give the illusion that the bug is not there
+	if (camera.currentlyFalling == false && camera.currentlyJumping == false && camera.pressedSpace == false)
+	{
+		modelStack.Translate(0, camera.position.y, 0);
+	}
 	RenderMesh(meshList[GEO_AXES], false);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);

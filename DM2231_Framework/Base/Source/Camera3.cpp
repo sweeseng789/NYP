@@ -19,6 +19,10 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+
+	pressedSpace = false;
+	currentlyJumping = false;
+	currentlyFalling = false;
 }
 
 void Camera3::Update(double dt)
@@ -144,9 +148,9 @@ void Camera3::Update(double dt)
 
 
 	//==============Jump Function==========//
-	static bool pressedSpace = false;
+	/*static bool pressedSpace = false;
 	static bool currentlyJumping = false;
-	static bool currentlyFalling = false;
+	static bool currentlyFalling = false;*/
 	static float JUMP_SPEED = 7.0f;
 
 	if (Application::IsKeyPressed(VK_SPACE) && pressedSpace == false && currentlyJumping == false && currentlyFalling == false)

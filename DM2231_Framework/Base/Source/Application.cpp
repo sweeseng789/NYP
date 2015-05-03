@@ -12,16 +12,10 @@
 #include <stdlib.h>
 
 
-#include "Scene1.h"
-#include "Scene2.h"
-#include "Scene3.h"
-#include "Scene4.h"
-#include "Scene5.h"
-#include "SceneLight.h"
-#include "SceneLight2.h"
 #include "SceneTexture.h"
 #include "SceneSkybox.h"
 #include "SceneText.h"
+#include "GenerateSkyPlane.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -115,6 +109,8 @@ void Application::Init()
 
 	//Hide cursor
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+	m_dAccumulatedTime_SceneUpdate = m_dAccumulatedTime_MouseUpdate = m_dElapsedTime = 0.0;
 }
 
 void Application::Run()
@@ -126,8 +122,23 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
-		GetMouseUpdate();
-		scene->Update(m_timer.getElapsedTime());
+
+		m_dElapsedTime = m_timer.getElapsedTime();
+		m_dAccumulatedTime_SceneUpdate += m_dElapsedTime;
+		m_dAccumulatedTime_MouseUpdate += m_dElapsedTime;
+
+		if (m_dAccumulatedTime_SceneUpdate > 1/2)
+		{
+			scene->Update(m_dElapsedTime);
+			m_dAccumulatedTime_SceneUpdate = 0.0;
+		}
+
+		if (m_dAccumulatedTime_MouseUpdate > 0.03)
+		{
+			GetMouseUpdate();
+			m_dAccumulatedTime_MouseUpdate = 0.0;
+		}
+		
 		scene->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);

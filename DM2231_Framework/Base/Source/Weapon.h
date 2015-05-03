@@ -5,13 +5,17 @@
 #include <Windows.h>
 #include <string>
 #include "Ammo.h"
+#include "SMGClass.h"
+#include "SniperClass.h"
+#include "SwordClass.h"
+#include "PistolClass.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
 
-class CWeapon
+class CWeapon : public PistolClass
 {
 public:
 	CWeapon();
@@ -33,7 +37,7 @@ public:
 	unsigned int returnSniperNumber();
 	unsigned int returnSMGNumber();
 
-	CAmmo ammo[4];
+	CAmmo ammo1, ammo2, ammo3, ammo4;
 private:
 	unsigned int swordNumber, pistolNumber, sniperNumber, SMGnumber, bullet, rounds;
 	bool usingSword, usingPistol, usingSniper, usingSMG;

@@ -17,28 +17,28 @@ void CWeapon::setWeapon(unsigned int newWeapon, string newType)
 	//pistol is 30
 	//sniper is 31
 	//smg is 32
-	if (newWeapon == 29)
+	/*if (newWeapon == 29)
 	{
 		this->swordNumber = newWeapon;
 	}
 	else if (newWeapon == 30)
 	{
 		this->pistolNumber = newWeapon;
-		this->ammo[1].setBulletandRounds(15, 5);
+		this->ammo2.setBulletandRounds(15, 5);
 		
 	}
 	else if (newWeapon == 31)
 	{
 		this->sniperNumber = newWeapon;
-		this->ammo[2].setBulletandRounds(8, 2);
+		this->ammo3.setBulletandRounds(8, 2);
 	}
 	else
 	{
 		this->SMGnumber = newWeapon;
-		this->ammo[3].setBulletandRounds(30, 3);
+		this->ammo4.setBulletandRounds(30, 3);
 	}
 
-	this->type = newType;
+	this->type = newType;*/
 }
 
 bool CWeapon::returnSwordConfirmation()
@@ -103,18 +103,17 @@ void CWeapon::update(float dt)
 
 	//============Ammo Update===========//
 	//=============PISTOL=============//
-	if (this->usingSword == false && this->usingPistol == true && this->usingSniper == false && this->usingSMG == false)
-	{
-		this->ammo[1].update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
-	}
-	//=============SNIPER=============//
-	else if (this->usingSword == false && this->usingPistol == false && this->usingSniper == true && this->usingSMG == false)
-	{
-		this->ammo[2].update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
-	}
-	//=============SMG=============//
-	else if (this->usingSword == false && this->usingPistol == false && this->usingSniper == false && this->usingSMG == true)
-	{
-		this->ammo[3].update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
-	}
+	//if (this->usingSword == false && this->usingPistol == true && this->usingSniper == false && this->usingSMG == false)
+	//{
+	//	this->ammo2.update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
+	//}
+	//else if (this->usingSword == false && this->usingPistol == false && this->usingSniper == true && this->usingSMG == false)
+	//{
+	//	this->ammo3.update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
+	//}
+	////=============SMG=============//
+	//else if (this->usingSword == false && this->usingPistol == false && this->usingSniper == false && this->usingSMG == true)
+	//{
+	//	this->ammo4.update(dt, this->usingSword, this->usingPistol, this->usingSniper, this->usingSMG);
+	//}
 }

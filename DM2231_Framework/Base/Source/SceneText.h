@@ -10,13 +10,11 @@
 #include "Weapon.h"
 #include <vector>
 #include <string>
+#include "Enemy.h"
+#include "Ammo.h"
+#include "TestingBaseClass.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
 using std::vector;
-using std::to_string;
-
 class SceneText : public Scene
 {
 	enum UNIFORM_TYPE
@@ -94,52 +92,87 @@ class SceneText : public Scene
 		WeaponIcon_Sniper,
 		WeaponIcon_SMG,
 		HudBackground,
+		modelHead,
+		modelHand,
+		modelTorso,
+		modelLeg,
+		Weapon_SMG,
+		Weapon_Pistol,
+		Weapon_Sniper,
+		crosshair,
 		NUM_GEOMETRY,
 	};
 public:
 	SceneText();
 	~SceneText();
 
+
+	//======================Getter=========================//
+	float calculatingFPS(float dt);
+	void PistolBulletFunction(float dt);
+	void SniperBulletFunction(float dt);
+
+	//======================Setter========================//
+	void SetParameters();
+	void view();
+
+	//======================Render========================//
+	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f,  float x = 0.0f, float y = 0.0f);
+	void RenderMesh(Mesh *mesh, bool enableLight);
+	void RenderSkybox();
+	void RenderHUD();
+	void RenderEnemyModel();
+	void RenderEverything();
+
+	//======================Virtual Function========================//
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
 
-	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-
-	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f,  float x = 0.0f, float y = 0.0f);
-
-	void RenderMesh(Mesh *mesh, bool enableLight);
-	void RenderSkybox();
-	void RenderHUD();
-
-	double moving;
-
-	CWeapon weapon;
-	//1 = Sword
-	//2 = Pistol
-	//3 = Sniper
-	//4 = SMG
 private:
+
+	//Int
 	unsigned m_vertexArrayID;
-	Mesh* meshList[NUM_GEOMETRY];
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	Camera3 camera;
+	//Float
+	float rotateAngle, rotateAngle2;
+	float fps;
 
-	float rotateAngle;
+	//Double
+	double moving;
+	double m_dElapsedTime;
+	double m_dAccumulatedTime_RenderScene;
+	double m_dAccumulatedTime_RenderText;
 
+	//Class
 	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
 
+	CEnemy enemy;
+	CAmmo Pistol, Sniper, SMG, Sword;
+
 	Light lights[2];
 
-	bool bLightEnabled;
+	//Polymorphism
+	Mesh* meshList[NUM_GEOMETRY];
+	CAmmo * temp;
 
-	float fps;
+	//vector
+	vector<CAmmo *> PistolBullet;
+	vector<CAmmo *> SniperBullet;
+	vector<CAmmo *> SMGBullet;
+
+	//Camera3
+	Camera3 camera;
+
+	//Bool
+	bool bLightEnabled;
 };
 
 #endif

@@ -37,6 +37,9 @@ private:
 
 	//Declare a window object
 	StopWatch m_timer;
+	double m_dElapsedTime;
+	double m_dAccumulatedTime_SceneUpdate;
+	double m_dAccumulatedTime_MouseUpdate;
 
 	//Mouse
 	const static int m_window_deadzone = 1000;

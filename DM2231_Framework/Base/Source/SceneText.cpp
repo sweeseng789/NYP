@@ -1,12 +1,16 @@
 #include "SceneText.h"
 #include "GL\glew.h"
 
+#include <sstream>
 #include "shader.hpp"
 #include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
-#include <sstream>
+#include "TestingDerivedClass.h"
+#include "PistolClass.h"
+#include "SniperClass.h"
+#include "SMGClass.h"
 
 SceneText::SceneText()
 {
@@ -14,6 +18,19 @@ SceneText::SceneText()
 
 SceneText::~SceneText()
 {
+}
+
+void SceneText::SetParameters()
+{
+	moving = 0;
+	Pistol.SetBulletandRounds_Pistol(15, 5);
+	Sniper.SetBulletandRounds_Sniper(8, 2);
+	SMG.SetBulletandRounds_SMG(30, 3);
+}
+
+float SceneText::calculatingFPS(float dt)
+{
+	return (float)(1.f / dt);
 }
 
 void SceneText::Init()
@@ -146,7 +163,7 @@ void SceneText::Init()
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
-	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 1), 1);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
@@ -182,24 +199,44 @@ void SceneText::Init()
 
 	meshList[WeaponIcon_Sword] = MeshBuilder::GenerateQuad("Weapon Icon Sword", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sword]->textureID = LoadTGA("Image//WeaponIcon_Sword.tga");
-	weapon.setWeapon(WeaponIcon_Sword, "Close Range");
 
 	meshList[WeaponIcon_Pistol] = MeshBuilder::GenerateQuad("Weapon Icon Pistol", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Pistol]->textureID = LoadTGA("Image//WeaponIcon_Pistol.tga");
-	weapon.setWeapon(WeaponIcon_Pistol, "Long Range");
 
 	meshList[WeaponIcon_Sniper] = MeshBuilder::GenerateQuad("Weapon Icon Sniper", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sniper]->textureID = LoadTGA("Image//WeaponIcon_Sniper.tga");
-	weapon.setWeapon(WeaponIcon_Sniper, "Long Range");
 
 	meshList[WeaponIcon_SMG] = MeshBuilder::GenerateQuad("Weapon Icon SMG", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_SMG]->textureID = LoadTGA("Image//WeaponIcon_SMG.tga");
-	weapon.setWeapon(WeaponIcon_SMG, "Long Range");
+
+	meshList[Weapon_SMG] = MeshBuilder::GenerateQuad("Weapon SMG", Color(1, 1, 1), 1.0f);
+	meshList[Weapon_SMG]->textureID = LoadTGA("Image//SMG_Weapon_Sprite.tga");
+
+	meshList[Weapon_Pistol] = MeshBuilder::GenerateQuad("Weapon Pistol", Color(1, 1, 1), 1.0f);
+	meshList[Weapon_Pistol]->textureID = LoadTGA("Image//Pistol_Weapon_Sprite.tga");
+
+	meshList[Weapon_Sniper] = MeshBuilder::GenerateQuad("Weapon Sniper", Color(1, 1, 1), 1.0f);
+	meshList[Weapon_Sniper]->textureID = LoadTGA("Image//Sniper_Weapon_Sprite.tga");
+
+	meshList[crosshair] = MeshBuilder::GenerateQuad("Crosshair", Color(1, 1, 1), 1.0f);
+	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair_Image.tga");
 
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
 
-	//Variable
-	moving = 100;
+	//==================MODEL==================//
+	meshList[modelHead] = MeshBuilder::GenerateOBJ("Enemy Head", "OBJ//modelHead.obj");
+	meshList[modelHead]->textureID = LoadTGA("Image//modelHead.tga");
+
+	meshList[modelHand] = MeshBuilder::GenerateOBJ("Enemy Hand", "OBJ//modelHand.obj");
+	meshList[modelHand]->textureID = LoadTGA("Image//modelHand.tga");
+
+	meshList[modelTorso] = MeshBuilder::GenerateOBJ("Enemy Torso", "OBJ//modelTorso.obj");
+	meshList[modelTorso]->textureID = LoadTGA("Image//modelTorso.tga");
+
+	meshList[modelLeg] = MeshBuilder::GenerateOBJ("Enemy Leg", "OBJ//modelLeg.obj");
+	meshList[modelLeg]->textureID = LoadTGA("Image//modelLeg.tga");
+
+	SetParameters();
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -207,9 +244,157 @@ void SceneText::Init()
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 
-	rotateAngle = 0;
+	rotateAngle= rotateAngle2 = 0;
 
 	bLightEnabled = true;
+}
+
+void SceneText::PistolBulletFunction(float dt)
+{
+	//=========================Pistol Bullet============================//
+	if (Pistol.returnCreateBullet_Pistol() == true)
+	{
+		this->temp = new PistolClass(camera.position, camera.direction, Vector3(8.f, 8.f, 8.f));
+		this->PistolBullet.push_back(temp);
+	}
+
+	if (PistolBullet.empty() == false)
+	{
+		for (int a = 0; a < PistolBullet.size(); ++a)
+		{
+			//Update
+			((PistolClass*)PistolBullet[a])->bulletUpdate(dt);
+			//Delete
+			if (//Head
+				((PistolClass*)PistolBullet[a])->bulletPosition.x < enemy.returnEnemyHeadHitboxMax().x &&
+				((PistolClass*)PistolBullet[a])->bulletPosition.x > enemy.returnEnemyHeadHitboxMin().x &&
+				((PistolClass*)PistolBullet[a])->bulletPosition.y < enemy.returnEnemyHeadHitboxMax().y &&
+				((PistolClass*)PistolBullet[a])->bulletPosition.y > enemy.returnEnemyHeadHitboxMin().y &&
+				((PistolClass*)PistolBullet[a])->bulletPosition.z < enemy.returnEnemyHeadHitboxMax().z &&
+				((PistolClass*)PistolBullet[a])->bulletPosition.z > enemy.returnEnemyHeadHitboxMin().z)
+			{
+				if (enemy.returnRenderHead() == true)
+				{
+					cout << "Hit Head" <<endl;
+					enemy.MinusEnemyHeadHealth(((PistolClass*)PistolBullet[a])->returnHeadDamage());
+					PistolBullet.erase(PistolBullet.begin() + a);
+				}
+			}
+			else if (((PistolClass*)PistolBullet[a])->bulletPosition.x < enemy.returnEnemyTorsoHitboxMax().x &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.x > enemy.returnEnemyTorsoHitboxMin().x &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.y < enemy.returnEnemyTorsoHitboxMax().y &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.y > enemy.returnEnemyTorsoHitboxMin().y &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.z < enemy.returnEnemyTorsoHitboxMax().z &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.z > enemy.returnEnemyTorsoHitboxMin().z)
+			{
+				cout << "Hit Torso" <<endl;
+				enemy.MinusEnemyTorsoHealth(((PistolClass*)PistolBullet[a])->returnTorsoDamage());
+				PistolBullet.erase(PistolBullet.begin() + a);
+			}
+			else if(((PistolClass*)PistolBullet[a])->bulletPosition.x < enemy.returnEnemyRightHandHitboxMax().x &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.x > enemy.returnEnemyRightHandHitboxMin().x &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.y < enemy.returnEnemyRightHandHitboxMax().y &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.y > enemy.returnEnemyRightHandHitboxMin().y &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.z < enemy.returnEnemyRightHandHitboxMax().z &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.z > enemy.returnEnemyRightHandHitboxMin().z)
+			{
+				if (enemy.returnRenderRightArm() == true)
+				{
+					cout << "Hit Right Arm" <<endl;
+					enemy.MinusEnemyRightArmHealth(((PistolClass*)PistolBullet[a])->returnArmDamage());
+					PistolBullet.erase(PistolBullet.begin() + a);
+				}
+			}
+			else if (((PistolClass*)PistolBullet[a])->bulletPosition.x < enemy.returnEnemyLeftHandHitboxMax().x &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.x > enemy.returnEnemyLeftHandHitboxMin().x &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.y < enemy.returnEnemyLeftHandHitboxMax().y &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.y > enemy.returnEnemyLeftHandHitboxMin().y &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.z < enemy.returnEnemyLeftHandHitboxMax().z &&
+					((PistolClass*)PistolBullet[a])->bulletPosition.z > enemy.returnEnemyLeftHandHitboxMin().z)
+			{
+				if (enemy.returnRenderLeftArm() == true)
+				{
+					cout << "Hit Left Arm" <<endl;
+					enemy.MinusEnemyLeftArmHealth(((PistolClass*)PistolBullet[a])->returnArmDamage());
+					PistolBullet.erase(PistolBullet.begin() + a);
+				}
+			}
+		}
+	}
+}
+
+void SceneText::SniperBulletFunction(float dt)
+{
+	//=========================Sniper Bullet============================//
+	if (Sniper.returnCreateBullet_Sniper() == true)
+	{
+		this->temp = new SniperClass(camera.position, camera.direction, Vector3(8.f, 8.f, 8.f));
+		this->SniperBullet.push_back(temp);
+	}
+
+	if (SniperBullet.empty() == false)
+	{
+		for (int a = 0; a < SniperBullet.size(); ++a)
+		{
+			//Update
+			((SniperClass*)SniperBullet[a])->bulletUpdate(dt);
+			//Delete
+			if (//Head
+				((SniperClass*)SniperBullet[a])->bulletPosition.x < enemy.returnEnemyHeadHitboxMax().x &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.x > enemy.returnEnemyHeadHitboxMin().x &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.y < enemy.returnEnemyHeadHitboxMax().y &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.y > enemy.returnEnemyHeadHitboxMin().y &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.z < enemy.returnEnemyHeadHitboxMax().z &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.z > enemy.returnEnemyHeadHitboxMin().z)
+			{
+				if (enemy.returnRenderHead() == true)
+				{
+					cout << "Hit Head" <<endl;
+					enemy.MinusEnemyHeadHealth(((SniperClass*)SniperBullet[a])->returnHeadDamage());
+					SniperBullet.erase(SniperBullet.begin() + a);
+				}
+			}
+			else if (((SniperClass*)SniperBullet[a])->bulletPosition.x < enemy.returnEnemyTorsoHitboxMax().x &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.x > enemy.returnEnemyTorsoHitboxMin().x &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.y < enemy.returnEnemyTorsoHitboxMax().y &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.y > enemy.returnEnemyTorsoHitboxMin().y &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.z < enemy.returnEnemyTorsoHitboxMax().z &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.z > enemy.returnEnemyTorsoHitboxMin().z)
+			{
+				cout << "Hit Torso" <<endl;
+				enemy.MinusEnemyTorsoHealth(((SniperClass*)SniperBullet[a])->returnTorsoDamage());
+				SniperBullet.erase(SniperBullet.begin() + a);
+			}
+			else if(((SniperClass*)SniperBullet[a])->bulletPosition.x < enemy.returnEnemyRightHandHitboxMax().x &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.x > enemy.returnEnemyRightHandHitboxMin().x &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.y < enemy.returnEnemyRightHandHitboxMax().y &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.y > enemy.returnEnemyRightHandHitboxMin().y &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.z < enemy.returnEnemyRightHandHitboxMax().z &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.z > enemy.returnEnemyRightHandHitboxMin().z)
+			{
+				if (enemy.returnRenderRightArm() == true)
+				{
+					cout << "Hit Right Arm" <<endl;
+					enemy.MinusEnemyRightArmHealth(((SniperClass*)SniperBullet[a])->returnArmDamage());
+					SniperBullet.erase(SniperBullet.begin() + a);
+				}
+			}
+			else if (((SniperClass*)SniperBullet[a])->bulletPosition.x < enemy.returnEnemyLeftHandHitboxMax().x &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.x > enemy.returnEnemyLeftHandHitboxMin().x &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.y < enemy.returnEnemyLeftHandHitboxMax().y &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.y > enemy.returnEnemyLeftHandHitboxMin().y &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.z < enemy.returnEnemyLeftHandHitboxMax().z &&
+					((SniperClass*)SniperBullet[a])->bulletPosition.z > enemy.returnEnemyLeftHandHitboxMin().z)
+			{
+				if (enemy.returnRenderLeftArm() == true)
+				{
+					cout << "Hit Left Arm" <<endl;
+					enemy.MinusEnemyLeftArmHealth(((SniperClass*)SniperBullet[a])->returnArmDamage());
+					SniperBullet.erase(SniperBullet.begin() + a);
+				}
+			}
+		}
+	}
 }
 
 void SceneText::Update(double dt)
@@ -260,23 +445,78 @@ void SceneText::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-	rotateAngle += (float)(10 * dt);
 
 	camera.Update(dt);
-
-	fps = (float)(1.f / dt);
+	fps = calculatingFPS((float)dt);
 
 	if (Application::IsKeyPressed('9'))
 		moving += 1;
 	if (Application::IsKeyPressed('8'))
 		moving -= 1;
 
-	if (moving < 0)
-		moving = 0;
+	/*if (moving < 0)
+	moving = 0;
 	if (moving > 100)
-		moving = 100;
+	moving = 100;*/
 
-	weapon.update((float)dt);
+	if (Application::IsKeyPressed(VK_LEFT))
+		rotateAngle += (float)(200 * dt);
+	if (Application::IsKeyPressed(VK_RIGHT))
+		rotateAngle -= (float)(200 * dt);
+	if (Application::IsKeyPressed(VK_UP))
+		rotateAngle2 += (float)(200.0f * dt);
+	if (Application::IsKeyPressed(VK_DOWN))
+		rotateAngle2 -= (float)(200.0f * dt);
+
+	Sword.ChooseWeaponUpdate();
+	Pistol.ChooseWeaponUpdate();
+	Sniper.ChooseWeaponUpdate();
+	SMG.ChooseWeaponUpdate();
+
+	if (Sword.returnSwordConfirmation() == true)
+	{
+		Sword.update((float)dt);
+	}
+	if (Pistol.returnPistolConfirmation() == true)
+	{
+		Pistol.update((float)dt);
+	}
+	if (Sniper.returnSniperConfirmation() == true)
+	{
+		Sniper.update((float)dt);
+	}
+	if (SMG.returnSMGConfirmation() == true)
+	{
+		SMG.update((float)dt);
+	}
+
+	enemy.update(dt);
+	cout << enemy.returnEnemyHealth() << endl;
+	PistolBulletFunction(dt);
+
+	SniperBulletFunction(dt);
+
+	//=========================SMG Bullet============================//
+	if (SMG.returnCreateBullet_SMG() == true)
+	{
+		this->temp = new SMGClass(camera.position, camera.direction, Vector3(5.f, 5.f, 5.f));
+		this->SMGBullet.push_back(temp);
+	}
+
+	if (SMGBullet.empty() == false)
+	{
+		for (int a = 0; a < SMGBullet.size(); ++a)
+		{
+			//Update
+			((SMGClass*)SMGBullet[a])->bulletUpdate(dt);
+
+			//Delete
+			if (((SMGClass*)SMGBullet[a])->bulletPosition.z < -10)
+			{
+				SMGBullet.erase(SMGBullet.begin() + a);
+			}
+		}
+	}
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -481,6 +721,9 @@ void SceneText::RenderSkybox()
 
 void SceneText::RenderHUD()
 {
+	//==================CrossHair=============//
+	RenderMeshIn2D(meshList[crosshair], true, 3.0f, 3.0f, 0 , 0);
+
 	//===============HEALTH===========//
 	for (unsigned a = 0; a < moving; ++a)//Healthbar
 	{
@@ -493,7 +736,7 @@ void SceneText::RenderHUD()
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Setsuna", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 55.7f);//Name
 
-	if (weapon.returnSwordConfirmation() == false)
+	if (Sword.returnSwordConfirmation() == false)
 	{
 		RenderMeshIn2D(meshList[HudBackground], true, 20.0f, 5.0f, 3.49f, -11.5f);//background for ready screen
 	}
@@ -506,7 +749,7 @@ void SceneText::RenderHUD()
 	RenderMeshIn2D(meshList[RoundIcon], true, 13.0f, 13.0f, -5.5f, 1.8f);//Round icon
 
 	//=====================SWORD=====================//
-	if (weapon.returnSwordConfirmation() == true)
+	if (Sword.returnSwordConfirmation() == true)
 	{
 		RenderMeshIn2D(meshList[SwordIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Sword icon
 
@@ -522,93 +765,169 @@ void SceneText::RenderHUD()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Error", Color(1.0f, 1.0f, 1.0f), 3.0f, 33.5f, 29.5f);
 		}
 	}//=====================PISTOL=====================//
-	else if (weapon.returnPistolConfirmation() == true)//player is using pistol
+	if (Pistol.returnPistolConfirmation() == true)//player is using pistol
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
 
-		if (weapon.ammo[1].returnAmmos() < 10)
+		if (Pistol.returnBullet_Pistol() < 10)
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnBullet_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
 		}
 		else
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnBullet_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
 		}
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
+		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnRounds_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
 		RenderMeshIn2D(meshList[WeaponIcon_Pistol], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for long ranged weapon
 
-		if (weapon.ammo[1].returnReloading() == true) //reloading
+		if (Pistol.returnReloading() == true) //reloading
 		{
 			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[1].returnReloadTime_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnReloadTime_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+		}
+		else
+		{
+			modelStack.PushMatrix();
+			RenderMeshIn2D(meshList[Weapon_Pistol], false, 70, 70, 0.7, -0.4);
+			modelStack.PopMatrix();
 		}
 
-		if (weapon.ammo[1].returnReadyToShootPistol() == true)
+		if (Pistol.returnReadyToShootPistol() == true)
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
 		}
 	}//=====================SNIPER=====================//
-	else if (weapon.returnSniperConfirmation() == true)//player is using sniper
+	else if (Sniper.returnSniperConfirmation() == true)//player is using sniper
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[2].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
+		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnBullet_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[2].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
+		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnRounds_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
 		RenderMeshIn2D(meshList[WeaponIcon_Sniper], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
 
-		if (weapon.ammo[2].returnReloading() == true)
+		if (Sniper.returnReloading() == true)
 		{
 			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[2].returnReloadTime_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnReloadTime_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+		}
+		else
+		{
+			modelStack.PushMatrix();
+			RenderMeshIn2D(meshList[Weapon_Sniper], false, 70, 70, 0.7, -0.4);
+			modelStack.PopMatrix();
 		}
 
-		if (weapon.ammo[2].returnReadyToShootSniper() == true)
+		if (Sniper.returnReadyToShootSniper() == true)
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
 		}
 	}//=====================SMG=====================//
-	else if (weapon.returnSMGConfirmation() == true)//player is using SMG
+	else if (SMG.returnSMGConfirmation() == true)//player is using SMG
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
 
-		if (weapon.ammo[3].returnAmmos() < 10)//Arranging bullet number to middle if it is less than 10
+		if (SMG.returnBullet_SMG() < 10)//Arranging bullet number to middle if it is less than 10
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnBullet_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
 		}
 		else
 		{	
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnAmmos()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnBullet_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);
 		}
 
 
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnRounds()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
+		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnRounds_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
 		RenderMeshIn2D(meshList[WeaponIcon_SMG], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
 
-		if (weapon.ammo[3].returnReloading() == true)//Reloading
+		if (SMG.returnReloading() == true)//Reloading
 		{
 			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string((long long)weapon.ammo[3].returnReloadTime_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnReloadTime_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
+		}
+		else
+		{
+			modelStack.PushMatrix();
+			RenderMeshIn2D(meshList[Weapon_SMG], false, 100, 100, 0.3, -0.2);
+			modelStack.PopMatrix();
 		}
 
-		if (weapon.ammo[3].returnReadyToShootSMG() == true)
+		if (SMG.returnReadyToShootSMG() == true)
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
 		}
 	}
-
-	//==================CrossHair=============//
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], true, 3.0f, 3.0f, 0 , 0);
 }
 
-void SceneText::Render()
+void SceneText::RenderEnemyModel()
+{
+	if (enemy.returnAliveState() == true)
+	{
+		if (enemy.returnRenderHead() == true)
+		{
+			//Head
+			modelStack.PushMatrix();
+			modelStack.Translate(enemy.returnEnemyHeadPosition().x,
+				enemy.returnEnemyHeadPosition().y, 
+				enemy.returnEnemyHeadPosition().z);
+			RenderMesh(meshList[modelHead], false);
+			modelStack.PopMatrix();
+		}
+
+		//Torso
+		modelStack.PushMatrix();
+		modelStack.Translate(enemy.returnEnemyTorsoPosition().x,
+			enemy.returnEnemyTorsoPosition().y,
+			enemy.returnEnemyTorsoPosition().z);
+		RenderMesh(meshList[modelTorso], false);
+		modelStack.PopMatrix();
+
+		if (enemy.returnRenderLeftArm() == true)
+		{
+			//Left Arm
+			modelStack.PushMatrix();
+			modelStack.Translate(enemy.returnEnemyLeftHandPosition().x,
+				enemy.returnEnemyLeftHandPosition().y,
+				enemy.returnEnemyLeftHandPosition().z);
+			RenderMesh(meshList[modelHand], false);
+			modelStack.PopMatrix();
+		}
+
+		if (enemy.returnRenderRightArm() == true)
+		{
+			//Right Arm
+			modelStack.PushMatrix();
+			modelStack.Translate(enemy.returnEnemyRightHandPosition().x,
+				enemy.returnEnemyRightHandPosition().y,
+				enemy.returnEnemyRightHandPosition().z);
+			RenderMesh(meshList[modelHand], false);
+			modelStack.PopMatrix();
+		}
+
+		//Left Leg
+		modelStack.PushMatrix();
+		modelStack.Translate(enemy.returnEnemyLeftLegPosition().x,
+							 enemy.returnEnemyLeftLegPosition().y,
+							 enemy.returnEnemyLeftLegPosition().z);
+		RenderMesh(meshList[modelLeg], false);
+		modelStack.PopMatrix();
+
+		//Right Leg
+		modelStack.PushMatrix();
+		modelStack.Translate(0.34f, -1.5f, 0.f);
+		RenderMesh(meshList[modelLeg], false);
+		modelStack.PopMatrix();
+	}
+}
+
+void SceneText::view()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Mtx44 perspective;
@@ -625,6 +944,11 @@ void SceneText::Render()
 		);
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
+}
+
+void SceneText::Render()
+{
+	view();
 
 	if(lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -719,9 +1043,26 @@ void SceneText::Render()
 	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
+	modelStack.PushMatrix();
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Translate(enemy.returnEnemyPosition().x, -2 + enemy.returnEnemyPosition().y, enemy.returnEnemyPosition().z);
+	RenderEnemyModel();
+	modelStack.PopMatrix();
 
 	RenderHUD();
+
+
+	//==============Testing===============//
+	//modelStack.PushMatrix();//Left right
+	//modelStack.Translate(camera.direction.x, camera.direction.y, camera.direction.z);
+	//modelStack.Rotate(rotateAngle, 0, 1, 0);
+	//modelStack.Translate(0, 0, -4);
+
+	//RenderMesh(meshList[GEO_CUBE], true);
+	//modelStack.PopMatrix();
+
+
 }
 
 void SceneText::Exit()

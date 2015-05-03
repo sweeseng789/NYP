@@ -28,7 +28,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 void Camera3::Update(double dt)
 {
 	static const float CAMERA_SPEED = 200.f;
-	static const float MOVEMENT_SPEED = 50.f;
+	static float MOVEMENT_SPEED = 50.f;
 	if(Application::IsKeyPressed('A'))
 	{
 		Vector3 view = (target - position).Normalized();
@@ -191,7 +191,29 @@ void Camera3::Update(double dt)
 		}
 	}
 
-	std::cout << position.y << std::endl;
+
+	//==============SPRINT===================//
+	if (Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('W') ||
+		Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('A') ||
+		Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('S') ||
+		Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('D'))
+	{
+		MOVEMENT_SPEED += 10.f * dt;
+		if (MOVEMENT_SPEED > 80.0f)
+		{
+			MOVEMENT_SPEED = 80.0f;
+		}
+	}
+	else
+	{
+		MOVEMENT_SPEED -= 10.f * dt;
+		if (MOVEMENT_SPEED < 50.f)
+		{
+			MOVEMENT_SPEED = 50.0f;
+		}
+	}
+
+	direction = target - position;
 }
 
 void Camera3::Reset()

@@ -22,6 +22,7 @@ public:
 	static Mesh* GenerateOBJ(const std::string &meshName, const std::string &file_path);
 	static Mesh* GenerateText(const std::string &meshName, unsigned row, unsigned col);
 	static Mesh* GenerateCrossHair(const std::string &meshName, float colour_r=1.0f, float colour_g=1.0f, float colour_b=0.0f, float length=1.0f);
+	static Mesh* GenerateSkyPlane(const std::string &meshName, Color color, int slices, float PlanetRadius, float AtmosphereRadius, float hTile, float vTile);
 };
 
 #endif

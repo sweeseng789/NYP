@@ -1,0 +1,22 @@
+#pragma once
+#include "Ammo.h"
+#include "Vector3.h"
+
+class SMGClass : public CAmmo
+{
+public:
+	SMGClass(void);
+	SMGClass(Vector3 bulletPosition, Vector3 bulletDirection, Vector3 bulletSpeed);
+	~SMGClass(void);
+
+	unsigned GetDamage();
+
+	//Vector3
+	Vector3 bulletPosition;
+	Vector3 bulletDirection;
+	Vector3 bulletSpeed;
+
+	void bulletUpdate(float dt);
+	unsigned returnDamage();
+};
+

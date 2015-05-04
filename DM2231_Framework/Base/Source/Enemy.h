@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ENEMY_H
+#define ENEMY_H
+
 #include <iostream>
 #include <vector>
 #include "Camera3.h"
@@ -91,3 +93,4 @@ private:
 	Vector3 RightLegHitBoxMin;
 };
 
+#endif

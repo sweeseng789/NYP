@@ -254,16 +254,17 @@ void SceneText::PistolBulletFunction(float dt)
 	//=========================Pistol Bullet============================//
 	if (Pistol.returnCreateBullet_Pistol() == true)
 	{
-		this->temp = new PistolClass(camera.position, camera.direction, Vector3(8.f, 8.f, 8.f));
+		this->temp = new PistolClass(camera.position, camera.direction, Vector3(0.1f, 0.1f, 0.1f));
 		this->PistolBullet.push_back(temp);
 	}
 
 	if (PistolBullet.empty() == false)
 	{
-		for (int a = 0; a < PistolBullet.size(); ++a)
+		for (unsigned a = 0; a < PistolBullet.size(); ++a)
 		{
 			//Update
 			((PistolClass*)PistolBullet[a])->bulletUpdate(dt);
+			cout << ((PistolClass*)PistolBullet[a])->bulletPosition << endl;
 			//Delete
 			if (//Head
 				((PistolClass*)PistolBullet[a])->bulletPosition.x < enemy.returnEnemyHeadHitboxMax().x &&
@@ -334,7 +335,7 @@ void SceneText::SniperBulletFunction(float dt)
 
 	if (SniperBullet.empty() == false)
 	{
-		for (int a = 0; a < SniperBullet.size(); ++a)
+		for (unsigned a = 0; a < SniperBullet.size(); ++a)
 		{
 			//Update
 			((SniperClass*)SniperBullet[a])->bulletUpdate(dt);
@@ -490,11 +491,11 @@ void SceneText::Update(double dt)
 		SMG.update((float)dt);
 	}
 
-	enemy.update(dt);
-	cout << enemy.returnEnemyHealth() << endl;
-	PistolBulletFunction(dt);
+	enemy.update((float)dt);
+	//cout << enemy.returnEnemyHealth() << endl;
+	PistolBulletFunction((float)dt);
 
-	SniperBulletFunction(dt);
+	SniperBulletFunction((float)dt);
 
 	//=========================SMG Bullet============================//
 	if (SMG.returnCreateBullet_SMG() == true)
@@ -505,10 +506,10 @@ void SceneText::Update(double dt)
 
 	if (SMGBullet.empty() == false)
 	{
-		for (int a = 0; a < SMGBullet.size(); ++a)
+		for (unsigned a = 0; a < SMGBullet.size(); ++a)
 		{
 			//Update
-			((SMGClass*)SMGBullet[a])->bulletUpdate(dt);
+			((SMGClass*)SMGBullet[a])->bulletUpdate((float)dt);
 
 			//Delete
 			if (((SMGClass*)SMGBullet[a])->bulletPosition.z < -10)
@@ -791,7 +792,7 @@ void SceneText::RenderHUD()
 		else
 		{
 			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_Pistol], false, 70, 70, 0.7, -0.4);
+			RenderMeshIn2D(meshList[Weapon_Pistol], false, 70.f, 70.f, 0.7f, -0.4f);
 			modelStack.PopMatrix();
 		}
 
@@ -819,7 +820,7 @@ void SceneText::RenderHUD()
 		else
 		{
 			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_Sniper], false, 70, 70, 0.7, -0.4);
+			RenderMeshIn2D(meshList[Weapon_Sniper], false, 70.f, 70.f, 0.7f, -0.4f);
 			modelStack.PopMatrix();
 		}
 
@@ -855,7 +856,7 @@ void SceneText::RenderHUD()
 		else
 		{
 			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_SMG], false, 100, 100, 0.3, -0.2);
+			RenderMeshIn2D(meshList[Weapon_SMG], false, 100.f, 100.f, 0.3f, -0.2f);
 			modelStack.PopMatrix();
 		}
 

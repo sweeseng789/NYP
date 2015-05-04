@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SNIPER_CLASS_H
+#define SNIPER_CLASS_H
+
 #include "Ammo.h"
 #include "Vector3.h"
 
@@ -26,3 +28,4 @@ private:
 	unsigned ArmDamage;
 };
 
+#endif

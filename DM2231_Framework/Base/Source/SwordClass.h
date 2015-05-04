@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SWORD_CLASS_H
+#define SWORD_CLASS_H
 class SwordClass
 {
 public:
@@ -9,3 +10,4 @@ private:
 	int rounds, bullet, damage;
 };
 
+#endif

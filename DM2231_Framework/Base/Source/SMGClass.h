@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SMG_CLASS_H
+#define SMG_CLASS_H
 #include "Ammo.h"
 #include "Vector3.h"
 
@@ -20,3 +21,4 @@ public:
 	unsigned returnDamage();
 };
 
+#endif

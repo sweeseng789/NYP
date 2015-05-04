@@ -7,7 +7,6 @@
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
-#include "TestingDerivedClass.h"
 #include "PistolClass.h"
 #include "SniperClass.h"
 #include "SMGClass.h"
@@ -219,7 +218,7 @@ void SceneText::Init()
 	meshList[Weapon_Sniper]->textureID = LoadTGA("Image//Sniper_Weapon_Sprite.tga");
 
 	meshList[crosshair] = MeshBuilder::GenerateQuad("Crosshair", Color(1, 1, 1), 1.0f);
-	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair_Image.tga");
+	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
 
@@ -723,7 +722,7 @@ void SceneText::RenderSkybox()
 void SceneText::RenderHUD()
 {
 	//==================CrossHair=============//
-	RenderMeshIn2D(meshList[crosshair], true, 3.0f, 3.0f, 0 , 0);
+	RenderMeshIn2D(meshList[crosshair], true, 5.0f, 5.0f, 0 , 0);
 
 	//===============HEALTH===========//
 	for (unsigned a = 0; a < moving; ++a)//Healthbar

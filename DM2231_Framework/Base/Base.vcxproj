@@ -31,8 +31,6 @@
     <ClCompile Include="Source\SMGClass.cpp" />
     <ClCompile Include="Source\SniperClass.cpp" />
     <ClCompile Include="Source\SwordClass.cpp" />
-    <ClCompile Include="Source\TestingBaseClass.cpp" />
-    <ClCompile Include="Source\TestingDerivedClass.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\Weapon.cpp" />
   </ItemGroup>
@@ -60,8 +58,6 @@
     <ClInclude Include="Source\SMGClass.h" />
     <ClInclude Include="Source\SniperClass.h" />
     <ClInclude Include="Source\SwordClass.h" />
-    <ClInclude Include="Source\TestingBaseClass.h" />
-    <ClInclude Include="Source\TestingDerivedClass.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\Weapon.h" />

@@ -12,7 +12,6 @@
 #include <string>
 #include "Enemy.h"
 #include "Ammo.h"
-#include "TestingBaseClass.h"
 
 using std::vector;
 class SceneText : public Scene

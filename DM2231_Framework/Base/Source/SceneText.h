@@ -58,6 +58,7 @@ class SceneText : public Scene
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
+		GEO_TERRAIN,
 		GEO_CROSSHAIR,
 		GEO_LIGHTBALL,
 		GEO_SPHERE,
@@ -80,6 +81,7 @@ class SceneText : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 		GEO_OBJECT,
+		GEO_SKYPLANE,
 		GEO_TEXT,
 		Healthbar,
 		AvatarIcon,
@@ -98,6 +100,7 @@ class SceneText : public Scene
 		Weapon_SMG,
 		Weapon_Pistol,
 		Weapon_Sniper,
+		Weapon_Sword,
 		crosshair,
 		NUM_GEOMETRY,
 	};
@@ -118,12 +121,14 @@ public:
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f,  float x = 0.0f, float y = 0.0f);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f,  float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	void RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderHUD();
 	void RenderEnemyModel();
 	void RenderEverything();
+	void RenderTerrain();
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -166,6 +171,7 @@ private:
 	vector<CAmmo *> PistolBullet;
 	vector<CAmmo *> SniperBullet;
 	vector<CAmmo *> SMGBullet;
+	vector<unsigned char> m_heightMap;
 
 	//Camera3
 	Camera3 camera;

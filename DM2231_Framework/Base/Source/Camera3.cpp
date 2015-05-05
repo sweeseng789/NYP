@@ -50,14 +50,14 @@ void Camera3::Update(double dt)
 	if(Application::IsKeyPressed('W'))
 	{
 		Vector3 view = (target - position).Normalized();
-		view.y = 0;
+		//view.y = 0;
 		position += view * MOVEMENT_SPEED * (float)dt;
 		target += view * MOVEMENT_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed('S'))
 	{
 		Vector3 view = (target - position).Normalized();
-		view.y = 0;
+		//view.y = 0;
 		position -= view * MOVEMENT_SPEED * (float)dt;
 		target -= view * MOVEMENT_SPEED * (float)dt;
 	}
@@ -180,14 +180,14 @@ void Camera3::Update(double dt)
 		{
 			position.y -= (float)(JUMP_SPEED * dt);
 			target.y -= (float)(JUMP_SPEED * dt);
-			//JUMP_SPEED += (float)(15.0f * dt);
+			JUMP_SPEED += (float)(15.0f * dt);
 		}
 		if (position.y <= 0.0f)
 		{
 			pressedSpace = false;
 			currentlyJumping = false;
 			currentlyFalling = false;
-			//position.y = target.y = 0.0f;
+			position.y = target.y = 0.0f;
 		}
 	}
 
@@ -198,7 +198,7 @@ void Camera3::Update(double dt)
 		Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('S') ||
 		Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('D'))
 	{
-		MOVEMENT_SPEED += 10.f * dt;
+		MOVEMENT_SPEED += 1000.f * dt;
 		if (MOVEMENT_SPEED > 80.0f)
 		{
 			MOVEMENT_SPEED = 80.0f;

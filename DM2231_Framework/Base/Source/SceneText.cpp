@@ -51,7 +51,7 @@ void SceneText::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
+	m_programID = LoadShaders( "Shader//comg.vertexshader", "Shader//comg.fragmentshader" );
 
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -144,7 +144,7 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 10, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -180,6 +180,9 @@ void SceneText::Init()
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+
+	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//heightmap.raw", m_heightMap);
+	//meshList[GEO_TERRAIN]->textureID = LoadTGA("Image//moss1.tga");
 
 	meshList[AvatarIcon] = MeshBuilder::GenerateQuad("Avatar Icon", Color(1, 1, 1), 1.0f);
 	meshList[AvatarIcon]->textureID = LoadTGA("Image//GGOHead.tga");
@@ -217,6 +220,9 @@ void SceneText::Init()
 	meshList[Weapon_Sniper] = MeshBuilder::GenerateQuad("Weapon Sniper", Color(1, 1, 1), 1.0f);
 	meshList[Weapon_Sniper]->textureID = LoadTGA("Image//Sniper_Weapon_Sprite.tga");
 
+	meshList[Weapon_Sword] = MeshBuilder::GenerateQuad("Weapon Sword", Color(1, 1, 1), 1.0f);
+	meshList[Weapon_Sword]->textureID = LoadTGA("Image//Sprite_Image_Sword.tga");
+
 	meshList[crosshair] = MeshBuilder::GenerateQuad("Crosshair", Color(1, 1, 1), 1.0f);
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
@@ -234,6 +240,9 @@ void SceneText::Init()
 
 	meshList[modelLeg] = MeshBuilder::GenerateOBJ("Enemy Leg", "OBJ//modelLeg.obj");
 	meshList[modelLeg]->textureID = LoadTGA("Image//modelLeg.tga");
+
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
+	meshList[GEO_SKYPLANE]->textureID = LoadTGA("Image//top.tga"); 
 
 	SetParameters();
 
@@ -399,14 +408,14 @@ void SceneText::SniperBulletFunction(float dt)
 
 void SceneText::Update(double dt)
 {
-	/*if(Application::IsKeyPressed('1'))
+	if(Application::IsKeyPressed('1'))
 	glEnable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('2'))
 	glDisable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('3'))
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	if(Application::IsKeyPressed('5'))
 	{
@@ -588,7 +597,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y)
+void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y, float z)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -599,7 +608,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float 
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Scale(sizeX, sizeY, sizeX);
-	modelStack.Translate(x, y, 0);
+	modelStack.Translate(x, y, z);
 
 	Mtx44 MVP, modelview, modelView_inverse_transpose;
 
@@ -721,8 +730,6 @@ void SceneText::RenderSkybox()
 
 void SceneText::RenderHUD()
 {
-	//==================CrossHair=============//
-	RenderMeshIn2D(meshList[crosshair], true, 5.0f, 5.0f, 0 , 0);
 
 	//===============HEALTH===========//
 	for (unsigned a = 0; a < moving; ++a)//Healthbar
@@ -740,7 +747,6 @@ void SceneText::RenderHUD()
 	{
 		RenderMeshIn2D(meshList[HudBackground], true, 20.0f, 5.0f, 3.49f, -11.5f);//background for ready screen
 	}
-
 
 	//===============Weapon Chosen==============//
 	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 2.9f);//bakcground for ammo
@@ -788,12 +794,6 @@ void SceneText::RenderHUD()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
 			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnReloadTime_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
 		}
-		else
-		{
-			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_Pistol], false, 70.f, 70.f, 0.7f, -0.4f);
-			modelStack.PopMatrix();
-		}
 
 		if (Pistol.returnReadyToShootPistol() == true)
 		{
@@ -816,12 +816,12 @@ void SceneText::RenderHUD()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
 			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnReloadTime_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
 		}
-		else
+		/*else
 		{
 			modelStack.PushMatrix();
 			RenderMeshIn2D(meshList[Weapon_Sniper], false, 70.f, 70.f, 0.7f, -0.4f);
 			modelStack.PopMatrix();
-		}
+		}*/
 
 		if (Sniper.returnReadyToShootSniper() == true)
 		{
@@ -852,18 +852,56 @@ void SceneText::RenderHUD()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
 			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnReloadTime_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
 		}
-		else
+	/*	else
 		{
 			modelStack.PushMatrix();
 			RenderMeshIn2D(meshList[Weapon_SMG], false, 100.f, 100.f, 0.3f, -0.2f);
 			modelStack.PopMatrix();
-		}
+		}*/
 
 		if (SMG.returnReadyToShootSMG() == true)
 		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Ready", Color(1.0f, 1.0f, 1.0f), 2.0f, 70.7f, 0.3f);
 		}
 	}
+
+	if (Sword.returnSwordConfirmation() == true)
+	{
+		RenderMeshIn2D(meshList[Weapon_Sword], false, 90.f, 90.f, 0.56f, -0.35f);
+	}
+	if (Pistol.returnReloading() == false)
+	{
+		if (Pistol.returnPistolConfirmation() == true)
+		{
+			modelStack.PushMatrix();
+			RenderMeshIn2D(meshList[Weapon_Pistol], false, 70.f, 70.f, 0.7f, -0.4f);
+			modelStack.PopMatrix();
+		}
+	}
+	if (Sniper.returnReloading() == false)
+	{
+		if (Sniper.returnSniperConfirmation() == true)
+		{
+			modelStack.PushMatrix();
+			RenderMeshIn2D(meshList[Weapon_Sniper], false, 70.f, 70.f, 0.7f, -0.4f);
+			modelStack.PopMatrix();
+		}
+	}
+	//==================CrossHair=============//
+	RenderMeshIn2D(meshList[crosshair], true, 5.0f, 5.0f, 0 , 0);
+
+	if (SMG.returnReloading() == false)
+	{
+		if (SMG.returnSMGConfirmation() == true)
+		{
+			modelStack.PushMatrix();
+			RenderMeshIn2D(meshList[Weapon_SMG], false, 100.f, 100.f, 0.3f, -0.2f);
+			modelStack.PopMatrix();
+		}
+	}
+
+
+	
 }
 
 void SceneText::RenderEnemyModel()
@@ -946,6 +984,28 @@ void SceneText::view()
 	modelStack.LoadIdentity();
 }
 
+void SceneText::RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile)
+{
+	modelStack.PushMatrix();
+
+	modelStack.Translate(500.f, 1800.f, -500.f + (float)moving);
+
+	RenderMesh(meshList[GEO_SKYPLANE], false);
+
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderTerrain()
+{
+	Vector3 pos;
+	pos.Set(-20, 0, -20);
+	pos.y = 350.f * ReadHeightMap(m_heightMap, pos.x / 4000.f, pos.z / 4000.f);
+	modelStack.PushMatrix();
+	modelStack.Scale(2000.0f, 350.f, 2000.f);
+	RenderMesh(meshList[GEO_TERRAIN], false);
+	modelStack.PopMatrix();
+}
+
 void SceneText::Render()
 {
 	view();
@@ -1000,7 +1060,8 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	RenderSkybox();
+	//RenderSkybox();
+	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 300.0f, 2000.0f, 1.0f, 1.0f);
 
 	// perspective;
 	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -1050,8 +1111,9 @@ void SceneText::Render()
 	RenderEnemyModel();
 	modelStack.PopMatrix();
 
-	RenderHUD();
+	RenderTerrain();
 
+	RenderHUD();
 
 	//==============Testing===============//
 	//modelStack.PushMatrix();//Left right

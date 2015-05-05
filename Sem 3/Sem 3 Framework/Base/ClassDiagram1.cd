@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CAmmo" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QFQIgQAAAQAAiABIABWEBAQRCIAEABRwihwAQAAEmAA=</HashCode>
+      <FileName>Source\Ammo.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Application" Collapsed="true">
+    <Position X="26.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACABAAAEAAgIAAIAIABAAGAAAAICQCAAAAAAc=</HashCode>
+      <FileName>Source\Application.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAAAAAABAAAYAAAIAAAAAAAAAAAAAACAgAAAAA=</HashCode>
+      <FileName>Source\Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera2" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQAAAABAGAAAAAAAAAAAAIAAAAAAACAAAAEAA=</HashCode>
+      <FileName>Source\Camera2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera3" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAgAAAEIAJAFAAAAAAAAAAAAIAAAAAAACAAAAEAA=</HashCode>
+      <FileName>Source\Camera3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CEnemy" Collapsed="true">
+    <Position X="28.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAABAEAAAAAAAAQAAAACAAAgBAAAAQAAAAAAAAEAAA=</HashCode>
+      <FileName>Source\Enemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GenerateSkyPlane" Collapsed="true">
+    <Position X="6" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oCQgCABIIhAAAAIAAgAAAAAADBIQCAAAIBAGAAAEAAQ=</HashCode>
+      <FileName>Source\GenerateSkyPlane.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mesh" Collapsed="true">
+    <Position X="26.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAEAAACAAAAAAAAACBAEABAAARAAAABAAAA=</HashCode>
+      <FileName>Source\Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeshBuilder" Collapsed="true">
+    <Position X="28.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAIAAAAAACAAgAAAAAAAAAQAAAQAAAAAgAACCAAAEA=</HashCode>
+      <FileName>Source\MeshBuilder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PistolClass" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAgAAAA=</HashCode>
+      <FileName>Source\PistolClass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAgAAAAAAAQAAAAAAAIBACAAAAAAA=</HashCode>
+      <FileName>Source\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene1" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAgAAAAAAAAAAgAAAAIBACAAAAEAQ=</HashCode>
+      <FileName>Source\Scene1.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene2" Collapsed="true">
+    <Position X="17.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAKAkAAAAAAAABAgAACAIBACAAAAEAQ=</HashCode>
+      <FileName>Source\Scene2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene3" Collapsed="true">
+    <Position X="21.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIAhAAAAIAoAAAAAAAABAAAAAAIBACAAAAAAQ=</HashCode>
+      <FileName>Source\Scene3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene4" Collapsed="true">
+    <Position X="1.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAAIIhAAAAIAhAAAAAAAABAAAAAAIBACAAAAAAQ=</HashCode>
+      <FileName>Source\Scene4.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene5" Collapsed="true">
+    <Position X="8.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAAIIhAAAAIAiAAAAAAAABQAAAACIBACABAAAAQ=</HashCode>
+      <FileName>Source\Scene5.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneLight" Collapsed="true">
+    <Position X="10.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQIAAAIIhAAAAIAAAAAAAAAABIAAAAAIBACAgAEAAQ=</HashCode>
+      <FileName>Source\SceneLight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneLight2" Collapsed="true">
+    <Position X="15" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQIAAAoIhAAAAIAAAAAAAAAABIAAAAAIBACAAAEAAQ=</HashCode>
+      <FileName>Source\SceneLight2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneSkybox" Collapsed="true">
+    <Position X="19.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oCQAAAAIIhAAAAIAAAAAACAABBIAAAAEIBACAAAEAAQ=</HashCode>
+      <FileName>Source\SceneSkybox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneText" Collapsed="true">
+    <Position X="24" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>sCQgCABIIhAAAAIAAAACAAAADBIACAAEIBACAAAEAAY=</HashCode>
+      <FileName>Source\SceneText.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneTexture" Collapsed="true">
+    <Position X="3.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQQAAAAIIrAAAAIAAAAAAAAAABIIAAAAIBACAAAMAAQ=</HashCode>
+      <FileName>Source\SceneTexture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SMGClass" Collapsed="true">
+    <Position X="30" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\SMGClass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SniperClass" Collapsed="true">
+    <Position X="26.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Source\SniperClass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SwordClass" Collapsed="true">
+    <Position X="28.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAABAAgAQAAAAAAAAAAAAAAAAAAhAAAAAAAAA=</HashCode>
+      <FileName>Source\SwordClass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWeapon" Collapsed="true">
+    <Position X="30" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQgDAJAAAAoAAEEQAEBkAIDAQBAAlgAoAAmACA=</HashCode>
+      <FileName>Source\Weapon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="PackedVertex" Collapsed="true">
+    <Position X="28.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAgAAAAAgA=</HashCode>
+      <FileName>Source\LoadOBJ.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Light" Collapsed="true">
+    <Position X="30" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAgAAAAAAAQIgAAAAERAACAAAAAAABAAAE=</HashCode>
+      <FileName>Source\Light.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Component" Collapsed="true">
+    <Position X="28.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAQBBAAAAAAA=</HashCode>
+      <FileName>Source\Material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Material" Collapsed="true">
+    <Position X="26.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAAAAAAAAAAAAAAgAAAAAAAAAAACAAAAAAAAAAIAA=</HashCode>
+      <FileName>Source\Material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Position" Collapsed="true">
+    <Position X="30" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Color" Collapsed="true">
+    <Position X="26.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAQABgAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TexCoord" Collapsed="true">
+    <Position X="26.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAIAAAAAAAAAAAAAABIAAAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex" Collapsed="true">
+    <Position X="28.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAIgAAAAAAACAAAIAAAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

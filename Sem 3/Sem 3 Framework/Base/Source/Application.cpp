@@ -11,10 +11,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#include "SceneText.h"
 #include "SceneTexture.h"
 #include "SceneSkybox.h"
-#include "SceneText.h"
+
 #include "GenerateSkyPlane.h"
 
 GLFWwindow* m_window;
@@ -116,7 +116,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SceneText();
+	scene = new SceneText();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -130,6 +130,7 @@ void Application::Run()
 		if (m_dAccumulatedTime_SceneUpdate > 1/2)
 		{
 			scene->Update(m_dElapsedTime);
+			GetKeyboardUpdate();
 			m_dAccumulatedTime_SceneUpdate = 0.0;
 		}
 
@@ -190,4 +191,31 @@ bool Application::GetMouseUpdate()
 	mouse_last_y = mouse_current_y;
 
 	return false;
+}
+
+bool Application::GetKeyboardUpdate()
+{
+	if (IsKeyPressed('A'))
+	{
+		scene->UpdateCameraStatus('a');
+	}
+	if (IsKeyPressed('D'))
+	{
+		scene->UpdateCameraStatus('d');
+	}
+	if (IsKeyPressed('W'))
+	{
+		scene->UpdateCameraStatus('w');
+	}
+	if (IsKeyPressed('S'))
+	{
+		scene->UpdateCameraStatus('s');
+	}
+
+	if (IsKeyPressed(32))
+	{
+		scene->UpdateCameraStatus(32);
+	}
+
+	return true;
 }

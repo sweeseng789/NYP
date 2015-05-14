@@ -20,13 +20,15 @@ using std::to_string;
 CModuleTime mTime;
 CModuleInfo mInfo;
 CModule newEntry;
-vector<CModule> Monday, Tuesday, Wednesday, Thursday, Friday;
+vector<CModule> Mon, Tue, Wed, Thurs, Fri;
 int choice = -1;
 int choice2 = -1;
 int choice3 = -1;
 unsigned totalTime_min;
 string data[9] = {"01", "02", "03", "04", "05", "06", "07", "08", "09"};
 string zero = "00";
+unsigned minute = 0;
+unsigned hour = 0;
 
 void ErrorCheckingForInput()
 {
@@ -36,45 +38,48 @@ void ErrorCheckingForInput()
 }
 void AddNewDataToMonday()
 {
-	if (!Monday.empty())
+	if (!Mon.empty())
 	{
-		static unsigned hour = 17 - Monday[Monday.size() - 1].returnModuleEndTime_Hour();
-		static unsigned minute = 60 - Monday[Monday.size() - 1].returnModuleEndTime_Minute();
-		totalTime_min = (hour * 60) + minute;
+		hour =  Mon[Mon.size() - 1].returnModuleEndTime_Hour() - 9;
+		minute = Mon[Mon.size() - 1].returnModuleEndTime_Minute();
+		totalTime_min = (hour * 60) + minute + (mTime.returnHour() * 60) + mTime.returnMinute();
 		cout << totalTime_min << endl;
-		if (totalTime_min > 540)
+		while (totalTime_min > 1080)
 		{
+			totalTime_min = (hour * 60) + minute + (mTime.returnHour() * 60) + mTime.returnMinute();
 			ErrorCheckingForInput();
 		}
 	}
 	else
 	{
 		totalTime_min = (mTime.returnHour() * 60) + mTime.returnMinute();//Converting everything to min
-		if(totalTime_min > 540)
+
+		while(totalTime_min > 1080)
 		{
+			totalTime_min = (mTime.returnHour() * 60) + mTime.returnMinute();
 			ErrorCheckingForInput();
 		}
 	}
 
 	newEntry.setParameters(mTime.returnHour(), mTime.returnMinute(), mInfo.returnModuleCode(), mInfo.returnModuleName());
-	Monday.push_back(newEntry);
-	if (Monday.size() > 1)
+	Mon.push_back(newEntry);
+	if (Mon.size() > 1)
 	{
-		Monday[Monday.size() - 1].setModuleStartTime_Hour(Monday[Monday.size() - 2].returnModuleEndTime_Hour());
-		Monday[Monday.size() - 1].setModuleStartTime_Minute(Monday[Monday.size() - 2].returnModuleEndTime_Minute());
+		Mon[Mon.size() - 1].setModuleStartTime_Hour(Mon[Mon.size() - 2].returnModuleEndTime_Hour());
+		Mon[Mon.size() - 1].setModuleStartTime_Minute(Mon[Mon.size() - 2].returnModuleEndTime_Minute());
 	}
 
-	Monday[Monday.size() - 1].setModuleEndTime_Hour(Monday[Monday.size() - 1].returnModuleStartTime_Hour() + Monday[Monday.size() - 1].returnHour());
-	Monday[Monday.size() - 1].setModuleEndTime_Minute(Monday[Monday.size() - 1].returnModuleStartTime_Minute() + Monday[Monday.size() - 1].returnMinute());
+	Mon[Mon.size() - 1].setEndTime_Hour(Mon[Mon.size() - 1].returnStartTime_Hour() + Mon[Mon.size() - 1].returnHour());
+	Mon[Mon.size() - 1].setEndTime_Minute(Mon[Mon.size()-1].returnEndTime_Minute() + Mon[Mon.size() - 1].returnMinute());
 }
 void AddNewDataToTuesday()
 {
-	if (!Tuesday.empty())
+	if (!Tue.empty())
 	{
-		static unsigned hour = 17 - Tuesday[Tuesday.size() - 1].returnModuleEndTime_Hour();
-		static unsigned minute = 60 - Tuesday[Tuesday.size() - 1].returnModuleEndTime_Minute();
+		hour = 17 - Tue[Tue.size() - 1].returnModuleEndTime_Hour();
+		minute = 60 - Tue[Tue.size() - 1].returnModuleEndTime_Minute();
 		totalTime_min = (hour * 60) + minute;
-		cout << totalTime_min << endl;
+
 		if (totalTime_min > 540)
 		{
 			ErrorCheckingForInput();
@@ -90,24 +95,24 @@ void AddNewDataToTuesday()
 	}
 
 	newEntry.setParameters(mTime.returnHour(), mTime.returnMinute(), mInfo.returnModuleCode(), mInfo.returnModuleName());
-	Tuesday.push_back(newEntry);
-	if (Tuesday.size() > 1)
+	Tue.push_back(newEntry);
+	if (Tue.size() > 1)
 	{
-		Tuesday[Tuesday.size() - 1].setModuleStartTime_Hour(Tuesday[Tuesday.size() - 2].returnModuleEndTime_Hour());
-		Tuesday[Tuesday.size() - 1].setModuleStartTime_Minute(Tuesday[Tuesday.size() - 2].returnModuleEndTime_Minute());
+		Tue[Tue.size() - 1].setModuleStartTime_Hour(Tue[Tue.size() - 2].returnModuleEndTime_Hour());
+		Tue[Tue.size() - 1].setModuleStartTime_Minute(Tue[Tue.size() - 2].returnModuleEndTime_Minute());
 	}
 
-	Tuesday[Tuesday.size() - 1].setModuleEndTime_Hour(Tuesday[Tuesday.size() - 1].returnModuleStartTime_Hour() + Tuesday[Tuesday.size() - 1].returnHour());
-	Tuesday[Tuesday.size() - 1].setModuleEndTime_Minute(Tuesday[Tuesday.size() - 1].returnModuleStartTime_Minute() + Tuesday[Tuesday.size() - 1].returnMinute());
+	Tue[Tue.size() - 1].setEndTime_Hour(Tue[Tue.size() - 1].returnStartTime_Hour() + Tue[Tue.size() - 1].returnHour());
+	Tue[Tue.size() - 1].setEndTime_Minute(Tue[Tue.size() - 1].returnEndTime_Minute() + Tue[Tue.size() - 1].returnMinute());
 }
 void AddNewDataToWednesday()
 {
-	if (!Wednesday.empty())
+	if (!Wed.empty())
 	{
-		static unsigned hour = 17 - Wednesday[Wednesday.size() - 1].returnModuleEndTime_Hour();
-		static unsigned minute = 60 - Wednesday[Wednesday.size() - 1].returnModuleEndTime_Minute();
+		hour = 17 - Wed[Wed.size() - 1].returnModuleEndTime_Hour();
+		minute = 60 - Wed[Wed.size() - 1].returnModuleEndTime_Minute();
 		totalTime_min = (hour * 60) + minute;
-		cout << totalTime_min << endl;
+
 		if (totalTime_min > 540)
 		{
 			ErrorCheckingForInput();
@@ -123,24 +128,24 @@ void AddNewDataToWednesday()
 	}
 
 	newEntry.setParameters(mTime.returnHour(), mTime.returnMinute(), mInfo.returnModuleCode(), mInfo.returnModuleName());
-	Wednesday.push_back(newEntry);
-	if (Wednesday.size() > 1)
+	Wed.push_back(newEntry);
+	if (Wed.size() > 1)
 	{
-		Wednesday[Wednesday.size() - 1].setModuleStartTime_Hour(Wednesday[Wednesday.size() - 2].returnModuleEndTime_Hour());
-		Wednesday[Wednesday.size() - 1].setModuleStartTime_Minute(Wednesday[Wednesday.size() - 2].returnModuleEndTime_Minute());
+		Wed[Wed.size() - 1].setModuleStartTime_Hour(Wed[Wed.size() - 2].returnModuleEndTime_Hour());
+		Wed[Wed.size() - 1].setModuleStartTime_Minute(Wed[Wed.size() - 2].returnModuleEndTime_Minute());
 	}
 
-	Wednesday[Wednesday.size() - 1].setModuleEndTime_Hour(Wednesday[Wednesday.size() - 1].returnModuleStartTime_Hour() + Wednesday[Wednesday.size() - 1].returnHour());
-	Wednesday[Wednesday.size() - 1].setModuleEndTime_Minute(Wednesday[Wednesday.size() - 1].returnModuleStartTime_Minute() + Wednesday[Wednesday.size() - 1].returnMinute());
+	Wed[Wed.size() - 1].setEndTime_Hour(Wed[Wed.size() - 1].returnStartTime_Hour() + Wed[Wed.size() - 1].returnHour());
+	Wed[Wed.size() - 1].setEndTime_Minute(Wed[Wed.size() - 1].returnEndTime_Minute() + Wed[Wed.size() - 1].returnMinute());
 }
 void AddNewDataToThursday()
 {
-	if (!Thursday.empty())
+	if (!Thurs.empty())
 	{
-		static unsigned hour = 17 - Thursday[Wednesday.size() - 1].returnModuleEndTime_Hour();
-		static unsigned minute = 60 - Thursday[Wednesday.size() - 1].returnModuleEndTime_Minute();
+		hour = 17 - Thurs[Wed.size() - 1].returnModuleEndTime_Hour();
+		minute = 60 - Thurs[Wed.size() - 1].returnModuleEndTime_Minute();
 		totalTime_min = (hour * 60) + minute;
-		cout << totalTime_min << endl;
+
 		if (totalTime_min > 540)
 		{
 			ErrorCheckingForInput();
@@ -156,24 +161,24 @@ void AddNewDataToThursday()
 	}
 
 	newEntry.setParameters(mTime.returnHour(), mTime.returnMinute(), mInfo.returnModuleCode(), mInfo.returnModuleName());
-	Thursday.push_back(newEntry);
-	if (Thursday.size() > 1)
+	Thurs.push_back(newEntry);
+	if (Thurs.size() > 1)
 	{
-		Thursday[Thursday.size() - 1].setModuleStartTime_Hour(Thursday[Thursday.size() - 2].returnModuleEndTime_Hour());
-		Thursday[Thursday.size() - 1].setModuleStartTime_Minute(Thursday[Thursday.size() - 2].returnModuleEndTime_Minute());
+		Thurs[Thurs.size() - 1].setModuleStartTime_Hour(Thurs[Thurs.size() - 2].returnModuleEndTime_Hour());
+		Thurs[Thurs.size() - 1].setModuleStartTime_Minute(Thurs[Thurs.size() - 2].returnModuleEndTime_Minute());
 	}
 
-	Thursday[Thursday.size() - 1].setModuleEndTime_Hour(Thursday[Tuesday.size() - 1].returnModuleStartTime_Hour() + Thursday[Thursday.size() - 1].returnHour());
-	Thursday[Thursday.size() - 1].setModuleEndTime_Minute(Thursday[Tuesday.size() - 1].returnModuleStartTime_Minute() + Thursday[Thursday.size() - 1].returnMinute());
+	Thurs[Thurs.size() - 1].setEndTime_Hour(Thurs[Tue.size() - 1].returnStartTime_Hour() + Thurs[Thurs.size() - 1].returnHour());
+	Thurs[Thurs.size() - 1].setEndTime_Minute(Thurs[Tue.size() - 1].returnEndTime_Minute() + Thurs[Thurs.size() - 1].returnMinute());
 }
 void AddNewDataToFriday()
 {
-	if (!Friday.empty())
+	if (!Fri.empty())
 	{
-		static unsigned hour = 17 - Friday[Friday.size() - 1].returnModuleEndTime_Hour();
-		static unsigned minute = 60 - Friday[Friday.size() - 1].returnModuleEndTime_Minute();
+		hour = 17 - Fri[Fri.size() - 1].returnModuleEndTime_Hour();
+		minute = 60 - Fri[Fri.size() - 1].returnModuleEndTime_Minute();
 		totalTime_min = (hour * 60) + minute;
-		cout << totalTime_min << endl;
+
 		if (totalTime_min > 540)
 		{
 			ErrorCheckingForInput();
@@ -189,15 +194,15 @@ void AddNewDataToFriday()
 	}
 
 	newEntry.setParameters(mTime.returnHour(), mTime.returnMinute(), mInfo.returnModuleCode(), mInfo.returnModuleName());
-	Friday.push_back(newEntry);
-	if (Friday.size() > 1)
+	Fri.push_back(newEntry);
+	if (Fri.size() > 1)
 	{
-		Friday[Thursday.size() - 1].setModuleStartTime_Hour(Friday[Friday.size() - 2].returnModuleEndTime_Hour());
-		Friday[Thursday.size() - 1].setModuleStartTime_Minute(Friday[Friday.size() - 2].returnModuleEndTime_Minute());
+		Fri[Fri.size() - 1].setModuleStartTime_Hour(Fri[Fri.size() - 2].returnModuleEndTime_Hour());
+		Fri[Fri.size() - 1].setModuleStartTime_Minute(Fri[Fri.size() - 2].returnModuleEndTime_Minute());
 	}
 
-	Friday[Friday.size() - 1].setModuleEndTime_Hour(Friday[Friday.size() - 1].returnModuleStartTime_Hour() + Friday[Friday.size() - 1].returnHour());
-	Friday[Friday.size() - 1].setModuleEndTime_Minute(Friday[Friday.size() - 1].returnModuleStartTime_Minute() + Friday[Friday.size() - 1].returnMinute());
+	Fri[Fri.size() - 1].setEndTime_Hour(Fri[Fri.size() - 1].returnStartTime_Hour() + Fri[Fri.size() - 1].returnHour());
+	Fri[Fri.size() - 1].setEndTime_Minute(Fri[Fri.size() - 1].returnEndTime_Minute() + Fri[Fri.size() - 1].returnMinute());
 }
 ostream & operator<< (ostream & output, vector<CModule> & passIn)
 {
@@ -243,31 +248,31 @@ ostream & operator<< (ostream & output, vector<CModule> & passIn)
 		}
 
 		//Checking Module start time in hour
-		if(passIn[a].returnModuleStartTime_Hour() < 10 && passIn[a].returnModuleStartTime_Hour() > 0)
+		if(passIn[a].returnStartTime_Hour() < 10 && passIn[a].returnStartTime_Hour() > 0)
 		{
-			moduleStartTime_Hour = data[passIn[a].returnModuleStartTime_Hour() - 1];
+			moduleStartTime_Hour = data[passIn[a].returnStartTime_Hour() - 1];
 		}
-		else if (passIn[a].returnModuleStartTime_Hour() == 0)
+		else if (passIn[a].returnStartTime_Hour() == 0)
 		{
 			moduleStartTime_Hour = zero;
 		}
 		else
 		{
-			moduleStartTime_Hour = to_string((long long)passIn[a].returnModuleStartTime_Hour());
+			moduleStartTime_Hour = to_string((long long)passIn[a].returnStartTime_Hour());
 		}
 
 		//Chcking Module start time in minute
-		if(passIn[a].returnModuleStartTime_Minute() < 10 && passIn[a].returnModuleStartTime_Minute() > 0)
+		if(passIn[a].returnEndTime_Minute() < 10 && passIn[a].returnEndTime_Minute() > 0)
 		{
-			moduleStartTime_Minute = data[passIn[a].returnModuleStartTime_Minute() - 1];
+			moduleStartTime_Minute = data[passIn[a].returnEndTime_Minute() - 1];
 		}
-		else if (passIn[a].returnModuleStartTime_Minute() == 0)
+		else if (passIn[a].returnEndTime_Minute() == 0)
 		{
 			moduleStartTime_Minute = zero;
 		}
 		else
 		{
-			moduleStartTime_Minute = to_string((long long)passIn[a].returnModuleStartTime_Minute());
+			moduleStartTime_Minute = to_string((long long)passIn[a].returnEndTime_Minute());
 		}
 
 		//Checking Module end time in hour
@@ -311,7 +316,7 @@ ostream & operator<< (ostream & output, vector<CModule> & passIn)
 }
 void newData()
 {
-	cout << "Which day? \n1)Monday \n2)Tuesday \n3)Wednesday \n4)Thursday \n5)Friday" << endl;
+	cout << "Which day? \n1)Mon \n2)Tue \n3)Wed \n4)Thurs \n5)Fri" << endl;
 	cin >> choice3;
 	cin >> mInfo;
 	cin >> mTime;
@@ -322,27 +327,27 @@ void newData()
 		cin >> choice3;
 	}
 
-	//=======Monday=========//
+	//=======Mon=========//
 	if (choice3 == 1)
 	{
 		AddNewDataToMonday();
 	}
-	//=======Tuesday=========//
+	//=======Tue=========//
 	else if (choice3 == 2)
 	{
 		AddNewDataToTuesday();
 	}
-	//=======Wednesday=========//
+	//=======Wed=========//
 	else if (choice3 == 3)
 	{
 		AddNewDataToWednesday();
 	}
-	//=======Thursday=========//
+	//=======Thurs=========//
 	else if (choice3 == 4)
 	{
 		AddNewDataToThursday();
 	}
-	//=======Friday=========//
+	//=======Fri=========//
 	else
 	{
 		AddNewDataToFriday();
@@ -359,9 +364,9 @@ void Choices()
 		cin >> choice;
 	}
 }
-void Choices2()
+void Print()
 {
-	cout << "Which day? \n1)Monday \n2)Tuesday \n3)Wednesday \n4)Thursday \n5)Friday" << endl;
+	cout << "Which day? \n1)Mon \n2)Tue \n3)Wed \n4)Thurs \n5)Fri" << endl;
 	cin >> choice2;
 
 	while(choice2 < 1 || choice2 > 5)
@@ -370,47 +375,47 @@ void Choices2()
 		cin >> choice2;
 	}
 
-	//=======Monday=========//
+	//=======Mon=========//
 	if (choice2 == 1)
 	{
-		if (!Monday.empty())
+		if (!Mon.empty())
 		{
-			cout << Monday;
+			cout << Mon;
 		}
 		else
-			cout << "No data entered for Monday" << endl;
+			cout << "No data entered for Mon" << endl;
 	}
-	//=======Tuesday=========//
+	//=======Tue=========//
 	else if (choice2 == 2)
 	{
-		if (!Tuesday.empty())
-			cout << Tuesday;
+		if (!Tue.empty())
+			cout << Tue;
 		else
-			cout << "No data entered for Tuesday" << endl;
+			cout << "No data entered for Tue" << endl;
 	}
-	//=======Wednesday=========//
+	//=======Wed=========//
 	else if (choice2 == 3)
 	{
-		if (!Wednesday.empty())
-			cout << Wednesday;
+		if (!Wed.empty())
+			cout << Wed;
 		else
-			cout << "No data entered fro Wednesday" << endl;
+			cout << "No data entered for Wed" << endl;
 	}
-	//=======Thursday=========//
+	//=======Thurs=========//
 	else if (choice2 == 4)
 	{
-		if (!Thursday.empty())
-			cout << Thursday;
+		if (!Thurs.empty())
+			cout << Thurs;
 		else
-			cout << "No data entered for Thursday" << endl;
+			cout << "No data entered for Thurs" << endl;
 	}
-	//=======Friday=========//
+	//=======Fri=========//
 	else
 	{
-		if (!Friday.empty())
-			cout << Friday;
+		if (!Fri.empty())
+			cout << Fri;
 		else
-			cout << "No data entered for Friday" << endl;
+			cout << "No data entered for Fri" << endl;
 	}
 }
 
@@ -426,19 +431,15 @@ void main()
 		system("cls");
 
 		Choices();
-
+		
+		system("cls");
 		if (choice == 1)
 		{
-			system("cls");
-
 			newData();
-
 		}
 		else if (choice == 2)
 		{
-			system("cls");
-
-			Choices2();
+			Print();
 		}
 		system("pause");
 	}

@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "Mtx44.h"
+#include "Camera4.h"
 #include "Camera3.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
@@ -49,8 +50,12 @@ class SceneText : public Scene
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
+
 		U_COLOR_TEXTURE_ENABLED,
+		U_COLOR_TEXTURE_ENABLED1,
 		U_COLOR_TEXTURE,
+		U_COLOR_TEXTURE1,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -135,7 +140,8 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-
+	// Update Camera status
+	virtual void UpdateCameraStatus (const unsigned char key);
 private:
 
 	//Int
@@ -175,6 +181,7 @@ private:
 
 	//Camera3
 	Camera3 camera;
+	Camera4 camera2;
 
 	//Bool
 	bool bLightEnabled;

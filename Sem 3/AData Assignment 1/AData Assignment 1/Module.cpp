@@ -44,11 +44,11 @@ unsigned CModule::returnMinute()
 {
 	return this->minute;
 }
-unsigned CModule::returnModuleStartTime_Hour()
+unsigned CModule::returnStartTime_Hour()
 {
 	return this->moduleStartTime_Hour;
 }
-unsigned CModule::returnModuleStartTime_Minute()
+unsigned CModule::returnEndTime_Minute()
 {
 	return this->moduleStartTime_Minute;
 }
@@ -82,11 +82,11 @@ void CModule::setParameters(unsigned newHour, unsigned newMinute, string newMCod
 	this->MName = newMName;
 }
 
-void CModule::setModuleEndTime_Hour(int newValue)
+void CModule::setEndTime_Hour(int newValue)
 {
 	this->moduleEndTime_Hour = newValue;
 }
-void CModule::setModuleEndTime_Minute(int newValue)
+void CModule::setEndTime_Minute(int newValue)
 {
 	this->moduleEndTime_Minute = newValue;
 }

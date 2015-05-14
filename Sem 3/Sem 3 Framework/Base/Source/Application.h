@@ -3,7 +3,7 @@
 #define APPLICATION_H
 
 #include "timer.h"
-
+class SceneText;
 class Application
 {
 public:
@@ -16,6 +16,7 @@ public:
 	void Run();
 	void Exit();
 	static bool IsKeyPressed(unsigned short key);
+	bool GetKeyboardUpdate();
 
 	//Mouse
 	static double mouse_last_x, 
@@ -45,6 +46,8 @@ private:
 	const static int m_window_deadzone = 1000;
 	const static int m_window_width = 800;
 	const static int m_window_height = 600;
+
+	SceneText *scene;
 };
 
 #endif

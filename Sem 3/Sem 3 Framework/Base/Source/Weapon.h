@@ -4,7 +4,6 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
-#include "Ammo.h"
 #include "SMGClass.h"
 #include "SniperClass.h"
 #include "SwordClass.h"

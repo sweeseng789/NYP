@@ -27,6 +27,7 @@ public:
 
 	Material material;
 	unsigned textureID;
+	unsigned textureArray[2];
 };
 
 #endif

@@ -22,8 +22,8 @@ public:
 	unsigned returnHour();
 	unsigned returnMinute();
 
-	unsigned returnModuleStartTime_Hour();
-	unsigned returnModuleStartTime_Minute();
+	unsigned returnStartTime_Hour();
+	unsigned returnEndTime_Minute();
 	unsigned returnModuleEndTime_Hour();
 	unsigned returnModuleEndTime_Minute();
 
@@ -32,8 +32,8 @@ public:
 
 	void setModuleStartTime_Hour(int newValue);
 	void setModuleStartTime_Minute(int newValue);
-	void setModuleEndTime_Hour(int newValue);
-	void setModuleEndTime_Minute(int newValue);
+	void setEndTime_Hour(int newValue);
+	void setEndTime_Minute(int newValue);
 
 	void setFull();
 private:

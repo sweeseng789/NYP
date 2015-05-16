@@ -10,7 +10,7 @@
 
 class SceneAsteroid : public SceneBase
 {
-	static const int MAX_SPEED = 10;
+	static const int MAX_SPEED = 100;
 	static const int BULLET_SPEED = 50;
 	static const int MISSILE_SPEED = 20;
 	static const int MISSILE_POWER = 1;
@@ -41,6 +41,7 @@ protected:
 	float m_worldWidth;
 	float m_worldHeight;
 	GameObject *m_ship;
+	GameObject *m_thruster;
 	Vector3 m_force;
 	int m_objectCount;
 	int m_lives;
@@ -48,6 +49,8 @@ protected:
 
 private:
 	float rotateShip;
+	float bulletAngle;
+	Vector3 bullet;
 };
 
 #endif

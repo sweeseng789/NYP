@@ -44,6 +44,8 @@ public:
 	enum GEOMETRY_TYPE
 	{
 		Spaceship,
+		Spaceship_Thurster,
+		SpaceShip_Thurster_back,
 		GEO_AXES,
 		GEO_TEXT,
 		GEO_BALL,

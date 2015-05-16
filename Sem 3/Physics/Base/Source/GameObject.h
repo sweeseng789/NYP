@@ -12,6 +12,7 @@ struct GameObject
 		GO_CUBE,
 		GO_ASTEROID,
 		GO_SHIP,
+		GO_SHIP_THURSTER,
 		GO_BULLET,
 		GO_MISSILE,
 		GO_TOTAL, //must be last

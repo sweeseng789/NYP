@@ -33,15 +33,17 @@ void SceneAsteroid::Init()
 	//Exercise 2c: Construct m_ship, set active, type, scale and pos
 	m_ship = new GameObject(GameObject::GO_SHIP);
 	m_ship->active = true;
-	m_ship->scale.Set(12, 12, 12);
+	//m_ship->scale.Set(12, 12, 12);
 	m_worldHeight = 100.f;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 	m_ship->pos.Set(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 	m_ship->mass = 0.1f;
 
+	m_thruster = new GameObject(GameObject::GO_SHIP_THURSTER);
 
 	//Set Paramters
 	rotateShip = 0.f;
+	bulletAngle = 0.f;
 }
 
 GameObject* SceneAsteroid::FetchGO()
@@ -53,7 +55,7 @@ GameObject* SceneAsteroid::FetchGO()
 		if (!go->active)
 		{
 			go->active = true;
-			break;
+			return go;
 		}
 	}
 
@@ -66,11 +68,23 @@ GameObject* SceneAsteroid::FetchGO()
 
 	GameObject *go = m_goList.back();
 	go->active = true;
-	return NULL;
+
+	return go;
 }
 
 void SceneAsteroid::Update(double dt)
 {
+	//Get Angle To Shoot Bullet
+	bulletAngle = atan2(m_ship->pos.x, m_ship->pos.y);
+	bullet.x = cos(bulletAngle) * 2;
+	bullet.y = sin(bulletAngle) * 2;
+
+	if (Application::IsKeyPressed('P'))
+	{
+		bullet.x += cos(bulletAngle) * 2;
+		bullet.x += sin(bulletAngle) * 2;
+	}
+
 	SceneBase::Update(dt);
 	
 	if(Application::IsKeyPressed('9'))
@@ -110,12 +124,43 @@ void SceneAsteroid::Update(double dt)
 		//m_force.x += 100 * dt;
 		rotateShip -= 100 * dt;
 	}
+
 	//Exercise 8: use 2 keys to increase and decrease mass of ship
+	if (Application::IsKeyPressed('K'))
+	{
+		m_ship->mass += 0.1f;
+	}
+	if (Application::IsKeyPressed('L'))
+	{
+		m_ship->mass -= 0.1f;
+		if (m_ship->mass < 0.1f)
+		{
+			m_ship->mass = 0.1f;
+		}
+	}
+
 
 	//Exercise 11: use a key to spawn some asteroids
+	if (Application::IsKeyPressed('V'))
+	{
+		GameObject * go = FetchGO();
+		go->type = GameObject::GO_ASTEROID;
+		go->scale.Set(1.f, 1.f, 1.f);
 
+		go->pos.Set(Math::RandFloatMinMax(0, m_worldWidth), Math::RandFloatMinMax(0, m_worldHeight), 0);
+		go->vel.Set(Math::RandFloatMinMax(-10, 10), Math::RandFloatMinMax(-10, 10) ,0);
+
+	}
 	//Exercise 14: use a key to spawn a bullet
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		GameObject * go = FetchGO();
+		go->type = GameObject::GO_BULLET;
+		go->scale.Set(1.f, 1.f, 1.f);
 
+		go->pos.Set(m_ship->pos.x, m_ship->pos.y, m_ship->pos.z);
+		go->vel.Set(m_ship->vel.x * 10, m_ship->vel.y * 10, m_ship->vel.z);
+	}
 	//Exercise 15: limit the spawn rate of bullets
 
 	//Mouse Section
@@ -149,16 +194,34 @@ void SceneAsteroid::Update(double dt)
 	m_ship->vel += acc * dt;
 	m_ship->pos += m_ship->vel * dt;
 
-	//Exercise 9: wrap ship position if it leaves screen
-	if (m_ship->pos.x > 130)
+	//limit speed
+	if (m_ship->vel.Length() > MAX_SPEED)
 	{
-		m_ship->pos.x = 130;
+		m_ship->vel.Normalize();
+		m_ship->vel *= MAX_SPEED;
 	}
-	if (m_ship->pos.x < 0)
+
+	//Exercise 9: wrap ship position if it leaves screen
+	if(m_ship->pos.x > m_worldWidth)
 	{
 		m_ship->pos.x = 0;
 	}
-	std::cout << m_ship->pos << std::endl;
+
+	else if(m_ship->pos.x < 0)
+	{
+		m_ship->pos.x = m_worldWidth;
+	}
+
+	if(m_ship->pos.y > m_worldHeight)
+	{
+		m_ship->pos.y = 0;
+	}
+
+	else if(m_ship->pos.y < 0)
+	{
+		m_ship->pos.y = m_worldHeight;
+	}
+
 
 	for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
@@ -166,11 +229,49 @@ void SceneAsteroid::Update(double dt)
 		if(go->active)
 		{
 			//Exercise 12: handle collision between GO_SHIP and GO_ASTEROID using simple distance-based check
+			if(go->type == GameObject::GO_ASTEROID)
+			{
+				float distSquared = (go->pos - m_ship->pos).LengthSquared();
+				float combinedRadius = go->scale.x + m_ship->scale.x;
 
-			//Exercise 13: asteroids should wrap around the screen like the ship
+				if (distSquared <= combinedRadius * combinedRadius)
+				{
+					go->active = false;
+					m_lives --;
+					m_ship->pos.Set(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+					m_ship->vel.SetZero();
+				}
+
+				//Exercise 13: asteroids should wrap around the screen like the ship
+				if(go->pos.x > m_worldWidth)
+				{
+					go->pos.x = 0;
+				}
+				else if(go->pos.x < 0)
+				{
+					go->pos.x = m_worldWidth;
+				}
+
+				if(go->pos.y > m_worldHeight)
+				{
+					go->pos.y = 0;
+				}
+				else if(go->pos.y < 0)
+				{
+					go->pos.y = m_worldHeight;
+				}
+			}
+			go->pos += go->vel * dt;
 
 			//Exercise 16: unspawn bullets when they leave screen
-
+			if (go->type == GameObject::GO_BULLET)
+			{
+				if(go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
+				{
+					go->active = false;
+				}
+			}
+			//Math::RadianToDegree(atan2(m_ship->vel.y / m_ship->vel.x));
 			//Exercise 18: collision check between GO_BULLET and GO_ASTEROID
 		}
 	}
@@ -182,13 +283,26 @@ void SceneAsteroid::RenderGO(GameObject *go)
 	switch(go->type)
 	{
 	case GameObject::GO_SHIP:
-		//Exercise 4a: render a sphere with radius 1
 		modelStack.PushMatrix();
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Rotate(rotateShip, 0, 0, 1);
-		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-		RenderMesh(meshList[Spaceship], false);
+		modelStack.Scale(go->scale.x * 10, go->scale.y * 10, go->scale.z);
+		if (Application::IsKeyPressed('W'))
+		{
+			//If i press W, render the thruster
+			RenderMesh(meshList[Spaceship_Thurster], false);
+		}
+		else if (Application::IsKeyPressed('S'))
+		{
+			//If i press S, render the thruster
+			RenderMesh(meshList[SpaceShip_Thurster_back], false);
+		}
+		else
+		{
+			RenderMesh(meshList[Spaceship], false);
+		}
 		modelStack.PopMatrix();
+		break;
 
 		//Exercise 17a: render a ship texture or 3D ship model
 		//Exercise 17b:	re-orientate the ship with velocity
@@ -197,7 +311,7 @@ void SceneAsteroid::RenderGO(GameObject *go)
 	case GameObject::GO_ASTEROID:
 		//Exercise 4b: render a cube with length 2
 		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Translate(go->pos.x, go->pos.y, 0);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
@@ -249,11 +363,35 @@ void SceneAsteroid::Render()
 		}
 	}
 	RenderGO(m_ship);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(bullet.x, bullet.y, 0);
+	RenderMesh(meshList[GEO_CUBE], false);
+	modelStack.PopMatrix();
+
 	//On screen text
 
 	//Exercise 5a: Render m_lives, m_score
+	std::ostringstream ss3;
+	ss3.precision(3);
+	ss3 << "Lives: " << m_lives << " Scores: " << m_score;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 9);
 
 	//Exercise 5b: Render position, velocity & mass of ship
+	std::ostringstream ss4;
+	ss4.precision(3);
+	ss4 << "Position: " << m_ship->pos;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 3, 0, 12);
+
+	std::ostringstream ss5;
+	ss5.precision(3);
+	ss5 << "Velocity: " << m_ship->vel;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss5.str(), Color(0, 1, 0), 3, 0, 15);
+
+	std::ostringstream ss6;
+	ss6.precision(3);
+	ss6 << "Mass: " << m_ship->mass;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss6.str(), Color(0, 1, 0), 3, 0, 18);
 
 	std::ostringstream ss2;
 	ss2.precision(3);

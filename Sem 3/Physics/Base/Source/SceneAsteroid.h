@@ -5,8 +5,6 @@
 #include <vector>
 #include "SceneBase.h"
 #include "Mesh.h"
-//#include "MeshBuilder.h"
-//#include "LoadTGA.h"
 
 class SceneAsteroid : public SceneBase
 {
@@ -33,15 +31,18 @@ public:
 	void RenderGO(GameObject *go);
 
 	GameObject* FetchGO();
+	GameObject* FetchGO2();
+
+	void GOUpdate(float dt);
 protected:
 
 	//Physics
-	std::vector<GameObject *> m_goList;
+	std::vector<GameObject *> m_goList_Asteroid;
+	std::vector<GameObject *> m_goList_Bullet;
 	float m_speed;
 	float m_worldWidth;
 	float m_worldHeight;
 	GameObject *m_ship;
-	GameObject *m_thruster;
 	Vector3 m_force;
 	int m_objectCount;
 	int m_lives;
@@ -51,6 +52,7 @@ private:
 	float rotateShip;
 	float bulletAngle;
 	Vector3 bullet;
+	float BulletGapLimit;
 };
 
 #endif

@@ -46,6 +46,8 @@ public:
 		Spaceship,
 		Spaceship_Thurster,
 		SpaceShip_Thurster_back,
+		Laser,
+		Asteroid_Sprite,
 		GEO_AXES,
 		GEO_TEXT,
 		GEO_BALL,

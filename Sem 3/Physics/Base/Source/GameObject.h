@@ -23,9 +23,13 @@ struct GameObject
 	Vector3 scale;
 	bool active;
 	float mass;
+	float angle;
+	double bulletSpeed;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();
+
+	void setAngle(float angle);
 };
 
 #endif

@@ -117,6 +117,12 @@ void SceneBase::Init()
 	meshList[SpaceShip_Thurster_back] = MeshBuilder::GenerateQuad("Spaceship backward thruster", Color(1, 1, 1), 1);
 	meshList[SpaceShip_Thurster_back]->textureID = LoadTGA("Image//Spaceship_Thurster_back.tga");
 
+	meshList[Laser] = MeshBuilder::GenerateQuad("Spaceship Laser Sprite", Color(1, 1, 1), 1);
+	meshList[Laser]->textureID = LoadTGA("Image//Laser_Sprite.tga");
+
+	meshList[Asteroid_Sprite] = MeshBuilder::GenerateQuad("Asteroid Sprite", Color(1, 1, 1), 1);
+	meshList[Asteroid_Sprite]->textureID = LoadTGA("Image//Asteroid_Sprite.tga");
+
 	bLightEnabled = false;
 }
 

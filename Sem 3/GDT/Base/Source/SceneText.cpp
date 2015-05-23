@@ -11,17 +11,18 @@
 #include "SniperClass.h"
 #include "SMGClass.h"
 
-SceneText::SceneText()
+SceneText::SceneText():
+m_cMinimap(NULL)
 {
 }
 
 SceneText::~SceneText()
 {
-	/*if (camera2 != NULL)
+	if (m_cMinimap)
 	{
-		delete camera2;
-		camera2 = NULL;
-	}*/
+		delete m_cMinimap;
+		m_cMinimap = NULL;
+	}
 }
 
 void SceneText::SetParameters()
@@ -249,8 +250,17 @@ void SceneText::Init()
 	meshList[modelLeg] = MeshBuilder::GenerateOBJ("Enemy Leg", "OBJ//modelLeg.obj");
 	meshList[modelLeg]->textureArray[0] = LoadTGA("Image//modelLeg.tga");
 
+	//SKYPLANE
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureID = LoadTGA("Image//top.tga"); 
+
+	//MINIMAP
+	m_cMinimap = new CMinimap();
+	m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
+	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass.tga");
+	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MiniMap border", Color(1, 1, 0), 1.f));
+	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MiniMap border", Color(1, 1, 0), 1.f));
+
 
 	SetParameters();
 
@@ -263,6 +273,23 @@ void SceneText::Init()
 	rotateAngle= rotateAngle2 = 0;
 
 	bLightEnabled = true;
+}
+
+void SceneText::SetHUD(const bool m_bHUDmode)
+{
+	if(m_bHUDmode)
+	{
+		glDisable(GL_DEPTH_TEST);
+		Mtx44 ortho;
+		ortho.SetToOrtho(0, 80, 0, 60, -10, 10);
+		projectionStack.PushMatrix();
+		projectionStack.LoadMatrix(ortho);
+	}
+	else
+	{
+		projectionStack.PopMatrix();
+		glEnable(GL_DEPTH_TEST);
+	}
 }
 
 /******************************************************************************
@@ -484,14 +511,8 @@ void SceneText::Update(double dt)
 	if (moving > 100)
 	moving = 100;*/
 
-	if (Application::IsKeyPressed(VK_LEFT))
-		rotateAngle += (float)(200 * dt);
-	if (Application::IsKeyPressed(VK_RIGHT))
-		rotateAngle -= (float)(200 * dt);
-	if (Application::IsKeyPressed(VK_UP))
-		rotateAngle2 += (float)(200.0f * dt);
-	if (Application::IsKeyPressed(VK_DOWN))
-		rotateAngle2 -= (float)(200.0f * dt);
+	//================Minimap==============//
+	rotateAngle -= Application::camera_yaw;
 
 	Sword.ChooseWeaponUpdate();
 	Pistol.ChooseWeaponUpdate();
@@ -613,7 +634,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y, float z)
+void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vector3 translate, bool rotate)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -623,8 +644,10 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float 
 	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Scale(sizeX, sizeY, sizeX);
-	modelStack.Translate(x, y, z);
+	modelStack.Scale(size.x, size.y, 0);
+	modelStack.Translate(translate.x, translate.y, 0);
+	if (rotate)
+		modelStack.Rotate(rotateAngle, 0, 0, 1);
 
 	Mtx44 MVP, modelview, modelView_inverse_transpose;
 
@@ -768,46 +791,47 @@ void SceneText::RenderHUD()
 	//===============HEALTH===========//
 	for (unsigned a = 0; a < moving; ++a)//Healthbar
 	{
-		RenderMeshIn2D(meshList[Healthbar], true, 0.8f, 2.0f, -76.0f + a, 25.0f);
+		//RenderMeshIn2D(meshList[Healthbar], true, 0.8f, 2.0f, -76.0f + a, 25.0f);
+		RenderMeshIn2D(meshList[Healthbar], true,Vector3(0.8f, 2.0f, 0), Vector3(-76.0f + a, 25.0f, 0), false);
 	}
 
-	RenderMeshIn2D(meshList[AvatarIcon], true, 13.0f, 13.0f, -5.5f, 4.0f); //Avatar icon
+	RenderMeshIn2D(meshList[AvatarIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 4.0f, 0), false); //Avatar icon
 
-	RenderMeshIn2D(meshList[HudBackground], true, 85.0f, 13.0f, -0.25f, 4.0f);//background
+	RenderMeshIn2D(meshList[HudBackground], true, Vector3(85.0f, 13.0f, 0), Vector3(-0.25f, 4.0f, 0), false);//background
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Setsuna", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 55.7f);//Name
 
 	if (Sword.returnSwordConfirmation() == false)
 	{
-		RenderMeshIn2D(meshList[HudBackground], true, 20.0f, 5.0f, 3.49f, -11.5f);//background for ready screen
+		RenderMeshIn2D(meshList[HudBackground], true, Vector3(20.0f, 5.0f, 0), Vector3(3.49f, -11.5f, 0), false);//background for ready screen
 	}
 
 	//===============Weapon Chosen==============//
-	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 2.9f);//bakcground for ammo
-	RenderMeshIn2D(meshList[HudBackground], true, 13.0f, 13.0f, -4.4f, 1.8f);//background for round
+	RenderMeshIn2D(meshList[HudBackground], true, Vector3(13.0f, 13.0f, 0), Vector3(-4.4f, 2.9f, 0), false);//bakcground for ammo
+	RenderMeshIn2D(meshList[HudBackground], true, Vector3(13.0f, 13.0f, 0), Vector3(-4.4f, 1.8f, 0), false);//background for round
 	//==============Round============//
-	RenderMeshIn2D(meshList[RoundIcon], true, 13.0f, 13.0f, -5.5f, 1.8f);//Round icon
+	RenderMeshIn2D(meshList[RoundIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 1.8f, 0), false);//Round icon
 
 	//=====================SWORD=====================//
 	if (Sword.returnSwordConfirmation() == true)
 	{
-		RenderMeshIn2D(meshList[SwordIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Sword icon
+		RenderMeshIn2D(meshList[SwordIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 2.9f, 0), false);//Sword icon
 
 		RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 47.5f);//Sword got no bullet, so i used --
 
 		RenderTextOnScreen(meshList[GEO_TEXT], "--", Color(1.0f, 1.0f, 1.0f), 3.0f, 9.5f, 40.0f);//Sword got no round, so i used --
 
-		RenderMeshIn2D(meshList[WeaponIcon_Sword], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for close ranged weapon
+		RenderMeshIn2D(meshList[WeaponIcon_Sword], true, Vector3(40.5f, 40.5f, 0), Vector3(-0.7f, 0.925f, 0), false);// This is the icon for close ranged weapon
 
 		if (Application::IsKeyPressed('R'))
 		{
-			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderMeshIn2D(meshList[HudBackground], true, Vector3(80.0f, 10.0f, 0), Vector3(0.01f, 0.2f, 0), false);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Error", Color(1.0f, 1.0f, 1.0f), 3.0f, 33.5f, 29.5f);
 		}
 	}//=====================PISTOL=====================//
 	if (Pistol.returnPistolConfirmation() == true)//player is using pistol
 	{
-		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
+		RenderMeshIn2D(meshList[BulletIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 2.9f, 0), false);//Bullet icon
 
 		if (Pistol.returnBullet_Pistol() < 10)
 		{
@@ -820,11 +844,11 @@ void SceneText::RenderHUD()
 
 		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnRounds_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
-		RenderMeshIn2D(meshList[WeaponIcon_Pistol], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for long ranged weapon
+		RenderMeshIn2D(meshList[WeaponIcon_Pistol], true, Vector3(40.5f, 40.5f, 0), Vector3(-0.7f, 0.925f, 0), false);// This is the icon for long ranged weapon
 
 		if (Pistol.returnReloading() == true) //reloading
 		{
-			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderMeshIn2D(meshList[HudBackground], true, Vector3(80.0f, 10.0f, 0), Vector3(0.01f, 0.2f, 0), false);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
 			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Pistol.returnReloadTime_Pistol()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
 		}
@@ -836,17 +860,17 @@ void SceneText::RenderHUD()
 	}//=====================SNIPER=====================//
 	else if (Sniper.returnSniperConfirmation() == true)//player is using sniper
 	{
-		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
+		RenderMeshIn2D(meshList[BulletIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 2.9f, 0), false);//Bullet icon
 
 		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnBullet_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 47.5f);
 
 		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnRounds_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
-		RenderMeshIn2D(meshList[WeaponIcon_Sniper], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
+		RenderMeshIn2D(meshList[WeaponIcon_Sniper], true, Vector3(40.5f, 40.5f, 0), Vector3(-0.7f, 0.925f, 0), false);// This is the icon for logn ranged weapon
 
 		if (Sniper.returnReloading() == true)
 		{
-			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderMeshIn2D(meshList[HudBackground], true, Vector3(80.0f, 10.0f, 0), Vector3(0.01f, 0.2f, 0), false);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
 			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)Sniper.returnReloadTime_Sniper()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
 		}
@@ -864,7 +888,7 @@ void SceneText::RenderHUD()
 	}//=====================SMG=====================//
 	else if (SMG.returnSMGConfirmation() == true)//player is using SMG
 	{
-		RenderMeshIn2D(meshList[BulletIcon], true, 13.0f, 13.0f, -5.5f, 2.9f);//Bullet icon
+		RenderMeshIn2D(meshList[BulletIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 2.9f, 0), false);//Bullet icon
 
 		if (SMG.returnBullet_SMG() < 10)//Arranging bullet number to middle if it is less than 10
 		{
@@ -878,11 +902,11 @@ void SceneText::RenderHUD()
 
 		RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnRounds_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 10.8f, 40.0f);
 
-		RenderMeshIn2D(meshList[WeaponIcon_SMG], true, 40.5f, 40.5f, -0.7f, 0.925f);// This is the icon for logn ranged weapon
+		RenderMeshIn2D(meshList[WeaponIcon_SMG], true, Vector3(40.5f, 40.5f, 0), Vector3(-0.7f, 0.925f, 0), false);// This is the icon for logn ranged weapon
 
 		if (SMG.returnReloading() == true)//Reloading
 		{
-			RenderMeshIn2D(meshList[HudBackground], true, 80.0f, 10.0f, 0.01f, 0.2f);//background for reload screen
+			RenderMeshIn2D(meshList[HudBackground], true, Vector3(80.0f, 10.0f, 0), Vector3(0.01f, 0.2f, 0), false);//background for reload screen
 			RenderTextOnScreen(meshList[GEO_TEXT], "Reload in", Color(1.0f, 1.0f, 1.0f), 3.0f, 25.0f, 29.5f);
 			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string((long long)SMG.returnReloadTime_SMG()), Color(1.0f, 1.0f, 1.0f), 3.0f, 55.0f, 29.5f);
 		}
@@ -901,14 +925,14 @@ void SceneText::RenderHUD()
 
 	if (Sword.returnSwordConfirmation() == true)
 	{
-		RenderMeshIn2D(meshList[Weapon_Sword], false, 90.f, 90.f, 0.56f, -0.35f);
+		RenderMeshIn2D(meshList[Weapon_Sword], false, Vector3(90.f, 90.f, 0), Vector3(0.56f, -0.35f, 0), false);
 	}
 	if (Pistol.returnReloading() == false)
 	{
 		if (Pistol.returnPistolConfirmation() == true)
 		{
 			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_Pistol], false, 70.f, 70.f, 0.7f, -0.4f);
+			RenderMeshIn2D(meshList[Weapon_Pistol], false, Vector3(70.f, 70.f, 0), Vector3(0.7f, -0.4f, 0), false);
 			modelStack.PopMatrix();
 		}
 	}
@@ -917,19 +941,19 @@ void SceneText::RenderHUD()
 		if (Sniper.returnSniperConfirmation() == true)
 		{
 			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_Sniper], false, 70.f, 70.f, 0.7f, -0.4f);
+			RenderMeshIn2D(meshList[Weapon_Sniper], false, Vector3(70.f, 70.f, 0), Vector3(0.7f, -0.4f, 0), false);
 			modelStack.PopMatrix();
 		}
 	}
 	//==================CrossHair=============//
-	RenderMeshIn2D(meshList[crosshair], true, 5.0f, 5.0f, 0 , 0);
+	RenderMeshIn2D(meshList[crosshair], true, Vector3(5.0f, 5.0f, 0), Vector3(0 , 0, 0), false);
 
 	if (SMG.returnReloading() == false)
 	{
 		if (SMG.returnSMGConfirmation() == true)
 		{
 			modelStack.PushMatrix();
-			RenderMeshIn2D(meshList[Weapon_SMG], false, 100.f, 100.f, 0.3f, -0.2f);
+			RenderMeshIn2D(meshList[Weapon_SMG], false, Vector3(100.f, 100.f, 0), Vector3(0.3f, -0.2f, 0), false);
 			modelStack.PopMatrix();
 		}
 	}
@@ -1082,10 +1106,7 @@ void SceneText::Render()
 	}
 
 	modelStack.PushMatrix();//Use this method to give the illusion that the bug is not there
-	if (camera.currentlyFalling == false && camera.currentlyJumping == false && camera.pressedSpace == false)
-	{
-		modelStack.Translate(0, camera.position.y, 0);
-	}
+	modelStack.Translate(0, camera.position.y, 0);
 	RenderMesh(meshList[GEO_AXES], false);
 	modelStack.PopMatrix();
 
@@ -1095,21 +1116,7 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 
 	RenderSkybox();
-	//RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 300.0f, 2000.0f, 1.0f, 1.0f);
 
-	// perspective;
-	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	//projectionStack.LoadMatrix(perspective);
-	//viewStack.LoadIdentity();
-	//
-	//modelStack.PushMatrix();
-	////modelStack.Translate(20, 0, -20);
-	////modelStack.Scale(0.1f, 0.1f, 0.1f);
-	//modelStack.Scale(50, 50, 50);
-	////RenderMesh(meshList[GEO_QUAD], false);
-	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
-	//modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-20, 0, -20);
 	RenderMesh(meshList[GEO_OBJECT], false);
@@ -1123,40 +1130,35 @@ void SceneText::Render()
 
 	modelStack.PushMatrix();
 	modelStack.Scale(10, 10, 10);
-	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
 	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
 	modelStack.PopMatrix();
 
+
+	SetHUD(true);
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y <<
+		", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 
-	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
-	modelStack.PushMatrix();
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Translate(enemy.returnEnemyPosition().x, -2 + enemy.returnEnemyPosition().y, enemy.returnEnemyPosition().z);
-	RenderEnemyModel();
-	modelStack.PopMatrix();
+	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, Vector3(20.0f, 20.0f, 0), Vector3(3, -2, 0), true);
+	RenderMeshIn2D(m_cMinimap->GetBorder(), false, Vector3(20.0f, 20.0f, 0), Vector3(3, -2, 0), false);
+	RenderMeshIn2D(m_cMinimap->GetBackground(), false, Vector3(20.0f, 20.0f, 0), Vector3(3, -2, 0), false);
+
+	SetHUD(false);
 
 	//RenderTerrain();
 
-	RenderHUD();
+	//RenderHUD();
 
 	//==============Testing===============//
-	//modelStack.PushMatrix();//Left right
-	//modelStack.Translate(camera.direction.x, camera.direction.y, camera.direction.z);
-	//modelStack.Rotate(rotateAngle, 0, 1, 0);
-	//modelStack.Translate(0, 0, -4);
-
-	//RenderMesh(meshList[GEO_CUBE], true);
-	//modelStack.PopMatrix();
+	
 }
 
 void SceneText::Exit()

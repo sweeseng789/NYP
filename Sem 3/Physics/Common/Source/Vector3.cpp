@@ -275,6 +275,11 @@ float Vector3::Length( void ) const
   return sqrt(x * x + y * y + z * z);
 }
 
+float Vector3::LengthNZ() const
+{
+	return sqrt(x * x + y* y);
+}
+
 /******************************************************************************/
 /*!
 \brief

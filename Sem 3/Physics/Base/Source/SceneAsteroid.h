@@ -6,10 +6,13 @@
 #include "SceneBase.h"
 #include "Mesh.h"
 
+using std::cout;
+using std::endl;
+
 class SceneAsteroid : public SceneBase
 {
 	static const int MAX_SPEED = 100;
-	static const int BULLET_SPEED = 50;
+	static const int BULLET_SPEED = 10000;
 	static const int MISSILE_SPEED = 20;
 	static const int MISSILE_POWER = 1;
 
@@ -31,14 +34,20 @@ public:
 	void RenderGO(GameObject *go);
 
 	GameObject* FetchGO();
-	GameObject* FetchGO2();
 
 	void GOUpdate(float dt);
+	void wrapGONearScreen(GameObject * go);
+	void deleteGONearScreen(GameObject * go);
+	void moveBullet(GameObject* go, double dt);
+	void CollisionForAsteroid(GameObject *go, double dt);
+	void SpawnAsteroid(GameObject *go);
+	void BouncingAsteroid(GameObject *go, GameObject *GOtoCheck);
+	void deleteTwoGO(GameObject *go, GameObject *GOtoCheck);
+	void AsteroidCollision(GameObject *go, GameObject *GOtoCheck);
 protected:
 
 	//Physics
-	std::vector<GameObject *> m_goList_Asteroid;
-	std::vector<GameObject *> m_goList_Bullet;
+	std::vector<GameObject *> m_goList;
 	float m_speed;
 	float m_worldWidth;
 	float m_worldHeight;

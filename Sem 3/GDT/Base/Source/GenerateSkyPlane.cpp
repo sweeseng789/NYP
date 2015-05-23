@@ -579,19 +579,6 @@ void GenerateSkyPlane::Render()
 	//RenderSkybox();
 	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 300.0f, 2000.0f, 1.0f, 1.0f);
 
-	// perspective;
-	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	//projectionStack.LoadMatrix(perspective);
-	//viewStack.LoadIdentity();
-	//
-	//modelStack.PushMatrix();
-	////modelStack.Translate(20, 0, -20);
-	////modelStack.Scale(0.1f, 0.1f, 0.1f);
-	//modelStack.Scale(50, 50, 50);
-	////RenderMesh(meshList[GEO_QUAD], false);
-	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
-	//modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-20, 0, -20);
 	RenderMesh(meshList[GEO_OBJECT], false);

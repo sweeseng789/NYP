@@ -30,6 +30,7 @@ void SceneText::SetParameters()
 	Pistol.SetBulletandRounds_Pistol(15, 5);
 	Sniper.SetBulletandRounds_Sniper(8, 2);
 	SMG.SetBulletandRounds_SMG(30, 3);
+	mapPos = Vector3(0, 0, 0);
 }
 
 float SceneText::calculatingFPS(float dt)
@@ -151,7 +152,7 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 110, 10), Vector3(0, 110, 0), Vector3(0, 1, 0));
 
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -189,8 +190,18 @@ void SceneText::Init()
 	meshList[GEO_BACK]->textureArray[0] = LoadTGA("Image//back.tga");
 
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//heightmap.raw", m_heightMap);
-	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//moss1.tga");
-	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//toilet.tga");
+	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
+	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
+
+	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("cat", 1, 6);
+	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//cat.tga");
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+
+	if (sa)
+	{
+		sa->m_anim = new Animation();
+		sa->m_anim->Set(0, 4, 0, 1.f);
+	}
 
 	meshList[AvatarIcon] = MeshBuilder::GenerateQuad("Avatar Icon", Color(1, 1, 1), 1.0f);
 	meshList[AvatarIcon]->textureID = LoadTGA("Image//GGOHead.tga");
@@ -250,7 +261,7 @@ void SceneText::Init()
 	meshList[modelLeg]->textureArray[0] = LoadTGA("Image//modelLeg.tga");
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
-	meshList[GEO_SKYPLANE]->textureID = LoadTGA("Image//top.tga"); 
+	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top.tga"); 
 
 	SetParameters();
 
@@ -474,11 +485,6 @@ void SceneText::Update(double dt)
 	camera.Update(dt);
 	fps = calculatingFPS((float)dt);
 
-	if (Application::IsKeyPressed('9'))
-		moving += 1;
-	if (Application::IsKeyPressed('8'))
-		moving -= 1;
-
 	/*if (moving < 0)
 	moving = 0;
 	if (moving > 100)
@@ -541,6 +547,27 @@ void SceneText::Update(double dt)
 				SMGBullet.erase(SMGBullet.begin() + a);
 			}
 		}
+	}
+	//mapPos.Set(-20, 0, -20);
+
+	if (Application::IsKeyPressed('9'))
+	{
+	//	mapPos.z += 5 * dt;
+		mapPos.x += 5 * dt;
+	}
+	if (Application::IsKeyPressed('8'))
+	{
+		//mapPos.z -= 5 * dt;
+		mapPos.x -= 5 * dt;
+	}
+
+	mapPos.y = 350.f * ReadHeightMap(m_heightMap, mapPos.x / 4000.f, mapPos.z / 4000.f);
+
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+
+	if (sa)
+	{
+		sa->Update(dt);
 	}
 }
 
@@ -750,7 +777,7 @@ void SceneText::RenderSkybox()
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_TOP], false);
+	//RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1022,7 +1049,9 @@ void SceneText::RenderSkyPlane(Mesh* mesh, Color color, int slices, float Planet
 {
 	modelStack.PushMatrix();
 
-	modelStack.Translate(500.f, 1800.f, -500.f + (float)moving);
+	modelStack.Translate(500.f, 1800.f, -500.f);
+
+	//modelStack.Scale(0.9, 0.9, 0.9);
 
 	RenderMesh(meshList[GEO_SKYPLANE], false);
 
@@ -1038,6 +1067,13 @@ void SceneText::RenderTerrain()
 	modelStack.Scale(2000.0f, 350.f, 2000.f);
 	RenderMesh(meshList[GEO_TERRAIN], false);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(mapPos.x + 5.f, mapPos.y + 2.f, mapPos.z);
+	RenderMesh(meshList[GEO_CUBE], false);
+	modelStack.PopMatrix();
+
+	std::cout << mapPos << std::endl;
 }
 
 void SceneText::Render()
@@ -1094,8 +1130,7 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	RenderSkybox();
-	//RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 300.0f, 2000.0f, 1.0f, 1.0f);
+	//RenderSkybox();
 
 	// perspective;
 	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -1115,10 +1150,7 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_OBJECT], false);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], true);
-	modelStack.PopMatrix();
+	
 
 
 	modelStack.PushMatrix();
@@ -1142,12 +1174,18 @@ void SceneText::Render()
 	modelStack.PushMatrix();
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Translate(enemy.returnEnemyPosition().x, -2 + enemy.returnEnemyPosition().y, enemy.returnEnemyPosition().z);
-	RenderEnemyModel();
+	//RenderEnemyModel();
 	modelStack.PopMatrix();
 
 	//RenderTerrain();
+	//RenderHUD();
+	//RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+	//RenderSkybox();
 
-	RenderHUD();
+	modelStack.PushMatrix();
+	//modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
+	modelStack.PopMatrix();
 
 	//==============Testing===============//
 	//modelStack.PushMatrix();//Left right

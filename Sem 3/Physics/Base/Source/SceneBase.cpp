@@ -123,6 +123,13 @@ void SceneBase::Init()
 	meshList[Asteroid_Sprite] = MeshBuilder::GenerateQuad("Asteroid Sprite", Color(1, 1, 1), 1);
 	meshList[Asteroid_Sprite]->textureID = LoadTGA("Image//Asteroid_Sprite.tga");
 
+	meshList[Background] = MeshBuilder::GenerateQuad("Space Background", Color(1, 1, 1), 1);
+	meshList[Background]->textureID = LoadTGA("Image//Background.tga");
+
+	meshList[Enemy_SpaceShip] = MeshBuilder::GenerateQuad("Enemy Spaceship", Color(1, 1, 1), 1);
+	meshList[Enemy_SpaceShip]->textureID = LoadTGA("Image//Enemy_Ship.tga");
+
+
 	bLightEnabled = false;
 }
 
@@ -139,6 +146,31 @@ void SceneBase::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	fps = (float)(1.f / dt);
+
+	
+	if (Application::IsKeyPressed('W'))
+	{
+		//If i press W, render the thruster
+		meshList[Spaceship]->textureID = LoadTGA("Image//Spaceship_Thurster.tga");
+	}
+	else if (Application::IsKeyPressed('S'))
+	{
+		//If i press S, render the thruster
+		meshList[Spaceship]->textureID = LoadTGA("Image//Spaceship_Thurster_back.tga");
+	}
+	else
+	{
+		meshList[Spaceship]->textureID = LoadTGA("Image//Spaceship.tga");
+	}
+
+	/*
+	meshList[Spaceship]->textureID = LoadTGA("Image//Spaceship.tga");
+
+	meshList[Spaceship_Thurster] = MeshBuilder::GenerateQuad("Spaceship forward thruster", Color(1, 1, 1), 1);
+	meshList[Spaceship_Thurster]->textureID = LoadTGA("Image//Spaceship_Thurster.tga");
+
+	meshList[SpaceShip_Thurster_back] = MeshBuilder::GenerateQuad("Spaceship backward thruster", Color(1, 1, 1), 1);
+	meshList[SpaceShip_Thurster_back]->textureID = LoadTGA("Image//Spaceship_Thurster_back.tga");*/
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)

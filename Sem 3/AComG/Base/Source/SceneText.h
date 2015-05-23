@@ -88,6 +88,7 @@ class SceneText : public Scene
 		GEO_OBJECT,
 		GEO_SKYPLANE,
 		GEO_TEXT,
+		GEO_SPRITE_ANIMATION,
 		Healthbar,
 		AvatarIcon,
 		SwordIcon,
@@ -178,6 +179,9 @@ private:
 	vector<CAmmo *> SniperBullet;
 	vector<CAmmo *> SMGBullet;
 	vector<unsigned char> m_heightMap;
+
+	//Vector3
+	Vector3 mapPos;
 
 	//Camera3
 	Camera3 camera;

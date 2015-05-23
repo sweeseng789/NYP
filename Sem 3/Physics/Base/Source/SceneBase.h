@@ -48,6 +48,8 @@ public:
 		SpaceShip_Thurster_back,
 		Laser,
 		Asteroid_Sprite,
+		Enemy_SpaceShip,
+		Background,
 		GEO_AXES,
 		GEO_TEXT,
 		GEO_BALL,
@@ -68,7 +70,7 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderGO(GameObject *go);
 
-	GameObject* FetchGO();
+	GameObject* FetchGO_ASTEROID_SMALL();
 protected:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];

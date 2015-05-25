@@ -275,9 +275,9 @@ float Vector3::Length( void ) const
   return sqrt(x * x + y * y + z * z);
 }
 
-float Vector3::LengthNZ() const
+float Vector3::LengthNZ( void ) const
 {
-	return sqrt(x * x + y* y);
+  return sqrt(x * x + y * y);
 }
 
 /******************************************************************************/

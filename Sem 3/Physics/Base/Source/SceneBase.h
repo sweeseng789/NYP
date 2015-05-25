@@ -47,9 +47,26 @@ public:
 		Spaceship_Thurster,
 		SpaceShip_Thurster_back,
 		Laser,
+		Enemy_Laser,
 		Asteroid_Sprite,
-		Enemy_SpaceShip,
+		Explosion_Asteroid,
+		Bomb,
 		Background,
+		black_background,
+		HUD,
+		Enemy,
+		heart,
+		Missile,
+		StartMenu,
+		StartTrue,
+		ExitTrue,
+		ControlTrue,
+		GameoverScreen,
+		WinScreen,
+		ShowControl,
+		PowerUp_Ironman,
+		Boss,
+		Boss_Shield,
 		GEO_AXES,
 		GEO_TEXT,
 		GEO_BALL,
@@ -70,7 +87,7 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderGO(GameObject *go);
 
-	GameObject* FetchGO_ASTEROID_SMALL();
+	GameObject* FetchGO();
 protected:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];

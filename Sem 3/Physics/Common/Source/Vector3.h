@@ -51,8 +51,9 @@ struct Vector3
 
 	Vector3& operator=(const Vector3& rhs); //Assignment operator
 
+
 	float Length( void ) const; //Get magnitude
-	float LengthNZ() const; //Get magnitude without includin Z
+	float LengthNZ( void ) const; //Get magnitude without factoring in Z
 	float LengthSquared (void ) const; //Get square of magnitude
 	
 	float Dot( const Vector3& rhs ) const; //Dot product

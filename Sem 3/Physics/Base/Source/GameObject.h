@@ -14,32 +14,38 @@ struct GameObject
 		GO_ASTEROID_BIG,
 		GO_SHIP,
 		GO_SHIP_THURSTER,
+		GO_BOMB,
+		GO_EXPLOSION,
 		GO_ENEMY,
+		GO_ENEMY_LASER,
+		GO_HEART,
 		GO_BULLET,
 		GO_MISSILE,
+		GO_POWERUP_Ironman,
+		GO_BOSS,
+		GO_BOSS_SHIELD,
 		GO_TOTAL, //must be last
 	};
 	GAMEOBJECT_TYPE type;
 	Vector3 pos;
-	Vector3 view;
-	Vector3 target;
 	Vector3 vel;
-	Vector3 up;
 	Vector3 scale;
-	Vector3 EnemyDiff;
+	double health;
+	double damage;
 	bool active;
 	float mass;
 	float angle;
-	double bulletSpeed;
-	float testing;
+	double bombTime;
+	double ScaleSize;
+	float bombDuration;
+	const unsigned bulletSpeed;
+	int number;
+	float m_shieldTime;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();
 
 	void setAngle(float angle);
-	void SetData(Vector3 pos, Vector3 target, Vector3 up);
-	void Update(float dt);
-	void angleUpdate(float dt, GameObject* m_ship);
 };
 
 #endif

@@ -18,7 +18,14 @@ public:
 	Vector3 bulletSpeed;
 
 	void bulletUpdate(float dt);
-	unsigned returnDamage();
+
+	unsigned returnHeadDamage();
+	unsigned returnTorsoDamage();
+	unsigned returnArmDamage();
+private:
+	unsigned HeadDamage;
+	unsigned TorsoDamage;
+	unsigned ArmDamage;
 };
 
 #endif

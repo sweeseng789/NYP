@@ -118,6 +118,7 @@ public:
 	float calculatingFPS(float dt);
 	void PistolBulletFunction(float dt);
 	void SniperBulletFunction(float dt);
+	void SMGBulletFunction(float dt);
 
 	//======================Setter========================//
 	void SetParameters();

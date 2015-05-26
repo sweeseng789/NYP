@@ -48,14 +48,14 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 void Camera3::MoveForward(const double dt)
 {
 	Vector3 view = (target - position).Normalized();
-	//view.y = 0;
+	view.y = 0;
 	position += view * MOVEMENT_SPEED * (float)dt;
 	target += view * MOVEMENT_SPEED * (float)dt;
 }
 void Camera3::MoveBackward(const double dt)
 {
 	Vector3 view = (target - position).Normalized();
-	//view.y = 0;
+	view.y = 0;
 	position -= view * MOVEMENT_SPEED * (float)dt;
 	target -= view * MOVEMENT_SPEED * (float)dt;
 }
@@ -86,7 +86,7 @@ void Camera3::UpdateStatus(const unsigned char key)
 
 void Camera3::Update(double dt)
 {
-	
+
 	if(myKeys['a'] == true)
 	{
 		MoveLeft(dt);
@@ -164,28 +164,28 @@ void Camera3::Update(double dt)
 	//Update camera base on direction 
 	//Left-right rotate
 	/*{
-		Vector3 view = (target - position).Normalized();
-		float yaw = (float)(-CAMERA_SPEED * Application::camera_yaw * (float)dt);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		view = rotation * view;
-		target = position + view;
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
+	Vector3 view = (target - position).Normalized();
+	float yaw = (float)(-CAMERA_SPEED * Application::camera_yaw * (float)dt);
+	Mtx44 rotation;
+	rotation.SetToRotation(yaw, 0, 1, 0);
+	view = rotation * view;
+	target = position + view;
+	Vector3 right = view.Cross(up);
+	right.y = 0;
+	right.Normalize();
+	up = right.Cross(view).Normalized();
 	}
 	{
-		float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		view = rotation * view;
-		target = position + view;
+	float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
+	Vector3 view = (target - position).Normalized();
+	Vector3 right = view.Cross(up);
+	right.y = 0;
+	right.Normalize();
+	up = right.Cross(view).Normalized();
+	Mtx44 rotation;
+	rotation.SetToRotation(pitch, right.x, right.y, right.z);
+	view = rotation * view;
+	target = position + view;
 	}*/
 	if (Application::camera_yaw != 0 )
 		Yaw(dt);
@@ -430,6 +430,8 @@ Update Jump
 ********************************************************************************/
 void Camera3::UpdateJump(const double dt)
 {
+	Vector3 tempTarget = target;
+	Vector3 tempPosition = position;
 	if (m_bJumping == true)
 	{
 		// Factor in gravity
@@ -438,13 +440,11 @@ void Camera3::UpdateJump(const double dt)
 		position.y += JumpVel * (float)dt;
 		target.y += JumpVel * (float)dt;
 
-		std::cout << position << std::endl;
-
 		// Check if the camera has reached the ground
 		if (position.y <= 0)
 		{
-			position.y = 0;
-			target.y = 0;
+			position = tempPosition;
+			target = tempTarget;
 			JumpVel = 0.0f;
 			m_bJumping = false;
 		}

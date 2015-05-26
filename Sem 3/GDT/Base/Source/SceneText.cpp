@@ -305,7 +305,7 @@ void SceneText::PistolBulletFunction(float dt)
 	//=========================Pistol Bullet============================//
 	if (Pistol.returnCreateBullet_Pistol() == true)
 	{
-		this->temp = new PistolClass(camera.position, camera.direction, Vector3(0.1f, 0.1f, 0.1f));
+		this->temp = new PistolClass(camera.position, camera.direction, Vector3(10.f, 10.f, 10.f));
 		this->PistolBullet.push_back(temp);
 	}
 
@@ -315,7 +315,6 @@ void SceneText::PistolBulletFunction(float dt)
 		{
 			//Update
 			((PistolClass*)PistolBullet[a])->bulletUpdate(dt);
-			cout << ((PistolClass*)PistolBullet[a])->bulletPosition << endl;
 			//Delete
 			if (//Head
 				((PistolClass*)PistolBullet[a])->bulletPosition.x < enemy.returnEnemyHeadHitboxMax().x &&
@@ -432,11 +431,11 @@ void SceneText::SniperBulletFunction(float dt)
 				}
 			}
 			else if (((SniperClass*)SniperBullet[a])->bulletPosition.x < enemy.returnEnemyLeftHandHitboxMax().x &&
-					((SniperClass*)SniperBullet[a])->bulletPosition.x > enemy.returnEnemyLeftHandHitboxMin().x &&
-					((SniperClass*)SniperBullet[a])->bulletPosition.y < enemy.returnEnemyLeftHandHitboxMax().y &&
-					((SniperClass*)SniperBullet[a])->bulletPosition.y > enemy.returnEnemyLeftHandHitboxMin().y &&
-					((SniperClass*)SniperBullet[a])->bulletPosition.z < enemy.returnEnemyLeftHandHitboxMax().z &&
-					((SniperClass*)SniperBullet[a])->bulletPosition.z > enemy.returnEnemyLeftHandHitboxMin().z)
+				((SniperClass*)SniperBullet[a])->bulletPosition.x > enemy.returnEnemyLeftHandHitboxMin().x &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.y < enemy.returnEnemyLeftHandHitboxMax().y &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.y > enemy.returnEnemyLeftHandHitboxMin().y &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.z < enemy.returnEnemyLeftHandHitboxMax().z &&
+				((SniperClass*)SniperBullet[a])->bulletPosition.z > enemy.returnEnemyLeftHandHitboxMin().z)
 			{
 				if (enemy.returnRenderLeftArm() == true)
 				{
@@ -449,16 +448,90 @@ void SceneText::SniperBulletFunction(float dt)
 	}
 }
 
+void SceneText::SMGBulletFunction(float dt)
+{
+	//=========================SMG Bullet============================//
+	if (SMG.returnCreateBullet_SMG() == true)
+	{
+		this->temp = new SMGClass(camera.position, camera.direction, Vector3(5.f, 5.f, 5.f));
+		this->SMGBullet.push_back(temp);
+	}
+
+	if (SMGBullet.empty() == false)
+	{
+		for (unsigned a = 0; a < SMGBullet.size(); ++a)
+		{
+			//Update
+			((SMGClass*)SMGBullet[a])->bulletUpdate(dt);
+			//Delete
+			if (//Head
+				((SMGClass*)SMGBullet[a])->bulletPosition.x < enemy.returnEnemyHeadHitboxMax().x &&
+				((SMGClass*)SMGBullet[a])->bulletPosition.x > enemy.returnEnemyHeadHitboxMin().x &&
+				((SMGClass*)SMGBullet[a])->bulletPosition.y < enemy.returnEnemyHeadHitboxMax().y &&
+				((SMGClass*)SMGBullet[a])->bulletPosition.y > enemy.returnEnemyHeadHitboxMin().y &&
+				((SMGClass*)SMGBullet[a])->bulletPosition.z < enemy.returnEnemyHeadHitboxMax().z &&
+				((SMGClass*)SMGBullet[a])->bulletPosition.z > enemy.returnEnemyHeadHitboxMin().z)
+			{
+				if (enemy.returnRenderHead() == true)
+				{
+					cout << "Hit Head" << endl;
+					enemy.MinusEnemyHeadHealth(((SMGClass*)SMGBullet[a])->returnHeadDamage());
+					SMGBullet.erase(SMGBullet.begin() + a);
+				}
+			}
+			else if (((SMGClass*)SMGBullet[a])->bulletPosition.x < enemy.returnEnemyTorsoHitboxMax().x &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.x > enemy.returnEnemyTorsoHitboxMin().x &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.y < enemy.returnEnemyTorsoHitboxMax().y &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.y > enemy.returnEnemyTorsoHitboxMin().y &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.z < enemy.returnEnemyTorsoHitboxMax().z &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.z > enemy.returnEnemyTorsoHitboxMin().z)
+			{
+				cout << "Hit Torso" <<endl;
+				enemy.MinusEnemyTorsoHealth(((SMGClass*)SMGBullet[a])->returnTorsoDamage());
+				SMGBullet.erase(SMGBullet.begin() + a);
+			}
+			else if(((SMGClass*)SMGBullet[a])->bulletPosition.x < enemy.returnEnemyRightHandHitboxMax().x &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.x > enemy.returnEnemyRightHandHitboxMin().x &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.y < enemy.returnEnemyRightHandHitboxMax().y &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.y > enemy.returnEnemyRightHandHitboxMin().y &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.z < enemy.returnEnemyRightHandHitboxMax().z &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.z > enemy.returnEnemyRightHandHitboxMin().z)
+			{
+				if (enemy.returnRenderRightArm() == true)
+				{
+					cout << "Hit Right Arm" <<endl;
+					enemy.MinusEnemyRightArmHealth(((SMGClass*)SMGBullet[a])->returnArmDamage());
+					SMGBullet.erase(SMGBullet.begin() + a);
+				}
+			}
+			else if (((SMGClass*)SMGBullet[a])->bulletPosition.x < enemy.returnEnemyLeftHandHitboxMax().x &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.x > enemy.returnEnemyLeftHandHitboxMin().x &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.y < enemy.returnEnemyLeftHandHitboxMax().y &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.y > enemy.returnEnemyLeftHandHitboxMin().y &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.z < enemy.returnEnemyLeftHandHitboxMax().z &&
+					((SMGClass*)SMGBullet[a])->bulletPosition.z > enemy.returnEnemyLeftHandHitboxMin().z)
+			{
+				if (enemy.returnRenderLeftArm() == true)
+				{
+					cout << "Hit Left Arm" <<endl;
+					enemy.MinusEnemyLeftArmHealth(((SMGClass*)SMGBullet[a])->returnArmDamage());
+					SMGBullet.erase(SMGBullet.begin() + a);
+				}
+			}
+		}
+	}
+}
+
 void SceneText::Update(double dt)
 {
-	if(Application::IsKeyPressed('1'))
+	/*if(Application::IsKeyPressed('1'))
 	glEnable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('2'))
 	glDisable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('3'))
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
 
 	if(Application::IsKeyPressed('5'))
 	{
@@ -512,7 +585,7 @@ void SceneText::Update(double dt)
 	moving = 100;*/
 
 	//================Minimap==============//
-	rotateAngle -= Application::camera_yaw;
+	rotateAngle -= (float)Application::camera_yaw;
 
 	Sword.ChooseWeaponUpdate();
 	Pistol.ChooseWeaponUpdate();
@@ -523,45 +596,29 @@ void SceneText::Update(double dt)
 	{
 		Sword.update((float)dt);
 	}
-	if (Pistol.returnPistolConfirmation() == true)
+	else if (Pistol.returnPistolConfirmation() == true)
 	{
 		Pistol.update((float)dt);
 	}
-	if (Sniper.returnSniperConfirmation() == true)
+	else if (Sniper.returnSniperConfirmation() == true)
 	{
 		Sniper.update((float)dt);
 	}
-	if (SMG.returnSMGConfirmation() == true)
+	else
 	{
 		SMG.update((float)dt);
 	}
 
 	enemy.update((float)dt);
 	//cout << enemy.returnEnemyHealth() << endl;
-	PistolBulletFunction((float)dt);
 
-	SniperBulletFunction((float)dt);
-
-	//=========================SMG Bullet============================//
-	if (SMG.returnCreateBullet_SMG() == true)
+	if(enemy.returnAliveState())
 	{
-		this->temp = new SMGClass(camera.position, camera.direction, Vector3(5.f, 5.f, 5.f));
-		this->SMGBullet.push_back(temp);
-	}
+		PistolBulletFunction((float)dt);
 
-	if (SMGBullet.empty() == false)
-	{
-		for (unsigned a = 0; a < SMGBullet.size(); ++a)
-		{
-			//Update
-			((SMGClass*)SMGBullet[a])->bulletUpdate((float)dt);
+		SniperBulletFunction((float)dt);
 
-			//Delete
-			if (((SMGClass*)SMGBullet[a])->bulletPosition.z < -10)
-			{
-				SMGBullet.erase(SMGBullet.begin() + a);
-			}
-		}
+		SMGBulletFunction((float)dt);
 	}
 }
 
@@ -1154,9 +1211,13 @@ void SceneText::Render()
 	SetHUD(false);
 
 	//RenderTerrain();
+	modelStack.PushMatrix();
+ 	modelStack.Rotate(180, 0, 1, 0);
+ 	modelStack.Translate(enemy.returnEnemyPosition().x, -2 + enemy.returnEnemyPosition().y, enemy.returnEnemyPosition().z);
+	RenderEnemyModel();
+ 	modelStack.PopMatrix();
 
-	//RenderHUD();
-
+	RenderHUD();
 	//==============Testing===============//
 	
 }

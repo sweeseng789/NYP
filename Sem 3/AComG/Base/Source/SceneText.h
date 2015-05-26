@@ -56,6 +56,13 @@ class SceneText : public Scene
 		U_COLOR_TEXTURE,
 		U_COLOR_TEXTURE1,
 
+		U_COLOR_FOG,
+		U_START_FOG,
+		U_END_FOG,
+		U_DENSITY_FOG,
+		U_TYPE_FOG,
+		U_ENABLE_FOG,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -189,6 +196,14 @@ private:
 
 	//Bool
 	bool bLightEnabled;
+
+	//Fog
+	Color fogColor;
+	float fogStart;
+	float fogEnd;
+	float fogDensity;
+	int fogType;
+	bool fogEnabled;
 };
 
 #endif

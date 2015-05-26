@@ -57,7 +57,7 @@ void SceneText::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders( "Shader//comg.vertexshader", "Shader//MultiTexture.fragmentshader" );
+	m_programID = LoadShaders( "Shader//Fog.vertexshader", "Shader//Fog.fragmentshader" );
 
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -98,6 +98,14 @@ void SceneText::Init()
 	m_parameters[U_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_programID, "colorTextureEnabled[1]");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture[0]");
 	m_parameters[U_COLOR_TEXTURE1] = glGetUniformLocation(m_programID, "colorTexture[1]");
+
+	m_parameters[U_COLOR_FOG] = glGetUniformLocation(m_programID, "fogParam.color");
+	m_parameters[U_START_FOG] = glGetUniformLocation(m_programID, "fogParam.start");
+	m_parameters[U_END_FOG] = glGetUniformLocation(m_programID, "fogParam.end");
+	m_parameters[U_DENSITY_FOG] = glGetUniformLocation(m_programID, "fogParam.density");
+	m_parameters[U_TYPE_FOG] = glGetUniformLocation(m_programID, "fogParam.type");
+	m_parameters[U_ENABLE_FOG] = glGetUniformLocation(m_programID, "fogParam.enabled");
+
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
@@ -151,6 +159,20 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], lights[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
+
+	fogColor = (0.5f, 0.5f, 0.5f);
+	fogStart = 10.f;
+	fogEnd = 1000.f;
+	fogDensity = 0.005f;
+	fogType = 0;
+	fogEnabled = 1;//Enable
+
+	glUniform3fv(m_parameters[U_COLOR_FOG], 1, &fogColor.r);
+	glUniform1f(m_parameters[U_START_FOG], fogStart);
+	glUniform1f(m_parameters[U_END_FOG], fogEnd);
+	glUniform1f(m_parameters[U_DENSITY_FOG], fogDensity);
+	glUniform1f(m_parameters[U_TYPE_FOG], fogType);
+	glUniform1f(m_parameters[U_ENABLE_FOG], 1);
 
 	camera.Init(Vector3(0, 110, 10), Vector3(0, 110, 0), Vector3(0, 1, 0));
 
@@ -681,6 +703,18 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float 
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
 }
+/*
+MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+modelView = viewStack.Top() * modelStack.Top(); // Week 6
+glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+if(enableLight && bLightEnabled)
+{
+	glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+	modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1,
+		GL_FALSE, &modelView_inverse_transpose.a[0]);*/
+
 
 void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 {
@@ -688,13 +722,17 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 	if(enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-		modelView = viewStack.Top() * modelStack.Top();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+		//modelView = viewStack.Top() * modelStack.Top();
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
+		/*glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);*/
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 
 		//load material
 		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
@@ -1072,8 +1110,6 @@ void SceneText::RenderTerrain()
 	modelStack.Translate(mapPos.x + 5.f, mapPos.y + 2.f, mapPos.z);
 	RenderMesh(meshList[GEO_CUBE], false);
 	modelStack.PopMatrix();
-
-	std::cout << mapPos << std::endl;
 }
 
 void SceneText::Render()
@@ -1145,6 +1181,7 @@ void SceneText::Render()
 	////RenderMesh(meshList[GEO_QUAD], false);
 	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
 	//modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(-20, 0, -20);
 	RenderMesh(meshList[GEO_OBJECT], false);
@@ -1177,10 +1214,8 @@ void SceneText::Render()
 	//RenderEnemyModel();
 	modelStack.PopMatrix();
 
-	//RenderTerrain();
-	//RenderHUD();
-	//RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
-	//RenderSkybox();
+	RenderTerrain();
+	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
 
 	modelStack.PushMatrix();
 	//modelStack.Scale(10, 10, 10);

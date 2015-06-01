@@ -9,7 +9,7 @@ Mesh::Mesh(const std::string &meshName)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indexBuffer);
-	textureID = 0;
+	//textureID = 0;
 
 	for (unsigned a = 0; a < 2; ++a)
 	{

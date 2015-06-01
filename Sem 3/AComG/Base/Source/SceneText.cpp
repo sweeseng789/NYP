@@ -216,7 +216,7 @@ void SceneText::Init()
 	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
 
 	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("cat", 1, 6);
-	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//cat.tga");
+	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//Dragon.tga");
 	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
 
 	if (sa)
@@ -591,6 +591,16 @@ void SceneText::Update(double dt)
 	{
 		sa->Update(dt);
 	}
+
+	/*static Vector3 HM; 
+	HM.Set(camera.position.x, camera.position.y, camera.position.z);
+	HM.y = 350.f * ReadHeightMap(m_heightMap, HM.x / 2000.f, HM.z / 2000.f) + 10.f;
+	camera.position.y = HM.y;
+	camera.target.y += HM.y - camera.position.y;*/
+	float tempY = 350.f * ReadHeightMap(m_heightMap, camera.position.x / 2000.f, camera.position.z / 2000.f) + 10.f;
+	float diff = tempY - camera.position.y;
+	camera.position.y = tempY;
+	camera.target.y += diff;
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -1099,8 +1109,6 @@ void SceneText::RenderSkyPlane(Mesh* mesh, Color color, int slices, float Planet
 void SceneText::RenderTerrain()
 {
 	Vector3 pos;
-	pos.Set(-20, 0, -20);
-	pos.y = 350.f * ReadHeightMap(m_heightMap, pos.x / 4000.f, pos.z / 4000.f);
 	modelStack.PushMatrix();
 	modelStack.Scale(2000.0f, 350.f, 2000.f);
 	RenderMesh(meshList[GEO_TERRAIN], false);
@@ -1218,7 +1226,8 @@ void SceneText::Render()
 	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
 
 	modelStack.PushMatrix();
-	//modelStack.Scale(10, 10, 10);
+	modelStack.Translate(0, camera.position.y, 0);
+	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
 	modelStack.PopMatrix();
 

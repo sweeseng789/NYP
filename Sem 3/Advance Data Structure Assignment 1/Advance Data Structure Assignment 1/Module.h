@@ -28,7 +28,32 @@ public:
 	friend istream & operator>>(istream & input, CModule* & passIn);
 
 	int getDay();
+	void DetermineDay();
+	void updateTiming_Mon(CModule* passIn);
+	void updateTiming_Tue(CModule* passIn);
+	void updateTiming_Wed(CModule* passIn);
+	void updateTiming_Thur(CModule* passIn);
+	void updateTiming_Fri(CModule* passIn);
 	CTimeType getDuration();
+
+	static int mon_hour;
+	static int mon_min;
+	static int tue_hour;
+	static int tue_min;
+	static int wed_hour;
+	static int wed_min;
+	static int thur_hour;
+	static int thur_min;
+	static int fri_hour;
+	static int fri_min;
+	static int day2;
+	static int input_hour;
+	static int input_min;
+	static int input_total;
+	static int freeTime;
+	static int hourToSet;
+	static int minToSet;
+	static string newCode;
 private:
 	string moduleCode;
 	CTimeType duration;

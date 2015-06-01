@@ -183,19 +183,15 @@ void GenerateSkyPlane::Init()
 
 	meshList[WeaponIcon_Sword] = MeshBuilder::GenerateQuad("Weapon Icon Sword", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sword]->textureID = LoadTGA("Image//WeaponIcon_Sword.tga");
-	weapon.setWeapon(WeaponIcon_Sword, "Close Range");
 
 	meshList[WeaponIcon_Pistol] = MeshBuilder::GenerateQuad("Weapon Icon Pistol", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Pistol]->textureID = LoadTGA("Image//WeaponIcon_Pistol.tga");
-	weapon.setWeapon(WeaponIcon_Pistol, "Long Range");
 
 	meshList[WeaponIcon_Sniper] = MeshBuilder::GenerateQuad("Weapon Icon Sniper", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_Sniper]->textureID = LoadTGA("Image//WeaponIcon_Sniper.tga");
-	weapon.setWeapon(WeaponIcon_Sniper, "Long Range");
 
 	meshList[WeaponIcon_SMG] = MeshBuilder::GenerateQuad("Weapon Icon SMG", Color(1, 1, 1), 1.0f);
 	meshList[WeaponIcon_SMG]->textureID = LoadTGA("Image//WeaponIcon_SMG.tga");
-	weapon.setWeapon(WeaponIcon_SMG, "Long Range");
 
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(255/253, 255/253, 255/253), 1.f);
 
@@ -288,7 +284,7 @@ void GenerateSkyPlane::Update(double dt)
 	if (Application::IsKeyPressed(VK_DOWN))
 		rotateAngle2 -= (float)(200.0f * dt);
 
-	weapon.update((float)dt);
+	//weapon.update((float)dt);
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -563,11 +559,7 @@ void GenerateSkyPlane::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	modelStack.PushMatrix();//Use this method to give the illusion that the bug is not there
-	if (camera.currentlyFalling == false && camera.currentlyJumping == false && camera.pressedSpace == false)
-	{
-		modelStack.Translate(0, camera.position.y, 0);
-	}
+	modelStack.PushMatrix();
 	RenderMesh(meshList[GEO_AXES], false);
 	modelStack.PopMatrix();
 
@@ -577,7 +569,7 @@ void GenerateSkyPlane::Render()
 	modelStack.PopMatrix();
 
 	//RenderSkybox();
-	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 300.0f, 2000.0f, 1.0f, 1.0f);
+	//RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 300.0f, 2000.0f, 1.0f, 1.0f);
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-20, 0, -20);
@@ -608,7 +600,6 @@ void GenerateSkyPlane::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
-
 	RenderHUD();
 }
 

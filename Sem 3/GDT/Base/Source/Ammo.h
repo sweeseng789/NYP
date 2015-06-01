@@ -11,135 +11,84 @@
 #include "Vector3.h"
 #include "Camera3.h"
 #include "Enemy.h"
+#include "Weapon.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::vector;
 
+enum WEAPON
+{
+	BULLET_SWORD = 1,
+	BULLET_PISTOL,
+	BULLET_SNIPER,
+	BULLET_SMG,
+	BULLET_TOTAL
+};
+
 class CAmmo
 {
 public:
 	CAmmo(void);
-	virtual ~CAmmo(void);
+	CAmmo(const Vector3 bulletPosition, const Vector3 bulletDirection, const Vector3 bulletSpeed, WEAPON dataType);
+	~CAmmo(void);
 
 	//======================GETTER=====================//
 	//Int
-	unsigned returnBullet_Pistol();
-	unsigned returnBullet_Sniper();
-	unsigned returnBullet_SMG();
-	unsigned returnRounds_Pistol();
-	unsigned returnRounds_Sniper();
-	unsigned returnRounds_SMG();
-	unsigned int returnSwordNumber();
-	unsigned int returnPistolNumber();
-	unsigned int returnSniperNumber();
-	unsigned int returnSMGNumber();
+	unsigned getBullet();
+	unsigned getRounds();
 
 	//Bool
-	bool returnReloading();
-	bool returnReadyToShootPistol();
-	bool returnReadyToShootSniper();
-	bool returnReadyToShootSMG();
-	bool returnPressingMouse();
-	bool returnSwordConfirmation();
-	bool returnPistolConfirmation();
-	bool returnSniperConfirmation();
-	bool returnSMGConfirmation();
-	bool returnPistolFired();
-	bool returnSniperFired();
-	bool returnSMGFired();
-	bool returnCreateBullet_Pistol();
-	bool returnCreateBullet_Sniper();
-	bool returnCreateBullet_SMG();
+	bool getReadyToShoot();
+	bool getReloading();
+	bool getCreateBullet();
 
 	//Float
-	float returnReloadTime_Pistol();
-	float returnReloadTime_Sniper();
-	float returnReloadTime_SMG();
-	float returnShootingGap_Pistol();
-
-	//Vector3
-	Vector3 returnBulletPosition();
+	float getReloadTime();
 
 	//===============SETTER==================//
-	void setPistolFired(bool newValue);
-	void SetBulletandRounds_Pistol(const unsigned newAmmos_Pistol, const unsigned newRounds_Pistol);
-	void SetBulletandRounds_Sniper(const unsigned newAmmos_Sniper, const unsigned newRounds_Sniper);
-	void SetBulletandRounds_SMG(const unsigned newAmmos_SMG, const unsigned newRounds_SMG);
-	void ChooseWeaponUpdate();
-	void DeleteBullet_Pistol();
-	void ShootingTimeGap();
-	void ButtonInput();
-	void ShootFunction_Pistol();
-	void ShootFunction_Sniper();
-	void ShootFunction_SMG();
-	void BulletAndRoundLimit();
-	void SetterForPolymorphism();
-
+	void setBulletAndRounds(const unsigned bullet, const unsigned rounds, const float shootTimeLimit, const float reloadTime);
+	void setDirection(const Vector3 bulletPosition, const Vector3 bulletDirection, const Vector3 bulletSpeed, const unsigned damage, bool active, const float lifeTime, WEAPON dataType);
 
 	//Update
 	virtual void bulletUpdate(float dt);
-	void update(float dt);
+	void update(float dt, CWeapon weapon);
 
-	//Vector3
+	//Bullet Variables
+	bool active;
+	unsigned damage;
+	float lifeTime;
+	WEAPON dataType;
 	Vector3 bulletPosition;
 	Vector3 bulletDirection;
 	Vector3 bulletSpeed;
-
 private:
 	//Int
 	unsigned ammos;
-	unsigned swordNumber; 
-	unsigned pistolNumber; 
-	unsigned sniperNumber; 
-	unsigned SMGnumber; 
-	unsigned bullet; 
+	unsigned bullet;
+	unsigned defaultBullet;
 	unsigned rounds;
-	unsigned PistolBullet;
-	unsigned PistolDamage;
-	unsigned PistolRound;
-	unsigned SniperBullet;
-	unsigned SniperDamage;
-	unsigned SniperRound;
-	unsigned SMGBullet;
-	unsigned SMGDamage;
-	unsigned SMGRound;
+	unsigned defaultRounds;
 
 	//Float
-	float reloadTime_Pistol; 
-	float reloadTime_Sniper;
-	float reloadTime_SMG;
-	float dt;
 	float elapsedTime1;
-	float shoot_Pistol;
-	float shoot_Sniper;
-	float shoot_SMG;
+	float defaultReloadTime;
+	float reloadTime;
+	float shootTimeGap;
+	float shootTimeLimit;
 
 	//bool
-	bool reloadedGun;
+
+	bool pressingR;
+	bool readyToShoot;
+
+	
+	
+	
+	bool pressingMouse;
 	bool reloading;
-	bool pressingMouse, pressingR;
-	bool readyToShoot_Pistol;
-	bool readyToShoot_Sniper; 
-	bool readyToShoot_SMG;
-	bool pistolFired; 
-	bool SniperFired; 
-	bool SMGFired;
-	bool usingSword;
-	bool usingPistol;
-	bool usingSniper; 
-	bool usingSMG;
-	bool testing;
-	bool CreateBullet_Pistol;
-	bool CreateBullet_Sniper;
-	bool CreateBullet_SMG;
-
-	//Timer
-	StopWatch timer;
-
-	//String
-	std::string type;
+	bool createBullet;
 };
 
 #endif

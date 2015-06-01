@@ -13,6 +13,7 @@
 
 #include "SceneKinematics.h"
 #include "SceneAsteroid.h"
+#include "SceneCollision.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -92,8 +93,8 @@ void Application::Init()
 	//Create a window and create its OpenGL context
 	m_width = 800;
 	m_height = 600;
-	//m_window = glfwCreateWindow(this->GetWindowWidth(), this->GetWindowHeight(), "Physics", NULL, NULL);
-	m_window = glfwCreateWindow(mode->width, mode->height, "Physics", glfwGetPrimaryMonitor(), NULL);
+	m_window = glfwCreateWindow(this->GetWindowWidth(), this->GetWindowHeight(), "Physics", NULL, NULL);
+	//m_window = glfwCreateWindow(mode->width, mode->height, "Physics", glfwGetPrimaryMonitor(), NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -125,7 +126,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SceneAsteroid();
+	Scene *scene = new SceneCollision();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

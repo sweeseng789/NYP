@@ -39,6 +39,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	sCameraType = LAND_CAM;
 
 	m_bJumping = false;
+	m_Scope = false;
 	JumpVel = 0.0f;
 	JUMPMAXSPEED = 10.0f;
 	JUMPACCEL = 10.0f;
@@ -161,32 +162,6 @@ void Camera3::Update(double dt)
 		target = position + view;
 	}
 
-	//Update camera base on direction 
-	//Left-right rotate
-	/*{
-	Vector3 view = (target - position).Normalized();
-	float yaw = (float)(-CAMERA_SPEED * Application::camera_yaw * (float)dt);
-	Mtx44 rotation;
-	rotation.SetToRotation(yaw, 0, 1, 0);
-	view = rotation * view;
-	target = position + view;
-	Vector3 right = view.Cross(up);
-	right.y = 0;
-	right.Normalize();
-	up = right.Cross(view).Normalized();
-	}
-	{
-	float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
-	Vector3 view = (target - position).Normalized();
-	Vector3 right = view.Cross(up);
-	right.y = 0;
-	right.Normalize();
-	up = right.Cross(view).Normalized();
-	Mtx44 rotation;
-	rotation.SetToRotation(pitch, right.x, right.y, right.z);
-	view = rotation * view;
-	target = position + view;
-	}*/
 	if (Application::camera_yaw != 0 )
 		Yaw(dt);
 	if (Application::camera_pitch != 0)
@@ -197,58 +172,13 @@ void Camera3::Update(double dt)
 		Reset();
 	}
 
-
-	//==============Jump Function==========//
-	/*static bool pressedSpace = false;
-	static bool currentlyJumping = false;
-	static bool currentlyFalling = false;*/
-	static float JUMP_SPEED = 7.0f;
-
-	//if (Application::IsKeyPressed(VK_SPACE) && pressedSpace == false && currentlyJumping == false && currentlyFalling == false)
-	//{
-	//	pressedSpace = true;
-	//}
-
-	//if (pressedSpace == true && currentlyFalling == false)
-	//{
-	//	currentlyJumping = true;
-	//	if (position.y < 5.0f)
-	//	{
-	//		position.y += (float)(JUMP_SPEED * dt);
-	//		target.y += (float)(JUMP_SPEED * dt);
-	//		//JUMP_SPEED -= (float)(10.0f * dt);
-	//	}
-	//	else if (position.y >= 5.0f)
-	//	{
-	//		currentlyFalling = true;
-	//		currentlyJumping = false;
-	//	}
-	//}
-
-	//if (currentlyFalling == true && currentlyJumping == false && pressedSpace == true )
-	//{
-	//	if (position.y >= 0.0f)
-	//	{
-	//		position.y -= (float)(JUMP_SPEED * dt);
-	//		target.y -= (float)(JUMP_SPEED * dt);
-	//		JUMP_SPEED += (float)(15.0f * dt);
-	//	}
-	//	if (position.y <= 0.0f)
-	//	{
-	//		pressedSpace = false;
-	//		currentlyJumping = false;
-	//		currentlyFalling = false;
-	//		position.y = target.y = 0.0f;
-	//	}
-	//}
-
 	if (myKeys[32] == true)
 	{
 		Jump( dt );
 		myKeys[32] = false;
 	}
-	UpdateJump(dt);
 
+	UpdateJump(dt);
 
 	//==============SPRINT===================//
 	if (Application::IsKeyPressed(VK_LSHIFT) && Application::IsKeyPressed('W') ||
@@ -449,4 +379,33 @@ void Camera3::UpdateJump(const double dt)
 			m_bJumping = false;
 		}
 	}
+}
+
+/********************************************************************************
+Update Scope
+********************************************************************************/
+void Camera3::UpdateScope(const double dt)
+{
+	Vector3 tempPosition = position;
+
+	/*if (m_Scope == true)
+	{
+		Vector3 direction = target - position;
+		if (direction.Length() > 1)
+		{
+			Vector3 view = (target - position).Normalized();
+			position += view * (float)(10.f * dt);
+		}
+	}
+	else
+	{
+		Vector3 direction = target - position;
+		if ()
+		{
+			Vector3 view = (target - position).Normalized();
+			position -= view * (float)(10.f * dt);
+		}
+	}*/
+
+	std::cout << position << std::endl;
 }

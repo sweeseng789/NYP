@@ -128,10 +128,6 @@ void SceneAsteroid::WrapGONearScreen(GameObject * go)
 
 void SceneAsteroid::DeleteGONearScreen(GameObject * go)
 {
-	if(go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
-	{
-		go->active = false;
-	}
 }
 
 float SceneAsteroid::findCollision(GameObject * go, GameObject * GotoCheck)

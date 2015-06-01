@@ -25,14 +25,11 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MiniMap.cpp" />
-    <ClCompile Include="Source\PistolClass.cpp" />
     <ClCompile Include="Source\SceneSkybox.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\SceneTexture.cpp" />
     <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\SMGClass.cpp" />
-    <ClCompile Include="Source\SniperClass.cpp" />
-    <ClCompile Include="Source\SwordClass.cpp" />
+    <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\Weapon.cpp" />
   </ItemGroup>
@@ -53,15 +50,12 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\MiniMap.h" />
-    <ClInclude Include="Source\PistolClass.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneSkybox.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\SceneTexture.h" />
     <ClInclude Include="Source\shader.hpp" />
-    <ClInclude Include="Source\SMGClass.h" />
-    <ClInclude Include="Source\SniperClass.h" />
-    <ClInclude Include="Source\SwordClass.h" />
+    <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\Weapon.h" />

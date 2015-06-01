@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "Vertex.h"
 #include "LoadHmap.h"
+#include "SpriteAnimation.h"
 
 /******************************************************************************/
 /*!
@@ -30,6 +31,7 @@ public:
 	static Mesh* GenerateMinimap(const std::string &meshName, Color color, float length = 1.f);
 	static Mesh* GenerateMinimapBorder(const std::string &meshName, Color color, float length = 1.f);
 	static Mesh* GenerateMinimapAvatar(const std::string &meshName, Color color, float length = 1.f);
+	static SpriteAnimation* GenerateSpriteAnimation(const std::string & meshName, unsigned numRow, unsigned numCol);
 };
 
 #endif

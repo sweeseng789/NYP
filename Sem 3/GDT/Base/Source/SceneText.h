@@ -1,6 +1,8 @@
 #ifndef SCENE_TEXT_H
 #define SCENE_TEXT_H
 
+#include <vector>
+#include <string>
 #include "Scene.h"
 #include "Mtx44.h"
 #include "Camera3.h"
@@ -8,8 +10,6 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Weapon.h"
-#include <vector>
-#include <string>
 #include "Enemy.h"
 #include "Ammo.h"
 #include "MiniMap.h"
@@ -107,6 +107,7 @@ class SceneText : public Scene
 		Weapon_Sniper,
 		Weapon_Sword,
 		crosshair,
+		GEO_SPRITE_ANIMATION,
 		NUM_GEOMETRY,
 	};
 public:
@@ -116,26 +117,26 @@ public:
 
 	//======================Getter=========================//
 	float calculatingFPS(float dt);
-	void PistolBulletFunction(float dt);
-	void SniperBulletFunction(float dt);
-	void SMGBulletFunction(float dt);
+	bool CollisionWithHead(CAmmo * BY);
+	bool CollisionWithTorso(CAmmo * BY);
+	bool CollisionWithLeftArm(CAmmo * BY);
+	bool CollisionWithRightArm(CAmmo * BY);
+	CAmmo* FetchBullet();
 
 	//======================Setter========================//
 	void SetParameters();
-	void view();
 
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vector3 translate, bool rotate);
-	void RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile);
+	void RenderSkyPlane(Mesh* mesh, Color color, int slyices, float PlanetRadius, float height, float hTile, float vTile);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderHUD();
 	void RenderEnemyModel();
-	void RenderEverything();
-	void RenderTerrain();
 	void SetHUD(const bool m_bHUDmode);
+	void BulletUpdate(float dt);
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -157,18 +158,14 @@ private:
 
 	//Double
 	double moving;
-	double m_dElapsedTime;
-	double m_dAccumulatedTime_RenderScene;
-	double m_dAccumulatedTime_RenderText;
 
 	//Class
 	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
-
 	CEnemy enemy;
 	CAmmo Pistol, Sniper, SMG, Sword;
-
+	CWeapon weapon;
 	Light lights[2];
 
 	//Polymorphism
@@ -177,9 +174,7 @@ private:
 	CMinimap* m_cMinimap;
 
 	//vector
-	vector<CAmmo *> PistolBullet;
-	vector<CAmmo *> SniperBullet;
-	vector<CAmmo *> SMGBullet;
+	vector<CAmmo *> bulletList;
 	vector<unsigned char> m_heightMap;
 
 	//Camera3
@@ -187,6 +182,7 @@ private:
 
 	//Bool
 	bool bLightEnabled;
+	bool pressingLMouse;
 };
 
 #endif

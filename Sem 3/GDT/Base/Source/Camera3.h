@@ -45,6 +45,7 @@ public:
 	virtual void Strafe(const double dt);
 	/*virtual void Jump(const double dt);*/
 	virtual void UpdateJump(const double dt);
+	virtual void UpdateScope(const double dt);
 
 	bool pressedSpace;
 	bool currentlyJumping;
@@ -57,6 +58,7 @@ private:
 
 	//For jumping
 	bool m_bJumping;
+	bool m_Scope;
 	float GRAVITY;
 	float JumpVel;
 	float JUMPMAXSPEED, JUMPACCEL;

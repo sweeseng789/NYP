@@ -56,6 +56,13 @@ class SceneText : public Scene
 		U_COLOR_TEXTURE,
 		U_COLOR_TEXTURE1,
 
+		U_COLOR_FOG,
+		U_START_FOG,
+		U_END_FOG,
+		U_DENSITY_FOG,
+		U_TYPE_FOG,
+		U_ENABLE_FOG,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -102,6 +109,7 @@ class SceneText : public Scene
 		modelHand,
 		modelTorso,
 		modelLeg,
+		firstAid,
 		Weapon_SMG,
 		Weapon_Pistol,
 		Weapon_Sniper,
@@ -130,11 +138,12 @@ public:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vector3 translate, bool rotate);
+	void RenderEnemyMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vector3 translate, bool rotate);
 	void RenderSkyPlane(Mesh* mesh, Color color, int slyices, float PlanetRadius, float height, float hTile, float vTile);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderHUD();
-	void RenderEnemyModel();
+	void RenderEnemyModel(CEnemy * passIn);
 	void SetHUD(const bool m_bHUDmode);
 	void BulletUpdate(float dt);
 
@@ -148,6 +157,7 @@ public:
 private:
 
 	//Int
+	int enemyCount;
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
@@ -155,6 +165,7 @@ private:
 	//Float
 	float rotateAngle, rotateAngle2;
 	float fps;
+	float restockTime;
 
 	//Double
 	double moving;
@@ -166,6 +177,7 @@ private:
 	CEnemy enemy;
 	CAmmo Pistol, Sniper, SMG, Sword;
 	CWeapon weapon;
+	Vector3 FApos;
 	Light lights[2];
 
 	//Polymorphism
@@ -175,6 +187,7 @@ private:
 
 	//vector
 	vector<CAmmo *> bulletList;
+	vector<CEnemy *> enemyList;
 	vector<unsigned char> m_heightMap;
 
 	//Camera3
@@ -183,6 +196,15 @@ private:
 	//Bool
 	bool bLightEnabled;
 	bool pressingLMouse;
+	bool restocking;
+
+	//Fog
+	Color fogColor;
+	float fogStart;
+	float fogEnd;
+	float fogDensity;
+	int fogType;
+	bool fogEnabled;
 };
 
 #endif

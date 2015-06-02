@@ -44,6 +44,10 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	JUMPMAXSPEED = 10.0f;
 	JUMPACCEL = 10.0f;
 	GRAVITY = -30.0f;
+	crouching = false;
+	crouched = false;
+	scoping = false;
+	scoped = false;
 }
 
 void Camera3::MoveForward(const double dt)
@@ -178,6 +182,42 @@ void Camera3::Update(double dt)
 		myKeys[32] = false;
 	}
 
+
+	//===============Crouching==============//
+	if(Application::IsKeyPressed(VK_LCONTROL) && crouching == false && crouched == false)
+	{
+		crouching = true;
+	}
+	else if(Application::IsKeyPressed(VK_LCONTROL) && crouching == true && crouched == true)
+	{
+		crouching = false;
+	}
+	
+
+	if(crouching == true)
+	{
+		if(position.y > -1 && crouched == false)
+		{
+			position.y -= (float)(5 * dt);
+			target.y  -= (float)(5 * dt);
+		}
+		else
+		{
+			crouched = true;
+		}
+	}
+	else
+	{
+		if(position.y < 0 && crouched == true)
+		{
+			position.y += (float)(5 * dt);
+			target.y  += (float)(5 * dt);
+		}
+		else
+		{
+			crouched = false;
+		}
+	}
 	UpdateJump(dt);
 
 	//==============SPRINT===================//
@@ -386,26 +426,19 @@ Update Scope
 ********************************************************************************/
 void Camera3::UpdateScope(const double dt)
 {
-	Vector3 tempPosition = position;
+	static Vector3 tempPosition;
 
-	/*if (m_Scope == true)
+	if (m_Scope == true)
 	{
 		Vector3 direction = target - position;
-		if (direction.Length() > 1)
-		{
-			Vector3 view = (target - position).Normalized();
-			position += view * (float)(10.f * dt);
-		}
+		position -= direction.Normalized() * 10 * dt;
 	}
 	else
 	{
-		Vector3 direction = target - position;
-		if ()
-		{
-			Vector3 view = (target - position).Normalized();
-			position -= view * (float)(10.f * dt);
-		}
-	}*/
+		tempPosition = position;
+		position = tempPosition;
+	}
 
-	std::cout << position << std::endl;
+	position = tempPosition;
+	std::cout << tempPosition << std::endl;
 }

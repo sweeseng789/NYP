@@ -1,8 +1,8 @@
 #include "Weapon.h"
 
 CWeapon::CWeapon():
-	usingSword	(true),
-	usingPistol	(false),
+	usingSword	(false),
+	usingPistol	(true),
 	usingSniper	(false),
 	usingSMG	(false)
 {
@@ -72,15 +72,16 @@ void CWeapon::update()
 {
 	if (Application::IsKeyPressed('1'))
 	{
-		weaponConfirm_Sword();
+		//weaponConfirm_Sword();
+		weaponConfirm_Pistol();
 	}
 	else if (Application::IsKeyPressed('2'))
 	{
-		weaponConfirm_Pistol();
+		weaponConfirm_Sniper();
 	}
 	else if(Application::IsKeyPressed('3'))
 	{
-		weaponConfirm_Sniper();
+		weaponConfirm_SMG();
 	}
 	else if (Application::IsKeyPressed('4'))
 	{

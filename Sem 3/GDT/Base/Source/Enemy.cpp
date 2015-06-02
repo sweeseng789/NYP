@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Application.h"
 
 
 CEnemy::CEnemy(void)
@@ -73,7 +74,7 @@ void CEnemy::update(float dt, Vector3 pos)
 	temp.x /= hyp;
 	temp.z /= hyp;
 
-	//EnemyPosition += temp * 2 * dt;
+	//EnemyPosition += temp * 10 * dt;
 
 	findDiff(pos);
 

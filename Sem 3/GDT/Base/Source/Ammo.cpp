@@ -27,6 +27,8 @@ bulletDirection		( Vector3(0.0f, 0.0f, 0.0f)),
 bulletPosition		( Vector3(0.0f, 0.0f, 0.0f)),
 bulletSpeed			( Vector3(5.f, 5.f, 5.f))
 {
+	elapsedTime = 0;
+	elapsedTime2 = 0;
 }
 
 CAmmo::~CAmmo(void)
@@ -90,10 +92,39 @@ bool CAmmo::getCreateBullet()
 	return createBullet;
 }
 
-void CAmmo::update(float dt, CWeapon weapon)
+void CAmmo::reload(float dt)
+{
+
+	elapsedTime += dt;
+	elapsedTime2 += dt;
+
+	if(elapsedTime > 0.5)
+	{
+		this->bullet += 1;
+		elapsedTime = 0;
+	}
+
+	if(elapsedTime2 > 1.5)
+	{
+		this->rounds += 1;
+		elapsedTime2 = 0;
+	}
+
+	if(bullet >= defaultBullet)
+	{
+		bullet = defaultBullet;
+	}
+
+	if(rounds >= defaultRounds)
+	{
+		rounds = defaultRounds;
+	}
+}
+
+void CAmmo::update(float dt, CWeapon weapon, bool restocking)
 {
 	//=============Pressing Left Mouse=============//
-	if (GetKeyState(VK_LBUTTON) < 0 && this->reloading == false)
+	if (GetKeyState(VK_LBUTTON) < 0 && this->reloading == false && restocking == false)
 		this->pressingMouse = true;
 	else
 		this->pressingMouse = false;

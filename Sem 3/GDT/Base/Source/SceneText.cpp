@@ -32,7 +32,12 @@ void SceneText::SetParameters()
 	Pistol.setBulletAndRounds(15, 5, 0.5f, 3.f);
 	Sniper.setBulletAndRounds(8, 2, 1.2f, 5.f);
 	SMG.setBulletAndRounds(30, 3, 0.2f, 5.f);
+	enemyCount = 0;
 	enemy.setPos(Vector3(0, 0, 0), Vector3(0, 0, 1));
+	restockTime = 10;
+	FApos.SetZero();
+	restocking = false;
+	restockTime = 5.f;
 
 	//Skybox
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
@@ -41,15 +46,15 @@ void SceneText::SetParameters()
 	meshList[GEO_RIGHT]->textureArray[0] = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
 	meshList[GEO_TOP]->textureArray[0] = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureArray[0] = LoadTGA("Image//bottom.tga");
+	/*meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
+	meshList[GEO_BOTTOM]->textureArray[0] = LoadTGA("Image//bottom.tga");*/
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureArray[0] = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
 	meshList[GEO_BACK]->textureArray[0] = LoadTGA("Image//back.tga");
-	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//heightmap.raw", m_heightMap);
-	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//moss1.tga");
-	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//toilet.tga");
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
+	meshList[GEO_BOTTOM]->textureArray[0] = LoadTGA("Image//bottom.tga");
+	meshList[GEO_BOTTOM]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
 
 	meshList[AvatarIcon] = MeshBuilder::GenerateQuad("Avatar Icon", Color(1, 1, 1), 1.0f);
 	meshList[AvatarIcon]->textureID = LoadTGA("Image//GGOHead.tga");
@@ -82,16 +87,6 @@ void SceneText::SetParameters()
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(1, 1, 1), 1.f);
 	meshList[Healthbar]->textureID = LoadTGA("Image//Healthbar.tga");
 
-	//==================MODEL==================//
-	meshList[modelHead] = MeshBuilder::GenerateOBJ("Enemy Head", "OBJ//modelHead2.obj");
-	meshList[modelHead]->textureArray[0] = LoadTGA("Image//modelHead.tga");
-	meshList[modelHand] = MeshBuilder::GenerateOBJ("Enemy Hand", "OBJ//modelArm2.obj");
-	meshList[modelHand]->textureArray[0] = LoadTGA("Image//modelHand.tga");
-	meshList[modelTorso] = MeshBuilder::GenerateOBJ("Enemy Torso", "OBJ//modelTorso2.obj");
-	meshList[modelTorso]->textureArray[0] = LoadTGA("Image//modelTorso.tga");
-	meshList[modelLeg] = MeshBuilder::GenerateOBJ("Enemy Leg", "OBJ//modelLeg.obj");
-	meshList[modelLeg]->textureArray[0] = LoadTGA("Image//modelLeg.tga");
-
 	//SKYPLANE
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureID = LoadTGA("Image//top.tga");
@@ -100,8 +95,8 @@ void SceneText::SetParameters()
 	m_cMinimap = new CMinimap();
 	m_cMinimap->SetBackground(MeshBuilder::GenerateSphere("Minimap", Color(1, 0, 0), 9, 18, 1.f));
 	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass.tga");
-	m_cMinimap->SetBorder(MeshBuilder::GenerateSphere("Minimap", Color(1, 0, 0), 9, 18, 1.1f));
-	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MiniMap border", Color(1, 1, 0), 1.f));
+	m_cMinimap->SetBorder(MeshBuilder::GenerateSphere("Minimap", Color(1, 0, 0), 9, 18, 1.01f));
+	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MiniMap border", Color(1, 1, 1), 1.f));
 
 
 	//Animation
@@ -114,6 +109,13 @@ void SceneText::SetParameters()
 		sa->m_anim = new Animation();
 		sa->m_anim->Set(0, 4, 0, 1.f);
 	}
+
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
+	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top.tga");
+	
+	meshList[firstAid] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//FirstAidbox.obj");
+	meshList[firstAid]->textureArray[0] = LoadTGA("Image//FirstAid.tga");
+
 }
 
 float SceneText::calculatingFPS(float dt)
@@ -140,7 +142,7 @@ void SceneText::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders("Shader//comg.vertexshader", "Shader//MultiTexture.fragmentshader");
+	m_programID = LoadShaders("Shader//Fog.vertexshader", "Shader//Fog.fragmentshader");
 
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -181,6 +183,8 @@ void SceneText::Init()
 	m_parameters[U_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_programID, "colorTextureEnabled[1]");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture[0]");
 	m_parameters[U_COLOR_TEXTURE1] = glGetUniformLocation(m_programID, "colorTexture[1]");
+
+
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
@@ -319,27 +323,30 @@ void SceneText::UpdateCameraStatus(const unsigned char key)
 
 void SceneText::BulletUpdate(float dt)
 {
-	if (Pistol.getCreateBullet() && weapon.returnPistolConfirmation())
+	if(restocking == false)
 	{
-		CAmmo * newAmmo = FetchBullet();
-		newAmmo->setDirection(camera.position, camera.direction, Vector3(100.f, 100.f, 100.f), 12, true, 3.f, WEAPON::BULLET_PISTOL);
-	}
-	else if (Sniper.getCreateBullet() && weapon.returnSniperConfirmation())
-	{
-		CAmmo * newAmmo = FetchBullet();
-		newAmmo->setDirection(camera.position, camera.direction, Vector3(100.f, 100.f, 100.f), 100, true, 3.f, WEAPON::BULLET_SNIPER);
-	}
-	else if (SMG.getCreateBullet() && weapon.returnSMGConfirmation())
-	{
-		CAmmo * newAmmo = FetchBullet();
-		newAmmo->setDirection(camera.position, camera.direction, Vector3(100.f, 100.f, 100.f), 20, true, 3.f, WEAPON::BULLET_SMG);
+		if (Pistol.getCreateBullet() && weapon.returnPistolConfirmation())
+		{
+			CAmmo * newAmmo = FetchBullet();
+			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 12, true, 3.f, WEAPON::BULLET_PISTOL);
+		}
+		else if (Sniper.getCreateBullet() && weapon.returnSniperConfirmation())
+		{
+			CAmmo * newAmmo = FetchBullet();
+			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 100, true, 3.f, WEAPON::BULLET_SNIPER);
+		}
+		else if (SMG.getCreateBullet() && weapon.returnSMGConfirmation())
+		{
+			CAmmo * newAmmo = FetchBullet();
+			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 20, true, 3.f, WEAPON::BULLET_SMG);
+		}
 	}
 
 
 	for (vector<CAmmo*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
 	{
 		CAmmo * BY = (CAmmo*)*it;
-		if (BY->active == true && enemy.active == true)
+		if (BY->active == true)
 		{
 			BY->lifeTime -= dt;
 
@@ -351,11 +358,19 @@ void SceneText::BulletUpdate(float dt)
 			BY->bulletPosition.y += (BY->bulletDirection.y * BY->bulletSpeed.y * dt);
 			BY->bulletPosition.z += (BY->bulletDirection.z * BY->bulletSpeed.z * dt);
 
-			if ((BY->bulletPosition - enemy.getEnemyPos()).LengthSquared() < 10)
+			for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
 			{
-				cout << "Hit" << endl;
-				enemy.minusHealth(BY->damage);
-				BY->active = false;
+				CEnemy * E = (CEnemy*)*it;
+				if(E->active == true)
+				{
+					if ((BY->bulletPosition - E->getEnemyPos()).LengthSquared() < 10)
+					{
+						cout << "Hit" << endl;
+						E->minusHealth(BY->damage);
+						BY->active = false;
+						enemyCount --;
+					}
+				}
 			}
 		}
 	}
@@ -423,18 +438,68 @@ void SceneText::Update(double dt)
 	if (moving > 100)
 	moving = 100;*/
 
+	static CEnemy * newEnemy;
+	if(enemyCount < 10)
+	{
+		newEnemy = new CEnemy;
+		float min = Math::RandFloatMinMax(-500, 500);
+		float max = Math::RandFloatMinMax(-500, 500);
+		newEnemy->active = true;
+		newEnemy->setPos(Vector3(min, 0, max), Vector3(min, 0, max + 1));
+		enemyList.push_back(newEnemy);
+		enemyCount ++;
+	}
+
+	for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
+	{
+		CEnemy * E = (CEnemy*)*it;
+		if(E->active == true)
+		{
+			E->update(dt, camera.position);
+			if(E->getEnemyHealth() <= 0)
+			{
+				E->active = false;
+			}
+		}
+	}
+
+	if((FApos - camera.position).Length() < 10)
+	{
+		if(!Pistol.getReloading() && !Sniper.getReloading() && !SMG.getReloading())
+		{
+			restocking = true;
+			Pistol.reload((float)dt);
+			Sniper.reload((float)dt);
+			SMG.reload((float)dt);
+			restockTime -= dt;
+		}
+	}
+	else
+	{
+		restocking = false;
+	}
+
+	if(restockTime <= 0)
+	{
+		FApos.x = Math::RandFloatMinMax(-500, 500);
+		FApos.z = Math::RandFloatMinMax(-500, 500);
+		restockTime = 10.f;
+	}
+
+	cout << restocking << endl;
+
 	//================Minimap==============//
 	rotateAngle -= (float)Application::camera_yaw;
 
 
 	if (weapon.returnSwordConfirmation() == true)
-		Sword.update((float)dt, weapon);
+		Sword.update((float)dt, weapon, restocking);
 	else if (weapon.returnPistolConfirmation() == true)
-		Pistol.update((float)dt, weapon);
+		Pistol.update((float)dt, weapon, restocking);
 	else if (weapon.returnSniperConfirmation() == true)
-		Sniper.update((float)dt, weapon);
+		Sniper.update((float)dt, weapon, restocking);
 	else
-		SMG.update((float)dt, weapon);
+		SMG.update((float)dt, weapon, restocking);
 
 	if (enemy.getEnemyHealth() <= 0)
 		enemy.active = false;
@@ -450,7 +515,7 @@ void SceneText::Update(double dt)
 	}
 }
 
-static const float SKYBOXSIZE = 1000.f;
+static const float SKYBOXSIZE = 9000.f;
 
 void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 {
@@ -532,7 +597,56 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vecto
 	modelStack.Scale(size.x, size.y, 0);
 	modelStack.Translate(translate.x, translate.y, 0);
 	if (rotate)
+		modelStack.Rotate(rotateAngle/4, 0, 0, 1);
+
+	Mtx44 MVP, modelview, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	if (mesh->textureID > 0)
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	mesh->Render();
+	if (mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	projectionStack.PopMatrix();
+}
+
+void SceneText::RenderEnemyMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vector3 translate, bool rotate)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+
+	float translatey = 15;
+
+	if (rotate)
 		modelStack.Rotate(rotateAngle, 0, 0, 1);
+
+	modelStack.Translate(translate.x, translate.y + translatey, 0);
+
+	modelStack.Scale(size.x, size.y, 0);
 
 	Mtx44 MVP, modelview, modelView_inverse_transpose;
 
@@ -611,7 +725,7 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneText::RenderSkybox()
 {
 	//left
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
@@ -644,11 +758,19 @@ void SceneText::RenderSkybox()
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_TOP], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
+
+	/*modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, , -SKYBOXSIZE / 2 + 2.f);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
+	modelStack.Translate(0, 0, -10);
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_BOTTOM], false);
@@ -691,7 +813,7 @@ void SceneText::RenderHUD()
 			RenderTextOnScreen(meshList[GEO_TEXT], "Error", Color(1.0f, 1.0f, 1.0f), 3.0f, 33.5f, 29.5f);
 		}
 	}//=====================PISTOL=====================//
-	if (weapon.returnPistolConfirmation() == true)//player is using pistol
+	else if (weapon.returnPistolConfirmation() == true)//player is using pistol
 	{
 		RenderMeshIn2D(meshList[BulletIcon], true, Vector3(13.0f, 13.0f, 0), Vector3(-5.5f, 2.9f, 0), false);//Bullet icon
 
@@ -781,7 +903,7 @@ void SceneText::RenderHUD()
 	}
 	if (Pistol.getReloading() == false)
 	{
-		if (weapon.returnPistolConfirmation() == true)
+		if (weapon.returnPistolConfirmation() == true && restocking == false)
 		{
 			modelStack.PushMatrix();
 			RenderMeshIn2D(meshList[Weapon_Pistol], false, Vector3(70.f, 70.f, 0), Vector3(0.7f, -0.4f, 0), false);
@@ -790,7 +912,7 @@ void SceneText::RenderHUD()
 	}
 	if (Sniper.getReloading() == false)
 	{
-		if (weapon.returnSniperConfirmation() == true)
+		if (weapon.returnSniperConfirmation() == true && restocking == false)
 		{
 			modelStack.PushMatrix();
 			RenderMeshIn2D(meshList[Weapon_Sniper], false, Vector3(70.f, 70.f, 0), Vector3(0.7f, -0.4f, -1), false);
@@ -798,12 +920,17 @@ void SceneText::RenderHUD()
 		}
 	}
 
+	if (restocking == true)
+	{
+		RenderMeshIn2D(meshList[HudBackground], true, Vector3(80.0f, 10.0f, 0), Vector3(0.01f, 0.2f, 0), false);//background for reload screen
+		RenderTextOnScreen(meshList[GEO_TEXT], "Restocking", Color(1.0f, 1.0f, 1.0f), 3.0f, 26.5f, 29.5f);
+	}
 	//==================CrossHair=============//
 	RenderMeshIn2D(meshList[crosshair], true, Vector3(5.0f, 5.0f, 0), Vector3(0, 0, 0), false);
 
 	if (SMG.getReloading() == false)
 	{
-		if (weapon.returnSMGConfirmation() == true)
+		if (weapon.returnSMGConfirmation() == true && restocking == false)
 		{
 			modelStack.PushMatrix();
 			RenderMeshIn2D(meshList[Weapon_SMG], false, Vector3(100.f, 100.f, 0), Vector3(0.3f, -0.2f, 0), false);
@@ -812,10 +939,11 @@ void SceneText::RenderHUD()
 	}
 }
 
-void SceneText::RenderEnemyModel()
+void SceneText::RenderEnemyModel(CEnemy * passIn)
 {
 	modelStack.PushMatrix();
-	modelStack.Rotate(enemy.getRotateAngle(), 0, 1, 0);
+	modelStack.Translate(passIn->getEnemyPos().x, passIn->getEnemyPos().y, passIn->getEnemyPos().z);
+	modelStack.Rotate(passIn->getRotateAngle(), 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
 	modelStack.PopMatrix();
@@ -825,7 +953,7 @@ void SceneText::RenderSkyPlane(Mesh* mesh, Color color, int slices, float Planet
 {
 	modelStack.PushMatrix();
 
-	modelStack.Translate(500.f, 1800.f, -500.f + (float)moving);
+	modelStack.Translate(0, 1800.f, -0);
 
 	RenderMesh(meshList[GEO_SKYPLANE], false);
 
@@ -922,9 +1050,9 @@ void SceneText::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 
-	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, Vector3(15.0f, 15.0f, 0), Vector3(3, -2, 0), false);
-	RenderMeshIn2D(m_cMinimap->GetBackground(), false, Vector3(15.0f, 15.0f, 0), Vector3(3, -2, 0), true);
-	RenderMeshIn2D(m_cMinimap->GetBorder(), false, Vector3(15.0f, 15.0f, 0), Vector3(3, -2, 0), true);
+	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
+	RenderMeshIn2D(m_cMinimap->GetBackground(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
+	RenderMeshIn2D(m_cMinimap->GetBorder(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
 
 	SetHUD(false);
 
@@ -934,9 +1062,22 @@ void SceneText::Render()
 	{
 		RenderMeshIn2D(meshList[Healthbar], true, Vector3(0.8f, 2.0f, 0), Vector3(-76.0f + a, 25.0f, 0), false);
 	}
+
+	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
 	RenderSkybox(); //RenderSKybox
-	if (enemy.active == true)
-		RenderEnemyModel(); //Render Enemy Model
+	for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
+	{
+		CEnemy * E = (CEnemy*)*it;
+		if(E->active == true)
+		{
+			RenderEnemyModel(E);
+		}
+	}
+	modelStack.PushMatrix();
+	modelStack.Translate(FApos.x, FApos.y - 9, FApos.z);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[firstAid], false);
+	modelStack.PopMatrix();
 	RenderHUD(); //Render HUD
 }
 

@@ -50,10 +50,11 @@ public:
 	//===============SETTER==================//
 	void setBulletAndRounds(const unsigned bullet, const unsigned rounds, const float shootTimeLimit, const float reloadTime);
 	void setDirection(const Vector3 bulletPosition, const Vector3 bulletDirection, const Vector3 bulletSpeed, const unsigned damage, bool active, const float lifeTime, WEAPON dataType);
+	void reload(float dt);
 
 	//Update
 	virtual void bulletUpdate(float dt);
-	void update(float dt, CWeapon weapon);
+	void update(float dt, CWeapon weapon, bool restocking);
 
 	//Bullet Variables
 	bool active;
@@ -83,7 +84,8 @@ private:
 	bool pressingR;
 	bool readyToShoot;
 
-	
+	float elapsedTime;
+	float elapsedTime2;
 	
 	
 	bool pressingMouse;

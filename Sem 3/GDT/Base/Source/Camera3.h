@@ -59,6 +59,10 @@ private:
 	//For jumping
 	bool m_bJumping;
 	bool m_Scope;
+	bool crouched;
+	bool crouching;
+	bool scoped;
+	bool scoping;
 	float GRAVITY;
 	float JumpVel;
 	float JUMPMAXSPEED, JUMPACCEL;

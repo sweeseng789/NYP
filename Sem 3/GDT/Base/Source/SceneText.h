@@ -146,6 +146,7 @@ public:
 	void RenderEnemyModel(CEnemy * passIn);
 	void SetHUD(const bool m_bHUDmode);
 	void BulletUpdate(float dt);
+	void reset();
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -197,6 +198,7 @@ private:
 	bool bLightEnabled;
 	bool pressingLMouse;
 	bool restocking;
+	bool caught;
 
 	//Fog
 	Color fogColor;

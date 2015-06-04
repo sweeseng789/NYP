@@ -74,7 +74,7 @@ void CEnemy::update(float dt, Vector3 pos)
 	temp.x /= hyp;
 	temp.z /= hyp;
 
-	//EnemyPosition += temp * 10 * dt;
+	EnemyPosition += temp * 30 * dt;
 
 	findDiff(pos);
 

@@ -171,10 +171,10 @@ void Camera3::Update(double dt)
 	if (Application::camera_pitch != 0)
 		Pitch(dt);
 
-	if(Application::IsKeyPressed('R'))
+	/*if(Application::IsKeyPressed('R'))
 	{
 		Reset();
-	}
+	}*/
 
 	if (myKeys[32] == true)
 	{

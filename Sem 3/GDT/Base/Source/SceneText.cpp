@@ -8,6 +8,13 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 
+#include <irrKlang.h>
+
+#pragma comment (lib, "irrKlang.lib")
+using namespace irrklang;
+
+ISoundEngine *sound = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
 SceneText::SceneText() :
 	m_cMinimap(NULL)
 {
@@ -25,7 +32,7 @@ SceneText::~SceneText()
 void SceneText::SetParameters()
 {
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
-	moving = 0;
+	moving = 100;
 	rotateAngle = 0;
 	rotateAngle2 = 0;
 	bLightEnabled = true;
@@ -38,6 +45,7 @@ void SceneText::SetParameters()
 	FApos.SetZero();
 	restocking = false;
 	restockTime = 5.f;
+	caught = false;
 
 	//Skybox
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
@@ -93,8 +101,10 @@ void SceneText::SetParameters()
 
 	//MINIMAP
 	m_cMinimap = new CMinimap();
-	m_cMinimap->SetBackground(MeshBuilder::GenerateSphere("Minimap", Color(1, 0, 0), 9, 18, 1.f));
-	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass.tga");
+	m_cMinimap->SetBackground(MeshBuilder::GenerateQuad("Crosshair", Color(1, 1, 1), 1.0f));
+	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//compass.tga");
+	//m_cMinimap->GetBackground()->textureArray[0] = LoadTGA("Image//bottom.tga");
+	//m_cMinimap->GetBackground()->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
 	m_cMinimap->SetBorder(MeshBuilder::GenerateSphere("Minimap", Color(1, 0, 0), 9, 18, 1.01f));
 	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MiniMap border", Color(1, 1, 1), 1.f));
 
@@ -328,17 +338,23 @@ void SceneText::BulletUpdate(float dt)
 		if (Pistol.getCreateBullet() && weapon.returnPistolConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
-			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 12, true, 3.f, WEAPON::BULLET_PISTOL);
+			sound->play3D("../irrKlang/media/Pistol.mp3", vec3df(0,0,0), false);
+			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 50, true, 3.f, WEAPON::BULLET_PISTOL);
+			camera.target.y += 2 * dt;
 		}
 		else if (Sniper.getCreateBullet() && weapon.returnSniperConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
+			sound->play3D("../irrKlang/media/Sniper.mp3", vec3df(0, 0, 0), false);
 			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 100, true, 3.f, WEAPON::BULLET_SNIPER);
+			camera.target.y += 10 * dt;
 		}
 		else if (SMG.getCreateBullet() && weapon.returnSMGConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
-			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 20, true, 3.f, WEAPON::BULLET_SMG);
+			sound->play3D("../irrKlang/media/SMG.mp3", vec3df(0, 0, 0), false);
+			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 25, true, 3.f, WEAPON::BULLET_SMG);
+			camera.target.y += dt;
 		}
 	}
 
@@ -374,6 +390,11 @@ void SceneText::BulletUpdate(float dt)
 			}
 		}
 	}
+}
+
+void SceneText::reset()
+{
+	SetParameters();
 }
 
 void SceneText::Update(double dt)
@@ -424,38 +445,48 @@ void SceneText::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-
-	camera.Update(dt);
+	if (moving > 0)
+	{
+		camera.Update(dt);
+	}
 	fps = calculatingFPS((float)dt);
 
-	if (Application::IsKeyPressed('9'))
-		moving += 1;
-	if (Application::IsKeyPressed('8'))
-		moving -= 1;
-
-	/*if (moving < 0)
+	if (moving < 0)
 	moving = 0;
 	if (moving > 100)
-	moving = 100;*/
+	moving = 100;
 
 	static CEnemy * newEnemy;
 	if(enemyCount < 10)
 	{
 		newEnemy = new CEnemy;
-		float min = Math::RandFloatMinMax(-500, 500);
-		float max = Math::RandFloatMinMax(-500, 500);
+		float min = Math::RandFloatMinMax(-1000, 1000);
+		float max = Math::RandFloatMinMax(-1000, 1000);
 		newEnemy->active = true;
 		newEnemy->setPos(Vector3(min, 0, max), Vector3(min, 0, max + 1));
 		enemyList.push_back(newEnemy);
 		enemyCount ++;
 	}
 
+	static float testing = 0.f;
 	for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
 	{
 		CEnemy * E = (CEnemy*)*it;
 		if(E->active == true)
 		{
-			E->update(dt, camera.position);
+			if ((camera.position - E->getEnemyPos()).Length() > 6)
+			{
+				E->update(dt, camera.position);
+				testing += dt;
+			}
+			else
+			{
+				if (testing >= 0.02f)
+				{
+					moving -= 10 * dt;
+					testing = 0.f;
+				}
+			}
 			if(E->getEnemyHealth() <= 0)
 			{
 				E->active = false;
@@ -463,6 +494,7 @@ void SceneText::Update(double dt)
 		}
 	}
 
+	static float recover = 0.f;
 	if((FApos - camera.position).Length() < 10)
 	{
 		if(!Pistol.getReloading() && !Sniper.getReloading() && !SMG.getReloading())
@@ -472,6 +504,12 @@ void SceneText::Update(double dt)
 			Sniper.reload((float)dt);
 			SMG.reload((float)dt);
 			restockTime -= dt;
+			recover += dt;
+			if (recover >= 0.2)
+			{
+				moving += 5 * dt;
+				recover = 0.f;
+			}
 		}
 	}
 	else
@@ -481,12 +519,10 @@ void SceneText::Update(double dt)
 
 	if(restockTime <= 0)
 	{
-		FApos.x = Math::RandFloatMinMax(-500, 500);
-		FApos.z = Math::RandFloatMinMax(-500, 500);
+		FApos.x = Math::RandFloatMinMax(-1000, 1000);
+		FApos.z = Math::RandFloatMinMax(-1000, 1000);
 		restockTime = 10.f;
 	}
-
-	cout << restocking << endl;
 
 	//================Minimap==============//
 	rotateAngle -= (float)Application::camera_yaw;
@@ -512,6 +548,37 @@ void SceneText::Update(double dt)
 	if (sa)
 	{
 		sa->Update(dt);
+	}
+
+	if (Application::IsKeyPressed('P'))
+	{
+		camera.Reset();
+		reset();
+
+		for (vector<CAmmo*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
+		{
+			CAmmo *BY = (CAmmo*)*it;
+
+			if (BY->active)
+			{
+				BY->active = false;
+			}
+		}
+
+		for (vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		{
+			CEnemy *E = (CEnemy*)*it;
+
+			if (E->active)
+			{
+				E->active = false;
+			}
+		}
+	}
+
+	if (Application::IsKeyPressed('W'))
+	{
+		//sound->play3D("../irrKlang/media/footsteps.mp3", vec3df(0, 0, 0), false);
 	}
 }
 
@@ -597,7 +664,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, Vecto
 	modelStack.Scale(size.x, size.y, 0);
 	modelStack.Translate(translate.x, translate.y, 0);
 	if (rotate)
-		modelStack.Rotate(rotateAngle/4, 0, 0, 1);
+		modelStack.Rotate(rotateAngle, 0, 0, 1);
 
 	Mtx44 MVP, modelview, modelView_inverse_transpose;
 
@@ -642,7 +709,7 @@ void SceneText::RenderEnemyMeshIn2D(Mesh *mesh, bool enableLight, Vector3 size, 
 	float translatey = 15;
 
 	if (rotate)
-		modelStack.Rotate(rotateAngle, 0, 0, 1);
+		modelStack.Rotate(-rotateAngle, 0, 0, 1);
 
 	modelStack.Translate(translate.x, translate.y + translatey, 0);
 
@@ -925,6 +992,7 @@ void SceneText::RenderHUD()
 		RenderMeshIn2D(meshList[HudBackground], true, Vector3(80.0f, 10.0f, 0), Vector3(0.01f, 0.2f, 0), false);//background for reload screen
 		RenderTextOnScreen(meshList[GEO_TEXT], "Restocking", Color(1.0f, 1.0f, 1.0f), 3.0f, 26.5f, 29.5f);
 	}
+
 	//==================CrossHair=============//
 	RenderMeshIn2D(meshList[crosshair], true, Vector3(5.0f, 5.0f, 0), Vector3(0, 0, 0), false);
 
@@ -1039,6 +1107,7 @@ void SceneText::Render()
 	}
 
 	SetHUD(true);
+
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -1050,9 +1119,9 @@ void SceneText::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 
-	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
-	RenderMeshIn2D(m_cMinimap->GetBackground(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
-	RenderMeshIn2D(m_cMinimap->GetBorder(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
+	//RenderMeshIn2D(m_cMinimap->GetAvatar(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
+
+	//RenderMeshIn2D(m_cMinimap->GetBorder(), false, Vector3(15.0f, 15.0f, 0), Vector3(0, 0, 0), true);
 
 	SetHUD(false);
 
@@ -1065,6 +1134,14 @@ void SceneText::Render()
 
 	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
 	RenderSkybox(); //RenderSKybox
+	
+	if (moving <= 0)
+	{
+		RenderMeshIn2D(meshList[HudBackground], true, Vector3(115.0f, 25.0f, 0), Vector3(0.1f, 0.f, 0), false);//background for reload screen
+		RenderTextOnScreen(meshList[GEO_TEXT], "You Have Died :D", Color(1.0f, 1.0f, 1.0f), 3.0f, 22.5f, 29.5f);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press P to continue", Color(1.0f, 1.0f, 1.0f), 3.0f, 18.5f, 25.5f);
+	}
+
 	for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
 	{
 		CEnemy * E = (CEnemy*)*it;
@@ -1078,6 +1155,7 @@ void SceneText::Render()
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[firstAid], false);
 	modelStack.PopMatrix();
+	RenderMeshIn2D(m_cMinimap->GetBackground(), false, Vector3(35.f, 35.0f, 0), Vector3(-1.8, -1.3, 0), true);
 	RenderHUD(); //Render HUD
 }
 

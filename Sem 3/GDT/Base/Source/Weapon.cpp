@@ -1,5 +1,12 @@
 #include "Weapon.h"
 
+#include <irrKlang.h>
+
+#pragma comment (lib, "irrKlang.lib")
+using namespace irrklang;
+
+ISoundEngine *sound3 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
 CWeapon::CWeapon():
 	usingSword	(false),
 	usingPistol	(true),
@@ -68,23 +75,40 @@ void CWeapon::weaponConfirm_SMG()
 	this->usingSword = this->usingPistol = this->usingSniper = false;
 }
 
-void CWeapon::update()
+void CWeapon::update(double dt)
 {
-	if (Application::IsKeyPressed('1'))
+	static double elapsedTime = 0.f;
+	elapsedTime += dt;
+
+	if (elapsedTime >= 0.3)
 	{
-		//weaponConfirm_Sword();
-		weaponConfirm_Pistol();
-	}
-	else if (Application::IsKeyPressed('2'))
-	{
-		weaponConfirm_Sniper();
-	}
-	else if(Application::IsKeyPressed('3'))
-	{
-		weaponConfirm_SMG();
-	}
-	else if (Application::IsKeyPressed('4'))
-	{
-		weaponConfirm_SMG();
+		elapsedTime = 0.3;
+
+
+		if (Application::IsKeyPressed('1'))
+		{
+			//weaponConfirm_Sword();
+			weaponConfirm_Pistol();
+			elapsedTime = 0;
+			sound3->play3D("../irrKlang/media/Change.mp3", vec3df(0, 0, 0), false);
+		}
+		else if (Application::IsKeyPressed('2'))
+		{
+			sound3->play3D("../irrKlang/media/Change.mp3", vec3df(0, 0, 0), false);
+			elapsedTime = 0;
+			weaponConfirm_Sniper();
+		}
+		else if (Application::IsKeyPressed('3'))
+		{
+			sound3->play3D("../irrKlang/media/Change.mp3", vec3df(0, 0, 0), false);
+			elapsedTime = 0;
+			weaponConfirm_SMG();
+		}
+		else if (Application::IsKeyPressed('4'))
+		{
+			sound3->play3D("../irrKlang/media/Change.mp3", vec3df(0, 0, 0), false);
+			elapsedTime = 0;
+			weaponConfirm_SMG();
+		}
 	}
 }

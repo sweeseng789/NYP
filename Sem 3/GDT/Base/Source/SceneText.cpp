@@ -38,7 +38,7 @@ void SceneText::SetParameters()
 	bLightEnabled = true;
 	Pistol.setBulletAndRounds(15, 5, 0.5f, 3.f);
 	Sniper.setBulletAndRounds(8, 2, 1.2f, 5.f);
-	SMG.setBulletAndRounds(30, 3, 0.2f, 5.f);
+	SMG.setBulletAndRounds(90, 3, 0.2f, 5.f);
 	enemyCount = 0;
 	enemy.setPos(Vector3(0, 0, 0), Vector3(0, 0, 1));
 	restockTime = 10;
@@ -122,10 +122,9 @@ void SceneText::SetParameters()
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top.tga");
-	
+
 	meshList[firstAid] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//FirstAidbox.obj");
 	meshList[firstAid]->textureArray[0] = LoadTGA("Image//FirstAid.tga");
-
 }
 
 float SceneText::calculatingFPS(float dt)
@@ -333,12 +332,12 @@ void SceneText::UpdateCameraStatus(const unsigned char key)
 
 void SceneText::BulletUpdate(float dt)
 {
-	if(restocking == false)
+	if (restocking == false)
 	{
 		if (Pistol.getCreateBullet() && weapon.returnPistolConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
-			sound->play3D("../irrKlang/media/Pistol.mp3", vec3df(0,0,0), false);
+			sound->play3D("../irrKlang/media/Pistol.mp3", vec3df(0, 0, 0), false);
 			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 50, true, 3.f, WEAPON::BULLET_PISTOL);
 			camera.target.y += 2 * dt;
 		}
@@ -374,17 +373,17 @@ void SceneText::BulletUpdate(float dt)
 			BY->bulletPosition.y += (BY->bulletDirection.y * BY->bulletSpeed.y * dt);
 			BY->bulletPosition.z += (BY->bulletDirection.z * BY->bulletSpeed.z * dt);
 
-			for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
+			for (vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
 			{
 				CEnemy * E = (CEnemy*)*it;
-				if(E->active == true)
+				if (E->active == true)
 				{
 					if ((BY->bulletPosition - E->getEnemyPos()).LengthSquared() < 10)
 					{
 						cout << "Hit" << endl;
 						E->minusHealth(BY->damage);
 						BY->active = false;
-						enemyCount --;
+						enemyCount--;
 					}
 				}
 			}
@@ -399,156 +398,6 @@ void SceneText::reset()
 
 void SceneText::Update(double dt)
 {
-	/*if(Application::IsKeyPressed('1'))
-	glEnable(GL_CULL_FACE);
-	if(Application::IsKeyPressed('2'))
-	glDisable(GL_CULL_FACE);
-	if(Application::IsKeyPressed('3'))
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if(Application::IsKeyPressed('4'))
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
-
-	if (Application::IsKeyPressed('5'))
-	{
-		lights[0].type = Light::LIGHT_POINT;
-		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
-	}
-	else if (Application::IsKeyPressed('6'))
-	{
-		lights[0].type = Light::LIGHT_DIRECTIONAL;
-		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
-	}
-	else if (Application::IsKeyPressed('7'))
-	{
-		lights[0].type = Light::LIGHT_SPOT;
-		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
-	}
-	else if (Application::IsKeyPressed('8'))
-	{
-		bLightEnabled = true;
-	}
-	else if (Application::IsKeyPressed('9'))
-	{
-		bLightEnabled = false;
-	}
-
-	if (Application::IsKeyPressed('I'))
-		lights[0].position.z -= (float)(10.f * dt);
-	if (Application::IsKeyPressed('K'))
-		lights[0].position.z += (float)(10.f * dt);
-	if (Application::IsKeyPressed('J'))
-		lights[0].position.x -= (float)(10.f * dt);
-	if (Application::IsKeyPressed('L'))
-		lights[0].position.x += (float)(10.f * dt);
-	if (Application::IsKeyPressed('O'))
-		lights[0].position.y -= (float)(10.f * dt);
-	if (Application::IsKeyPressed('P'))
-		lights[0].position.y += (float)(10.f * dt);
-
-	if (moving > 0)
-	{
-		camera.Update(dt);
-	}
-	fps = calculatingFPS((float)dt);
-
-	if (moving < 0)
-	moving = 0;
-	if (moving > 100)
-	moving = 100;
-
-	static CEnemy * newEnemy;
-	if(enemyCount < 10)
-	{
-		newEnemy = new CEnemy;
-		float min = Math::RandFloatMinMax(-1000, 1000);
-		float max = Math::RandFloatMinMax(-1000, 1000);
-		newEnemy->active = true;
-		newEnemy->setPos(Vector3(min, 0, max), Vector3(min, 0, max + 1));
-		enemyList.push_back(newEnemy);
-		enemyCount ++;
-	}
-
-	static float testing = 0.f;
-	for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
-	{
-		CEnemy * E = (CEnemy*)*it;
-		if(E->active == true)
-		{
-			if ((camera.position - E->getEnemyPos()).Length() > 6)
-			{
-				E->update(dt, camera.position);
-				testing += dt;
-			}
-			else
-			{
-				if (testing >= 0.02f)
-				{
-					moving -= 10 * dt;
-					testing = 0.f;
-				}
-			}
-			if(E->getEnemyHealth() <= 0)
-			{
-				E->active = false;
-			}
-		}
-	}
-
-	static float recover = 0.f;
-	if((FApos - camera.position).Length() < 10)
-	{
-		if(!Pistol.getReloading() && !Sniper.getReloading() && !SMG.getReloading())
-		{
-			restocking = true;
-			Pistol.reload((float)dt);
-			Sniper.reload((float)dt);
-			SMG.reload((float)dt);
-			restockTime -= dt;
-			recover += dt;
-			if (recover >= 0.2)
-			{
-				moving += 5 * dt;
-				recover = 0.f;
-			}
-		}
-	}
-	else
-	{
-		restocking = false;
-	}
-
-	if(restockTime <= 0)
-	{
-		FApos.x = Math::RandFloatMinMax(-1000, 1000);
-		FApos.z = Math::RandFloatMinMax(-1000, 1000);
-		restockTime = 10.f;
-	}
-
-	//================Minimap==============//
-	rotateAngle -= (float)Application::camera_yaw;
-
-
-	if (weapon.returnSwordConfirmation() == true)
-		Sword.update((float)dt, weapon, restocking);
-	else if (weapon.returnPistolConfirmation() == true)
-		Pistol.update((float)dt, weapon, restocking);
-	else if (weapon.returnSniperConfirmation() == true)
-		Sniper.update((float)dt, weapon, restocking);
-	else
-		SMG.update((float)dt, weapon, restocking);
-
-	if (enemy.getEnemyHealth() <= 0)
-		enemy.active = false;
-
-	BulletUpdate((float)dt);
-	weapon.update();
-	enemy.update((float)dt, camera.position);
-
-	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
-	if (sa)
-	{
-		sa->Update(dt);
-	}
 
 	if (Application::IsKeyPressed('P'))
 	{
@@ -575,10 +424,169 @@ void SceneText::Update(double dt)
 			}
 		}
 	}
-
-	if (Application::IsKeyPressed('W'))
+	if (moving > 0)
 	{
-		//sound->play3D("../irrKlang/media/footsteps.mp3", vec3df(0, 0, 0), false);
+		/*if(Application::IsKeyPressed('1'))
+		glEnable(GL_CULL_FACE);
+		if(Application::IsKeyPressed('2'))
+		glDisable(GL_CULL_FACE);
+		if(Application::IsKeyPressed('3'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if(Application::IsKeyPressed('4'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
+
+		if (Application::IsKeyPressed('5'))
+		{
+			lights[0].type = Light::LIGHT_POINT;
+			glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
+		}
+		else if (Application::IsKeyPressed('6'))
+		{
+			lights[0].type = Light::LIGHT_DIRECTIONAL;
+			glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
+		}
+		else if (Application::IsKeyPressed('7'))
+		{
+			lights[0].type = Light::LIGHT_SPOT;
+			glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
+		}
+		else if (Application::IsKeyPressed('8'))
+		{
+			bLightEnabled = true;
+		}
+		else if (Application::IsKeyPressed('9'))
+		{
+			bLightEnabled = false;
+		}
+
+		if (Application::IsKeyPressed('I'))
+			lights[0].position.z -= (float)(10.f * dt);
+		if (Application::IsKeyPressed('K'))
+			lights[0].position.z += (float)(10.f * dt);
+		if (Application::IsKeyPressed('J'))
+			lights[0].position.x -= (float)(10.f * dt);
+		if (Application::IsKeyPressed('L'))
+			lights[0].position.x += (float)(10.f * dt);
+		if (Application::IsKeyPressed('O'))
+			lights[0].position.y -= (float)(10.f * dt);
+		if (Application::IsKeyPressed('P'))
+			lights[0].position.y += (float)(10.f * dt);
+
+		if (moving > 0)
+		{
+			camera.Update(dt);
+		}
+		fps = calculatingFPS((float)dt);
+
+		if (moving < 0)
+			moving = 0;
+		if (moving > 100)
+			moving = 100;
+
+		static CEnemy * newEnemy;
+		if (enemyCount < 10)
+		{
+			newEnemy = new CEnemy;
+			float min = Math::RandFloatMinMax(-1000, 1000);
+			float max = Math::RandFloatMinMax(-1000, 1000);
+			newEnemy->active = true;
+			newEnemy->setPos(Vector3(min, 0, max), Vector3(min, 0, max + 1));
+			enemyList.push_back(newEnemy);
+			enemyCount++;
+		}
+
+		static float testing = 0.f;
+		for (vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
+		{
+			CEnemy * E = (CEnemy*)*it;
+			if (E->active == true)
+			{
+				if ((camera.position - E->getEnemyPos()).Length() > 6)
+				{
+					E->update(dt, camera.position);
+					testing += dt;
+				}
+				else
+				{
+					if (testing >= 0.02f)
+					{
+						sound->play3D("../irrKlang/media/Claw.mp3", vec3df(0, 0, 0), false);
+						moving -= 10 * dt;
+						testing = 0.f;
+					}
+				}
+				if (E->getEnemyHealth() <= 0)
+				{
+					E->active = false;
+					sound->play3D("../irrKlang/media/Death.mp3", vec3df(0, 0, 0), false);
+				}
+			}
+		}
+
+		static float recover = 0.f;
+		static float playSoundPU = 0.f;
+		if ((FApos - camera.position).Length() < 10)
+		{
+			if (!Pistol.getReloading() && !Sniper.getReloading() && !SMG.getReloading())
+			{
+				restocking = true;
+				Pistol.reload((float)dt);
+				Sniper.reload((float)dt);
+				SMG.reload((float)dt);
+				restockTime -= dt;
+				recover += dt;
+				playSoundPU += dt;
+				if (recover >= 0.2)
+				{
+					moving += 5 * dt;
+					recover = 0.f;
+
+				}
+
+				if (playSoundPU >= 1)
+				{
+					sound->play3D("../irrKlang/media/PowerUp.wav", vec3df(0, 0, 0), false);
+					playSoundPU = 0.f;
+				}
+			}
+		}
+		else
+		{
+			restocking = false;
+		}
+
+		if (restockTime <= 0)
+		{
+			FApos.x = Math::RandFloatMinMax(-1000, 1000);
+			FApos.z = Math::RandFloatMinMax(-1000, 1000);
+			restockTime = 10.f;
+		}
+
+		//================Minimap==============//
+		rotateAngle -= (float)Application::camera_yaw;
+
+
+		if (weapon.returnSwordConfirmation() == true)
+			Sword.update((float)dt, weapon, restocking, moving);
+		else if (weapon.returnPistolConfirmation() == true)
+			Pistol.update((float)dt, weapon, restocking, moving);
+		else if (weapon.returnSniperConfirmation() == true)
+			Sniper.update((float)dt, weapon, restocking, moving);
+		else
+			SMG.update((float)dt, weapon, restocking, moving);
+
+		if (enemy.getEnemyHealth() <= 0)
+			enemy.active = false;
+
+		BulletUpdate((float)dt);
+		weapon.update(dt);
+		enemy.update((float)dt, camera.position);
+
+		SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+		if (sa)
+		{
+			sa->Update(dt);
+		}
 	}
 }
 
@@ -1115,7 +1123,7 @@ void SceneText::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y <<", " << lights[0].position.z << ")";
+	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 
@@ -1125,16 +1133,16 @@ void SceneText::Render()
 
 	SetHUD(false);
 
-	
+
 	//===============HEALTH===========//
 	for (unsigned a = 0; a < moving; ++a)//Healthbar
 	{
 		RenderMeshIn2D(meshList[Healthbar], true, Vector3(0.8f, 2.0f, 0), Vector3(-76.0f + a, 25.0f, 0), false);
 	}
 
-	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+	RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
 	RenderSkybox(); //RenderSKybox
-	
+
 	if (moving <= 0)
 	{
 		RenderMeshIn2D(meshList[HudBackground], true, Vector3(115.0f, 25.0f, 0), Vector3(0.1f, 0.f, 0), false);//background for reload screen
@@ -1142,10 +1150,10 @@ void SceneText::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "Press P to continue", Color(1.0f, 1.0f, 1.0f), 3.0f, 18.5f, 25.5f);
 	}
 
-	for(vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
+	for (vector<CEnemy *>::iterator it = enemyList.begin(); it != enemyList.end(); it++)
 	{
 		CEnemy * E = (CEnemy*)*it;
-		if(E->active == true)
+		if (E->active == true)
 		{
 			RenderEnemyModel(E);
 		}

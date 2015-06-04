@@ -54,7 +54,7 @@ public:
 
 	//Update
 	virtual void bulletUpdate(float dt);
-	void update(float dt, CWeapon weapon, bool restocking);
+	void update(float dt, CWeapon weapon, bool restocking, float life);
 
 	//Bullet Variables
 	bool active;

@@ -17,7 +17,7 @@ public:
 	CWeapon();
 	~CWeapon();
 
-	void update();
+	void update(double dt);
 	void weaponConfirm_Sword();
 	void weaponConfirm_Pistol();
 	void weaponConfirm_Sniper();

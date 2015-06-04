@@ -1,5 +1,12 @@
 #include "Ammo.h"
 
+#include <irrKlang.h>
+
+#pragma comment (lib, "irrKlang.lib")
+using namespace irrklang;
+
+ISoundEngine *sound2 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
 
 CAmmo::CAmmo(void):
 //Int
@@ -121,16 +128,16 @@ void CAmmo::reload(float dt)
 	}
 }
 
-void CAmmo::update(float dt, CWeapon weapon, bool restocking)
+void CAmmo::update(float dt, CWeapon weapon, bool restocking, float life)
 {
 	//=============Pressing Left Mouse=============//
-	if (GetKeyState(VK_LBUTTON) < 0 && this->reloading == false && restocking == false)
+	if (GetKeyState(VK_LBUTTON) < 0 && this->reloading == false && restocking == false && life > 0)
 		this->pressingMouse = true;
 	else
 		this->pressingMouse = false;
 
 	//=============Pressing R=============//
-	if (Application::IsKeyPressed('R'))
+	if (Application::IsKeyPressed('R') && restocking == false)
 		this->pressingR = true;
 
 
@@ -189,6 +196,7 @@ void CAmmo::update(float dt, CWeapon weapon, bool restocking)
 				pressingR = false; // reset button
 				reloading = false;
 				reloadTime = defaultReloadTime;
+				sound2->play3D("../irrKlang/media/Reload.mp3", vec3df(0, 0, 0), false);
 			}
 
 			//Player switching weapon when reloading

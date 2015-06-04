@@ -2,6 +2,14 @@
 #include "Application.h"
 #include "Mtx44.h"
 
+#include <irrKlang.h>
+
+#pragma comment (lib, "irrKlang.lib")
+using namespace irrklang;
+
+ISoundEngine *sound4 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+
+
 Camera3::Camera3()
 {
 }
@@ -111,6 +119,32 @@ void Camera3::Update(double dt)
 	{
 		MoveBackward(dt);
 		myKeys['s'] = false;
+	}
+
+	static float playSoundFS = 0.f;
+	static float playSoundS = 0.f;
+
+	if (Application::IsKeyPressed('A') || Application::IsKeyPressed('D') || Application::IsKeyPressed('S') || Application::IsKeyPressed('W'))
+	{
+		
+		if (!Application::IsKeyPressed(VK_LSHIFT))
+		{
+			playSoundFS += dt;
+			if (playSoundFS >= 0.5f)
+			{
+				sound4->play3D("../irrKlang/media/footstep.mp3", vec3df(0, 0, 0), false);
+				playSoundFS = 0.f;
+			}
+		}
+		else
+		{
+			playSoundS += dt;
+			if (playSoundS >= 0.6f)
+			{
+				sound4->play3D("../irrKlang/media/Sprint.wav", vec3df(0, 0, 0), false);
+				playSoundS = 0.f;
+			}
+		}
 	}
 
 	if(Application::IsKeyPressed(VK_LEFT))
@@ -386,6 +420,7 @@ void Camera3::Jump(const double dt)
 {
 	if (m_bJumping == false)
 	{
+		sound4->play3D("../irrKlang/media/Jump.wav", vec3df(0, 0, 0), false);
 		m_bJumping = true;
 		// Calculate the jump velocity
 		JumpVel = JUMPACCEL;// * dt;

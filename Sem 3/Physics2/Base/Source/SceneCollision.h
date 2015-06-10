@@ -24,9 +24,6 @@ public:
 	void RenderGO(GameObject *go);
 
 	GameObject* FetchGO();
-
-	bool CheckCollision(GameObject *go1, GameObject *go2, float dt);
-
 protected:
 
 	//Physics
@@ -40,8 +37,6 @@ protected:
 	//Auditing
 	float m1, m2;
 	Vector3 u1, u2, v1, v2;
-	Vector3 initialMomentum, finalMomentum;
-	float initialKE, finalKE;
 };
 
 #endif

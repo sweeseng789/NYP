@@ -13,7 +13,7 @@
 #pragma comment (lib, "irrKlang.lib")
 using namespace irrklang;
 
-ISoundEngine *sound = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
+ISoundEngine *sound10 = createIrrKlangDevice(ESOD_AUTO_DETECT, ESEO_MULTI_THREADED | ESEO_LOAD_PLUGINS | ESEO_USE_3D_BUFFERS);
 
 SceneText::SceneText() :
 	m_cMinimap(NULL)
@@ -94,6 +94,9 @@ void SceneText::SetParameters()
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 	meshList[Healthbar] = MeshBuilder::GenerateQuad("healthbar", Color(1, 1, 1), 1.f);
 	meshList[Healthbar]->textureID = LoadTGA("Image//Healthbar.tga");
+
+	meshList[Testing] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//M9.obj");
+	meshList[Testing]->textureArray[0] = LoadTGA("Image//M9.tga");
 
 	//SKYPLANE
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
@@ -337,21 +340,21 @@ void SceneText::BulletUpdate(float dt)
 		if (Pistol.getCreateBullet() && weapon.returnPistolConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
-			sound->play3D("../irrKlang/media/Pistol.mp3", vec3df(0, 0, 0), false);
+			sound10->play3D("../irrKlang/media/Pistol.mp3", vec3df(0, 0, 0), false);
 			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 50, true, 3.f, WEAPON::BULLET_PISTOL);
 			camera.target.y += 2 * dt;
 		}
 		else if (Sniper.getCreateBullet() && weapon.returnSniperConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
-			sound->play3D("../irrKlang/media/Sniper.mp3", vec3df(0, 0, 0), false);
+			sound10->play3D("../irrKlang/media/Sniper.mp3", vec3df(0, 0, 0), false);
 			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 100, true, 3.f, WEAPON::BULLET_SNIPER);
 			camera.target.y += 10 * dt;
 		}
 		else if (SMG.getCreateBullet() && weapon.returnSMGConfirmation())
 		{
 			CAmmo * newAmmo = FetchBullet();
-			sound->play3D("../irrKlang/media/SMG.mp3", vec3df(0, 0, 0), false);
+			sound10->play3D("../irrKlang/media/SMG.mp3", vec3df(0, 0, 0), false);
 			newAmmo->setDirection(camera.position, camera.direction, Vector3(200.f, 200.f, 200.f), 25, true, 3.f, WEAPON::BULLET_SMG);
 			camera.target.y += dt;
 		}
@@ -378,7 +381,16 @@ void SceneText::BulletUpdate(float dt)
 				CEnemy * E = (CEnemy*)*it;
 				if (E->active == true)
 				{
-					if ((BY->bulletPosition - E->getEnemyPos()).LengthSquared() < 10)
+					/*if ((BY->bulletPosition - E->getEnemyPos()).LengthSquared() < 10)
+					{
+						cout << "Hit" << endl;
+						E->minusHealth(BY->damage);
+						BY->active = false;
+						enemyCount--;
+					}*/
+					/*float dist = Vector3(BY->bulletPosition - E->getEnemyPos()).LengthSquared();
+					if (dist <= (0.1 + 10) * (0.1 * 10))*/
+					if(collision.SphereToSphere(BY->bulletPosition, E->getEnemyPos(), 0.1, 10))
 					{
 						cout << "Hit" << endl;
 						E->minusHealth(BY->damage);
@@ -424,6 +436,11 @@ void SceneText::Update(double dt)
 			}
 		}
 	}
+
+	if (Application::IsKeyPressed('6'))
+		rotateAngle += 30 * dt;
+	if (Application::IsKeyPressed('7'))
+		rotateAngle -= 30 * dt;
 	if (moving > 0)
 	{
 		/*if(Application::IsKeyPressed('1'))
@@ -510,7 +527,7 @@ void SceneText::Update(double dt)
 				{
 					if (testing >= 0.02f)
 					{
-						sound->play3D("../irrKlang/media/Claw.mp3", vec3df(0, 0, 0), false);
+						sound10->play3D("../irrKlang/media/Claw.mp3", vec3df(0, 0, 0), false);
 						moving -= 10 * dt;
 						testing = 0.f;
 					}
@@ -518,7 +535,7 @@ void SceneText::Update(double dt)
 				if (E->getEnemyHealth() <= 0)
 				{
 					E->active = false;
-					sound->play3D("../irrKlang/media/Death.mp3", vec3df(0, 0, 0), false);
+					sound10->play3D("../irrKlang/media/Death.mp3", vec3df(0, 0, 0), false);
 				}
 			}
 		}
@@ -545,7 +562,7 @@ void SceneText::Update(double dt)
 
 				if (playSoundPU >= 1)
 				{
-					sound->play3D("../irrKlang/media/PowerUp.wav", vec3df(0, 0, 0), false);
+					sound10->play3D("../irrKlang/media/PowerUp.wav", vec3df(0, 0, 0), false);
 					playSoundPU = 0.f;
 				}
 			}
@@ -1158,6 +1175,19 @@ void SceneText::Render()
 			RenderEnemyModel(E);
 		}
 	}
+
+
+	/*modelStack.PushMatrix();
+	modelStack.Translate(camera.position.x + camera.direction.x * 2, camera.position.y + camera.direction.y * 2, camera.position.z + camera.direction.z * 2);
+
+	modelStack.Translate(camera.position.x + 1, camera.position.y, camera.position.z);
+	modelStack.Rotate(rotateAngle, 0, 1, 0);
+	modelStack.Translate(-camera.position.x, -camera.position.y, -camera.position.z);
+
+	modelStack.Scale(0.1, 0.1, 0.1);
+	RenderMesh(meshList[Testing], true);
+	modelStack.PopMatrix();*/
+
 	modelStack.PushMatrix();
 	modelStack.Translate(FApos.x, FApos.y - 9, FApos.z);
 	modelStack.Scale(2, 2, 2);

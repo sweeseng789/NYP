@@ -12,9 +12,6 @@
     <Filter Include="Header Files\Weapon Folder">
       <UniqueIdentifier>{5bb0d68a-69df-4c61-adb2-1021946e1eab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{1f23b25b-bf0b-42ee-b624-3b1e1bd70bd0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Camera Folder">
       <UniqueIdentifier>{7bbdf4d7-35f2-4824-9ca7-5cfbedb0e040}</UniqueIdentifier>
     </Filter>
@@ -29,6 +26,9 @@
     </Filter>
     <Filter Include="Source Files\Camera Folder">
       <UniqueIdentifier>{d030a9a6-710c-4581-87d5-7c48d6b18be8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera Folder\Shader">
+      <UniqueIdentifier>{1f23b25b-bf0b-42ee-b624-3b1e1bd70bd0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +93,18 @@
       <Filter>Source Files\Scene Folder</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpriteAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\OBJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneSandBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,6 +182,18 @@
       <Filter>Header Files\Scene Folder</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpriteAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\OBJ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneSandBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

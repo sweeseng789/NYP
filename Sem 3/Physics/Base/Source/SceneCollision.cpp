@@ -61,6 +61,79 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 		return false;
 }
 
+void SceneCollision::GOUpdate(const double dt)
+{
+	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->active)
+		{
+			go->pos += go->vel * static_cast<float>(dt);
+
+			//Exercise 2a: Rebound game object at screen edges
+
+			//Exercise 2b: Unspawn if it really leave the screen
+			/*	if (go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
+			{
+			go->active = false;
+			--m_objectCount;
+			}*/
+			initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
+			finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
+
+			if (go->pos.x > m_worldWidth || go->pos.x < 0)
+			{
+				go->vel.x = -go->vel.x;
+			}
+
+			if (go->pos.y > m_worldHeight || go->pos.y < 0)
+			{
+				go->vel.y = -go->vel.y;
+			}
+			/*else if (go->pos.x >= m_worldWidth + 1 || go->pos.x <= -1)
+			{
+				go->active = false;
+				--m_objectCount;
+			}*/
+			for (std::vector<GameObject *>::iterator it2 = it + 1; it2 != m_goList.end(); ++it2)
+			{
+				GameObject *go2 = static_cast<GameObject *>(*it2);
+				if (go2->active)
+				{
+					//Practical 4, Exercise 13: improve collision detection algorithm
+					if (CheckCollision(go, go2, dt))
+					{
+						initialMomentum = go->mass * go->vel + go2->mass * go2->vel;
+
+						//getting the translateDist
+						Vector3 posDiff = go->pos - go2->pos;
+						//Mininum translate distance to push ball after intersecting
+						Vector3 translateDist = posDiff *(((go->scale.x + go2->scale.x)) - posDiff.Length() / posDiff.Length());
+
+						//inverse mass quantities
+						float im1 = 1 / go->mass;
+						float im2 = 1 / go2->mass;
+
+						//Impact speed
+						Vector3 velDiff = (go->vel - go2->vel);
+						float velNormalize = velDiff.Dot(translateDist.Normalize());
+
+						//Collision impulse
+						float i = (-(1.f + 1) * velNormalize) / (im1 + im2);
+						Vector3 impulse = translateDist * i;
+
+						//Change in momentum
+						go->vel = go->vel + (impulse * im1);
+						go2->vel = go2->vel - (impulse * im2);
+
+						finalMomentum = go->mass * go->vel + go2->mass * go2->vel;
+					}
+				}
+			}
+		}
+	}
+}
+
 void SceneCollision::Update(double dt)
 {
 	SceneBase::Update(dt);
@@ -88,7 +161,7 @@ void SceneCollision::Update(double dt)
 		float posX = static_cast<float>(x) / w * m_worldWidth;
 		float posY = (h - static_cast<float>(y)) / h * m_worldHeight;
 
-		m_ghost->pos.Set(posX, m_worldHeight * 0.5f, 0); //IMPT
+		m_ghost->pos.Set(posX, posY, 0); //IMPT
 		m_ghost->active = true;
 		float sc = 2;
 		m_ghost->scale.Set(sc, sc, sc);
@@ -129,7 +202,7 @@ void SceneCollision::Update(double dt)
 		float posX = static_cast<float>(x) / w * m_worldWidth;
 		float posY = (h - static_cast<float>(y)) / h * m_worldHeight;
 
-		m_ghost->pos.Set(posX, m_worldHeight * 0.5f, 0); //IMPT
+		m_ghost->pos.Set(posX, posY, 0); //IMPT
 		m_ghost->active = true;
 		float sc = 3;
 		m_ghost->scale.Set(sc, sc, sc);
@@ -151,7 +224,7 @@ void SceneCollision::Update(double dt)
 		float posY = (h - static_cast<float>(y)) / h * m_worldHeight;
 
 		go->pos = m_ghost->pos;
-		go->vel.Set(m_ghost->pos.x - posX, 0, 0);
+		go->vel.Set(m_ghost->pos.x - posX, m_ghost->pos.y - posY, 0);
 		m_ghost->active = false;
 		float sc = 3;
 		go->scale.Set(sc, sc, sc);
@@ -161,66 +234,7 @@ void SceneCollision::Update(double dt)
 	//Physics Simulation Section
 	dt *= m_speed;
 
-	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-	{
-		GameObject *go = (GameObject *)*it;
-		if (go->active)
-		{
-			go->pos += go->vel * static_cast<float>(dt);
-
-			//Exercise 2a: Rebound game object at screen edges
-
-			//Exercise 2b: Unspawn if it really leave the screen
-		/*	if (go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
-			{
-				go->active = false;
-				--m_objectCount;
-			}*/
-			initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
-			finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
-
-			if (go->pos.x > m_worldWidth || go->pos.x < 0)
-			{
-				go->vel = -go->vel;
-			}
-			else if (go->pos.x >= m_worldWidth + 1 || go->pos.x <= -1)
-			{
-				go->active = false;
-				--m_objectCount;
-			}
-
-			for (std::vector<GameObject *>::iterator it2 = it + 1; it2 != m_goList.end(); ++it2)
-			{
-				GameObject *go2 = static_cast<GameObject *>(*it2);
-				if (go2->active)
-				{
-					//Practical 4, Exercise 13: improve collision detection algorithm
-					if (CheckCollision(go, go2, dt))
-					{
-						m1 = go->mass;
-						m2 = go2->mass;
-						u1 = go->vel;
-						u2 = go2->vel;
-
-						initialMomentum = m1 * u1 + m2 * u2;
-
-						Vector3 momentum1 = go->mass * go->vel;
-						Vector3 momentum2 = go2->mass * go2->vel;
-
-						go->vel = momentum2 * (1.f / go->mass);
-						go2->vel = momentum1 * (1.f / go2->mass);
-
-						v1 = go->vel;
-						v2 = go2->vel;
-
-						finalMomentum = m1 * v1 + m2 * v2;
-
-						//Exercise 3: audit kinetic energy
-					}
-				}
-			}
-		}
-	}
+	GOUpdate(dt);
 }
 
 

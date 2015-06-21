@@ -1,6 +1,7 @@
 #include "Camera3.h"
 #include "Application.h"
 #include "Mtx44.h"
+#include "Sound.h"
 
 #include <irrKlang.h>
 
@@ -47,11 +48,12 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	sCameraType = LAND_CAM;
 
 	m_bJumping = false;
-	m_Scope = false;
 	JumpVel = 0.0f;
-	JUMPMAXSPEED = 10.0f;
-	JUMPACCEL = 10.0f;
-	GRAVITY = -30.0f;
+	JUMPMAXSPEED = 500.0f;
+	JUMPACCEL = 30.0f;
+	GRAVITY = -40.0f;
+	tempY = 0.f;
+
 	crouching = false;
 	crouched = false;
 	scoping = false;
@@ -126,23 +128,27 @@ void Camera3::Update(double dt)
 
 	if (Application::IsKeyPressed('A') || Application::IsKeyPressed('D') || Application::IsKeyPressed('S') || Application::IsKeyPressed('W'))
 	{
-		
-		if (!Application::IsKeyPressed(VK_LSHIFT))
+		if (m_bJumping == false)
 		{
-			playSoundFS += dt;
-			if (playSoundFS >= 0.5f)
+			if (!Application::IsKeyPressed(VK_LSHIFT))
 			{
-				sound4->play3D("../irrKlang/media/footstep.mp3", vec3df(0, 0, 0), false);
-				playSoundFS = 0.f;
+				playSoundFS += dt;
+				if (playSoundFS >= 0.5f)
+				{
+					//sound4->play3D("../irrKlang/media/footstep.mp3", vec3df(0, 0, 0), false);
+					Sound::Walking();
+					playSoundFS = 0.f;
+				}
 			}
-		}
-		else
-		{
-			playSoundS += dt;
-			if (playSoundS >= 0.6f)
+			else
 			{
-				sound4->play3D("../irrKlang/media/Sprint.wav", vec3df(0, 0, 0), false);
-				playSoundS = 0.f;
+				playSoundS += dt;
+				if (playSoundS >= 0.6f)
+				{
+					//sound4->play3D("../irrKlang/media/Sprint.wav", vec3df(0, 0, 0), false);
+					Sound::Sprinting();
+					playSoundS = 0.f;
+				}
 			}
 		}
 	}
@@ -420,7 +426,7 @@ void Camera3::Jump(const double dt)
 {
 	if (m_bJumping == false)
 	{
-		sound4->play3D("../irrKlang/media/Jump.wav", vec3df(0, 0, 0), false);
+		Sound::Jump();
 		m_bJumping = true;
 		// Calculate the jump velocity
 		JumpVel = JUMPACCEL;// * dt;
@@ -446,8 +452,9 @@ void Camera3::UpdateJump(const double dt)
 		target.y += JumpVel * (float)dt;
 
 		// Check if the camera has reached the ground
-		if (position.y <= 0)
+		if (position.y <= tempY)
 		{
+			Sound::Land();
 			position = tempPosition;
 			target = tempTarget;
 			JumpVel = 0.0f;
@@ -461,19 +468,28 @@ Update Scope
 ********************************************************************************/
 void Camera3::UpdateScope(const double dt)
 {
-	static Vector3 tempPosition;
-
-	if (m_Scope == true)
+	Vector3 tempTarget = target;
+	Vector3 tempPosition = position;
+	if (m_bJumping == true)
 	{
-		Vector3 direction = target - position;
-		position -= direction.Normalized() * 10 * dt;
-	}
-	else
-	{
-		tempPosition = position;
-		position = tempPosition;
-	}
+		// Factor in gravity
+		JumpVel += GRAVITY * dt;
+		// Update the camera and target position
+		position.y += JumpVel * (float)dt;
+		target.y += JumpVel * (float)dt;
 
-	position = tempPosition;
-	std::cout << tempPosition << std::endl;
+		// Check if the camera has reached the ground
+		if (position.y <= tempY)
+		{
+			position = tempPosition;
+			target = tempTarget;
+			JumpVel = 0.0f;
+			m_bJumping = false;
+		}
+	}
+}
+
+bool Camera3::getJumpStatus()
+{
+	return m_bJumping;
 }

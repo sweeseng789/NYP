@@ -3,7 +3,7 @@
 #define APPLICATION_H
 
 #include "timer.h"
-class SceneText;
+class SceneSandBox;
 class Application
 {
 public:
@@ -47,7 +47,7 @@ private:
 	const static int m_window_width = 800;
 	const static int m_window_height = 600;
 
-	SceneText *scene;
+	SceneSandBox *scene;
 };
 
 #endif

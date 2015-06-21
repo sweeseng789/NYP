@@ -12,8 +12,8 @@ Camera3::~Camera3()
 
 static const float CAMERA_SPEED = 200.f;
 static float MOVEMENT_SPEED = 50.f;
-Vector3 testingP (0, 0, 0);
-Vector3 testingT (0, 0, 0);
+Vector3 testingP(0, 0, 0);
+Vector3 testingT(0, 0, 0);
 
 
 void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
@@ -40,9 +40,10 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	m_bJumping = false;
 	JumpVel = 0.0f;
-	JUMPMAXSPEED = 10.0f;
-	JUMPACCEL = 10.0f;
-	GRAVITY = -30.0f;
+	JUMPMAXSPEED = 30.0f;
+	JUMPACCEL = 30.0f;
+	GRAVITY = -40.0f;
+	tempY = 0.f;
 }
 
 void Camera3::MoveForward(const double dt)
@@ -86,29 +87,29 @@ void Camera3::UpdateStatus(const unsigned char key)
 
 void Camera3::Update(double dt)
 {
-	
-	if(myKeys['a'] == true)
+
+	if (myKeys['a'] == true)
 	{
 		MoveLeft(dt);
 		myKeys['a'] = false;
 	}
-	if(myKeys['d'] == true)
+	if (myKeys['d'] == true)
 	{
 		MoveRight(dt);
 		myKeys['d'] = false;
 	}
-	if(myKeys['w'] == true)
+	if (myKeys['w'] == true)
 	{
 		MoveForward(dt);
 		myKeys['w'] = false;
 	}
-	if(myKeys['s'] == true)
+	if (myKeys['s'] == true)
 	{
 		MoveBackward(dt);
 		myKeys['s'] = false;
 	}
 
-	if(Application::IsKeyPressed(VK_LEFT))
+	if (Application::IsKeyPressed(VK_LEFT))
 	{
 		Vector3 view = (target - position).Normalized();
 		float yaw = (float)(CAMERA_SPEED * (float)dt);
@@ -121,7 +122,7 @@ void Camera3::Update(double dt)
 		right.Normalize();
 		up = right.Cross(view).Normalized();
 	}
-	if(Application::IsKeyPressed(VK_RIGHT))
+	if (Application::IsKeyPressed(VK_RIGHT))
 	{
 		Vector3 view = (target - position).Normalized();
 		float yaw = (float)(-CAMERA_SPEED * (float)dt);
@@ -134,7 +135,7 @@ void Camera3::Update(double dt)
 		right.Normalize();
 		up = right.Cross(view).Normalized();
 	}
-	if(Application::IsKeyPressed(VK_UP))
+	if (Application::IsKeyPressed(VK_UP))
 	{
 		float pitch = (float)(CAMERA_SPEED * (float)dt);
 		Vector3 view = (target - position).Normalized();
@@ -147,7 +148,7 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
-	if(Application::IsKeyPressed(VK_DOWN))
+	if (Application::IsKeyPressed(VK_DOWN))
 	{
 		float pitch = (float)(-CAMERA_SPEED * (float)dt);
 		Vector3 view = (target - position).Normalized();
@@ -187,12 +188,12 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}*/
-	if (Application::camera_yaw != 0 )
+	if (Application::camera_yaw != 0)
 		Yaw(dt);
 	if (Application::camera_pitch != 0)
 		Pitch(dt);
 
-	if(Application::IsKeyPressed('R'))
+	if (Application::IsKeyPressed('R'))
 	{
 		Reset();
 	}
@@ -252,10 +253,10 @@ void Camera3::Update(double dt)
 
 	if (Application::IsKeyPressed(' '))
 	{
-	/*	Jump( dt );
-		myKeys[32] = false;*/
-		position.y += 50 * dt;
-		target.y += 50 * dt;
+		Jump(dt);
+		myKeys[32] = false;
+		/*	position.y += 50 * dt;
+			target.y += 50 * dt;*/
 	}
 
 	UpdateJump(dt);
@@ -357,8 +358,8 @@ Lookup
 *************************************************************************/
 void Camera3::LookUp(const double dt)
 {
-	float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float) dt);
-	Vector3 view= (target - position).Normalized();
+	float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
+	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
@@ -374,8 +375,8 @@ Lookdown
 *************************************************************************/
 void Camera3::LookDown(const double dt)
 {
-	float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float) dt);
-	Vector3 view= (target - position).Normalized();
+	float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
+	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
@@ -436,28 +437,33 @@ void Camera3::Jump(const double dt)
 	}
 }
 
-	/********************************************************************************
-	Update Jump
-	********************************************************************************/
-	void Camera3::UpdateJump(const double dt)
+/********************************************************************************
+Update Jump
+********************************************************************************/
+void Camera3::UpdateJump(const double dt)
+{
+	Vector3 tempTarget = target;
+	Vector3 tempPosition = position;
+	if (m_bJumping == true)
 	{
-		if (m_bJumping == true)
+		// Factor in gravity
+		JumpVel += GRAVITY * dt;
+		// Update the camera and target position
+		position.y += JumpVel * (float)dt;
+		target.y += JumpVel * (float)dt;
+
+		// Check if the camera has reached the ground
+		if (position.y <= tempY)
 		{
-			// Factor in gravity
-			JumpVel += GRAVITY * dt;
-			// Update the camera and target position
-			position.y += JumpVel * (float)dt;
-			target.y += JumpVel * (float)dt;
-
-			std::cout << position << std::endl;
-
-			// Check if the camera has reached the ground
-			if (position.y <= 0)
-			{
-				position.y = 0;
-				target.y = 0;
-				JumpVel = 0.0f;
-				m_bJumping = false;
-			}
+			position = tempPosition;
+			target = tempTarget;
+			JumpVel = 0.0f;
+			m_bJumping = false;
 		}
 	}
+}
+
+bool Camera3::getJumpStatus()
+{
+	return m_bJumping;
+}

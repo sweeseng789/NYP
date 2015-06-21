@@ -1,9 +1,9 @@
-#ifndef SCENE_TEXT_H
-#define SCENE_TEXT_H
+#pragma once
+#ifndef SCENE_SANDBOX_H
+#define SCENE_SANDBOX_H
 
 #include "Scene.h"
 #include "Mtx44.h"
-#include "Camera4.h"
 #include "Camera3.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
@@ -11,11 +11,12 @@
 #include <vector>
 #include <string>
 #include "OBJ.h"
+#include "Collision.h"
 
 using std::vector;
 using std::cout;
 using std::endl;
-class SceneText : public Scene
+class SceneSandBox : public Scene
 {
 	enum UNIFORM_TYPE
 	{
@@ -57,6 +58,8 @@ class SceneText : public Scene
 		U_COLOR_TEXTURE1,
 
 		U_COLOR_FOG,
+		U_COLOR_FOG2,
+		U_COLOR_FOG3,
 		U_START_FOG,
 		U_END_FOG,
 		U_DENSITY_FOG,
@@ -102,8 +105,8 @@ class SceneText : public Scene
 		NUM_GEOMETRY,
 	};
 public:
-	SceneText();
-	~SceneText();
+	SceneSandBox();
+	~SceneSandBox();
 
 
 	//======================Getter=========================//
@@ -118,7 +121,7 @@ public:
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f,  float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f, float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	void RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
@@ -130,7 +133,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	// Update Camera status
-	virtual void UpdateCameraStatus (const unsigned char key);
+	virtual void UpdateCameraStatus(const unsigned char key);
 private:
 
 	//Int
@@ -169,7 +172,6 @@ private:
 
 	//Camera3
 	Camera3 camera;
-	Camera4 camera2;
 
 	//Bool
 	bool bLightEnabled;

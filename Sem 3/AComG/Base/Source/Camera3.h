@@ -49,8 +49,11 @@ public:
 	bool pressedSpace;
 	bool currentlyJumping;
 	bool currentlyFalling;
+
 	// Update Camera status
 	virtual void UpdateStatus(const unsigned char key);
+	bool getJumpStatus();
+	float tempY;
 private:
 	bool myKeys[255];
 	CAM_TYPE sCameraType;

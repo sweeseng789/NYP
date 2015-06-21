@@ -14,6 +14,7 @@
 #include "SceneText.h"
 #include "SceneTexture.h"
 #include "SceneSkybox.h"
+#include "SceneSandBox.h"
 
 #include "GenerateSkyPlane.h"
 
@@ -116,7 +117,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	scene = new SceneText();
+	scene = new SceneSandBox();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

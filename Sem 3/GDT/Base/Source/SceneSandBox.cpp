@@ -1,4 +1,4 @@
-#include "SceneText.h"
+#include "SceneSandBox.h"
 #include "GL\glew.h"
 
 #include <sstream>
@@ -8,60 +8,60 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 
-SceneText::SceneText()
+SceneSandBox::SceneSandBox()
 {
 }
 
-SceneText::~SceneText()
+SceneSandBox::~SceneSandBox()
 {
 	/*if (camera2 != NULL)
 	{
-		delete camera2;
-		camera2 = NULL;
+	delete camera2;
+	camera2 = NULL;
 	}*/
 }
 
-void SceneText::SetParameters()
+void SceneSandBox::SetParameters()
 {
 	moving = 0;
 	mapPos = Vector3(0, 0, 0);
 	leonPos.Set(0, 100, -400);
 	cubePos.SetZero();
 
-	for(unsigned a = 0; a < 2000; a++)
+	for (unsigned a = 0; a < 2000; a++)
 	{
 		float X = Math::RandFloatMinMax(-1000, 1000);
 		float Z = Math::RandFloatMinMax(-1000, 1000);
 		float speed = Math::RandFloatMinMax(50, 150);
 
-		COBJ * rain = new COBJ(Vector3(X, 320, Z), speed, 1);
+		COBJ * rain = new COBJ(Vector3(X, 450, Z), speed, 1);
 		OBJList.push_back(rain);
 	}
 
 	//Tree
-	for(unsigned a = 0; a < 100; a++)
+	for (unsigned a = 0; a < 100; a++)
 	{
 		float X = Math::RandFloatMinMax(-1000, 1000);
 		float Z = Math::RandFloatMinMax(-1000, 1000);
-		float Y = 350.f * ReadHeightMap(m_heightMap, X / 2000.f, Z / 2000.f);
+		float Y = 350.f * ReadHeightMap(m_heightMap, X / 2000.f, Z / 2000.f) + 10.f;
 		COBJ * tree = new COBJ(Vector3(X, Y, Z), 0, 2);
 		OBJList.push_back(tree);
 	}
 }
 
-float SceneText::calculatingFPS(float dt)
+float SceneSandBox::calculatingFPS(float dt)
 {
 	return (float)(1.f / dt);
 }
 
-void SceneText::Init()
+void SceneSandBox::Init()
 {
 	// Black background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS); 
+	glDepthFunc(GL_LESS);
 
 	glEnable(GL_CULL_FACE);
 
@@ -73,7 +73,7 @@ void SceneText::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders( "Shader//Fog.vertexshader", "Shader//Fog.fragmentshader" );
+	m_programID = LoadShaders("Shader//Fog.vertexshader", "Shader//Fog.fragmentshader");
 
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -176,7 +176,7 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	fogColor = (0.f, 1.f, 0.f);
+	fogColor = (0.f, 0.f, 0.f);
 	fogStart = 10.f;
 	fogEnd = 1000.f;
 	fogDensity = 10.f;
@@ -184,6 +184,8 @@ void SceneText::Init()
 	fogEnabled = 1;//Enable
 
 	glUniform3fv(m_parameters[U_COLOR_FOG], 1, &fogColor.r);
+	glUniform3fv(m_parameters[U_COLOR_FOG2], 1, &fogColor.g);
+	glUniform3fv(m_parameters[U_COLOR_FOG3], 1, &fogColor.b);
 	glUniform1f(m_parameters[U_START_FOG], fogStart);
 	glUniform1f(m_parameters[U_END_FOG], fogEnd);
 	glUniform1f(m_parameters[U_DENSITY_FOG], fogDensity);
@@ -192,7 +194,7 @@ void SceneText::Init()
 
 	camera.Init(Vector3(-104, 110, -433), Vector3(-104, 110, 0), Vector3(0, 1, 0));
 
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
 	}
@@ -204,7 +206,7 @@ void SceneText::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga"); 
+	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
@@ -232,6 +234,10 @@ void SceneText::Init()
 	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
 
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBj//tree.obj");
+	meshList[GEO_TREE]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_TREE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_TREE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_TREE]->material.kShininess = 10.f;
 	meshList[GEO_TREE]->textureArray[0] = LoadTGA("Image//tree.tga");
 
 	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
@@ -248,7 +254,7 @@ void SceneText::Init()
 	}
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
-	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top.tga"); 
+	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
 
 	meshList[BulletIcon] = MeshBuilder::GenerateQuad("Bullet Icon", Color(1, 1, 1), 1.0f);
 	meshList[BulletIcon]->textureArray[0] = LoadTGA("Image//GGOGun.tga");
@@ -261,7 +267,7 @@ void SceneText::Init()
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 
-	rotateAngle= rotateAngle2 = 0;
+	rotateAngle = rotateAngle2 = 0;
 
 	bLightEnabled = true;
 }
@@ -269,57 +275,57 @@ void SceneText::Init()
 /******************************************************************************
 Update Camera position
 ******************************************************************************/
-void SceneText::UpdateCameraStatus(const unsigned char key)
+void SceneSandBox::UpdateCameraStatus(const unsigned char key)
 {
 	camera.UpdateStatus(key);
 }
 
-void SceneText::Update(double dt)
+void SceneSandBox::Update(double dt)
 {
-	if(Application::IsKeyPressed('1'))
-	glEnable(GL_CULL_FACE);
-	if(Application::IsKeyPressed('2'))
-	glDisable(GL_CULL_FACE);
-	if(Application::IsKeyPressed('3'))
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if(Application::IsKeyPressed('4'))
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if (Application::IsKeyPressed('1'))
+		glEnable(GL_CULL_FACE);
+	if (Application::IsKeyPressed('2'))
+		glDisable(GL_CULL_FACE);
+	if (Application::IsKeyPressed('3'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	if (Application::IsKeyPressed('4'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	if(Application::IsKeyPressed('5'))
+	if (Application::IsKeyPressed('5'))
 	{
 		lights[0].type = Light::LIGHT_POINT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
 	}
-	else if(Application::IsKeyPressed('6'))
+	else if (Application::IsKeyPressed('6'))
 	{
 		lights[0].type = Light::LIGHT_DIRECTIONAL;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
 	}
-	else if(Application::IsKeyPressed('7'))
+	else if (Application::IsKeyPressed('7'))
 	{
 		lights[0].type = Light::LIGHT_SPOT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
 	}
-	else if(Application::IsKeyPressed('8'))
+	else if (Application::IsKeyPressed('8'))
 	{
 		bLightEnabled = true;
 	}
-	else if(Application::IsKeyPressed('9'))
+	else if (Application::IsKeyPressed('9'))
 	{
 		bLightEnabled = false;
 	}
 
-	if(Application::IsKeyPressed('I'))
+	if (Application::IsKeyPressed('I'))
 		lights[0].position.z -= (float)(10.f * dt);
-	if(Application::IsKeyPressed('K'))
+	if (Application::IsKeyPressed('K'))
 		lights[0].position.z += (float)(10.f * dt);
-	if(Application::IsKeyPressed('J'))
+	if (Application::IsKeyPressed('J'))
 		lights[0].position.x -= (float)(10.f * dt);
-	if(Application::IsKeyPressed('L'))
+	if (Application::IsKeyPressed('L'))
 		lights[0].position.x += (float)(10.f * dt);
-	if(Application::IsKeyPressed('O'))
+	if (Application::IsKeyPressed('O'))
 		lights[0].position.y -= (float)(10.f * dt);
-	if(Application::IsKeyPressed('P'))
+	if (Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
 
@@ -342,7 +348,7 @@ void SceneText::Update(double dt)
 
 	if (Application::IsKeyPressed('9'))
 	{
-	//	mapPos.z += 5 * dt;
+		//	mapPos.z += 5 * dt;
 		mapPos.x += 5 * dt;
 	}
 	if (Application::IsKeyPressed('8'))
@@ -355,11 +361,12 @@ void SceneText::Update(double dt)
 	for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
 	{
 		COBJ * raining = (COBJ*)*it;
-		if ((raining->getPos() - camera.position).Length() < 300)
+		//if ((raining->getPos() - camera.position).Length() < 1000)
 		{
-			raining->tempY = 350.f * ReadHeightMap(m_heightMap, raining->getPos().x / 2000.f, raining->getPos().z / 2000.f);
+			//raining->tempY = 350.f * ReadHeightMap(m_heightMap, raining->getPos().x / 2000.f, raining->getPos().z / 2000.f);
+			//Test = 350.f * ReadHeightMap(m_heightMap, raining->getPos().x / 2000.f, raining->getPos().z / 2000.f);
+			raining->update(dt);
 		}
-		raining->update(dt);
 	}
 
 	mapPos.y = 350.f * ReadHeightMap(m_heightMap, mapPos.x / 4000.f, mapPos.z / 4000.f);
@@ -371,7 +378,7 @@ void SceneText::Update(double dt)
 		sa->Update(dt);
 	}
 
-	/*static Vector3 HM; 
+	/*static Vector3 HM;
 	HM.Set(camera.position.x, camera.position.y, camera.position.z);
 	HM.y = 350.f * ReadHeightMap(m_heightMap, HM.x / 2000.f, HM.z / 2000.f) + 10.f;
 	camera.position.y = HM.y;
@@ -380,7 +387,7 @@ void SceneText::Update(double dt)
 	leonPos.y = 350.f * ReadHeightMap(m_heightMap, leonPos.x / 2000.f, leonPos.z / 2000.f) + 5.f;
 	cubePos.y = 350.f * ReadHeightMap(m_heightMap, cubePos.x / 2000.f, cubePos.z / 2000.f) + 5.f;
 
-	if(leonPos.z < -100)
+	if (leonPos.z < -100)
 	{
 		leonPos.z += 10 * dt;
 	}
@@ -396,12 +403,11 @@ void SceneText::Update(double dt)
 	if (!camera.getJumpStatus())
 	{
 		static float diff = 0.f;
-		static float test = 0.f;
 		diff = tempY - camera.position.y;
 		camera.position.y += diff;
 		camera.target.y += diff;
 	}
-	
+
 	/*camera.position.x = cubePos.x - cos(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
 	camera.position.y = cubePos.y + sin(Application::camera_pitch) * 10;
 	camera.position.z = cubePos.z - sin(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
@@ -410,9 +416,9 @@ void SceneText::Update(double dt)
 
 static const float SKYBOXSIZE = 1000.f;
 
-void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
+void SceneSandBox::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -423,7 +429,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	for(unsigned i = 0; i < text.length(); ++i)
+	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
 		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
@@ -437,9 +443,9 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SceneSandBox::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -460,7 +466,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	for(unsigned i = 0; i < text.length(); ++i)
+	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
 		characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
@@ -477,7 +483,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y, float z)
+void SceneSandBox::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float x, float y, float z)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -516,7 +522,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float 
 	}
 
 	mesh->Render();
-	
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	modelStack.PopMatrix();
@@ -530,13 +536,13 @@ modelView = viewStack.Top() * modelStack.Top(); // Week 6
 glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 if(enableLight && bLightEnabled)
 {
-	glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-	modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-	glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1,
-		GL_FALSE, &modelView_inverse_transpose.a[0]);*/
+glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1,
+GL_FALSE, &modelView_inverse_transpose.a[0]);*/
 
 
-void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
+void SceneSandBox::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -544,7 +550,7 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 	modelView = viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-	if(enableLight && bLightEnabled)
+	if (enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
 		//modelView = viewStack.Top() * modelStack.Top();
@@ -561,7 +567,7 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
 	}
 	else
-	{	
+	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
 	///*if(mesh->textureID > 0)
@@ -600,7 +606,7 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void SceneText::RenderSkybox()
+void SceneSandBox::RenderSkybox()
 {
 	//left
 	modelStack.PushMatrix();
@@ -647,7 +653,7 @@ void SceneText::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
-void SceneText::view()
+void SceneSandBox::view()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Mtx44 perspective;
@@ -666,7 +672,7 @@ void SceneText::view()
 	modelStack.LoadIdentity();
 }
 
-void SceneText::RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile)
+void SceneSandBox::RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile)
 {
 	modelStack.PushMatrix();
 
@@ -679,7 +685,7 @@ void SceneText::RenderSkyPlane(Mesh* mesh, Color color, int slices, float Planet
 	modelStack.PopMatrix();
 }
 
-void SceneText::RenderTerrain()
+void SceneSandBox::RenderTerrain()
 {
 	Vector3 pos;
 	modelStack.PushMatrix();
@@ -693,17 +699,17 @@ void SceneText::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
-void SceneText::Render()
+void SceneSandBox::Render()
 {
 	view();
 
-	if(lights[0].type == Light::LIGHT_DIRECTIONAL)
+	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
 	}
-	else if(lights[0].type == Light::LIGHT_SPOT)
+	else if (lights[0].type == Light::LIGHT_SPOT)
 	{
 		Position lightPosition_cameraspace = viewStack.Top() * lights[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
@@ -715,13 +721,13 @@ void SceneText::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * lights[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-	if(lights[1].type == Light::LIGHT_DIRECTIONAL)
+	if (lights[1].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(lights[1].position.x, lights[1].position.y, lights[1].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
 	}
-	else if(lights[1].type == Light::LIGHT_SPOT)
+	else if (lights[1].type == Light::LIGHT_SPOT)
 	{
 		Position lightPosition_cameraspace = viewStack.Top() * lights[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
@@ -744,27 +750,32 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	for(vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
+	for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
 	{
 		COBJ * raining = (COBJ*)*it;
 
-		if((raining->getPos() - camera.position).Length() < 300)
-		{
-			if(raining->type == 1 )
+		
+			if (raining->type == 1)
 			{
-				modelStack.PushMatrix();
-				modelStack.Translate(raining->getPos().x, raining->getPos().y, raining->getPos().z);
-				RenderMesh(meshList[GEO_LIGHTBALL], false);
-				modelStack.PopMatrix();
+				if (Collision::PointDistance(camera.position, raining->getPos(), 1000))
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(raining->getPos().x, raining->getPos().y, raining->getPos().z);
+					RenderMesh(meshList[GEO_LIGHTBALL], false);
+					modelStack.PopMatrix();
+				}
 			}
-			else if(raining->type == 2)
+			else if (raining->type == 2)
 			{
-				modelStack.PushMatrix();
-				modelStack.Translate(raining->getPos().x, raining->getPos().y, raining->getPos().z);
-				modelStack.Scale(3, 3, 3);
-				RenderMesh(meshList[GEO_TREE], true);
-				modelStack.PopMatrix();
-			}
+				if (Collision::PointDistance(camera.position, raining->getPos(), 300))
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(raining->getPos().x, raining->getPos().y, raining->getPos().z);
+					modelStack.Scale(3, 3, 3);
+					RenderMesh(meshList[GEO_TREE], true);
+					modelStack.PopMatrix();
+				}
+			
 		}
 	}
 
@@ -794,7 +805,7 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_CUBE], false);
 	modelStack.PopMatrix();
 
-	
+
 
 
 	modelStack.PushMatrix();
@@ -804,7 +815,7 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 
 	RenderTerrain();
-	RenderSkyPlane(meshList[GEO_SKYPLANE],Color (1,1,1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+	RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -828,13 +839,20 @@ void SceneText::Render()
 	//==============Testing===============//
 }
 
-void SceneText::Exit()
+void SceneSandBox::Exit()
 {
 	// Cleanup VBO
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
-		if(meshList[i])
+		if (meshList[i])
 			delete meshList[i];
+	}
+
+	while (!OBJList.empty())
+	{
+		COBJ* obj = OBJList.back();
+		delete obj;
+		OBJList.pop_back();
 	}
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);

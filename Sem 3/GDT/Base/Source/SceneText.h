@@ -13,6 +13,7 @@
 #include "Enemy.h"
 #include "Ammo.h"
 #include "MiniMap.h"
+#include "Collision.h"
 
 using std::vector;
 class SceneText : public Scene
@@ -114,6 +115,7 @@ class SceneText : public Scene
 		Weapon_Pistol,
 		Weapon_Sniper,
 		Weapon_Sword,
+		Testing,
 		crosshair,
 		GEO_SPRITE_ANIMATION,
 		NUM_GEOMETRY,
@@ -180,6 +182,7 @@ private:
 	CWeapon weapon;
 	Vector3 FApos;
 	Light lights[2];
+	Collision collision;
 
 	//Polymorphism
 	Mesh* meshList[NUM_GEOMETRY];

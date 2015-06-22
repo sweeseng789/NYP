@@ -47,6 +47,30 @@ void SceneSandBox::SetParameters()
 		COBJ * tree = new COBJ(Vector3(X, Y, Z), 0, 2);
 		OBJList.push_back(tree);
 	}
+
+	for (unsigned a = 0; a < 2000; a++)
+	{
+		float X = Math::RandFloatMinMax(-1000, 1000);
+		float Z = Math::RandFloatMinMax(-1000, 1000);
+		Vector3 vel;
+		vel.x = Math::RandFloatMinMax(-10, 10);
+		vel.y = Math::RandFloatMinMax(-10, 10);
+		vel.z = Math::RandFloatMinMax(-10, 10);
+		Material newMaterial;
+		newMaterial.kAmbient.Set(0.1f, 0.1f, 0.1f);
+		newMaterial.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+		newMaterial.kSpecular.Set(0.5f, 0.5f, 0.5f);
+		newMaterial.kShininess = 10.f;
+		float scale = Math::RandFloatMinMax(0, 10);
+		float mass = scale * scale * scale;
+
+		Particle * particle = new Particle(Vector3(X, 320, Z), vel, scale, true, newMaterial, mass);
+		ParticleList.push_back(particle);
+	}
+
+	mSpeed = 1.f;
+	OBJCount = 0;
+	gravity = Vector3(0, -9.8f, 0);
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -176,7 +200,7 @@ void SceneSandBox::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	fogColor = (0.f, 0.f, 0.f);
+	fogColor = (1.f, 0.f, 0.f);
 	fogStart = 10.f;
 	fogEnd = 1000.f;
 	fogDensity = 10.f;
@@ -209,8 +233,8 @@ void SceneSandBox::Init()
 	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 0, 1), 1);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0, 0, 0), 18, 36, 1.f);
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(0.5, 0.5, 0.5), 1);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
@@ -253,6 +277,16 @@ void SceneSandBox::Init()
 		sa->m_anim->Set(0, 4, 0, 1.f);
 	}
 
+	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 7);
+	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
+	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
+
+	if (sa2)
+	{
+		sa2->m_anim = new Animation();
+		sa2->m_anim->Set(0, 30, 0, 0.2f);
+	}
+
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
 
@@ -270,6 +304,45 @@ void SceneSandBox::Init()
 	rotateAngle = rotateAngle2 = 0;
 
 	bLightEnabled = true;
+}
+
+Particle* SceneSandBox::fetchOBJ()
+{
+	for (std::vector<Particle *>::iterator it = ParticleList.begin(); it != ParticleList.end(); ++it)
+	{
+		Particle *p = (Particle *)*it;
+		if (!p->active)
+		{
+			p->active = true;
+			//++m_objectCount;
+			return p;
+		}
+	}
+	for (unsigned i = 0; i < 10; ++i)
+	{
+		for (unsigned a = 0; a < 2000; a++)
+		{
+			float X = Math::RandFloatMinMax(-1000, 1000);
+			float Z = Math::RandFloatMinMax(-1000, 1000);
+			Vector3 vel;
+			vel.x = Math::RandFloatMinMax(-10, 10);
+			vel.y = Math::RandFloatMinMax(-10, 10);
+			vel.z = Math::RandFloatMinMax(-10, 10);
+			Material newMaterial;
+			newMaterial.kAmbient.Set(0.1f, 0.1f, 0.1f);
+			newMaterial.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+			newMaterial.kSpecular.Set(0.5f, 0.5f, 0.5f);
+			newMaterial.kShininess = 10.f;
+			float mass = Math::RandFloatMinMax(0, 10);
+
+			Particle * particle = new Particle(Vector3(X, 320, Z), vel, 10, true, newMaterial, mass);
+			ParticleList.push_back(particle);
+		}
+	}
+	Particle *p = ParticleList.back();
+	p->active = true;
+	//++m_objectCount;
+	return p;
 }
 
 /******************************************************************************
@@ -308,11 +381,12 @@ void SceneSandBox::Update(double dt)
 	}
 	else if (Application::IsKeyPressed('8'))
 	{
-		bLightEnabled = true;
+		//bLightEnabled = true;
+		fogColor.r += 1;
 	}
 	else if (Application::IsKeyPressed('9'))
 	{
-		bLightEnabled = false;
+		//bLightEnabled = false;
 	}
 
 	if (Application::IsKeyPressed('I'))
@@ -348,14 +422,13 @@ void SceneSandBox::Update(double dt)
 
 	if (Application::IsKeyPressed('9'))
 	{
-		//	mapPos.z += 5 * dt;
-		mapPos.x += 5 * dt;
+		mSpeed = Math::Max(0.f, mSpeed - 0.1f);
 	}
-	if (Application::IsKeyPressed('8'))
+	if (Application::IsKeyPressed('0'))
 	{
-		//mapPos.z -= 5 * dt;
-		mapPos.x -= 5 * dt;
+		mSpeed += 0.1f;
 	}
+	dt *= mSpeed;
 
 	float posY = 0;
 	for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
@@ -376,6 +449,13 @@ void SceneSandBox::Update(double dt)
 	if (sa)
 	{
 		sa->Update(dt);
+	}
+
+	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
+
+	if (sa2)
+	{
+		sa2->Update(dt);
 	}
 
 	/*static Vector3 HM;
@@ -404,14 +484,23 @@ void SceneSandBox::Update(double dt)
 	{
 		static float diff = 0.f;
 		diff = tempY - camera.position.y;
-		camera.position.y += diff;
-		camera.target.y += diff;
+		camera.position.y += diff * dt * 20;
+		camera.target.y += diff * dt * 20;
 	}
 
 	/*camera.position.x = cubePos.x - cos(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
 	camera.position.y = cubePos.y + sin(Application::camera_pitch) * 10;
 	camera.position.z = cubePos.z - sin(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
 	camera.target = cubePos;*/
+
+	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
+	{
+		Particle * particle = (Particle*)*it;
+		if (particle->active == true)
+		{
+			particle->update(dt);
+		}
+	}
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -750,7 +839,20 @@ void SceneSandBox::Render()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
+	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
+	{
+		Particle * particle = (Particle*)*it;
+		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+			modelStack.Scale(particle->scale, particle->scale, particle->scale);
+			RenderMesh(meshList[GEO_SPHERE], false);
+			modelStack.PopMatrix();
+		}
+	}
+
+	/*for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
 	{
 		COBJ * raining = (COBJ*)*it;
 
@@ -777,7 +879,7 @@ void SceneSandBox::Render()
 				}
 			
 		}
-	}
+	}*/
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-60, 50, -120);
@@ -834,7 +936,11 @@ void SceneSandBox::Render()
 	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
 	modelStack.PopMatrix();
 
-	RenderMeshIn2D(meshList[BulletIcon], true, 10, 10, 0, 0, 0);
+	/*modelStack.PushMatrix();
+	modelStack.Translate(0, camera.position.y, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[Soccer], false);
+	modelStack.PopMatrix();*/
 
 	//==============Testing===============//
 }

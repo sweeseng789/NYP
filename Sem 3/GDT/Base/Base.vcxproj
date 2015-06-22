@@ -27,6 +27,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MiniMap.cpp" />
     <ClCompile Include="Source\OBJ.cpp" />
+    <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\SceneSandBox.cpp" />
     <ClCompile Include="Source\SceneSkybox.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\MiniMap.h" />
     <ClInclude Include="Source\OBJ.h" />
+    <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneSandBox.h" />
     <ClInclude Include="Source\SceneSkybox.h" />

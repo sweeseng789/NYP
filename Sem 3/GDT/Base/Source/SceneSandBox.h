@@ -12,6 +12,7 @@
 #include <string>
 #include "OBJ.h"
 #include "Collision.h"
+#include "Particle.h"
 
 using std::vector;
 using std::cout;
@@ -102,6 +103,7 @@ class SceneSandBox : public Scene
 		GEO_CHURCH,
 		GEO_SPRITE_ANIMATION,
 		BulletIcon,
+		Soccer,
 		NUM_GEOMETRY,
 	};
 public:
@@ -113,6 +115,7 @@ public:
 	float calculatingFPS(float dt);
 	void PistolBulletFunction(float dt);
 	void SniperBulletFunction(float dt);
+	Particle* fetchOBJ();
 
 	//======================Setter========================//
 	void SetParameters();
@@ -126,6 +129,7 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderTerrain();
+	
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -164,6 +168,7 @@ private:
 	//vector
 	vector<unsigned char> m_heightMap;
 	vector<COBJ *> OBJList;
+	vector<Particle *> ParticleList;
 
 	//Vector3
 	Vector3 mapPos;
@@ -183,6 +188,12 @@ private:
 	float fogDensity;
 	int fogType;
 	bool fogEnabled;
+
+	//Patricles
+	float mSpeed;
+	int OBJCount;
+	Vector3 gravity;
+
 };
 
 #endif

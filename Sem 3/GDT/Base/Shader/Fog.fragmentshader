@@ -78,7 +78,7 @@ uniform FogParam fogParam;
 
 float getFogFactor(FogParam fog, float fogDistance)
 {
-	float factor;
+	float factor = 0.0;
 
 	if(fog.enabled == false)
 	{

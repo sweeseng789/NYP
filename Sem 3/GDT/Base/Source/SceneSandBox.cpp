@@ -64,7 +64,7 @@ void SceneSandBox::SetParameters()
 		float scale = Math::RandFloatMinMax(0, 10);
 		float mass = scale * scale * scale;
 
-		Particle * particle = new Particle(Vector3(X, 320, Z), vel, scale, true, newMaterial, mass);
+		Particle * particle = new Particle(Vector3(X, 500, Z), vel, scale, true, newMaterial, mass);
 		ParticleList.push_back(particle);
 	}
 

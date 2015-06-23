@@ -27,7 +27,7 @@ Particle::~Particle()
 
 void Particle::update(double dt)
 {
-	pos += (vel * (1/mass) * dt);
+	pos += vel * (1000/mass) * dt;
 	scale -= dt * 10;
 
 

@@ -193,7 +193,6 @@ private:
 	float mSpeed;
 	int OBJCount;
 	Vector3 gravity;
-
 };
 
 #endif

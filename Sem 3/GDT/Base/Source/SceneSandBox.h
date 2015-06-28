@@ -13,6 +13,7 @@
 #include "OBJ.h"
 #include "Collision.h"
 #include "Particle.h"
+#include "Map.h"
 
 using std::vector;
 using std::cout;
@@ -104,6 +105,10 @@ class SceneSandBox : public Scene
 		GEO_SPRITE_ANIMATION,
 		BulletIcon,
 		Soccer,
+		crosshair,
+		GEO_BACKGROUND,
+		GEO_TILEGROUND,
+		GEO_TILEHERO,
 		NUM_GEOMETRY,
 	};
 public:
@@ -113,13 +118,18 @@ public:
 
 	//======================Getter=========================//
 	float calculatingFPS(float dt);
-	void PistolBulletFunction(float dt);
-	void SniperBulletFunction(float dt);
 	Particle* fetchOBJ();
 
 	//======================Setter========================//
 	void SetParameters();
+	void SetMesh();
 	void view();
+
+	//======================Methods for hero========================//
+	void HeroUpdate();
+	void HeroJump();
+	void HeroMoveUpDown(const bool mode, const float timeDiff);
+	void HeroMoveLeftRIght(const bool mode, const float timeDiff);
 
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -129,6 +139,8 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderTerrain();
+	void RenderBackground();
+	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size = 1.0f, const float x = 0.f, const float y = 0.f, const bool rotate = false);
 	
 
 	//======================Virtual Function========================//
@@ -193,6 +205,16 @@ private:
 	float mSpeed;
 	int OBJCount;
 	Vector3 gravity;
+
+	//Map
+	CMap * m_cMap;
+	void RenderTileMap();
+
+	//Hero Info
+	Vector3 HeroPos;
+	bool hero_InMidAir_Up;
+	bool hero_InMidAir_Down;
+	int jumpspeed;
 };
 
 #endif

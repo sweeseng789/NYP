@@ -78,28 +78,29 @@ uniform FogParam fogParam;
 
 float getFogFactor(FogParam fog, float fogDistance)
 {
-	float factor;
+	float factor = 0.0;
 
 	if(fog.enabled == false)
 	{
 		factor = 0.0;
 	}
-
-	if(fog.type == 0)
-	{
-		factor = (fog.end - fogDistance)/ (fog.end - fog.start);
-	}
-	else if(fog.type == 1)
-	{
-		factor = (-fog.density * fogDistance);
-	}
 	else
 	{
-		factor = (-pow(fog.density * fogDistance, 2.0));
+		if(fog.type == 0)
+		{
+			factor = (fog.end - fogDistance)/ (fog.end - fog.start);
+		}
+		else if(fog.type == 1)
+		{
+			factor = exp(-fog.density * fogDistance);
+		}
+		else
+		{
+			factor = exp(-pow(fog.density * fogDistance, 2.0));
+		}
 	}
-
 	factor = 1.0 - clamp(factor, 0.0, 1.0);
-
+	
 	return factor;
 }
 

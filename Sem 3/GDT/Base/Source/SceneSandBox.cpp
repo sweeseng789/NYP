@@ -8,7 +8,11 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 
-SceneSandBox::SceneSandBox()
+SceneSandBox::SceneSandBox():
+	m_cMap(NULL),
+	hero_InMidAir_Up(false),
+	hero_InMidAir_Down(false),
+	jumpspeed(0)
 {
 }
 
@@ -19,58 +23,114 @@ SceneSandBox::~SceneSandBox()
 	delete camera2;
 	camera2 = NULL;
 	}*/
+	if (m_cMap)
+	{
+		delete m_cMap;
+		m_cMap = NULL;
+	}
+}
+
+void SceneSandBox::SetMesh()
+{
+	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
+	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("Crosshair", 1.0f, 1.0f, 0.0f, 1.0f);
+	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
+	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
+	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0, 0, 0), 18, 36, 1.f);
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(0.5, 0.5, 0.5), 1);
+	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
+	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
+	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
+
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
+	meshList[GEO_LEFT]->textureArray[0] = LoadTGA("Image//left.tga");
+	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
+	meshList[GEO_RIGHT]->textureArray[0] = LoadTGA("Image//right.tga");
+	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
+	meshList[GEO_TOP]->textureArray[0] = LoadTGA("Image//top.tga");
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
+	meshList[GEO_BOTTOM]->textureArray[0] = LoadTGA("Image//bottom.tga");
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
+	meshList[GEO_FRONT]->textureArray[0] = LoadTGA("Image//front.tga");
+	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
+	meshList[GEO_BACK]->textureArray[0] = LoadTGA("Image//back.tga");
+
+	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
+	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
+	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
+
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBj//tree.obj");
+	meshList[GEO_TREE]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_TREE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_TREE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_TREE]->material.kShininess = 10.f;
+	meshList[GEO_TREE]->textureArray[0] = LoadTGA("Image//tree.tga");
+
+	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
+	meshList[GEO_CHURCH]->textureArray[0] = LoadTGA("Image//church.tga");
+
+	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("cat", 1, 6);
+	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//leon.tga");
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+
+	if (sa)
+	{
+		sa->m_anim = new Animation();
+		sa->m_anim->Set(0, 4, 0, 1.f);
+	}
+
+	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 7);
+	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
+	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
+
+	if (sa2)
+	{
+		sa2->m_anim = new Animation();
+		sa2->m_anim->Set(0, 30, 0, 0.2f);
+	}
+
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
+	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
+
+	meshList[BulletIcon] = MeshBuilder::GenerateQuad("Bullet Icon", Color(1, 1, 1), 1.0f);
+	meshList[BulletIcon]->textureArray[0] = LoadTGA("Image//GGOGun.tga");
+
+	meshList[GEO_BACKGROUND] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1, 1, 1), 0.0f, 0.0f, 800.0f, 600.0f);
+	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//sky.tga");
+
+	meshList[GEO_TILEGROUND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_TILEGROUND]->textureID = LoadTGA("Image//tile1_ground.tga");
+
+	meshList[GEO_TILEHERO] = MeshBuilder::Generate2DMesh("tile2_hero", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_TILEHERO]->textureID = LoadTGA("Image//marioalpha.tga");
+
+	//Initalise the new tile map
+	m_cMap = new CMap();
+	m_cMap->Init(800, 600, 24, 32);
+	m_cMap->LoadMap("Image//MapDesign.csv");
+
+	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
+	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 }
 
 void SceneSandBox::SetParameters()
 {
-	moving = 0;
-	mapPos = Vector3(0, 0, 0);
-	leonPos.Set(0, 100, -400);
-	cubePos.SetZero();
-
-	for (unsigned a = 0; a < 2000; a++)
-	{
-		float X = Math::RandFloatMinMax(-1000, 1000);
-		float Z = Math::RandFloatMinMax(-1000, 1000);
-		float speed = Math::RandFloatMinMax(50, 150);
-
-		COBJ * rain = new COBJ(Vector3(X, 450, Z), speed, 1);
-		OBJList.push_back(rain);
-	}
-
-	//Tree
-	for (unsigned a = 0; a < 100; a++)
-	{
-		float X = Math::RandFloatMinMax(-1000, 1000);
-		float Z = Math::RandFloatMinMax(-1000, 1000);
-		float Y = 350.f * ReadHeightMap(m_heightMap, X / 2000.f, Z / 2000.f) + 10.f;
-		COBJ * tree = new COBJ(Vector3(X, Y, Z), 0, 2);
-		OBJList.push_back(tree);
-	}
-
-	for (unsigned a = 0; a < 2000; a++)
-	{
-		float X = Math::RandFloatMinMax(-1000, 1000);
-		float Z = Math::RandFloatMinMax(-1000, 1000);
-		Vector3 vel;
-		vel.x = Math::RandFloatMinMax(-10, 10);
-		vel.y = Math::RandFloatMinMax(-10, 10);
-		vel.z = Math::RandFloatMinMax(-10, 10);
-		Material newMaterial;
-		newMaterial.kAmbient.Set(0.1f, 0.1f, 0.1f);
-		newMaterial.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-		newMaterial.kSpecular.Set(0.5f, 0.5f, 0.5f);
-		newMaterial.kShininess = 10.f;
-		float scale = Math::RandFloatMinMax(0, 10);
-		float mass = scale * scale * scale;
-
-		Particle * particle = new Particle(Vector3(X, 500, Z), vel, scale, true, newMaterial, mass);
-		ParticleList.push_back(particle);
-	}
 
 	mSpeed = 1.f;
 	OBJCount = 0;
 	gravity = Vector3(0, -9.8f, 0);
+
+
+	HeroPos.x = 50;
+	HeroPos.y = 575 -  100;
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -91,6 +151,7 @@ void SceneSandBox::Init()
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	// Enable blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -205,7 +266,7 @@ void SceneSandBox::Init()
 	fogEnd = 1000.f;
 	fogDensity = 10.f;
 	fogType = 0;
-	fogEnabled = 1;//Enable
+	fogEnabled = 0;//Enable
 
 	glUniform3fv(m_parameters[U_COLOR_FOG], 1, &fogColor.r);
 	glUniform3fv(m_parameters[U_COLOR_FOG2], 1, &fogColor.g);
@@ -222,77 +283,8 @@ void SceneSandBox::Init()
 	{
 		meshList[i] = NULL;
 	}
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("Crosshair", 1.0f, 1.0f, 0.0f, 1.0f);
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0, 0, 0), 18, 36, 1.f);
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(0.5, 0.5, 0.5), 1);
-	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
-	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureArray[0] = LoadTGA("Image//left.tga");
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureArray[0] = LoadTGA("Image//right.tga");
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureArray[0] = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureArray[0] = LoadTGA("Image//bottom.tga");
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureArray[0] = LoadTGA("Image//front.tga");
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureArray[0] = LoadTGA("Image//back.tga");
-
-	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
-	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
-	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
-
-	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBj//tree.obj");
-	meshList[GEO_TREE]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_TREE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_TREE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_TREE]->material.kShininess = 10.f;
-	meshList[GEO_TREE]->textureArray[0] = LoadTGA("Image//tree.tga");
-
-	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
-	meshList[GEO_CHURCH]->textureArray[0] = LoadTGA("Image//church.tga");
-
-	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("cat", 1, 6);
-	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//leon.tga");
-	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
-
-	if (sa)
-	{
-		sa->m_anim = new Animation();
-		sa->m_anim->Set(0, 4, 0, 1.f);
-	}
-
-	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 7);
-	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
-	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
-
-	if (sa2)
-	{
-		sa2->m_anim = new Animation();
-		sa2->m_anim->Set(0, 30, 0, 0.2f);
-	}
-
-	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
-	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
-
-	meshList[BulletIcon] = MeshBuilder::GenerateQuad("Bullet Icon", Color(1, 1, 1), 1.0f);
-	meshList[BulletIcon]->textureArray[0] = LoadTGA("Image//GGOGun.tga");
-
+	SetMesh();
 	SetParameters();
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
@@ -430,20 +422,6 @@ void SceneSandBox::Update(double dt)
 	}
 	dt *= mSpeed;
 
-	float posY = 0;
-	for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
-	{
-		COBJ * raining = (COBJ*)*it;
-		//if ((raining->getPos() - camera.position).Length() < 1000)
-		{
-			//raining->tempY = 350.f * ReadHeightMap(m_heightMap, raining->getPos().x / 2000.f, raining->getPos().z / 2000.f);
-			//Test = 350.f * ReadHeightMap(m_heightMap, raining->getPos().x / 2000.f, raining->getPos().z / 2000.f);
-			raining->update(dt);
-		}
-	}
-
-	mapPos.y = 350.f * ReadHeightMap(m_heightMap, mapPos.x / 4000.f, mapPos.z / 4000.f);
-
 	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
 
 	if (sa)
@@ -501,6 +479,19 @@ void SceneSandBox::Update(double dt)
 			particle->update(dt);
 		}
 	}
+
+	if (Application::IsKeyPressed('W'))
+		HeroMoveUpDown(true, 1.f);
+	if (Application::IsKeyPressed('S'))
+		HeroMoveUpDown(false, 1.f);
+	if (Application::IsKeyPressed('A'))
+		HeroMoveLeftRIght(true, 1.f);
+	if (Application::IsKeyPressed('D'))
+		HeroMoveLeftRIght(false, 1.f);
+	if (Application::IsKeyPressed(' '))
+		HeroJump();
+
+	HeroUpdate();
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -609,7 +600,6 @@ void SceneSandBox::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, flo
 		glBindTexture(GL_TEXTURE_2D, mesh->textureArray[a]);
 		glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 	}
-
 	mesh->Render();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -788,6 +778,187 @@ void SceneSandBox::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
+void SceneSandBox::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, float y, bool rotate)
+{
+	//glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 800, 0, 600, -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
+	if (rotate)
+		modelStack.Rotate(rotateAngle, 0, 0, 1);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	/*Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);*/
+
+
+	if (mesh->textureID > 0)
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	mesh->Render();
+
+	if (mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	projectionStack.PopMatrix();
+	//glEnable(GL_DEPTH_TEST);
+}
+
+void SceneSandBox::RenderBackground()
+{
+	Render2DMesh(meshList[GEO_BACKGROUND], false, 1.0f);
+}
+
+void SceneSandBox::RenderTileMap()
+{
+	for (unsigned i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
+	{
+		for (unsigned k = 0; k < m_cMap->GetNumOfTiles_Width(); k++)
+		{
+			if (m_cMap->theScreenMap[i][k] != 0)
+				Render2DMesh(meshList[GEO_TILEGROUND], false, 1.f, k * m_cMap->GetTileSize(), 575 - i * m_cMap->GetTileSize());
+		}
+	}
+}
+
+/********************************************************************************
+Hero Update
+********************************************************************************/
+void SceneSandBox::HeroUpdate()
+{
+	// Update Hero's info
+	if (hero_InMidAir_Up == false && hero_InMidAir_Down == false)
+	{
+		//Don't Jump
+
+		int checkPosition_X = (int)floor((float)HeroPos.x / m_cMap->GetTileSize());
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + m_cMap->GetTileSize()) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
+		{
+			hero_InMidAir_Up = false;
+			hero_InMidAir_Down = true;
+			jumpspeed = 10;
+		}
+	}
+	else if (hero_InMidAir_Up == true && hero_InMidAir_Down == false)
+	{
+		// Check if the hero can move up into mid air...
+		int checkPosition_X = (int)ceil((float)HeroPos.x / m_cMap->GetTileSize());
+		int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+		{
+			HeroPos.y = (checkPosition_Y + 1) * m_cMap->GetTileSize();
+			hero_InMidAir_Up = false;
+			jumpspeed = 0;
+		}
+		else
+		{
+			HeroPos.y -= jumpspeed;
+			jumpspeed -= 1;
+			if (jumpspeed == 0)
+			{
+				hero_InMidAir_Up = false;
+				hero_InMidAir_Down = true;
+			}
+		}
+	}
+	else if (hero_InMidAir_Up == false && hero_InMidAir_Down == true)
+	{
+		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] == 1)
+		{
+			// Since the new position does not allow the hero to move into, then go back to the old position
+			HeroPos.y = (checkPosition_Y - 1) * m_cMap->GetTileSize();
+			hero_InMidAir_Down = false;
+			jumpspeed = 0;
+		}
+		else
+		{
+			HeroPos.y += jumpspeed;
+			jumpspeed += 1;
+		}
+	}
+}
+
+/********************************************************************************
+Hero Jump
+********************************************************************************/
+void SceneSandBox::HeroJump()
+{
+	if (hero_InMidAir_Up == false && hero_InMidAir_Down == false)
+	{
+		hero_InMidAir_Up = true;
+		jumpspeed = 15;
+	}
+}
+
+/********************************************************************************
+Hero Move Up Down
+********************************************************************************/
+void SceneSandBox::HeroMoveUpDown(const bool mode, const float timeDiff)
+{
+	if (mode)
+	{
+		//Going Up
+		//HeroPos.y = HeroPos.y - (int)(5.0f * timeDiff);
+	}
+	else
+	{
+		//Going Down
+		//HeroPos.y = HeroPos.y + (int)(5.0f * timeDiff);
+	}
+}
+
+/********************************************************************************
+Hero Move Left Right
+********************************************************************************/
+void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
+{
+	if (mode)
+	{
+		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
+			HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
+	}
+	else
+	{
+		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
+			HeroPos.x = HeroPos.x + (int)(5.0f * timeDiff);
+	}
+}
+
+
 void SceneSandBox::Render()
 {
 	view();
@@ -829,7 +1000,7 @@ void SceneSandBox::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(0, camera.position.y, 0);
 	RenderMesh(meshList[GEO_AXES], false);
 	modelStack.PopMatrix();
@@ -837,9 +1008,9 @@ void SceneSandBox::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
-	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
+	/*for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
 	{
 		Particle * particle = (Particle*)*it;
 		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
@@ -850,7 +1021,7 @@ void SceneSandBox::Render()
 			RenderMesh(meshList[GEO_SPHERE], false);
 			modelStack.PopMatrix();
 		}
-	}
+	}*/
 
 	/*for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
 	{
@@ -881,11 +1052,11 @@ void SceneSandBox::Render()
 		}
 	}*/
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-60, 50, -120);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[GEO_CHURCH], true);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-60, 50, -120);
+	//modelStack.Rotate(90, 0, 1, 0);
+	//RenderMesh(meshList[GEO_CHURCH], true);
+	//modelStack.PopMatrix();
 	//RenderSkybox();
 
 	// perspective;
@@ -902,24 +1073,25 @@ void SceneSandBox::Render()
 	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
 	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(cubePos.x, cubePos.y, cubePos.z);
-	RenderMesh(meshList[GEO_CUBE], false);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(cubePos.x, cubePos.y, cubePos.z);
+	//RenderMesh(meshList[GEO_CUBE], false);
+	//modelStack.PopMatrix();
 
 
 
 
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
+	//modelStack.PushMatrix();
+	//modelStack.Scale(10, 10, 10);
+	////RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
 	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	modelStack.PopMatrix();
+	//modelStack.PopMatrix();
 
-	RenderTerrain();
-	RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+	//RenderTerrain();
+	//RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+	
 	//On screen text
-	std::ostringstream ss;
+	/*std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
@@ -927,20 +1099,44 @@ void SceneSandBox::Render()
 	std::ostringstream ss1;
 	ss1.precision(4);
 	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);*/
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(leonPos.x, leonPos.y, leonPos.z);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(15, 15, 15);
 	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, camera.position.y, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[Soccer], false);
 	modelStack.PopMatrix();*/
+	//Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
+	Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
+	//Render Tile map
+	RenderTileMap();
+	//Render background image
+	RenderBackground();
+	/*glPushMatrix();
+	glTranslatef(HeroPos.x, HeroPos.y, 0);
+	glEnable(GL_TEXTURE_2D);	
+	glEnable(GL_BLEND);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, meshList[GEO_TILEHERO]->textureID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 1); glVertex2f(0, 0);
+	glTexCoord2f(0, 0); glVertex2f(0, m_cMap->GetTileSize());
+	glTexCoord2f(1, 0); glVertex2f(m_cMap->GetTileSize(), m_cMap->GetTileSize());
+	glTexCoord2f(1, 1); glVertex2f(m_cMap->GetTileSize(), 0);
+	glEnd();
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();*/
+
+	
 
 	//==============Testing===============//
 }

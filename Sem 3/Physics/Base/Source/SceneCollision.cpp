@@ -53,9 +53,11 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 	//Exercise 1: move collision code to CheckCollision()
 	float distSquared = (go1->pos - go2->pos).LengthSquared();
 	float combinedRadius = go1->scale.x + go2->scale.x;
+	Vector3 c = go1->vel - go2->vel;
+	Vector3 d = go2->pos - go1->pos;
 
 	//Practical 4, Exercise 13: improve collision detection algorithm
-	if (distSquared <= combinedRadius * combinedRadius)
+	if (distSquared <= combinedRadius * combinedRadius &&c.Dot(d) > 0)
 		return true;
 	else
 		return false;
@@ -81,20 +83,40 @@ void SceneCollision::GOUpdate(const double dt)
 			initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 			finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 
-			if (go->pos.x > m_worldWidth || go->pos.x < 0)
+			/*if (go->pos.x > m_worldWidth || go->pos.x < 0)
+			{
+				go->vel.x = -go->vel.x;
+			}*/
+			if (go->pos.x > m_worldWidth - go->scale.x && go->vel.x > 0)
+			{
+				go->vel.x = -go->vel.x;
+			}
+			else if(go->pos.x < 0 + go->scale.x && go->vel.x < 0)
 			{
 				go->vel.x = -go->vel.x;
 			}
 
-			if (go->pos.y > m_worldHeight || go->pos.y < 0)
+			if (go->pos.y > m_worldHeight - go->scale.x && go->vel.y > 0)
 			{
 				go->vel.y = -go->vel.y;
 			}
-			/*else if (go->pos.x >= m_worldWidth + 1 || go->pos.x <= -1)
+			else if (go->pos.y < 0 + go->scale.x && go->vel.y < 0)
+			{
+				go->vel.y = -go->vel.y;
+			}
+
+			if (go->pos.x > m_worldWidth + 5 || go->pos.x < -5 || go->pos.y > m_worldHeight + 5 || go->pos.y < -5)
 			{
 				go->active = false;
-				--m_objectCount;
+				this->m_objectCount--;
+			}
+
+			/*if (go->pos.y > m_worldHeight || go->pos.y < 0)
+			{
+				go->vel.y = -go->vel.y;
 			}*/
+
+
 			for (std::vector<GameObject *>::iterator it2 = it + 1; it2 != m_goList.end(); ++it2)
 			{
 				GameObject *go2 = static_cast<GameObject *>(*it2);
@@ -127,6 +149,18 @@ void SceneCollision::GOUpdate(const double dt)
 						go2->vel = go2->vel - (impulse * im2);
 
 						finalMomentum = go->mass * go->vel + go2->mass * go2->vel;
+
+						/*m1 = go->mass;
+						m2 = go2->mass;
+						u1 = go->vel;
+						u2 = go2->vel;
+
+						Vector3 N = (go2->pos - go->pos).Normalized();
+						Vector3 u1N = u1.Dot(N) * N;
+						Vector3 u2N = u2.Dot(N) * N;
+
+						go->vel = u1 + 2 * m2 / (m1 + m2) * (u2N - u1N);
+						go2->vel = u2 + 2 * m1 / (m2 + m1) * (u1N - u2N);*/
 					}
 				}
 			}

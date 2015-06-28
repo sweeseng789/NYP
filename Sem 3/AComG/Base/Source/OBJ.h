@@ -1,9 +1,13 @@
 #ifndef RAIN_H
 #define RAIN_H
 
+#include <vector>
 #include "Mesh.h"
 #include "Vector3.h"
 #include "Vertex.h"
+#include "LoadHmap.h"
+
+using std::vector;
 
 class COBJ
 {
@@ -12,6 +16,7 @@ public:
 	~COBJ(void);
 
 	void update(double dt);
+	void update2(double dt, vector<unsigned char> m_heightMap);
 
 	Vector3 getPos();
 

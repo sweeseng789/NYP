@@ -330,12 +330,8 @@ void SceneTexture::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 	
-	//RenderMesh(meshList[GEO_AXES], false);
-	
-	//modelStack.PushMatrix();
-	//modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	//RenderMesh(meshList[GEO_LIGHTBALL], false);
-	//modelStack.PopMatrix();
+	RenderMesh(meshList[GEO_AXES], false);
+
 	
 	glDisable(GL_BLEND);
 	modelStack.PushMatrix();
@@ -360,56 +356,6 @@ void SceneTexture::Render()
 	modelStack.Scale(5, 5, 5);
 	RenderMesh(meshList[GEO_QUAD1], false);
 	modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, 0);
-	//RenderMesh(meshList[GEO_CONE], true);
-	//modelStack.PopMatrix();
-	
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, 0);
-	//RenderMesh(meshList[GEO_SPHERE], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-20, 0, 0);
-	//RenderMesh(meshList[GEO_SPHERE2], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(20, 0, 0);
-	//RenderMesh(meshList[GEO_SPHERE3], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, 20);
-	//RenderMesh(meshList[GEO_SPHERE4], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-20, 0, 20);
-	//RenderMesh(meshList[GEO_SPHERE5], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(20, 0, 20);
-	//RenderMesh(meshList[GEO_SPHERE6], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, -20);
-	//RenderMesh(meshList[GEO_SPHERE7], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-20, 0, -20);
-	//RenderMesh(meshList[GEO_SPHERE8], true);
-	//modelStack.PopMatrix();
-	//
-	//modelStack.PushMatrix();
-	//modelStack.Translate(20, 0, -20);
-	//RenderMesh(meshList[GEO_SPHERE9], true);
-	//modelStack.PopMatrix();
 }
 
 void SceneTexture::Exit()

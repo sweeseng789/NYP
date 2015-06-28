@@ -28,8 +28,11 @@ public:
 	static Mesh* GenerateCrossHair(const std::string &meshName, float colour_r=1.0f, float colour_g=1.0f, float colour_b=0.0f, float length=1.0f);
 	static Mesh* GenerateSkyPlane(const std::string &meshName, Color color, int slices, float PlanetRadius, float AtmosphereRadius, float hTile, float vTile);
 	static Mesh* GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> & heightMap);
-
+	static Mesh* GenerateMinimap(const std::string &meshName, Color color, float length = 1.f);
+	static Mesh* GenerateMinimapBorder(const std::string &meshName, Color color, float length = 1.f);
+	static Mesh* GenerateMinimapAvatar(const std::string &meshName, Color color, float length = 1.f);
 	static SpriteAnimation* GenerateSpriteAnimation(const std::string & meshName, unsigned numRow, unsigned numCol);
+	static Mesh* Generate2DMesh(const std::string & meshName, Color color, double pos_x, double pos_y, double width, double height);
 };
 
 #endif

@@ -45,11 +45,11 @@ public:
 	virtual void Strafe(const double dt);
 	/*virtual void Jump(const double dt);*/
 	virtual void UpdateJump(const double dt);
+	virtual void UpdateScope(const double dt);
 
 	bool pressedSpace;
 	bool currentlyJumping;
 	bool currentlyFalling;
-
 	// Update Camera status
 	virtual void UpdateStatus(const unsigned char key);
 	bool getJumpStatus();
@@ -60,6 +60,11 @@ private:
 
 	//For jumping
 	bool m_bJumping;
+	bool m_Scope;
+	bool crouched;
+	bool crouching;
+	bool scoped;
+	bool scoping;
 	float GRAVITY;
 	float JumpVel;
 	float JUMPMAXSPEED, JUMPACCEL;

@@ -6,6 +6,7 @@
 #include "Camera3.h"
 #include "MyMath.h"
 #include "Vector3.h"
+#include "SpriteAnimation.h"
 
 using std::cin;
 using std::cout;
@@ -19,10 +20,6 @@ public:
 	~CEnemy(void);
 
 	//Getter
-	int getEnemyHealth();
-	bool returnRenderHead();
-	bool returnRenderLeftArm();
-	bool returnRenderRightArm();
 	float getRotateAngle();
 	Vector3 getEnemyPos();
 
@@ -30,24 +27,25 @@ public:
 	void update(float dt, Vector3 pos);
 	void findDiff(Vector3 pos);
 	void setPos(Vector3 pos, Vector3 target);
-	void minusHealth(int valueToMinus);
+	void setAngle(float rotateAngle);
+	void setSpriteAnimation(SpriteAnimation *sa);
 
 	//Variable
 	bool active;
-private:
-	//Int
-	int EnemyHealth;
+	float defaultAngle;
+	float defaultAngle2;
+	bool test;
+	Vector3 EnemyPosition;
 
+	SpriteAnimation *sa;
+private:
 	//Float
 	float rotateAngle;
 
-	//Bool
-	bool renderHead;
-	bool renderLeftArm;
-	bool renderRightArm;
+	int count;
 
 	//Vector3
-	Vector3 EnemyPosition;
+	
 	Vector3 EnemyTarget;
 	Vector3 EnemyView;
 	Vector3 EnemyDiff;

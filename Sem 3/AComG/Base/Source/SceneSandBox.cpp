@@ -23,36 +23,52 @@ SceneSandBox::~SceneSandBox()
 
 void SceneSandBox::SetParameters()
 {
+	camera.Init(Vector3(-104, 110, -433), Vector3(-104, 110, 0), Vector3(0, 1, 0));
 	moving = 0;
 	mapPos = Vector3(0, 0, 0);
 	leonPos.Set(0, 100, -400);
+	HeightMapScale.Set(2000.0f, 350.f, 2000.f);
 
+	/*for (unsigned a = 0; a < 100; a++)
+	{
+		Vector3 pos;
+		pos.x = Math::RandFloatMinMax(-1000, 1000);
+		pos.z = Math::RandFloatMinMax(-1000, 1000);
+		pos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, pos.x / HeightMapScale.x, pos.z / HeightMapScale.z) + 10.f;
+		Particle * particle = new Particle();
+		particle->CreateStaticOBJ(pos);
+		ParticleList.push_back(particle);
+	}
 	for (unsigned a = 0; a < 2000; a++)
 	{
 		Particle * particle = new Particle();
 		particle->CreateBall();
 		ParticleList.push_back(particle);
-	}
+	}*/
 	for (unsigned a = 0; a < 2000; a++)
 	{
 		Particle * particle = new Particle();
 		particle->CreateRain();
 		ParticleList.push_back(particle);
 	}
-	for (unsigned a = 0; a < 100; a++)
-	{
-		Vector3 pos;
-		pos.x = Math::RandFloatMinMax(-1000, 1000);
-		pos.z = Math::RandFloatMinMax(-1000, 1000);
-		pos.y = 350.f * ReadHeightMap(m_heightMap, pos.x / 2000.f, pos.z / 2000.f) + 10.f;
-		Particle * particle = new Particle();
-		particle->CreateStaticOBJ(pos);
-		ParticleList.push_back(particle);
-	}
 
 	mSpeed = 1.f;
 	OBJCount = 0;
 	gravity = Vector3(0, -9.8f, 0);
+}
+
+void SceneSandBox::SAInit()
+{
+
+	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 6);
+	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
+	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
+
+	if (sa2)
+	{
+		sa2->m_anim = new Animation();
+		sa2->m_anim->Set(0, 36, 0, 10.f);
+	}
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -198,8 +214,6 @@ void SceneSandBox::Init()
 	glUniform1f(m_parameters[U_TYPE_FOG], fogType);
 	glUniform1f(m_parameters[U_ENABLE_FOG], fogEnabled);
 
-	camera.Init(Vector3(-104, 110, -433), Vector3(-104, 110, 0), Vector3(0, 1, 0));
-
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
@@ -239,6 +253,7 @@ void SceneSandBox::Init()
 	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
 
+
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBj//tree.obj");
 	meshList[GEO_TREE]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_TREE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
@@ -249,26 +264,6 @@ void SceneSandBox::Init()
 	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
 	meshList[GEO_CHURCH]->textureArray[0] = LoadTGA("Image//church.tga");
 
-	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("cat", 1, 6);
-	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//leon.tga");
-	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
-
-	if (sa)
-	{
-		sa->m_anim = new Animation();
-		sa->m_anim->Set(0, 4, 0, 1.f);
-	}
-
-	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 7);
-	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
-	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
-
-	if (sa2)
-	{
-		sa2->m_anim = new Animation();
-		sa2->m_anim->Set(0, 30, 0, 0.2f);
-	}
-
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
 
@@ -278,8 +273,34 @@ void SceneSandBox::Init()
 	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
+	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("Skeleton", 6, 6);
+	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//s2.tga");
 
+
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+	if (sa)
+	{
+		sa->m_anim = new Animation();
+		sa->m_anim->Set(0, 3, 0, 5.f);
+	}
+
+	SAInit();
 	SetParameters();
+
+	for (unsigned a = 0; a < 10; a++)
+	{
+
+		CEnemy* enemy = new CEnemy();
+		//enemy->setSpriteAnimation(sa);
+		Vector3 enemyPos;
+		enemyPos.x = Math::RandFloatMinMax(-1000, 1000);
+		enemyPos.z = Math::RandFloatMinMax(-1000, 1000);
+		enemyPos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, enemyPos.x / HeightMapScale.x, enemyPos.z / HeightMapScale.z);
+
+		enemy->setPos(enemyPos, enemyPos + 1);
+		enemy->setAngle(Math::RandFloatMinMax(-180, 180));
+		EnemyList.push_back(enemy);
+	}
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -294,41 +315,41 @@ void SceneSandBox::Init()
 
 Particle* SceneSandBox::fetchOBJ()
 {
-	for (std::vector<Particle *>::iterator it = ParticleList.begin(); it != ParticleList.end(); ++it)
-	{
-		Particle *p = (Particle *)*it;
-		if (!p->active)
-		{
-			p->active = true;
-			//++m_objectCount;
-			return p;
-		}
-	}
-	for (unsigned i = 0; i < 10; ++i)
-	{
-		for (unsigned a = 0; a < 2000; a++)
-		{
-			float X = Math::RandFloatMinMax(-1000, 1000);
-			float Z = Math::RandFloatMinMax(-1000, 1000);
-			Vector3 vel;
-			vel.x = Math::RandFloatMinMax(-10, 10);
-			vel.y = Math::RandFloatMinMax(-10, 10);
-			vel.z = Math::RandFloatMinMax(-10, 10);
-			Material newMaterial;
-			newMaterial.kAmbient.Set(0.1f, 0.1f, 0.1f);
-			newMaterial.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-			newMaterial.kSpecular.Set(0.5f, 0.5f, 0.5f);
-			newMaterial.kShininess = 10.f;
-			float mass = Math::RandFloatMinMax(0, 10);
+	//for (std::vector<Particle *>::iterator it = ParticleList.begin(); it != ParticleList.end(); ++it)
+	//{
+	//	Particle *p = (Particle *)*it;
+	//	if (!p->active)
+	//	{
+	//		p->active = true;
+	//		//++m_objectCount;
+	//		return p;
+	//	}
+	//}
+	//for (unsigned i = 0; i < 10; ++i)
+	//{
+	//	for (unsigned a = 0; a < 2000; a++)
+	//	{
+	//		float X = Math::RandFloatMinMax(-1000, 1000);
+	//		float Z = Math::RandFloatMinMax(-1000, 1000);
+	//		Vector3 vel;
+	//		vel.x = Math::RandFloatMinMax(-10, 10);
+	//		vel.y = Math::RandFloatMinMax(-10, 10);
+	//		vel.z = Math::RandFloatMinMax(-10, 10);
+	//		Material newMaterial;
+	//		newMaterial.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	//		newMaterial.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	//		newMaterial.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	//		newMaterial.kShininess = 10.f;
+	//		float mass = Math::RandFloatMinMax(0, 10);
 
-			Particle * particle = new Particle(Vector3(X, 320, Z), vel, 10, true, newMaterial, mass);
-			ParticleList.push_back(particle);
-		}
-	}
-	Particle *p = ParticleList.back();
-	p->active = true;
-	//++m_objectCount;
-	return p;
+	//		Particle * particle = new Particle(Vector3(X, 320, Z), vel, 10, true, newMaterial, mass);
+	//		ParticleList.push_back(particle);
+	//	}
+	//}
+	//Particle *p = ParticleList.back();
+	//p->active = true;
+	////++m_objectCount;
+	return 0;
 }
 
 /******************************************************************************
@@ -337,6 +358,23 @@ Update Camera position
 void SceneSandBox::UpdateCameraStatus(const unsigned char key)
 {
 	camera.UpdateStatus(key);
+}
+
+void SceneSandBox::SAUpdate(double dt)
+{
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+
+	if (sa)
+	{
+		sa->Update(dt);
+	}
+
+	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
+
+	if (sa2)
+	{
+		sa2->Update(dt);
+	}
 }
 
 void SceneSandBox::Update(double dt)
@@ -411,21 +449,7 @@ void SceneSandBox::Update(double dt)
 	}
 	dt *= mSpeed;
 
-	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
-
-	if (sa)
-	{
-		sa->Update(dt);
-	}
-
-	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
-
-	if (sa2)
-	{
-		sa2->Update(dt);
-	}
-
-	leonPos.y = 350.f * ReadHeightMap(m_heightMap, leonPos.x / 2000.f, leonPos.z / 2000.f) + 5.f;
+	leonPos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, leonPos.x / HeightMapScale.x, leonPos.z / HeightMapScale.z) + 5.f;
 
 	if (leonPos.z < -100)
 	{
@@ -438,7 +462,7 @@ void SceneSandBox::Update(double dt)
 
 
 	static float tempY = 0.f;
-	tempY = 350.f * ReadHeightMap(m_heightMap, camera.position.x / 2000.f, camera.position.z / 2000.f) + 10.f;
+	tempY = HeightMapScale.y * ReadHeightMap(m_heightMap, camera.position.x / HeightMapScale.x, camera.position.z / HeightMapScale.z) + 10.f;
 	camera.tempY = tempY;
 	if (!camera.getJumpStatus())
 	{
@@ -461,6 +485,15 @@ void SceneSandBox::Update(double dt)
 			particle->update(dt, camera.position);
 		}
 	}
+	for (vector<CEnemy*>::iterator it = EnemyList.begin(); it != EnemyList.end(); it++)
+	{
+		CEnemy * enemy = (CEnemy*)*it;
+		enemy->EnemyPosition.y = HeightMapScale.y * ReadHeightMap(m_heightMap, enemy->EnemyPosition.x / HeightMapScale.x, enemy->EnemyPosition.z / HeightMapScale.z) + 5.5f;
+		enemy->update(dt, camera.position);
+	}
+
+
+	SAUpdate(dt);
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -711,7 +744,7 @@ void SceneSandBox::RenderTerrain()
 {
 	Vector3 pos;
 	modelStack.PushMatrix();
-	modelStack.Scale(2000.0f, 350.f, 2000.f);
+	modelStack.Scale(HeightMapScale.x, HeightMapScale.y, HeightMapScale.z);
 	RenderMesh(meshList[GEO_TERRAIN], false);
 	modelStack.PopMatrix();
 
@@ -731,7 +764,6 @@ void SceneSandBox::RenderParticle(Particle * particle)
 		modelStack.Scale(particle->scale, particle->scale, particle->scale);
 		RenderMesh(meshList[GEO_RAIN], false);
 		modelStack.PopMatrix();
-
 	}
 	else if (particle->ParticleType == particle->GO_BALL)
 	{
@@ -750,9 +782,7 @@ void SceneSandBox::RenderParticle(Particle * particle)
 		modelStack.Scale(particle->scale, particle->scale, particle->scale);
 		RenderMesh(meshList[GEO_TREE], true);
 		modelStack.PopMatrix();
-
 	}
-
 }
 
 
@@ -803,7 +833,14 @@ void SceneSandBox::Render()
 	modelStack.PopMatrix();
 
 	RenderTerrain();
+
 	RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-60, 50, -120);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_CHURCH], true);
+	modelStack.PopMatrix();
 
 	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
 	{
@@ -814,18 +851,33 @@ void SceneSandBox::Render()
 		}
 	}
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-60, 50, -120);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[GEO_CHURCH], true);
-	modelStack.PopMatrix();
+	/*Vector3 diff;
+	diff.x = camera.position.x - -104;
+	diff.z = camera.position.z - -433;
+	float angle = Math::RadianToDegree(atan2(diff.x, diff.z));
+
 
 	modelStack.PushMatrix();
-	modelStack.Translate(leonPos.x, leonPos.y, leonPos.z);
-	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Translate(-104, camera.position.y, -433);
+	if (angle > 90 && angle <= 180 || angle > -180 && angle < -90)
+	{
+		angle += 180;
+	}
+	modelStack.Rotate(angle, 0, 1, 0);
 	modelStack.Scale(15, 15, 15);
 	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
+
+	for (vector<CEnemy*>::iterator it = EnemyList.begin(); it != EnemyList.end(); it++)
+	{
+		CEnemy * enemy = (CEnemy*)*it;
+		modelStack.PushMatrix();
+		modelStack.Translate(enemy->getEnemyPos().x, enemy->getEnemyPos().y, enemy->getEnemyPos().z);
+		modelStack.Rotate(enemy->getRotateAngle(), 0, 1, 0);
+		modelStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
+		modelStack.PopMatrix();
+	}
 	
 	//On screen text
 	std::ostringstream ss;

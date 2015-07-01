@@ -69,7 +69,7 @@ void SceneCollision::GOUpdate(const double dt)
 	{
 		GameObject *go = (GameObject *)*it;
 		if (go->active)
-		{
+		{ 
 			go->pos += go->vel * static_cast<float>(dt);
 
 			//Exercise 2a: Rebound game object at screen edges
@@ -197,7 +197,7 @@ void SceneCollision::Update(double dt)
 
 		m_ghost->pos.Set(posX, posY, 0); //IMPT
 		m_ghost->active = true;
-		float sc = 2;
+		float sc = posX;
 		m_ghost->scale.Set(sc, sc, sc);
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))

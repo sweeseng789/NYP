@@ -2,18 +2,19 @@
 #ifndef SCENE_SANDBOX_H
 #define SCENE_SANDBOX_H
 
+#include <vector>
+#include <string>
 #include "Scene.h"
 #include "Mtx44.h"
 #include "Camera3.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
-#include <vector>
-#include <string>
 #include "OBJ.h"
 #include "Collision.h"
 #include "Particle.h"
 #include "Map.h"
+#include "Enemy.h"
 
 using std::vector;
 using std::cout;
@@ -107,6 +108,7 @@ class SceneSandBox : public Scene
 		Soccer,
 		crosshair,
 		GEO_RAIN,
+		GEO_SKELETON,
 		NUM_GEOMETRY,
 	};
 public:
@@ -121,6 +123,9 @@ public:
 	//======================Setter========================//
 	void SetParameters();
 	void view();
+	void SAInit();
+	void SAUpdate(double dt);
+
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
@@ -169,11 +174,13 @@ private:
 	vector<unsigned char> m_heightMap;
 	vector<COBJ *> OBJList;
 	vector<Particle *> ParticleList;
+	vector<CEnemy *> EnemyList;
 
 	//Vector3
 	Vector3 mapPos;
 	Vector3 leonPos;
 	Vector3 cubePos;
+	Vector3 HeightMapScale;
 
 	//Camera3
 	Camera3 camera;

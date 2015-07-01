@@ -12,23 +12,11 @@ Particle::Particle(): active(true)
 	material.kShininess = 10.f;
 }
 
-Particle::Particle(Vector3 pos, Vector3 vel, float scale, bool active, Material material, float mass)
-{
-	this->pos = pos;
-	this->defaultPos = pos;
-	this->vel = vel;
-	this->scale = scale;
-	this->defaultScale = scale;
-	this->active = active;
-	this->material = material;
-	this->mass = mass;
-	ParticleType = PARTICLE_TYPE::GO_BALL;
-}
-
 
 Particle::~Particle()
 {
 }
+
 
 void Particle::CreateRain()
 {
@@ -87,14 +75,10 @@ void Particle::update(double dt, Vector3 CameraPos)
 			CreateRain();
 		}
 
+		//atan2(difference about x axis, difference about z axis) == angle
 		Vector3 diff;
 		diff.x = CameraPos.x - pos.x;
 		diff.z = CameraPos.z - pos.z;
-
-		angle = Math::RadianToDegree(acos(view.Dot(diff) / (view.Length() * diff.Length())));
-		if (view.Cross(diff).y > 1)
-			angle *= 1;
-		else
-			angle *= -1;
+		angle = Math::RadianToDegree(atan2(diff.x, diff.z));
 	}
 }

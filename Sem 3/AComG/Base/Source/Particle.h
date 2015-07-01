@@ -1,8 +1,10 @@
 #pragma once
+#include <vector>>
 #include "Vector3.h"
 #include "Material.h"
 #include "LoadHmap.h"
 
+using std::vector;
 class Particle
 {
 public:
@@ -16,7 +18,6 @@ public:
 	};
 
 	Particle();
-	Particle(Vector3 pos, Vector3 vel, float scale, bool active, Material material, float mass);
 	~Particle();
 
 	//Create Particle
@@ -37,5 +38,9 @@ public:
 	Material material;
 	int ParticleType;
 	float angle;
+	float tempY;
+	Vector3 HMScale;
+
+private:
 };
 

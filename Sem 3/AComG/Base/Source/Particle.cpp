@@ -28,7 +28,7 @@ void Particle::CreateRain()
 	vel.y = Math::RandFloatMinMax(-50, -150);
 	defaultScale = scale = 3;
 	mass = scale * scale  * scale;
-	ParticleType = PARTICLE_TYPE::GO_RAIN;
+	ParticleType = GO_RAIN;
 }
 
 void Particle::CreateBall()
@@ -42,7 +42,7 @@ void Particle::CreateBall()
 	vel.z = Math::RandFloatMinMax(-10, 10);
 	defaultScale = scale = Math::RandFloatMinMax(0, 10);
 	mass = scale * scale * scale;
-	ParticleType = PARTICLE_TYPE::GO_BALL;
+	ParticleType = GO_BALL;
 }
 
 void Particle::CreateStaticOBJ(Vector3 pos)
@@ -50,25 +50,23 @@ void Particle::CreateStaticOBJ(Vector3 pos)
 	active = true;
 	this->pos = pos;
 	vel.SetZero();
-	scale = 10;
-	ParticleType = PARTICLE_TYPE::GO_STATICOBJ;
 }
 
 void Particle::update(double dt, Vector3 CameraPos)
 {
-	pos += vel * (100 / mass) * dt;
+	pos += vel * (100 / mass) * (float)dt;
 
-	if (ParticleType == PARTICLE_TYPE::GO_BALL)
+	/*if (ParticleType == GO_BALL)
 	{
-		scale -= dt * 10;
+		scale -= (float)dt * 10;
 
 		if (scale < 0)
 			scale = defaultScale;
 
 		if (pos.y < 0 || pos.y > 1000 || pos.z < -1000 || pos.z > 1000 || pos.x < -1000 || pos.x > 1000)
 			CreateBall();
-	}
-	else if (ParticleType == PARTICLE_TYPE::GO_RAIN)
+	}*/
+	if (ParticleType == GO_RAIN)
 	{
 		if (pos.y < 0)
 		{

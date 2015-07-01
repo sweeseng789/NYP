@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>>
+#include <vector>
 #include "Vector3.h"
 #include "Material.h"
 #include "LoadHmap.h"
@@ -14,6 +14,8 @@ public:
 		GO_BALL,
 		GO_RAIN,
 		GO_STATICOBJ,
+		GO_STATICOBJ2,
+		GO_STATICOBJ3,
 		GO_TOTAL, //must be last
 	};
 
@@ -38,9 +40,10 @@ public:
 	Material material;
 	int ParticleType;
 	float angle;
-	float tempY;
-	Vector3 HMScale;
 
+	bool rotateX;
+	bool rotateY;
+	bool rotateZ;
 private:
 };
 

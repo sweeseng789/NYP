@@ -29,22 +29,71 @@ void SceneSandBox::SetParameters()
 	leonPos.Set(0, 100, -400);
 	HeightMapScale.Set(2000.0f, 350.f, 2000.f);
 
-	/*for (unsigned a = 0; a < 100; a++)
+	for (unsigned a = 0; a < 30; a++)
 	{
 		Vector3 pos;
 		pos.x = Math::RandFloatMinMax(-1000, 1000);
 		pos.z = Math::RandFloatMinMax(-1000, 1000);
 		pos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, pos.x / HeightMapScale.x, pos.z / HeightMapScale.z) + 10.f;
 		Particle * particle = new Particle();
+		particle->scale = Math::RandFloatMinMax(3, 10);
+		particle->angle = Math::RandFloatMinMax(-90, 90);
+		particle->rotateX = Math::RandIntMinMax(0, 1);
+		particle->rotateY = Math::RandIntMinMax(0, 1);
+		particle->rotateZ = Math::RandIntMinMax(0, 1);
+		while (particle->rotateX == 0 && particle->rotateY == 0 && particle->rotateZ == 0)
+		{
+			particle->rotateX = Math::RandIntMinMax(0, 1);
+			particle->rotateY = Math::RandIntMinMax(0, 1);
+			particle->rotateZ = Math::RandIntMinMax(0, 1);
+		}
 		particle->CreateStaticOBJ(pos);
+		particle->ParticleType = particle->GO_STATICOBJ;
 		ParticleList.push_back(particle);
 	}
-	for (unsigned a = 0; a < 2000; a++)
+
+	for (unsigned a = 0; a < 100; a++)
 	{
+		Vector3 pos;
+		pos.x = Math::RandFloatMinMax(-1000, 1000);
+		pos.z = Math::RandFloatMinMax(-1000, 1000);
+		pos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, pos.x / HeightMapScale.x, pos.z / HeightMapScale.z);
 		Particle * particle = new Particle();
-		particle->CreateBall();
+		particle->CreateStaticOBJ(pos);
+		particle->scale = Math::RandFloatMinMax(5, 10);
+		particle->angle = Math::RandFloatMinMax(0, 360);
+		particle->rotateX = Math::RandIntMinMax(0, 1);
+		particle->rotateY = Math::RandIntMinMax(0, 1);
+		particle->rotateZ = Math::RandIntMinMax(0, 1);
+		while (particle->rotateX == 0 && particle->rotateY == 0 && particle->rotateZ == 0)
+		{
+			particle->rotateX = Math::RandIntMinMax(0, 1);
+			particle->rotateY = Math::RandIntMinMax(0, 1);
+			particle->rotateZ = Math::RandIntMinMax(0, 1);
+		}
+		particle->ParticleType = particle->GO_STATICOBJ2;
 		ParticleList.push_back(particle);
-	}*/
+	}
+
+	for (unsigned a = 0; a < 50; a++)
+	{
+		Vector3 pos;
+		pos.x = Math::RandFloatMinMax(-1000, 1000);
+		pos.z = Math::RandFloatMinMax(-1000, 1000);
+		pos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, pos.x / HeightMapScale.x, pos.z / HeightMapScale.z);
+		Particle * particle = new Particle();
+		particle->CreateStaticOBJ(pos);
+		particle->scale = Math::RandFloatMinMax(5, 10);
+		particle->angle = Math::RandFloatMinMax(-10, 10);
+		while (particle->rotateX == 0 && particle->rotateY == 0 && particle->rotateZ == 0)
+		{
+			particle->rotateX = Math::RandIntMinMax(0, 1);
+			particle->rotateY = Math::RandIntMinMax(0, 1);
+			particle->rotateZ = Math::RandIntMinMax(0, 1);
+		}
+		particle->ParticleType = particle->GO_STATICOBJ3;
+		ParticleList.push_back(particle);
+	}
 	for (unsigned a = 0; a < 2000; a++)
 	{
 		Particle * particle = new Particle();
@@ -59,6 +108,14 @@ void SceneSandBox::SetParameters()
 
 void SceneSandBox::SAInit()
 {
+	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("Skeleton", 6, 6);
+	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//s2.tga");
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
+	if (sa)
+	{
+		sa->m_anim = new Animation();
+		sa->m_anim->Set(0, 3, 0, 5.f);
+	}
 
 	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 6);
 	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
@@ -262,7 +319,25 @@ void SceneSandBox::Init()
 	meshList[GEO_TREE]->textureArray[0] = LoadTGA("Image//tree.tga");
 
 	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
+	meshList[GEO_CHURCH]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_CHURCH]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_CHURCH]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_CHURCH]->material.kShininess = 10.f;
 	meshList[GEO_CHURCH]->textureArray[0] = LoadTGA("Image//church.tga");
+
+	meshList[GEO_PLANK] = MeshBuilder::GenerateOBJ("Plank", "OBj//Plank.obj");
+	meshList[GEO_PLANK]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_PLANK]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_PLANK]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_PLANK]->material.kShininess = 10.f;
+	meshList[GEO_PLANK]->textureArray[0] = LoadTGA("Image//Plank.tga");
+
+	meshList[GEO_STUMP] = MeshBuilder::GenerateOBJ("Plank", "OBj//Stump.obj");
+	meshList[GEO_STUMP]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_STUMP]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_STUMP]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_STUMP]->material.kShininess = 10.f;
+	meshList[GEO_STUMP]->textureArray[0] = LoadTGA("Image//Stump.tga");
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
@@ -273,35 +348,8 @@ void SceneSandBox::Init()
 	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
-	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("Skeleton", 6, 6);
-	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//s2.tga");
-
-
-	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
-	if (sa)
-	{
-		sa->m_anim = new Animation();
-		sa->m_anim->Set(0, 3, 0, 5.f);
-	}
-
-	SAInit();
 	SetParameters();
-
-	for (unsigned a = 0; a < 10; a++)
-	{
-
-		CEnemy* enemy = new CEnemy();
-		//enemy->setSpriteAnimation(sa);
-		Vector3 enemyPos;
-		enemyPos.x = Math::RandFloatMinMax(-1000, 1000);
-		enemyPos.z = Math::RandFloatMinMax(-1000, 1000);
-		enemyPos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, enemyPos.x / HeightMapScale.x, enemyPos.z / HeightMapScale.z);
-
-		enemy->setPos(enemyPos, enemyPos + 1);
-		enemy->setAngle(Math::RandFloatMinMax(-180, 180));
-		EnemyList.push_back(enemy);
-	}
-
+	SAInit();
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -449,7 +497,7 @@ void SceneSandBox::Update(double dt)
 	}
 	dt *= mSpeed;
 
-	leonPos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, leonPos.x / HeightMapScale.x, leonPos.z / HeightMapScale.z) + 5.f;
+	/*leonPos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, leonPos.x / HeightMapScale.x, leonPos.z / HeightMapScale.z) + 5.f;
 
 	if (leonPos.z < -100)
 	{
@@ -458,7 +506,7 @@ void SceneSandBox::Update(double dt)
 	else
 	{
 		leonPos.z = -400;
-	}
+	}*/
 
 
 	static float tempY = 0.f;
@@ -468,8 +516,8 @@ void SceneSandBox::Update(double dt)
 	{
 		static float diff = 0.f;
 		diff = tempY - camera.position.y;
-		camera.position.y += diff * dt * 20;
-		camera.target.y += diff * dt * 20;
+		camera.position.y += diff * (float)dt * 20;
+		camera.target.y += diff * (float)dt * 20;
 	}
 
 	/*camera.position.x = cubePos.x - cos(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
@@ -485,13 +533,6 @@ void SceneSandBox::Update(double dt)
 			particle->update(dt, camera.position);
 		}
 	}
-	for (vector<CEnemy*>::iterator it = EnemyList.begin(); it != EnemyList.end(); it++)
-	{
-		CEnemy * enemy = (CEnemy*)*it;
-		enemy->EnemyPosition.y = HeightMapScale.y * ReadHeightMap(m_heightMap, enemy->EnemyPosition.x / HeightMapScale.x, enemy->EnemyPosition.z / HeightMapScale.z) + 5.5f;
-		enemy->update(dt, camera.position);
-	}
-
 
 	SAUpdate(dt);
 }
@@ -779,8 +820,27 @@ void SceneSandBox::RenderParticle(Particle * particle)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		modelStack.Rotate(particle->angle, particle->rotateX, particle->rotateY, particle->rotateZ);
 		modelStack.Scale(particle->scale, particle->scale, particle->scale);
 		RenderMesh(meshList[GEO_TREE], true);
+		modelStack.PopMatrix();
+	}
+	else if (particle->ParticleType == particle->GO_STATICOBJ2)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		modelStack.Rotate(particle->angle, particle->rotateX, particle->rotateY, particle->rotateZ);
+		modelStack.Scale(particle->scale, particle->scale, particle->scale);
+		RenderMesh(meshList[GEO_PLANK], true);
+		modelStack.PopMatrix();
+	}
+	else if (particle->ParticleType == particle->GO_STATICOBJ3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		modelStack.Rotate(particle->angle, 0, 1, 0);
+		modelStack.Scale(particle->scale, particle->scale, particle->scale);
+		RenderMesh(meshList[GEO_STUMP], true);
 		modelStack.PopMatrix();
 	}
 }
@@ -851,34 +911,6 @@ void SceneSandBox::Render()
 		}
 	}
 
-	/*Vector3 diff;
-	diff.x = camera.position.x - -104;
-	diff.z = camera.position.z - -433;
-	float angle = Math::RadianToDegree(atan2(diff.x, diff.z));
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-104, camera.position.y, -433);
-	if (angle > 90 && angle <= 180 || angle > -180 && angle < -90)
-	{
-		angle += 180;
-	}
-	modelStack.Rotate(angle, 0, 1, 0);
-	modelStack.Scale(15, 15, 15);
-	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
-	modelStack.PopMatrix();*/
-
-	for (vector<CEnemy*>::iterator it = EnemyList.begin(); it != EnemyList.end(); it++)
-	{
-		CEnemy * enemy = (CEnemy*)*it;
-		modelStack.PushMatrix();
-		modelStack.Translate(enemy->getEnemyPos().x, enemy->getEnemyPos().y, enemy->getEnemyPos().z);
-		modelStack.Rotate(enemy->getRotateAngle(), 0, 1, 0);
-		modelStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
-		modelStack.PopMatrix();
-	}
-	
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -891,11 +923,6 @@ void SceneSandBox::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 
 	//==============Testing===============//
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, camera.position.y, 0);
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[Soccer], false);
-	modelStack.PopMatrix();*/
 }
 
 void SceneSandBox::Exit()

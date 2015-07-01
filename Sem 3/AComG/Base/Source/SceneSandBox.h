@@ -108,6 +108,8 @@ class SceneSandBox : public Scene
 		Soccer,
 		crosshair,
 		GEO_RAIN,
+		GEO_PLANK,
+		GEO_STUMP,
 		GEO_SKELETON,
 		NUM_GEOMETRY,
 	};

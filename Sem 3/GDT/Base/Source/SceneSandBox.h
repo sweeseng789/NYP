@@ -109,6 +109,7 @@ class SceneSandBox : public Scene
 		GEO_BACKGROUND,
 		GEO_TILEGROUND,
 		GEO_TILEHERO,
+		GEO_TILETREE,
 		NUM_GEOMETRY,
 	};
 public:
@@ -130,6 +131,12 @@ public:
 	void HeroJump();
 	void HeroMoveUpDown(const bool mode, const float timeDiff);
 	void HeroMoveLeftRIght(const bool mode, const float timeDiff);
+	void constrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
+
+	//Code for scroling
+	int mapOffSet_x, mapOffset_y;
+	int tileOffSet_x, tileOffset_y;
+	int mapFineOffSet_x, mapFineOffset_y;
 
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);

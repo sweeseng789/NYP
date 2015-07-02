@@ -60,8 +60,8 @@ void SceneSandBox::SetParameters()
 		pos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, pos.x / HeightMapScale.x, pos.z / HeightMapScale.z);
 		Particle * particle = new Particle();
 		particle->CreateStaticOBJ(pos);
-		particle->scale = Math::RandFloatMinMax(5, 10);
-		particle->angle = Math::RandFloatMinMax(0, 360);
+		particle->scale = Math::RandFloatMinMax(5, 15);
+		particle->angle = Math::RandFloatMinMax(-180, 180);
 		particle->rotateX = Math::RandIntMinMax(0, 1);
 		particle->rotateY = Math::RandIntMinMax(0, 1);
 		particle->rotateZ = Math::RandIntMinMax(0, 1);
@@ -94,7 +94,7 @@ void SceneSandBox::SetParameters()
 		particle->ParticleType = particle->GO_STATICOBJ3;
 		ParticleList.push_back(particle);
 	}
-	for (unsigned a = 0; a < 2000; a++)
+	for (unsigned a = 0; a < 1000; a++)
 	{
 		Particle * particle = new Particle();
 		particle->CreateRain();
@@ -108,7 +108,7 @@ void SceneSandBox::SetParameters()
 
 void SceneSandBox::SAInit()
 {
-	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("Skeleton", 6, 6);
+	/*meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("Skeleton", 6, 6);
 	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//s2.tga");
 	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
 	if (sa)
@@ -125,7 +125,7 @@ void SceneSandBox::SAInit()
 	{
 		sa2->m_anim = new Animation();
 		sa2->m_anim->Set(0, 36, 0, 10.f);
-	}
+	}*/
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -332,12 +332,12 @@ void SceneSandBox::Init()
 	meshList[GEO_PLANK]->material.kShininess = 10.f;
 	meshList[GEO_PLANK]->textureArray[0] = LoadTGA("Image//Plank.tga");
 
-	meshList[GEO_STUMP] = MeshBuilder::GenerateOBJ("Plank", "OBj//Stump.obj");
+	/*meshList[GEO_STUMP] = MeshBuilder::GenerateOBJ("Plank", "OBj//Stump.obj");
 	meshList[GEO_STUMP]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
 	meshList[GEO_STUMP]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_STUMP]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_STUMP]->material.kShininess = 10.f;
-	meshList[GEO_STUMP]->textureArray[0] = LoadTGA("Image//Stump.tga");
+	meshList[GEO_STUMP]->textureArray[0] = LoadTGA("Image//Stump.tga");*/
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
@@ -572,6 +572,7 @@ void SceneSandBox::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 		return;
 
 	glDisable(GL_DEPTH_TEST);
+	glUniform1f(m_parameters[U_ENABLE_FOG], 0);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -10, 10);
 	projectionStack.PushMatrix();
@@ -603,6 +604,7 @@ void SceneSandBox::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
+	glUniform1f(m_parameters[U_ENABLE_FOG], 1);
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -621,12 +623,10 @@ void SceneSandBox::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, flo
 
 	//Mtx44 MVP, modelview, modelView_inverse_transpose;
 
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
+	Mtx44 MVP, modelview, modelView_inverse_transpose;
 
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	modelView = viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 
 	for (unsigned a = 0; a < 2; ++a)
 	{
@@ -650,6 +650,7 @@ void SceneSandBox::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, flo
 	modelStack.PopMatrix();
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
+	
 }
 
 
@@ -799,12 +800,14 @@ void SceneSandBox::RenderParticle(Particle * particle)
 {
 	if (particle->ParticleType == particle->GO_RAIN)
 	{
+		glUniform1f(m_parameters[U_ENABLE_FOG], 0);
 		modelStack.PushMatrix();
 		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
 		modelStack.Rotate(particle->angle, 0, 1, 0);
 		modelStack.Scale(particle->scale, particle->scale, particle->scale);
 		RenderMesh(meshList[GEO_RAIN], false);
 		modelStack.PopMatrix();
+		glUniform1f(m_parameters[U_ENABLE_FOG], 1);
 	}
 	else if (particle->ParticleType == particle->GO_BALL)
 	{
@@ -834,7 +837,7 @@ void SceneSandBox::RenderParticle(Particle * particle)
 		RenderMesh(meshList[GEO_PLANK], true);
 		modelStack.PopMatrix();
 	}
-	else if (particle->ParticleType == particle->GO_STATICOBJ3)
+	/*else if (particle->ParticleType == particle->GO_STATICOBJ3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
@@ -842,7 +845,7 @@ void SceneSandBox::RenderParticle(Particle * particle)
 		modelStack.Scale(particle->scale, particle->scale, particle->scale);
 		RenderMesh(meshList[GEO_STUMP], true);
 		modelStack.PopMatrix();
-	}
+	}*/
 }
 
 

@@ -12,7 +12,13 @@ SceneSandBox::SceneSandBox():
 	m_cMap(NULL),
 	hero_InMidAir_Up(false),
 	hero_InMidAir_Down(false),
-	jumpspeed(0)
+	jumpspeed(0),
+	mapOffSet_x(0),
+	mapOffset_y(0),
+	tileOffSet_x(0),
+	tileOffset_y(0),
+	mapFineOffSet_x(0), 
+	mapFineOffset_y(0)
 {
 }
 
@@ -112,9 +118,12 @@ void SceneSandBox::SetMesh()
 	meshList[GEO_TILEHERO] = MeshBuilder::Generate2DMesh("tile2_hero", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
 	meshList[GEO_TILEHERO]->textureID = LoadTGA("Image//marioalpha.tga");
 
+	meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
+	meshList[GEO_TILETREE]->textureID = LoadTGA("Image//tile3_tree.tga");
+
 	//Initalise the new tile map
 	m_cMap = new CMap();
-	m_cMap->Init(800, 600, 24, 32);
+	m_cMap->Init(600, 800, 24, 32, 600, 1600);
 	m_cMap->LoadMap("Image//MapDesign.csv");
 
 	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
@@ -154,6 +163,7 @@ void SceneSandBox::Init()
 	// Enable blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
@@ -780,7 +790,6 @@ void SceneSandBox::RenderTerrain()
 
 void SceneSandBox::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, float y, bool rotate)
 {
-	//glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 800, 0, 600, -10, 10);
 	projectionStack.PushMatrix();
@@ -828,7 +837,6 @@ void SceneSandBox::Render2DMesh(Mesh *mesh, bool enableLight, float size, float 
 	modelStack.PopMatrix();
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
-	//glEnable(GL_DEPTH_TEST);
 }
 
 void SceneSandBox::RenderBackground()
@@ -838,14 +846,29 @@ void SceneSandBox::RenderBackground()
 
 void SceneSandBox::RenderTileMap()
 {
-	for (unsigned i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
+	//If i want to centralise the character, i can play around here
+	int m = 0;
+	mapFineOffSet_x = mapFineOffSet_x % m_cMap->GetTileSize();
+	for (int i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
 	{
-		for (unsigned k = 0; k < m_cMap->GetNumOfTiles_Width(); k++)
+		for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
 		{
-			if (m_cMap->theScreenMap[i][k] != 0)
-				Render2DMesh(meshList[GEO_TILEGROUND], false, 1.f, k * m_cMap->GetTileSize(), 575 - i * m_cMap->GetTileSize());
+			m = tileOffSet_x + k;
+			// If we have reached the right side of the Map, then do not display the extra column of tiles.
+			if ((tileOffSet_x + k) >= m_cMap->getNumOfTiles_MapWidth())
+				break;
+			if (m_cMap->theScreenMap[i][m] == 1)
+			{
+				Render2DMesh(meshList[GEO_TILEGROUND], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize());
+			}
+			else if (m_cMap->theScreenMap[i][m] == 2)
+			{
+				Render2DMesh(meshList[GEO_TILETREE], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize());
+			}
 		}
 	}
+
+	Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
 }
 
 /********************************************************************************
@@ -858,7 +881,8 @@ void SceneSandBox::HeroUpdate()
 	{
 		//Don't Jump
 
-		int checkPosition_X = (int)floor((float)HeroPos.x / m_cMap->GetTileSize());
+		//int checkPosition_X = (int)floor((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize());
+		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)ceil(((float)HeroPos.y + m_cMap->GetTileSize()) / m_cMap->GetTileSize());
 		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
 		{
@@ -870,7 +894,8 @@ void SceneSandBox::HeroUpdate()
 	else if (hero_InMidAir_Up == true && hero_InMidAir_Down == false)
 	{
 		// Check if the hero can move up into mid air...
-		int checkPosition_X = (int)ceil((float)HeroPos.x / m_cMap->GetTileSize());
+		//int checkPosition_X = (int)ceil((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize());
+		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
 		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
 		{
@@ -891,7 +916,8 @@ void SceneSandBox::HeroUpdate()
 	}
 	else if (hero_InMidAir_Up == false && hero_InMidAir_Down == true)
 	{
-		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
+		//int checkPosition_X = (int)ceil(((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize()));
+		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] == 1)
 		{
@@ -906,6 +932,11 @@ void SceneSandBox::HeroUpdate()
 			jumpspeed += 1;
 		}
 	}
+
+	constrainHero(25, 750, 25, 575, 1.f);
+	tileOffSet_x = (int)(mapOffSet_x / m_cMap->GetTileSize());
+	if (tileOffSet_x + m_cMap->GetNumOfTiles_Width() > m_cMap->getNumOfTiles_MapWidth())
+		tileOffSet_x = m_cMap->getNumOfTiles_MapWidth() - m_cMap->GetNumOfTiles_Width();
 }
 
 /********************************************************************************
@@ -958,6 +989,33 @@ void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 	}
 }
 
+void SceneSandBox::constrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff)
+{
+	if (HeroPos.x < leftBorder)
+	{
+		HeroPos.x = leftBorder;
+		mapOffSet_x = mapOffSet_x - (int)(5.f * timeDiff);
+		if (mapOffSet_x < 0)
+			mapOffSet_x = 0;
+	}
+	else if (HeroPos.x > rightBorder)
+	{
+		HeroPos.x = rightBorder;
+		mapOffSet_x = mapOffSet_x + (int)(5.f * timeDiff);
+		if (mapOffSet_x > 800)
+			mapOffSet_x = 800;
+	}
+
+	if (HeroPos.y < topBorder)
+	{
+		HeroPos.y = topBorder;
+	}
+	else if (HeroPos.y > bottomBorder)
+	{
+		HeroPos.y = bottomBorder;
+	}
+}
+
 
 void SceneSandBox::Render()
 {
@@ -1000,142 +1058,22 @@ void SceneSandBox::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, camera.position.y, 0);
-	RenderMesh(meshList[GEO_AXES], false);
-	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();*/
-
-	/*for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
-	{
-		Particle * particle = (Particle*)*it;
-		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-			modelStack.Scale(particle->scale, particle->scale, particle->scale);
-			RenderMesh(meshList[GEO_SPHERE], false);
-			modelStack.PopMatrix();
-		}
-	}*/
-
-	/*for (vector<COBJ*>::iterator it = OBJList.begin(); it != OBJList.end(); it++)
-	{
-		COBJ * raining = (COBJ*)*it;
-
-		
-			if (raining->type == 1)
-			{
-				if (Collision::PointDistance(camera.position, raining->getPos(), 1000))
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(raining->getPos().x, raining->getPos().y, raining->getPos().z);
-					RenderMesh(meshList[GEO_LIGHTBALL], false);
-					modelStack.PopMatrix();
-				}
-			}
-			else if (raining->type == 2)
-			{
-				if (Collision::PointDistance(camera.position, raining->getPos(), 300))
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(raining->getPos().x, raining->getPos().y, raining->getPos().z);
-					modelStack.Scale(3, 3, 3);
-					RenderMesh(meshList[GEO_TREE], true);
-					modelStack.PopMatrix();
-				}
-			
-		}
-	}*/
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-60, 50, -120);
-	//modelStack.Rotate(90, 0, 1, 0);
-	//RenderMesh(meshList[GEO_CHURCH], true);
-	//modelStack.PopMatrix();
-	//RenderSkybox();
-
-	// perspective;
-	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	//projectionStack.LoadMatrix(perspective);
-	//viewStack.LoadIdentity();
-	//
-	//modelStack.PushMatrix();
-	////modelStack.Translate(20, 0, -20);
-	////modelStack.Scale(0.1f, 0.1f, 0.1f);
-	//modelStack.Scale(50, 50, 50);
-	////RenderMesh(meshList[GEO_QUAD], false);
-	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
-	//modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(cubePos.x, cubePos.y, cubePos.z);
-	//RenderMesh(meshList[GEO_CUBE], false);
-	//modelStack.PopMatrix();
-
-
-
-
-	//modelStack.PushMatrix();
-	//modelStack.Scale(10, 10, 10);
-	////RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	//modelStack.PopMatrix();
-
-	//RenderTerrain();
-	//RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
-	
-	//On screen text
-	/*std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);*/
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(leonPos.x, leonPos.y, leonPos.z);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(15, 15, 15);
-	RenderMesh(meshList[GEO_SPRITE_ANIMATION], false);
-	modelStack.PopMatrix();*/
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, camera.position.y, 0);
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[Soccer], false);
-	modelStack.PopMatrix();*/
-	//Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
 	//Render Tile map
 	RenderTileMap();
 	//Render background image
 	RenderBackground();
-	/*glPushMatrix();
-	glTranslatef(HeroPos.x, HeroPos.y, 0);
-	glEnable(GL_TEXTURE_2D);	
-	glEnable(GL_BLEND);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, meshList[GEO_TILEHERO]->textureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 1); glVertex2f(0, 0);
-	glTexCoord2f(0, 0); glVertex2f(0, m_cMap->GetTileSize());
-	glTexCoord2f(1, 0); glVertex2f(m_cMap->GetTileSize(), m_cMap->GetTileSize());
-	glTexCoord2f(1, 1); glVertex2f(m_cMap->GetTileSize(), 0);
-	glEnd();
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-	glPopMatrix();*/
 
+	//On screen text
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "tileOffset_x: " << tileOffSet_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+
+	std::ostringstream ss1;
+	ss1.precision(5);
+	ss1 << "mapOffset_x: " << mapOffSet_x;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 	
 
 	//==============Testing===============//

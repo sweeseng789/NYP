@@ -1,11 +1,15 @@
 #include "Map.h"
 
 CMap::CMap(void)
-: theScreen_Height(0)
-, theScreen_Width(0)
-, theNumOfTiles_Height(0)
-, theNumOfTiles_Width(0)
-, theTileSize(0)
+	: theScreen_Height(0)
+	, theScreen_Width(0)
+	, theNumOfTiles_Height(0)
+	, theNumOfTiles_Width(0)
+	, theMap_Height(0)
+	, theMap_Width(0)
+	, theNumOfTiles_MapHeight(0)
+	, theNumOfTiles_MapWidth(0)
+	, theTileSize(0)
 {
 	theScreenMap.clear();
 }
@@ -15,17 +19,25 @@ CMap::~CMap(void)
 	theScreenMap.clear();
 }
 
-void CMap::Init(const int theScreen_Height, const int theScreen_Width, const int theNumOfTiles_Height, const int theNumOfTiles_Width, int theTileSize)
+void CMap::Init(const int theScreen_Height, const int theScreen_Width,
+	const int theNumOfTiles_Height, const int theNumOfTiles_Width,
+	const int theMap_Height, const int theMap_Width,
+	int theTileSize)
 {
-	this->theScreen_Height		= theScreen_Height;
-	this->theScreen_Width		= theScreen_Width;
-	this->theNumOfTiles_Height	= theNumOfTiles_Height;
-	this->theNumOfTiles_Width	= theNumOfTiles_Width;
-	this->theTileSize			= theTileSize;
+	this->theScreen_Height = theScreen_Height;
+	this->theScreen_Width = theScreen_Width;
+	this->theNumOfTiles_Height = theNumOfTiles_Height;
+	this->theNumOfTiles_Width = theNumOfTiles_Width;
+	this->theMap_Height = theMap_Height;
+	this->theMap_Width = theMap_Width;
+	this->theTileSize = theTileSize;
 
-	theScreenMap.resize(theNumOfTiles_Height);
-	for (int i = 0; i < theNumOfTiles_Height; ++i)
-		theScreenMap[i].resize(theNumOfTiles_Width);
+	theNumOfTiles_MapHeight = (int)(theMap_Height / theTileSize);
+	theNumOfTiles_MapWidth = (int)(theMap_Width / theTileSize);
+
+	theScreenMap.resize(theNumOfTiles_MapHeight);
+	for (int i = 0; i < theNumOfTiles_MapHeight; ++i)
+		theScreenMap[i].resize(theNumOfTiles_MapWidth);
 }
 
 bool CMap::LoadMap(const string mapName)
@@ -45,31 +57,31 @@ bool CMap::LoadFile(const string mapName)
 	int theMaxNumOfColumns = 0;
 
 	ifstream file(mapName.c_str());
-	if(file.is_open())
+	if (file.is_open())
 	{
 		int i = 0, k = 0;
-		while(file.good())
+		while (file.good())
 		{
 			string aLineOfText = "";
 			getline(file, aLineOfText);
 
-			if  (theLineCounter>=theNumOfTiles_Height)
+			if (theLineCounter >= theNumOfTiles_MapHeight)
 				break;
 
 			// If this line is not a comment line, then process it
-			if(!(aLineOfText.find("//*") == NULL) && aLineOfText != "")
+			if (!(aLineOfText.find("//*") == NULL) && aLineOfText != "")
 			{
 				if (theLineCounter == 0)
 				{
 					// This is the first line of the map data file
 					string token;
 					istringstream iss(aLineOfText);
-					while(getline(iss, token, ','))
+					while (getline(iss, token, ','))
 					{
 						// Count the number of columns
 						theMaxNumOfColumns = atoi(token.c_str());
 					}
-					if ( theMaxNumOfColumns != theNumOfTiles_Width)
+					if (theMaxNumOfColumns != theNumOfTiles_MapWidth)
 						return false;
 				}
 				else
@@ -78,7 +90,7 @@ bool CMap::LoadFile(const string mapName)
 
 					string token;
 					istringstream iss(aLineOfText);
-					while(getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_Width))
+					while (getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_MapWidth))
 					{
 						theScreenMap[theLineCounter][theColumnCounter++] = atoi(token.c_str());
 					}
@@ -104,4 +116,16 @@ int CMap::GetNumOfTiles_Width(void)
 int CMap::GetTileSize(void)
 {
 	return theTileSize;
+}
+
+// Get the number of tiles for height of the map
+int CMap::getNumOfTiles_MapHeight(void)
+{
+	return theNumOfTiles_MapHeight;
+}
+
+// Get the number of tiles for width of the map
+int CMap::getNumOfTiles_MapWidth(void)
+{
+	return theNumOfTiles_MapWidth;
 }

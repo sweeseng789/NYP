@@ -197,7 +197,7 @@ void SceneText::Init()
 	meshList[GEO_TILEGROUND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
 	meshList[GEO_TILEGROUND]->textureID = LoadTGA("Image//tile1_ground.tga");
 	meshList[GEO_TILEHERO] = MeshBuilder::Generate2DMesh("GEO_TILEHERO", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
-	meshList[GEO_TILEHERO]->textureID = LoadTGA("Image//tile2_hero.tga");
+	meshList[GEO_TILEHERO]->textureID = LoadTGA("Image//marioalpha.tga");
 	meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
 	meshList[GEO_TILETREE]->textureID = LoadTGA("Image//tile3_tree.tga");
 
@@ -673,18 +673,27 @@ void SceneText::HeroUpdate()
   	if (hero_inMidAir_Up == false && hero_inMidAir_Down == false)
 	{
 		// Don't jump
+		int checkPosition_X = (int)((mapOffset_x + theHeroPosition.x) / m_cMap->GetTileSize());
+		int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int)ceil((theHeroPosition.y + m_cMap->GetTileSize() + jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
+		{
+			hero_inMidAir_Down = true;
+			hero_inMidAir_Up = false;
+			jumpspeed = 10;
+		}
 	}
 	else if (hero_inMidAir_Up == true && hero_inMidAir_Down == false)
 	{
 		// Check if the hero can move up into mid air...
 		int checkPosition_X = (int) ((mapOffset_x+theHeroPosition.x) / m_cMap->GetTileSize());
-		int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int) ceil( (float) (theHeroPosition.y + m_cMap->GetTileSize() + jumpspeed) / m_cMap->GetTileSize());
+		int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int) ceil(  (theHeroPosition.y + m_cMap->GetTileSize() + jumpspeed) / m_cMap->GetTileSize());
 		if ( (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1) ||
-		     (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X+1] == 1) )
+		     (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1) )
 		{
 			// Since the new position does not allow the hero to move into, then go back to the old position
-			theHeroPosition.y = ((int) (theHeroPosition.y / m_cMap->GetTileSize())) * m_cMap->GetTileSize();
+			//theHeroPosition.y = ((int) (theHeroPosition.y / m_cMap->GetTileSize())) * m_cMap->GetTileSize();
 			hero_inMidAir_Up = false;
+			hero_inMidAir_Down = true;
 			jumpspeed = 0;
 		}
 		else
@@ -706,12 +715,13 @@ void SceneText::HeroUpdate()
 			checkPosition_X = 0;
 		if (checkPosition_X > m_cMap->getNumOfTiles_MapWidth())
 			checkPosition_X = m_cMap->getNumOfTiles_MapWidth();
-		int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int) ceil( (float) (theHeroPosition.y - jumpspeed) / m_cMap->GetTileSize());
+		int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int) ceil( (theHeroPosition.y - jumpspeed) / m_cMap->GetTileSize());
 		if (checkPosition_Y < 0)
 			checkPosition_Y = 0;
 		if (checkPosition_Y > m_cMap->GetNumOfTiles_Height())
 			checkPosition_Y = m_cMap->GetNumOfTiles_Height();
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1)
 		{
 			// Since the new position does not allow the hero to move into, then go back to the old position
 			theHeroPosition.y = ((int) (theHeroPosition.y / m_cMap->GetTileSize())) * m_cMap->GetTileSize();
@@ -739,7 +749,7 @@ void SceneText::HeroJump()
 	if (hero_inMidAir_Up == false && hero_inMidAir_Down == false)
 	{
 		hero_inMidAir_Up = true;
-		jumpspeed = 10;
+		jumpspeed = 15;
 	}
 }
 
@@ -765,11 +775,17 @@ void SceneText::HeroMoveLeftRight(const bool mode, const float timeDiff)
 {
 	if (mode)
 	{
-		theHeroPosition.x = theHeroPosition.x - (int) (5.0f * timeDiff);
+		int checkPosition_X = (int)ceil(((float)theHeroPosition.x / m_cMap->GetTileSize()));
+		int checkPosition_Y = (int)ceil(((float)theHeroPosition.y + jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
+			theHeroPosition.x = theHeroPosition.x - (int)(5.0f * timeDiff);
 	}
 	else
 	{
-		theHeroPosition.x = theHeroPosition.x + (int) (5.0f * timeDiff);
+		int checkPosition_X = (int)ceil(((float)theHeroPosition.x / m_cMap->GetTileSize()));
+		int checkPosition_Y = (int)ceil(((float)theHeroPosition.y + jumpspeed) / m_cMap->GetTileSize());
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
+			theHeroPosition.x = theHeroPosition.x + (int) (5.0f * timeDiff);
 	}
 }
 

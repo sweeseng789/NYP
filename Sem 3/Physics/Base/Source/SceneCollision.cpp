@@ -125,42 +125,48 @@ void SceneCollision::GOUpdate(const double dt)
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(go, go2, dt))
 					{
-						initialMomentum = go->mass * go->vel + go2->mass * go2->vel;
+						//initialMomentum = go->mass * go->vel + go2->mass * go2->vel;
 
-						//getting the translateDist
-						Vector3 posDiff = go->pos - go2->pos;
-						//Mininum translate distance to push ball after intersecting
-						Vector3 translateDist = posDiff *(((go->scale.x + go2->scale.x)) - posDiff.Length() / posDiff.Length());
+						////getting the translateDist
+						//Vector3 posDiff = go->pos - go2->pos;
+						////Mininum translate distance to push ball after intersecting
+						//Vector3 translateDist = posDiff *(((go->scale.x + go2->scale.x)) - posDiff.Length() / posDiff.Length());
 
-						//inverse mass quantities
-						float im1 = 1 / go->mass;
-						float im2 = 1 / go2->mass;
+						////inverse mass quantities
+						//float im1 = 1 / go->mass;
+						//float im2 = 1 / go2->mass;
 
-						//Impact speed
-						Vector3 velDiff = (go->vel - go2->vel);
-						float velNormalize = velDiff.Dot(translateDist.Normalize());
+						////Impact speed
+						//Vector3 velDiff = (go->vel - go2->vel);
+						//float velNormalize = velDiff.Dot(translateDist.Normalize());
 
-						//Collision impulse
-						float i = (-(1.f + 1) * velNormalize) / (im1 + im2);
-						Vector3 impulse = translateDist * i;
+						////Collision impulse
+						//float i = (-(1.f + 1) * velNormalize) / (im1 + im2);
+						//Vector3 impulse = translateDist * i;
 
-						//Change in momentum
-						go->vel = go->vel + (impulse * im1);
-						go2->vel = go2->vel - (impulse * im2);
+						////Change in momentum
+						//go->vel = go->vel + (impulse * im1);
+						//go2->vel = go2->vel - (impulse * im2);
 
-						finalMomentum = go->mass * go->vel + go2->mass * go2->vel;
+						//finalMomentum = go->mass * go->vel + go2->mass * go2->vel;
 
-						/*m1 = go->mass;
+						m1 = go->mass;
 						m2 = go2->mass;
 						u1 = go->vel;
 						u2 = go2->vel;
+
+						initialMomentum = m1 * u1 + m2 * u2;
 
 						Vector3 N = (go2->pos - go->pos).Normalized();
 						Vector3 u1N = u1.Dot(N) * N;
 						Vector3 u2N = u2.Dot(N) * N;
 
-						go->vel = u1 + 2 * m2 / (m1 + m2) * (u2N - u1N);
-						go2->vel = u2 + 2 * m1 / (m2 + m1) * (u1N - u2N);*/
+						go->vel = (2 * m2 * u2 + u1 * (m1 - m2)) * (1 / (m1 + m2));
+						go2->vel = (2 * m1 * u1 + u2 * (m2 - m1)) * (1 / (m1 + m2));
+
+						finalMomentum = m1 * v1 + m2 * v2;
+						initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
+						finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 					}
 				}
 			}
@@ -197,7 +203,7 @@ void SceneCollision::Update(double dt)
 
 		m_ghost->pos.Set(posX, posY, 0); //IMPT
 		m_ghost->active = true;
-		float sc = posX;
+		float sc = 2;
 		m_ghost->scale.Set(sc, sc, sc);
 	}
 	else if (bLButtonState && !Application::IsMousePressed(0))

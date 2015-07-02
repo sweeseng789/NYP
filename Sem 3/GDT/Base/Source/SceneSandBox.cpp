@@ -848,7 +848,7 @@ void SceneSandBox::RenderTileMap()
 {
 	//If i want to centralise the character, i can play around here
 	int m = 0;
-	mapFineOffSet_x = mapFineOffSet_x % m_cMap->GetTileSize();
+	mapFineOffSet_x = mapOffSet_x % m_cMap->GetTileSize();
 	for (int i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
 	{
 		for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
@@ -897,7 +897,7 @@ void SceneSandBox::HeroUpdate()
 		//int checkPosition_X = (int)ceil((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize());
 		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
 		{
 			HeroPos.y = (checkPosition_Y + 1) * m_cMap->GetTileSize();
 			hero_InMidAir_Up = false;
@@ -919,7 +919,7 @@ void SceneSandBox::HeroUpdate()
 		//int checkPosition_X = (int)ceil(((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize()));
 		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] == 1)
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1)
 		{
 			// Since the new position does not allow the hero to move into, then go back to the old position
 			HeroPos.y = (checkPosition_Y - 1) * m_cMap->GetTileSize();
@@ -973,17 +973,16 @@ Hero Move Left Right
 ********************************************************************************/
 void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 {
+	int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
+	int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+
 	if (mode)
 	{
-		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
-		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
 			HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
 	}
 	else
 	{
-		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
-		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
 			HeroPos.x = HeroPos.x + (int)(5.0f * timeDiff);
 	}

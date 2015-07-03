@@ -48,6 +48,39 @@ GameObject* SceneCollision::FetchGO()
 	return go;
 }
 
+float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
+{
+	/*Vector3 C = go->vel - go2->vel;
+
+	Vector3 D = go->pos - go2->pos;
+
+	float combineRadius = go->scale.x + go2->scale.x;*/
+
+	Vector3 p1 = go->pos;
+	Vector3 p2 = go2->pos;
+	Vector3 v1 = go->vel;
+	Vector3 v2 = go2->vel;
+	Vector3 C = p1 - p2;
+	Vector3 D = v1 - v2;
+
+	if (C.Dot(-D) < 0)
+		return -1;
+
+	float r = go->scale.x + go2->scale.x;
+	float a = C.Dot(C);
+	float b = 2 * C.Dot(D);
+	float c = D.Dot(D) - r * r;
+	float discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return -1;
+
+	float t = (-b - sqrt(discriminant)) / (2 * a);
+	if (t < 0)
+		t = (-b + sqrt(discriminant)) / (2 * a);
+
+	return t;
+}
+
 bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 {
 	//Exercise 1: move collision code to CheckCollision()
@@ -122,6 +155,16 @@ void SceneCollision::GOUpdate(const double dt)
 				GameObject *go2 = static_cast<GameObject *>(*it2);
 				if (go2->active)
 				{
+					/*float collisionTime = CheckCollision2(go, go2);
+					if (collisionTime > 0)
+					{
+						if (m_estimatedTime < 0)
+							m_estimatedTime = collisionTime;
+						if (m_estimatedTime < collisionTime)
+							m_estimatedTime = collisionTime;
+					}*/
+					std::cout << CheckCollision2(go, go2) << std::endl;
+
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(go, go2, dt))
 					{
@@ -275,6 +318,8 @@ void SceneCollision::Update(double dt)
 	dt *= m_speed;
 
 	GOUpdate(dt);
+
+
 }
 
 
@@ -283,6 +328,7 @@ void SceneCollision::RenderGO(GameObject *go)
 	switch (go->type)
 	{
 	case GameObject::GO_BALL:
+		//meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
 		modelStack.PushMatrix();
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);

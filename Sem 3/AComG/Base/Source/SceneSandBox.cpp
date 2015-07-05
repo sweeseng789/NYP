@@ -29,6 +29,14 @@ void SceneSandBox::SetParameters()
 	leonPos.Set(0, 100, -400);
 	HeightMapScale.Set(2000.0f, 350.f, 2000.f);
 
+	//Thunder Parameters
+	countdown_Start = 5;
+	countdown_End = 10;
+	countdown_Thunder = Math::RandFloatMinMax(countdown_Start, countdown_End);
+	on_Thunder = true;
+	off_Thunder = false;
+	playSound_Thunder = true;
+
 	for (unsigned a = 0; a < 30; a++)
 	{
 		Vector3 pos;
@@ -209,7 +217,7 @@ void SceneSandBox::Init()
 	glUseProgram(m_programID);
 
 	lights[0].type = Light::LIGHT_DIRECTIONAL;
-	lights[0].position.Set(0, 20, 0);
+	lights[0].position.Set(0, 700, 0);
 	lights[0].color.Set(1, 1, 1);
 	lights[0].power = 1;
 	lights[0].kC = 1.f;
@@ -223,7 +231,7 @@ void SceneSandBox::Init()
 	lights[1].type = Light::LIGHT_DIRECTIONAL;
 	lights[1].position.Set(1, 1, 0);
 	lights[1].color.Set(1, 1, 0.5f);
-	lights[1].power = 0.4f;
+	lights[1].power = 0.f;
 	//lights[1].kC = 1.f;
 	//lights[1].kL = 0.01f;
 	//lights[1].kQ = 0.001f;
@@ -255,7 +263,8 @@ void SceneSandBox::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	fogColor = (1.f, 0.f, 0.f);
+	fogColor.Set(0.6787f, 0.6787f, 0.6787f);
+	fogColor.Set(0.338683, 0.338683, 0.338683);
 	fogStart = 10.f;
 	fogEnd = 1000.f;
 	fogDensity = 10.f;
@@ -332,12 +341,12 @@ void SceneSandBox::Init()
 	meshList[GEO_PLANK]->material.kShininess = 10.f;
 	meshList[GEO_PLANK]->textureArray[0] = LoadTGA("Image//Plank.tga");
 
-	/*meshList[GEO_STUMP] = MeshBuilder::GenerateOBJ("Plank", "OBj//Stump.obj");
-	meshList[GEO_STUMP]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_STUMP]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_STUMP]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_STUMP]->material.kShininess = 10.f;
-	meshList[GEO_STUMP]->textureArray[0] = LoadTGA("Image//Stump.tga");*/
+	meshList[GEO_MOON] = MeshBuilder::GenerateOBJ("Moon", "OBj//Moon.obj");
+	meshList[GEO_MOON]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_MOON]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_MOON]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_MOON]->material.kShininess = 10.f;
+	meshList[GEO_MOON]->textureArray[0] = LoadTGA("Image//Moon.tga");
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
@@ -350,6 +359,7 @@ void SceneSandBox::Init()
 
 	SetParameters();
 	SAInit();
+
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -487,26 +497,57 @@ void SceneSandBox::Update(double dt)
 	if (Application::IsKeyPressed(VK_DOWN))
 		rotateAngle2 -= (float)(200.0f * dt);
 
-	if (Application::IsKeyPressed('9'))
+	if (countdown_Thunder <= 0)
 	{
-		mSpeed = Math::Max(0.f, mSpeed - 0.1f);
-	}
-	if (Application::IsKeyPressed('0'))
-	{
-		mSpeed += 0.1f;
-	}
-	dt *= mSpeed;
 
-	/*leonPos.y = HeightMapScale.y * ReadHeightMap(m_heightMap, leonPos.x / HeightMapScale.x, leonPos.z / HeightMapScale.z) + 5.f;
+		if (playSound_Thunder == true)
+		{
+			Sound::Thunder();
+			playSound_Thunder = false;
+		}
 
-	if (leonPos.z < -100)
-	{
-		leonPos.z += 10 * dt;
+		if (on_Thunder == true && off_Thunder == false)
+		{
+			fogColor.r += 0.6 * dt;
+			fogColor.g += 0.6 * dt;
+			fogColor.b += 0.6 * dt;
+			lights[0].power += 0.5 * dt;
+
+			if (fogColor.r >= 1.24)
+			{
+				on_Thunder = false;
+				off_Thunder = true;
+			}
+		}
+		else if (on_Thunder == false && off_Thunder == true)
+		{
+			fogColor.r -= 0.6 * dt;
+			fogColor.g -= 0.6 * dt;
+			fogColor.b -= 0.6 * dt;
+			lights[0].power -= 0.5 * dt;
+
+			if (fogColor.r <= 0.338683)
+			{
+				fogColor.Set(0.338683, 0.338683, 0.338683);
+				lights[0].power = 1;
+				countdown_Thunder = Math::RandFloatMinMax(countdown_Start, countdown_End);
+				on_Thunder = true;
+				off_Thunder = false;
+				playSound_Thunder = true;
+			}
+		}
+
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		glUniform3fv(m_parameters[U_COLOR_FOG], 1, &fogColor.r);
+		glUniform3fv(m_parameters[U_COLOR_FOG2], 1, &fogColor.g);
+		glUniform3fv(m_parameters[U_COLOR_FOG3], 1, &fogColor.b);
 	}
 	else
 	{
-		leonPos.z = -400;
-	}*/
+		countdown_Thunder -= dt;
+	}
+
+	dt *= mSpeed;
 
 
 	static float tempY = 0.f;
@@ -773,7 +814,7 @@ void SceneSandBox::RenderSkyPlane(Mesh* mesh, Color color, int slices, float Pla
 {
 	modelStack.PushMatrix();
 
-	modelStack.Translate(500.f, 1800.f, -500.f);
+	modelStack.Translate(600.f, 1800.f, -500.f);
 
 	//modelStack.Scale(0.9, 0.9, 0.9);
 
@@ -798,18 +839,7 @@ void SceneSandBox::RenderTerrain()
 
 void SceneSandBox::RenderParticle(Particle * particle)
 {
-	if (particle->ParticleType == particle->GO_RAIN)
-	{
-		glUniform1f(m_parameters[U_ENABLE_FOG], 0);
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		modelStack.Rotate(particle->angle, 0, 1, 0);
-		modelStack.Scale(particle->scale, particle->scale, particle->scale);
-		RenderMesh(meshList[GEO_RAIN], false);
-		modelStack.PopMatrix();
-		glUniform1f(m_parameters[U_ENABLE_FOG], 1);
-	}
-	else if (particle->ParticleType == particle->GO_BALL)
+	if (particle->ParticleType == particle->GO_BALL)
 	{
 
 		modelStack.PushMatrix();
@@ -847,6 +877,24 @@ void SceneSandBox::RenderParticle(Particle * particle)
 		modelStack.PopMatrix();
 	}*/
 }
+
+void SceneSandBox::RenderParticleNoFog(Particle * particle)
+{
+	glUniform1f(m_parameters[U_ENABLE_FOG], 0);
+
+	if (particle->ParticleType == particle->GO_RAIN)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		modelStack.Rotate(particle->angle, 0, 1, 0);
+		modelStack.Scale(particle->scale, particle->scale, particle->scale);
+		RenderMesh(meshList[GEO_RAIN], false);
+		modelStack.PopMatrix();
+	}
+
+	glUniform1f(m_parameters[U_ENABLE_FOG], 1);
+}
+
 
 
 void SceneSandBox::Render()
@@ -891,6 +939,12 @@ void SceneSandBox::Render()
 	}
 
 	modelStack.PushMatrix();
+	modelStack.Translate(lights[0].position.x, lights[0].position.y + camera.position.y, lights[0].position.z);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_MOON], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(0, camera.position.y, 0);
 	RenderMesh(meshList[GEO_AXES], false);
 	modelStack.PopMatrix();
@@ -908,9 +962,12 @@ void SceneSandBox::Render()
 	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
 	{
 		Particle * particle = (Particle*)*it;
-		if (particle->active == true && (camera.position - particle->pos).Length() < 500)
+		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
 		{
-			RenderParticle(particle);
+			if (particle->ParticleType == particle->GO_RAIN)
+				RenderParticleNoFog(particle);
+			else
+				RenderParticle(particle);
 		}
 	}
 

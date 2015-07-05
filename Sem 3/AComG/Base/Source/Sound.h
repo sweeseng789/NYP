@@ -10,5 +10,6 @@ public:
 	static void Sprinting();
 	static void Jump();
 	static void Land();
+	static void Thunder();
 };
 

@@ -15,6 +15,7 @@
 #include "Particle.h"
 #include "Map.h"
 #include "Enemy.h"
+#include "Sound.h"
 
 using std::vector;
 using std::cout;
@@ -110,7 +111,7 @@ class SceneSandBox : public Scene
 		GEO_RAIN,
 		GEO_PLANK,
 		GEO_STUMP,
-		GEO_SKELETON,
+		GEO_MOON,
 		NUM_GEOMETRY,
 	};
 public:
@@ -137,6 +138,7 @@ public:
 	void RenderSkybox();
 	void RenderTerrain();
 	void RenderParticle(Particle * particle);
+	void RenderParticleNoFog(Particle * particle);
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -202,6 +204,14 @@ private:
 	float mSpeed;
 	int OBJCount;
 	Vector3 gravity;
+
+	//Thunder
+	float countdown_Thunder;
+	bool on_Thunder;
+	bool off_Thunder;
+	bool playSound_Thunder;
+	float countdown_Start;
+	float countdown_End;
 };
 
 #endif

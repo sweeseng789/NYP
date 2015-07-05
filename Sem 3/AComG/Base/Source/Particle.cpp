@@ -25,6 +25,8 @@ void Particle::CreateRain()
 	pos.y = 500;
 	pos.z = Math::RandFloatMinMax(-1000, 1000);
 	defaultPos = pos;
+	vel.x = Math::RandFloatMinMax(-10, 10);
+	vel.z = Math::RandFloatMinMax(-10, 10);
 	vel.y = Math::RandFloatMinMax(-50, -150);
 	defaultScale = scale = 3;
 	mass = scale * scale  * scale;

@@ -973,18 +973,23 @@ Hero Move Left Right
 ********************************************************************************/
 void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 {
-	int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize()));
-	int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+	//for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
+	{
+		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize())) + tileOffSet_x;
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 
-	if (mode)
-	{
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
-			HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
-	}
-	else
-	{
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
-			HeroPos.x = HeroPos.x + (int)(5.0f * timeDiff);
+		if (mode)
+		{
+			if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
+			{
+				HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
+			}
+		}
+		else
+		{
+			if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
+				HeroPos.x = HeroPos.x + (int)(5.0f * timeDiff);
+		}
 	}
 }
 

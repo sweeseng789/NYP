@@ -44,6 +44,7 @@ protected:
 	Vector3 u1, u2, v1, v2;
 	Vector3 initialMomentum, finalMomentum;
 	float initialKE, finalKE;
+	float m_estimatedTime;
 };
 
 #endif

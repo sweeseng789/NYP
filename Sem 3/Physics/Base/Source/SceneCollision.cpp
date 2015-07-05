@@ -56,7 +56,7 @@ float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
 
 	float combineRadius = go->scale.x + go2->scale.x;*/
 
-	Vector3 p1 = go->pos;
+	/*Vector3 p1 = go->pos;
 	Vector3 p2 = go2->pos;
 	Vector3 v1 = go->vel;
 	Vector3 v2 = go2->vel;
@@ -78,6 +78,29 @@ float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
 	if (t < 0)
 		t = (-b + sqrt(discriminant)) / (2 * a);
 
+	return t;*/
+
+	Vector3 p1 = go->pos;
+	Vector3 p2 = go2->pos;
+	Vector3 v1 = go->vel;
+	Vector3 v2 = go2->vel;
+	Vector3 D = p1 - p2;
+	Vector3 C = v1 - v2;
+
+	if (C.Dot(-D) < 0)
+		return -1;
+
+	float r = go->scale.x + go2->scale.x;
+	float a = C.Dot(C);
+	float b = 2 * C.Dot(D);
+	float c = D.Dot(D) - r * r;
+	float discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return -1;
+
+	float t = (-b - sqrt(discriminant)) / (2 * a);
+	if (t < 0)
+		t = (-b + sqrt(discriminant)) / (2 * a);
 	return t;
 }
 
@@ -155,15 +178,17 @@ void SceneCollision::GOUpdate(const double dt)
 				GameObject *go2 = static_cast<GameObject *>(*it2);
 				if (go2->active)
 				{
-					/*float collisionTime = CheckCollision2(go, go2);
+					float collisionTime = CheckCollision2(go, go2);
 					if (collisionTime > 0)
 					{
 						if (m_estimatedTime < 0)
 							m_estimatedTime = collisionTime;
 						if (m_estimatedTime < collisionTime)
 							m_estimatedTime = collisionTime;
-					}*/
-					std::cout << CheckCollision2(go, go2) << std::endl;
+					}
+					//std::cout << CheckCollision2(go, go2) << std::endl;
+					//collisonTime = CheckCollision2(go, go2);
+
 
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(go, go2, dt))
@@ -215,6 +240,7 @@ void SceneCollision::GOUpdate(const double dt)
 			}
 		}
 	}
+	m_estimatedTime -= dt;
 }
 
 void SceneCollision::Update(double dt)
@@ -378,6 +404,10 @@ void SceneCollision::Render()
 	std::ostringstream ss;
 	ss << "Object count: " << m_objectCount;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 9);
+
+	ss.str(std::string());
+	ss << "Collison In: " << m_estimatedTime;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 18);
 
 	ss.str(std::string());
 	ss.precision(5);

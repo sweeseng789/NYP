@@ -16,6 +16,7 @@ public:
 		GO_STATICOBJ,
 		GO_STATICOBJ2,
 		GO_STATICOBJ3,
+		GO_MOON,
 		GO_TOTAL, //must be last
 	};
 

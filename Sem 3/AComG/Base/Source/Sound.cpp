@@ -33,3 +33,8 @@ void Sound::Land()
 {
 	sound->play3D("../irrKlang/media/Land.mp3", vec3df(0, 0, 0), false);
 }
+
+void Sound::Thunder()
+{
+	sound->play3D("../irrKlang/media/Thunder2.mp3", vec3df(0, 0, 0), false);
+}

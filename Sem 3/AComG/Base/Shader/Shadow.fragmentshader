@@ -5,6 +5,8 @@ in vec3 vertexPosition_cameraspace;
 in vec3 fragmentColor;
 in vec3 vertexNormal_cameraspace;
 in vec2 texCoord;
+in vec2 blurVec;
+in vec4 shadowCoord;
 
 // Ouput data
 out vec4 color;
@@ -50,13 +52,31 @@ float getSpotlightEffect(Light light, vec3 lightDirection) {
 
 struct FogParam
 {
-	vec3 color; // Fog color
-	float start; // For linear fog
-	float end; // For linear fog
-	float density; // For exponential fog
-	int type; // 0 = linear, 1 = exp, 2 = exp2
-	bool enabled; // Toggle fog
+	vec3 color;		// Fog color
+	float start;	// For linear fog
+	float end;		// For linear fog
+	float density;	// For exponential fog
+	int type;		// 0 = linear, 1 = exp, 2 = exp2
+	bool enabled;	// Toggle fog
 };
+
+float getFogFactor(FogParam fog, float fogDistance)
+{
+	if(fog.enabled == false)
+		return 0.0;
+
+	float factor = 0.0;
+	if(fog.type == 0) 
+		factor = (fog.end - fogDistance) / (fog.end - fog.start); 
+	else if(fog.type == 1) 
+		factor = exp(- fog.density * fogDistance); 
+	else if(fog.type == 2) 
+		factor = exp(- pow(fog.density * fogDistance, 2.0) ); 
+       
+	factor = 1.0 - clamp(factor, 0.0, 1.0); 
+    
+	return factor;
+}
 
 // Constant values
 const int MAX_LIGHTS = 8;
@@ -67,65 +87,49 @@ uniform bool lightEnabled;
 uniform Light lights[MAX_LIGHTS];
 uniform Material material;
 uniform int numLights;
-
 uniform bool colorTextureEnabled[MAX_TEXTURES];
+//uniform bool colorTextureEnabled1;
 uniform sampler2D colorTexture[MAX_TEXTURES];
-
+//uniform sampler2D colorTexture1;
 uniform bool textEnabled;
 uniform vec3 textColor;
 uniform FogParam fogParam;
+uniform sampler2D shadowMap;
 
-float getFogFactor(FogParam fog, float fogDistance)
+float getShadowEffect()
 {
-	float factor = 0.0;
-
-	if (fogParam.enabled == false)
-	{
-		return 0.0;
+	float visibility = 1.0;
+	float bias = 0.005;
+	if(texture2D(shadowMap, shadowCoord.xy).x < shadowCoord.z - bias) {
+		visibility = 0.25;
 	}
-
-	if(fogParam.type == 0)
-	{
-		factor = (fog.end - fogDistance)/(fog.end -fog.start);
-	}
-	else if(fogParam.type == 1)
-	{
-		factor = exp(-fog.density * fogDistance);
-	}
-	else if(fogParam.type == 2)
-	{
-		factor = exp(-pow(fog.density * fogDistance, 2.0));
-	}
-	factor = 1.0 - clamp(factor, 0.0, 1.0);
-
-	return factor;
+	return visibility;
 }
 
-void main()
-{
+void main(){
 	if(lightEnabled == true)
 	{
 		// Material properties
-		vec4 materialColor = vec4 (0, 0, 0, 0);
-
+		vec4 materialColor = vec4(0, 0, 0, 1);
+		
 		int texCount = 0;
-
-		for(int i = 0; i < MAX_TEXTURES; ++i)
+		
+		for (int i = 0; i < MAX_TEXTURES; ++i)
 		{
 			if(colorTextureEnabled[i] == true)
 			{
 				materialColor += texture2D( colorTexture[i], texCoord );
 				++texCount;
-			}
-		}
 
-		if(texCount > 0)
+			}		
+		}
+		if (texCount > 0)
 		{
 			materialColor = materialColor/texCount;
 		}
 		else
 			materialColor = vec4( fragmentColor, 1 );
-
+	
 		// Vectors
 		vec3 eyeDirection_cameraspace = - vertexPosition_cameraspace;
 		vec3 E = normalize(eyeDirection_cameraspace);
@@ -161,12 +165,15 @@ void main()
 			vec3 R = reflect(-L, N);
 			float cosAlpha = clamp( dot( E, R ), 0, 1 );
 			
+			float visibility =getShadowEffect();
+			
 			color +=
 				// Diffuse : "color" of the object
-				materialColor * vec4(material.kDiffuse, 1) * vec4(lights[i].color, 1) * lights[i].power * cosTheta * attenuationFactor * spotlightEffect +
+				visibility * materialColor * vec4(material.kDiffuse, 1) * vec4(lights[i].color, 1) * lights[i].power * cosTheta * attenuationFactor * spotlightEffect +
 				
 				// Specular : reflective highlight, like a mirror
-				vec4(material.kSpecular, 1) * vec4(lights[i].color, 1) * lights[i].power * pow(cosAlpha, material.kShininess) * attenuationFactor * spotlightEffect;
+				visibility * vec4(material.kSpecular, 1) * vec4(lights[i].color, 1) * lights[i].power * pow(cosAlpha, material.kShininess) * attenuationFactor * spotlightEffect;
+
 		}
 	}
 	else
@@ -177,11 +184,10 @@ void main()
 		}
 		else
 		{
-			color = vec4 (0, 0, 0, 0);
-
 			int texCount = 0;
-
-			for(int i = 0; i < MAX_TEXTURES; ++i)
+		
+			color = vec4(0, 0, 0, 0);
+			for (int i = 0; i < MAX_TEXTURES; ++i)
 			{
 				if(colorTextureEnabled[i] == true)
 				{
@@ -189,23 +195,22 @@ void main()
 					++texCount;
 				}
 			}
-
-			if(texCount > 0)
+			if (texCount > 0)
 			{
 				color = color/texCount;
 			}
 			else
-			{
 				color = vec4( fragmentColor, 1 );
-			}
 		}
 		
-		if(fogParam.enabled)
-		{
-			float fogDistance = abs(vertexPosition_cameraspace.z);
-			float fogFactor = getFogFactor(fogParam, fogDistance);
-			color = mix(color, vec4(fogParam.color, 1), fogFactor);
-		}
-
 	}
+
+	if(fogParam.enabled)
+	{
+		float fogDistance = abs(vertexPosition_cameraspace.z);
+		float fogFactor = getFogFactor(fogParam, fogDistance);
+		color = mix(color, vec4(fogParam.color, 1), fogFactor);
+	}
+
+
 }

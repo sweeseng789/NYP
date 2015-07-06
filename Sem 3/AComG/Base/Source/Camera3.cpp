@@ -63,14 +63,14 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 void Camera3::MoveForward(const double dt)
 {
 	Vector3 view = (target - position).Normalized();
-	view.y = 0;
+	//view.y = 0;
 	position += view * MOVEMENT_SPEED * (float)dt;
 	target += view * MOVEMENT_SPEED * (float)dt;
 }
 void Camera3::MoveBackward(const double dt)
 {
 	Vector3 view = (target - position).Normalized();
-	view.y = 0;
+	//view.y = 0;
 	position -= view * MOVEMENT_SPEED * (float)dt;
 	target -= view * MOVEMENT_SPEED * (float)dt;
 }
@@ -216,11 +216,11 @@ void Camera3::Update(double dt)
 		Reset();
 	}*/
 
-	if (myKeys[32] == true)
+	/*if (myKeys[32] == true)
 	{
 		Jump( dt );
 		myKeys[32] = false;
-	}
+	}*/
 
 
 	//===============Crouching==============//

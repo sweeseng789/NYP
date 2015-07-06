@@ -508,9 +508,9 @@ void SceneSandBox::Update(double dt)
 
 		if (on_Thunder == true && off_Thunder == false)
 		{
-			fogColor.r += 0.6 * dt;
-			fogColor.g += 0.6 * dt;
-			fogColor.b += 0.6 * dt;
+			fogColor.r += 2.5 * dt;
+			fogColor.g += 2.5 * dt;
+			fogColor.b += 2.5 * dt;
 			lights[0].power += 0.5 * dt;
 
 			if (fogColor.r >= 1.24)
@@ -521,9 +521,9 @@ void SceneSandBox::Update(double dt)
 		}
 		else if (on_Thunder == false && off_Thunder == true)
 		{
-			fogColor.r -= 0.6 * dt;
-			fogColor.g -= 0.6 * dt;
-			fogColor.b -= 0.6 * dt;
+			fogColor.r -= 2.5 * dt;
+			fogColor.g -= 2.5 * dt;
+			fogColor.b -= 2.5 * dt;
 			lights[0].power -= 0.5 * dt;
 
 			if (fogColor.r <= 0.338683)

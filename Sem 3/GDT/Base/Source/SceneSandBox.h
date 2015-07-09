@@ -100,12 +100,7 @@ class SceneSandBox : public Scene
 		GEO_OBJECT,
 		GEO_SKYPLANE,
 		GEO_TEXT,
-		GEO_TREE,
-		GEO_CHURCH,
 		GEO_SPRITE_ANIMATION,
-		BulletIcon,
-		Soccer,
-		crosshair,
 		GEO_BACKGROUND,
 		GEO_TILEGROUND,
 		GEO_TILEHERO,
@@ -115,6 +110,34 @@ class SceneSandBox : public Scene
 		GEO_TILEHERO_FRAME1,
 		GEO_TILEHERO_FRAME2,
 		GEO_TILEHERO_FRAME3,
+		GEO_HERO_DEFAULT,
+		GEO_HERO_SHOOT,
+		GEO_HERO_WALK_FRAME01,
+		GEO_HERO_WALK_FRAME02,
+		GEO_HERO_WALK_FRAME03,
+		GEO_HERO_WALK_FRAME04,
+		GEO_HERO_WALK_FRAME05,
+		GEO_HERO_WALK_FRAME06,
+		GEO_HERO_WALK_FRAME07,
+		GEO_HERO_WALK_FRAME08,
+		GEO_HERO_WALK_FRAME09,
+		GEO_HERO_WALK_FRAME10,
+		GEO_HERO_JUMP,
+		GEO_HERO_LAND,
+		GEO_HERO_DEFAULT_INVERSE,
+		GEO_HERO_SHOOT_INVERSE,
+		GEO_HERO_WALK_FRAME01_INVERSE,
+		GEO_HERO_WALK_FRAME02_INVERSE,
+		GEO_HERO_WALK_FRAME03_INVERSE,
+		GEO_HERO_WALK_FRAME04_INVERSE,
+		GEO_HERO_WALK_FRAME05_INVERSE,
+		GEO_HERO_WALK_FRAME06_INVERSE,
+		GEO_HERO_WALK_FRAME07_INVERSE,
+		GEO_HERO_WALK_FRAME08_INVERSE,
+		GEO_HERO_WALK_FRAME09_INVERSE,
+		GEO_HERO_WALK_FRAME10_INVERSE,
+		GEO_HERO_JUMP_INVERSE,
+		GEO_HERO_LAND_INVERSE,
 		NUM_GEOMETRY,
 	};
 public:
@@ -124,12 +147,10 @@ public:
 
 	//======================Getter=========================//
 	float calculatingFPS(float dt);
-	Particle* fetchOBJ();
 
 	//======================Setter========================//
 	void SetParameters();
 	void SetMesh();
-	void view();
 
 	//======================Methods for hero========================//
 	void HeroUpdate();
@@ -137,11 +158,6 @@ public:
 	void HeroMoveUpDown(const bool mode, const float timeDiff);
 	void HeroMoveLeftRIght(const bool mode, const float timeDiff);
 	void constrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
-
-	//Code for scroling
-	int mapOffSet_x, mapOffset_y;
-	int tileOffSet_x, tileOffset_y;
-	int mapFineOffSet_x, mapFineOffset_y;
 
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -222,6 +238,11 @@ private:
 	CMap * m_cMap;
 	void RenderTileMap();
 
+	//Code for Smooth scroling
+	int mapOffSet_x, mapOffset_y;
+	int tileOffSet_x, tileOffset_y;
+	int mapFineOffSet_x, mapFineOffset_y;
+
 	//Code for Parallax Scrolling
 	CMap * m_cRearMap;
 	void RenderRearTileMap();
@@ -235,7 +256,9 @@ private:
 	bool hero_InMidAir_Down;
 	int jumpspeed;
 	bool heroAnimationInvert;
-	int heroAnimationCounter;
+	float heroAnimationCounter;
+	float scale;
+	bool animate;
 	bool CheckCollision(Vector3 HeroPos, bool m_bCheckUpwards, bool m_bCheckDownwards, bool m_bCheckLeft, bool m_bCheckRight);
 };
 

@@ -78,20 +78,6 @@ void SceneSandBox::SetMesh()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
 	meshList[GEO_BACK]->textureArray[0] = LoadTGA("Image//back.tga");
 
-	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
-	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
-	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
-
-	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBj//tree.obj");
-	meshList[GEO_TREE]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
-	meshList[GEO_TREE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_TREE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_TREE]->material.kShininess = 10.f;
-	meshList[GEO_TREE]->textureArray[0] = LoadTGA("Image//tree.tga");
-
-	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
-	meshList[GEO_CHURCH]->textureArray[0] = LoadTGA("Image//church.tga");
-
 	meshList[GEO_SPRITE_ANIMATION] = MeshBuilder::GenerateSpriteAnimation("cat", 1, 6);
 	meshList[GEO_SPRITE_ANIMATION]->textureArray[0] = LoadTGA("Image//leon.tga");
 	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
@@ -102,21 +88,89 @@ void SceneSandBox::SetMesh()
 		sa->m_anim->Set(0, 4, 0, 1.f);
 	}
 
-	meshList[Soccer] = MeshBuilder::GenerateSpriteAnimation("Soccer", 6, 7);
-	meshList[Soccer]->textureArray[0] = LoadTGA("Image//soccer.tga");
-	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
+	meshList[GEO_HERO_DEFAULT] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_DEFAULT]->textureID = LoadTGA("Image//Master.tga");
 
-	if (sa2)
-	{
-		sa2->m_anim = new Animation();
-		sa2->m_anim->Set(0, 30, 0, 0.2f);
-	}
+	meshList[GEO_HERO_SHOOT] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_SHOOT]->textureID = LoadTGA("Image//Master2.tga");
 
-	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
-	meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//top2.tga");
+	meshList[GEO_HERO_JUMP] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_JUMP]->textureID = LoadTGA("Image//MasterJump.tga");
 
-	meshList[BulletIcon] = MeshBuilder::GenerateQuad("Bullet Icon", Color(1, 1, 1), 1.0f);
-	meshList[BulletIcon]->textureArray[0] = LoadTGA("Image//GGOGun.tga");
+	meshList[GEO_HERO_LAND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_LAND]->textureID = LoadTGA("Image//MasterLand.tga");
+
+	meshList[GEO_HERO_WALK_FRAME01] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME01]->textureID = LoadTGA("Image//Master3.tga");
+
+	meshList[GEO_HERO_WALK_FRAME02] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME02]->textureID = LoadTGA("Image//Master4.tga");
+
+	meshList[GEO_HERO_WALK_FRAME03] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME03]->textureID = LoadTGA("Image//Master5.tga");
+
+	meshList[GEO_HERO_WALK_FRAME04] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME04]->textureID = LoadTGA("Image//Master6.tga");
+
+	meshList[GEO_HERO_WALK_FRAME05] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME05]->textureID = LoadTGA("Image//Master7.tga");
+
+	meshList[GEO_HERO_WALK_FRAME06] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME06]->textureID = LoadTGA("Image//Master8.tga");
+
+	meshList[GEO_HERO_WALK_FRAME07] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME07]->textureID = LoadTGA("Image//Master9.tga");
+
+	meshList[GEO_HERO_WALK_FRAME08] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME08]->textureID = LoadTGA("Image//Master10.tga");
+
+	meshList[GEO_HERO_WALK_FRAME09] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME09]->textureID = LoadTGA("Image//Master11.tga");
+
+	meshList[GEO_HERO_WALK_FRAME10] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME10]->textureID = LoadTGA("Image//Master12.tga");
+
+	meshList[GEO_HERO_DEFAULT_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_DEFAULT_INVERSE]->textureID = LoadTGA("Image//MasterInverse.tga");
+
+	meshList[GEO_HERO_SHOOT_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_SHOOT_INVERSE]->textureID = LoadTGA("Image//Master2Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME01_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME01_INVERSE]->textureID = LoadTGA("Image//Master3Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME02_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME02_INVERSE]->textureID = LoadTGA("Image//Master4Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME03_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME03_INVERSE]->textureID = LoadTGA("Image//Master5Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME04_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME04_INVERSE]->textureID = LoadTGA("Image//Master6Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME05_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME05_INVERSE]->textureID = LoadTGA("Image//Master7Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME06_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME06_INVERSE]->textureID = LoadTGA("Image//Master8Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME07_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME07_INVERSE]->textureID = LoadTGA("Image//Master9Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME08_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME08_INVERSE]->textureID = LoadTGA("Image//Master10Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME09_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME09_INVERSE]->textureID = LoadTGA("Image//Master11Inverse.tga");
+
+	meshList[GEO_HERO_WALK_FRAME10_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_WALK_FRAME10_INVERSE]->textureID = LoadTGA("Image//Master12Inverse.tga");
+
+	meshList[GEO_HERO_JUMP_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_JUMP_INVERSE]->textureID = LoadTGA("Image//MasterJumpInverse.tga");
+
+	meshList[GEO_HERO_LAND_INVERSE] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 25.f, 25.f);
+	meshList[GEO_HERO_LAND_INVERSE]->textureID = LoadTGA("Image//MasterLandInverse.tga");
 
 	meshList[GEO_BACKGROUND] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1, 1, 1), 0.0f, 0.0f, 800.0f, 600.0f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//sky.tga");
@@ -145,9 +199,6 @@ void SceneSandBox::SetMesh()
 	meshList[GEO_TILEHERO_FRAME3] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
 	meshList[GEO_TILEHERO_FRAME3]->textureID = LoadTGA("Image//tile2_hero_frame_3.tga");
 
-	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
-	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
-
 	//Initalise the new tile map
 	m_cMap = new CMap();
 	m_cMap->Init(600, 800, 24, 32, 600, 1600);
@@ -170,6 +221,7 @@ void SceneSandBox::SetParameters()
 
 	HeroPos.x = 50;
 	HeroPos.y = 575 -  100;
+	scale = 2.5;
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -317,7 +369,7 @@ void SceneSandBox::Init()
 	glUniform1f(m_parameters[U_TYPE_FOG], fogType);
 	glUniform1f(m_parameters[U_ENABLE_FOG], fogEnabled);
 
-	camera.Init(Vector3(-104, 110, -433), Vector3(-104, 110, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -338,45 +390,6 @@ void SceneSandBox::Init()
 	bLightEnabled = true;
 }
 
-Particle* SceneSandBox::fetchOBJ()
-{
-	for (std::vector<Particle *>::iterator it = ParticleList.begin(); it != ParticleList.end(); ++it)
-	{
-		Particle *p = (Particle *)*it;
-		if (!p->active)
-		{
-			p->active = true;
-			//++m_objectCount;
-			return p;
-		}
-	}
-	for (unsigned i = 0; i < 10; ++i)
-	{
-		for (unsigned a = 0; a < 2000; a++)
-		{
-			float X = Math::RandFloatMinMax(-1000, 1000);
-			float Z = Math::RandFloatMinMax(-1000, 1000);
-			Vector3 vel;
-			vel.x = Math::RandFloatMinMax(-10, 10);
-			vel.y = Math::RandFloatMinMax(-10, 10);
-			vel.z = Math::RandFloatMinMax(-10, 10);
-			Material newMaterial;
-			newMaterial.kAmbient.Set(0.1f, 0.1f, 0.1f);
-			newMaterial.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-			newMaterial.kSpecular.Set(0.5f, 0.5f, 0.5f);
-			newMaterial.kShininess = 10.f;
-			float mass = Math::RandFloatMinMax(0, 10);
-
-			Particle * particle = new Particle(Vector3(X, 320, Z), vel, 10, true, newMaterial, mass);
-			ParticleList.push_back(particle);
-		}
-	}
-	Particle *p = ParticleList.back();
-	p->active = true;
-	//++m_objectCount;
-	return p;
-}
-
 /******************************************************************************
 Update Camera position
 ******************************************************************************/
@@ -387,7 +400,7 @@ void SceneSandBox::UpdateCameraStatus(const unsigned char key)
 
 bool SceneSandBox::CheckCollision(Vector3 HeroPos, bool m_bCheckUpwards, bool m_bCheckDownwards, bool m_bCheckLeft, bool m_bCheckRight)
 {
-	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
+	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x + 20) / m_cMap->GetTileSize())) + tileOffSet_x;
 	int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 
 	if (m_bCheckRight)
@@ -461,30 +474,6 @@ void SceneSandBox::Update(double dt)
 	camera.Update(dt);
 	fps = calculatingFPS((float)dt);
 
-	/*if (moving < 0)
-	moving = 0;
-	if (moving > 100)
-	moving = 100;*/
-
-	if (Application::IsKeyPressed(VK_LEFT))
-		rotateAngle += (float)(200 * dt);
-	if (Application::IsKeyPressed(VK_RIGHT))
-		rotateAngle -= (float)(200 * dt);
-	if (Application::IsKeyPressed(VK_UP))
-		rotateAngle2 += (float)(200.0f * dt);
-	if (Application::IsKeyPressed(VK_DOWN))
-		rotateAngle2 -= (float)(200.0f * dt);
-
-	if (Application::IsKeyPressed('9'))
-	{
-		mSpeed = Math::Max(0.f, mSpeed - 0.1f);
-	}
-	if (Application::IsKeyPressed('0'))
-	{
-		mSpeed += 0.1f;
-	}
-	dt *= mSpeed;
-
 	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
 
 	if (sa)
@@ -492,31 +481,14 @@ void SceneSandBox::Update(double dt)
 		sa->Update(dt);
 	}
 
-	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[Soccer]);
-
+	SpriteAnimation *sa2 = dynamic_cast<SpriteAnimation*>(meshList[GEO_HERO_DEFAULT]);
 	if (sa2)
 	{
 		sa2->Update(dt);
 	}
 
-	/*static Vector3 HM;
-	HM.Set(camera.position.x, camera.position.y, camera.position.z);
-	HM.y = 350.f * ReadHeightMap(m_heightMap, HM.x / 2000.f, HM.z / 2000.f) + 10.f;
-	camera.position.y = HM.y;
-	camera.target.y += HM.y - camera.position.y;*/
-
 	leonPos.y = 350.f * ReadHeightMap(m_heightMap, leonPos.x / 2000.f, leonPos.z / 2000.f) + 5.f;
 	cubePos.y = 350.f * ReadHeightMap(m_heightMap, cubePos.x / 2000.f, cubePos.z / 2000.f) + 5.f;
-
-	if (leonPos.z < -100)
-	{
-		leonPos.z += 10 * dt;
-	}
-	else
-	{
-		leonPos.z = -400;
-	}
-
 
 	static float tempY = 0.f;
 	tempY = 350.f * ReadHeightMap(m_heightMap, camera.position.x / 2000.f, camera.position.z / 2000.f) + 10.f;
@@ -525,22 +497,8 @@ void SceneSandBox::Update(double dt)
 	{
 		static float diff = 0.f;
 		diff = tempY - camera.position.y;
-		camera.position.y += diff * dt * 20;
-		camera.target.y += diff * dt * 20;
-	}
-
-	/*camera.position.x = cubePos.x - cos(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
-	camera.position.y = cubePos.y + sin(Application::camera_pitch) * 10;
-	camera.position.z = cubePos.z - sin(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
-	camera.target = cubePos;*/
-
-	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
-	{
-		Particle * particle = (Particle*)*it;
-		if (particle->active == true)
-		{
-			particle->update(dt);
-		}
+		camera.position.y += diff * (float)dt * 20;
+		camera.target.y += diff * (float)dt * 20;
 	}
 
 	if (Application::IsKeyPressed('W'))
@@ -565,6 +523,11 @@ void SceneSandBox::Update(double dt)
 		HeroJump();
 
 	HeroUpdate();
+
+	if (Application::IsKeyPressed('A') || Application::IsKeyPressed('D'))
+		animate = true;
+	else
+		animate = false;
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -681,17 +644,6 @@ void SceneSandBox::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, flo
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
 }
-/*
-MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-modelView = viewStack.Top() * modelStack.Top(); // Week 6
-glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-if(enableLight && bLightEnabled)
-{
-glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1,
-GL_FALSE, &modelView_inverse_transpose.a[0]);*/
 
 
 void SceneSandBox::RenderMesh(Mesh *mesh, bool enableLight)
@@ -705,11 +657,7 @@ void SceneSandBox::RenderMesh(Mesh *mesh, bool enableLight)
 	if (enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-		//modelView = viewStack.Top() * modelStack.Top();
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-		/*glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);*/
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 
 		//load material
@@ -722,22 +670,7 @@ void SceneSandBox::RenderMesh(Mesh *mesh, bool enableLight)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-	///*if(mesh->textureID > 0)
-	//{
-	//	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-	//	glActiveTexture(GL_TEXTURE0);
-	//	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-	//	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	//}
-	//else
-	//{
-	//	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-	//}
-	//mesh->Render();
-	//if(mesh->textureID > 0)
-	//{
-	//	glBindTexture(GL_TEXTURE_2D, 0);
-	//}*/
+
 	for (unsigned a = 0; a < 2; ++a)
 	{
 		if (mesh->textureArray[a] > 0)
@@ -805,25 +738,6 @@ void SceneSandBox::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
-void SceneSandBox::view()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Mtx44 perspective;
-	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	projectionStack.LoadMatrix(perspective);
-
-	// Camera matrix
-	viewStack.LoadIdentity();
-	viewStack.LookAt(
-		camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z
-		);
-	// Model matrix : an identity matrix (model will be at the origin)
-	modelStack.LoadIdentity();
-}
-
 void SceneSandBox::RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile)
 {
 	modelStack.PushMatrix();
@@ -870,13 +784,6 @@ void SceneSandBox::Render2DMesh(Mesh *mesh, bool enableLight, float size, float 
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
-	/*Mtx44 MVP, modelView, modelView_inverse_transpose;
-
-	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	modelView = viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);*/
 
 
 	if (mesh->textureID > 0)
@@ -933,18 +840,92 @@ void SceneSandBox::RenderTileMap()
 		}
 	}
 
-	//Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-
-	if(heroAnimationCounter == 0)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME0], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else if(heroAnimationCounter == 1)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME1], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else if (heroAnimationCounter == 2)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME2], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else if (heroAnimationCounter == 3)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME3], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
+	if (heroAnimationInvert)
+	{
+		if (hero_InMidAir_Up && !hero_InMidAir_Down)
+			Render2DMesh(meshList[GEO_HERO_JUMP_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+		else if(!hero_InMidAir_Up && hero_InMidAir_Down)
+			Render2DMesh(meshList[GEO_HERO_LAND_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+	}
 	else
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME0], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
+	{
+		if (hero_InMidAir_Up && !hero_InMidAir_Down)
+			Render2DMesh(meshList[GEO_HERO_JUMP], false, scale, HeroPos.x, 575 - HeroPos.y);
+		else if (!hero_InMidAir_Up && hero_InMidAir_Down)
+			Render2DMesh(meshList[GEO_HERO_LAND], false, scale, HeroPos.x, 575 - HeroPos.y);
+	}
+
+	if (!hero_InMidAir_Up && !hero_InMidAir_Down)
+	{
+		if (Application::IsKeyPressed('P'))
+		{
+			if (heroAnimationInvert)
+				Render2DMesh(meshList[GEO_HERO_SHOOT_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+			else
+				Render2DMesh(meshList[GEO_HERO_SHOOT], false, scale, HeroPos.x, 575 - HeroPos.y);
+		}
+
+		if (animate)
+		{
+			if (heroAnimationInvert)
+			{
+				if (heroAnimationCounter > 0 && heroAnimationCounter <= 1)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 1 && heroAnimationCounter <= 2)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME02_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 2 && heroAnimationCounter <= 3)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME03_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 3 && heroAnimationCounter <= 4)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME04_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 4 && heroAnimationCounter <= 5)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME05_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 5 && heroAnimationCounter <= 6)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME06_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 6 && heroAnimationCounter <= 7)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME07_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 7 && heroAnimationCounter <= 8)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME08_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 8 && heroAnimationCounter <= 9)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME09_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 9 && heroAnimationCounter <= 10)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME10_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+			}
+			else
+			{
+				if (heroAnimationCounter > 0 && heroAnimationCounter <= 1)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 1 && heroAnimationCounter <= 2)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME02], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 2 && heroAnimationCounter <= 3)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME03], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 3 && heroAnimationCounter <= 4)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME04], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 4 && heroAnimationCounter <= 5)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME05], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 5 && heroAnimationCounter <= 6)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME06], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 6 && heroAnimationCounter <= 7)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME07], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 7 && heroAnimationCounter <= 8)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME08], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 8 && heroAnimationCounter <= 9)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME09], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 9 && heroAnimationCounter <= 10)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME10], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01], false, scale, HeroPos.x, 575 - HeroPos.y);
+			}
+		}
+		else
+			if (heroAnimationInvert)
+			Render2DMesh(meshList[GEO_HERO_DEFAULT_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+			else
+				Render2DMesh(meshList[GEO_HERO_DEFAULT], false, scale, HeroPos.x, 575 - HeroPos.y);
+		//else if(heroAnimationCounter > 2 && < 3)
+	}
+	
 }
 
 /********************************************************************************
@@ -973,10 +954,11 @@ void SceneSandBox::HeroUpdate()
 		//int checkPosition_X = (int)ceil((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize());
 		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+		if (m_cMap->theScreenMap[checkPosition_Y - 1][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
 		{
 			HeroPos.y = (checkPosition_Y + 1) * m_cMap->GetTileSize();
 			hero_InMidAir_Up = false;
+			hero_InMidAir_Down = true;
 			jumpspeed = 0;
 		}
 		else
@@ -1058,11 +1040,12 @@ void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 				//Moving Left
 				HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
 			}
-
+			
 			heroAnimationInvert = true;
-			heroAnimationCounter--;
+			if (animate == true)
+				heroAnimationCounter -= 0.5f;
 			if (heroAnimationCounter == 0)
-				heroAnimationCounter = 3;
+				heroAnimationCounter = 10;
 		}
 		else
 		{
@@ -1073,8 +1056,9 @@ void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 			}
 
 			heroAnimationInvert = false;
-			heroAnimationCounter++;
-			if (heroAnimationCounter > 3)
+			if (animate == true)
+				heroAnimationCounter += 0.5f;
+			if (heroAnimationCounter == 10)
 				heroAnimationCounter = 0;
 		}
 	}
@@ -1117,7 +1101,7 @@ void SceneSandBox::RenderRearTileMap()
 	if (rearWallTileOffset_x + m_cRearMap->GetNumOfTiles_Width() > m_cRearMap->getNumOfTiles_MapWidth())
 		rearWallTileOffset_x = m_cRearMap->getNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width();
 
-	rearWallFineOffset_x = rearWallOffset_x & m_cRearMap->GetTileSize();
+	rearWallFineOffset_x = rearWallOffset_x % m_cRearMap->GetTileSize();
 
 	int m = 0;
 	for (int i = 0; i < m_cRearMap->GetNumOfTiles_Height(); i++)
@@ -1140,7 +1124,21 @@ void SceneSandBox::RenderRearTileMap()
 
 void SceneSandBox::Render()
 {
-	view();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Mtx44 perspective;
+	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
+	projectionStack.LoadMatrix(perspective);
+
+	// Camera matrix
+	viewStack.LoadIdentity();
+	viewStack.LookAt(
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z
+		);
+	// Model matrix : an identity matrix (model will be at the origin)
+	modelStack.LoadIdentity();
 
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -1181,16 +1179,12 @@ void SceneSandBox::Render()
 
 	//Render background image
 	RenderBackground();
+
 	//Render Tile Rear map
 	RenderRearTileMap();
+
 	//Render Tile map
 	RenderTileMap();
-
-	
-
-	
-
-
 
 	//On screen text
 	std::ostringstream ss;
@@ -1202,9 +1196,6 @@ void SceneSandBox::Render()
 	ss1.precision(5);
 	ss1 << "mapOffset_x: " << mapOffSet_x;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
-	
-
-	//==============Testing===============//
 }
 
 void SceneSandBox::Exit()

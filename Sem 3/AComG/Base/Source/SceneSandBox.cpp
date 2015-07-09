@@ -263,11 +263,11 @@ void SceneSandBox::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	fogColor.Set(0.6787f, 0.6787f, 0.6787f);
+//	fogColor.Set(0.6787f, 0.6787f, 0.6787f);
 	fogColor.Set(0.338683, 0.338683, 0.338683);
 	fogStart = 10.f;
 	fogEnd = 1000.f;
-	fogDensity = 10.f;
+	fogDensity = 10000.f;
 	fogType = 0;
 	fogEnabled = 1;//Enable
 

@@ -160,10 +160,18 @@ void SceneShadow::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
+	/*m_gPassShaderID = LoadShaders("Shader//GPass.vertexshader", "Shader//GPass/fragmentshader");
+	m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
+
 	m_programID = LoadShaders("Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
-	m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");	m_gPassShaderID = LoadShaders("Shader//GPass.vertexshader", "Shader//GPass/fragmentshader");
-	m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
+	m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");*/
+
+	m_gPassShaderID = LoadShaders("Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
+	m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
+
+	m_programID = LoadShaders("Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
+
 
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -216,6 +224,11 @@ void SceneShadow::Init()
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
 
+
+	m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
+	m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");
+
+	m_lightDepthFBO.Init(2048, 2048);
 	// Use our shader
 	glUseProgram(m_programID);
 
@@ -368,6 +381,8 @@ void SceneShadow::Init()
 	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
+	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
+	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
 	SetParameters();
 	SAInit();
@@ -382,9 +397,9 @@ void SceneShadow::Init()
 
 	bLightEnabled = true;
 
-	m_lightDepthFBO.Init(1024, 1024);
-	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
-	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
+	//m_lightDepthFBO.Init(1024, 1024);
+	//meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
+	//meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 }
 
 Particle* SceneShadow::fetchOBJ()
@@ -709,68 +724,118 @@ void SceneShadow::RenderMesh(Mesh *mesh, bool enableLight)
 
 	//glBindTexture(GL_TEXTURE_2D, 0);
 
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
+	//Mtx44 MVP, modelView, modelView_inverse_transpose;
 
+	//if (m_renderPass == RENDER_PASS_PRE)
+	//{
+	//	Mtx44 lightDepthMVP = m_lightDepthProj * m_lightDepthView * modelStack.Top();
+
+	//	glUniformMatrix4fv(m_parameters[U_LIGHT_DEPTH_MVP_GPASS], 1, GL_FALSE, &lightDepthMVP.a[0]);
+	//	mesh->Render();
+	//	return;
+	//}
+
+	//MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	//glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	//modelView = viewStack.Top() * modelStack.Top();
+	//glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	//if (enableLight && bLightEnabled)
+	//{
+	//	glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+
+	//	modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+
+	//	glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
+
+	//	Mtx44 lightDepthMVP = m_lightDepthProj * m_lightDepthView * modelStack.Top();
+	//	glUniformMatrix4fv(m_parameters[U_LIGHT_DEPTH_MVP], 1, GL_FALSE, &lightDepthMVP.a[0]);
+
+	//	//Load Material
+	//	glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
+	//	glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
+	//	glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
+	//	glUniform3fv(m_parameters[U_MATERIAL_SHININESS], 1, &mesh->material.kShininess);
+	//}
+	//else
+	//{
+	//	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	//}
+
+	//for (unsigned i = 0; i < 2; ++i)
+	//{
+	//	if (mesh->textureArray[i] > 0)
+	//	{
+	//		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
+	//		
+	//		glActiveTexture(GL_TEXTURE0 + i);
+	//		glBindTexture(GL_TEXTURE_2D, mesh->textureArray[i]);
+	//		glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
+	//	}
+	//	else
+	//	{
+	//		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
+	//	}
+	//}
+	//mesh->Render();
+	//glBindTexture(GL_TEXTURE_2D, 0);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	if (m_renderPass == RENDER_PASS_PRE)
 	{
 		Mtx44 lightDepthMVP = m_lightDepthProj * m_lightDepthView * modelStack.Top();
-
 		glUniformMatrix4fv(m_parameters[U_LIGHT_DEPTH_MVP_GPASS], 1, GL_FALSE, &lightDepthMVP.a[0]);
 		mesh->Render();
 		return;
 	}
-
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
 	modelView = viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-
 	if (enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
-
 		Mtx44 lightDepthMVP = m_lightDepthProj * m_lightDepthView * modelStack.Top();
 		glUniformMatrix4fv(m_parameters[U_LIGHT_DEPTH_MVP], 1, GL_FALSE, &lightDepthMVP.a[0]);
-
-		//Load Material
+		//load material
 		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
 		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
 		glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
-		glUniform3fv(m_parameters[U_MATERIAL_SHININESS], 1, &mesh->material.kShininess);
+		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
 	}
 	else
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-
-	for (unsigned i = 0; i < 2; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		if (mesh->textureArray[i] > 0)
 		{
 			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
-			
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, mesh->textureArray[i]);
 			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
 		}
 		else
-		{
 			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
-		}
 	}
 	mesh->Render();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void SceneShadow::RenderWorld()
 {
 	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, 2);
 	RenderMesh(meshList[GEO_SPHERE], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-45, 1, 0, 0);
+	//modelStack.Scale(100, 100, 100);
+	//RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 }
 
@@ -823,21 +888,6 @@ void SceneShadow::RenderSkybox()
 
 void SceneShadow::view()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Mtx44 perspective;
-	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	projectionStack.LoadMatrix(perspective);
-
-	// Camera matrix
-	viewStack.LoadIdentity();
-	viewStack.LookAt(
-		camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z
-		);
-	// Model matrix : an identity matrix (model will be at the origin)
-	modelStack.LoadIdentity();
 }
 
 void SceneShadow::RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile)
@@ -927,45 +977,161 @@ void SceneShadow::RenderParticleNoFog(Particle * particle)
 
 void SceneShadow::RenderPassGPass()
 {
+	//m_renderPass = RENDER_PASS_PRE;
+
+	//m_lightDepthFBO.BindForWriting();
+
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+
+	//glUseProgram(m_gPassShaderID);
+
+	////These matrices should change when light postion or direction changes
+
+	//if (lights[0].type == Light::LIGHT_DIRECTIONAL)
+	//	m_lightDepthProj.SetToOrtho(-10, 10, -10, 10, -10, 20);
+	//else
+	//	m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	//m_lightDepthView.SetToLookAt(lights[0].position.x, lights[0].position.y, lights[0].position.z, 0, 0, 1, 0, 1, 0);
+
+	//RenderWorld();
 	m_renderPass = RENDER_PASS_PRE;
-
 	m_lightDepthFBO.BindForWriting();
-
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glClear(GL_DEPTH_BUFFER_BIT);
-
 	glUseProgram(m_gPassShaderID);
-
-	//These matrices should change when light postion or direction changes
-
+	//These matrices should change when light position or direction changes
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
-		m_lightDepthProj.SetToOrtho(-10, 10, -10, 10, -10, 20);
+		m_lightDepthProj.SetToOrtho(-3000, 3000, -3000, 3000, -3000, 6000);
 	else
 		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
-	m_lightDepthView.SetToLookAt(lights[0].position.x, lights[0].position.y, lights[0].position.z, 0, 0, 1, 0, 1, 0);
+
+	m_lightDepthView.SetToLookAt(lights[0].position.x, lights[0].position.y, lights[0].position.z, 0, 0, 0, 0, 1, 0);
 
 	RenderWorld();
 }
 
 void SceneShadow::RenderPassMain()
 {
-	m_renderPass = RENDER_PASS_MAIN;
+	//m_renderPass = RENDER_PASS_MAIN;
 
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glViewport(0, 0, 800, 600);
+
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//glUseProgram(m_programID);
+
+	////Pass light depth texture
+	//m_lightDepthFBO.BindForReading(GL_TEXTURE8);
+	//glUniform1i(m_parameters[U_SHADOW_MAP], 8);
+	//glActiveTexture(GL_TEXTURE0);
+
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//Mtx44 perspective;
+	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
+	//projectionStack.LoadMatrix(perspective);
+
+	//// Camera matrix
+	//viewStack.LoadIdentity();
+	//viewStack.LookAt(
+	//	camera.position.x, camera.position.y, camera.position.z,
+	//	camera.target.x, camera.target.y, camera.target.z,
+	//	camera.up.x, camera.up.y, camera.up.z
+	//	);
+	//// Model matrix : an identity matrix (model will be at the origin)
+	//modelStack.LoadIdentity();
+
+	//if (lights[0].type == Light::LIGHT_DIRECTIONAL)
+	//{
+	//	Vector3 lightDir(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	//	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightDirection_cameraspace.x);
+	//}
+	//else if (lights[0].type == Light::LIGHT_SPOT)
+	//{
+	//	Position lightPosition_cameraspace = viewStack.Top() * lights[0].position;
+	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	//	Vector3 spotDirection_cameraspace = viewStack.Top() * lights[0].spotDirection;
+	//	glUniform3fv(m_parameters[U_LIGHT0_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	//}
+	//else
+	//{
+	//	Position lightPosition_cameraspace = viewStack.Top() * lights[0].position;
+	//	glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
+	//}
+	//if (lights[1].type == Light::LIGHT_DIRECTIONAL)
+	//{
+	//	Vector3 lightDir(lights[1].position.x, lights[1].position.y, lights[1].position.z);
+	//	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+	//	glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
+	//}
+	//else if (lights[1].type == Light::LIGHT_SPOT)
+	//{
+	//	Position lightPosition_cameraspace = viewStack.Top() * lights[1].position;
+	//	glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+	//	Vector3 spotDirection_cameraspace = viewStack.Top() * lights[1].spotDirection;
+	//	glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	//}
+	//else
+	//{
+	//	Position lightPosition_cameraspace = viewStack.Top() * lights[1].position;
+	//	glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
+	//}
+
+	//modelStack.PushMatrix();
+	//RenderMesh(meshList[GEO_AXES], false);
+	//modelStack.PopMatrix();
+
+	//RenderWorld();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	//RenderMesh(meshList[GEO_LIGHTBALL], false);
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, 0, -20);
+	//modelStack.Scale(30, 30, 30);
+	//RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], true);
+	//modelStack.PopMatrix();
+
+	m_renderPass = RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, 800, 600);
-
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(m_programID);
 
-	//Pass light depth texture
+	//pass light depth texture
 	m_lightDepthFBO.BindForReading(GL_TEXTURE8);
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
-	view();
+	//glActiveTexture(GL_TEXTURE0);
+
+	//... old stuffs
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Mtx44 perspective;
+	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
+	projectionStack.LoadMatrix(perspective);
+
+	// Camera matrix
+	viewStack.LoadIdentity();
+	viewStack.LookAt(
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z
+		);
+	// Model matrix : an identity matrix (model will be at the origin)
+	modelStack.LoadIdentity();
 
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -1004,10 +1170,6 @@ void SceneShadow::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	modelStack.PushMatrix();
-	RenderMesh(meshList[GEO_AXES], false);
-	modelStack.PopMatrix();
-
 	RenderWorld();
 
 	modelStack.PushMatrix();
@@ -1016,14 +1178,8 @@ void SceneShadow::RenderPassMain()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Rotate(-45, 1, 0, 0);
-	//modelStack.Scale(100, 100, 100);
-	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -20);
-	modelStack.Scale(10, 10, 10);
+	modelStack.Scale(30, 30, 30);
 	RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], true);
 	modelStack.PopMatrix();
 }

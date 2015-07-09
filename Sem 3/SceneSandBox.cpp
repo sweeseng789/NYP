@@ -25,9 +25,7 @@ SceneSandBox::SceneSandBox():
 	rearWallTileOffset_x(0),
 	rearWallTileOffset_y(0),
 	rearWallFineOffset_x(0),
-	rearWallFineOffset_y(0),
-	heroAnimationCounter(0),
-	heroAnimationInvert(0)
+	rearWallFineOffset_y(0)
 {
 }
 
@@ -130,21 +128,6 @@ void SceneSandBox::SetMesh()
 	meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
 	meshList[GEO_TILETREE]->textureID = LoadTGA("Image//tile3_tree.tga");
 
-	meshList[GEO_TILESTRUCTURE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
-	meshList[GEO_TILESTRUCTURE]->textureID = LoadTGA("Image//tile3_structure.tga");
-
-	meshList[GEO_TILEHERO_FRAME0] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
-	meshList[GEO_TILEHERO_FRAME0]->textureID = LoadTGA("Image//tile2_hero_frame_0.tga");
-
-	meshList[GEO_TILEHERO_FRAME1] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
-	meshList[GEO_TILEHERO_FRAME1]->textureID = LoadTGA("Image//tile2_hero_frame_1.tga");
-
-	meshList[GEO_TILEHERO_FRAME2] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
-	meshList[GEO_TILEHERO_FRAME2]->textureID = LoadTGA("Image//tile2_hero_frame_2.tga");
-
-	meshList[GEO_TILEHERO_FRAME3] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
-	meshList[GEO_TILEHERO_FRAME3]->textureID = LoadTGA("Image//tile2_hero_frame_3.tga");
-
 	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
@@ -155,8 +138,6 @@ void SceneSandBox::SetMesh()
 
 	//Initalise and load rear tile map
 	m_cRearMap = new CMap();
-	m_cRearMap->Init(600, 800, 24, 32, 600, 1600);
-	m_cRearMap->LoadMap("Image//MapDesign_Rear.csv");
 
 }
 
@@ -385,29 +366,6 @@ void SceneSandBox::UpdateCameraStatus(const unsigned char key)
 	camera.UpdateStatus(key);
 }
 
-bool SceneSandBox::CheckCollision(Vector3 HeroPos, bool m_bCheckUpwards, bool m_bCheckDownwards, bool m_bCheckLeft, bool m_bCheckRight)
-{
-	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
-	int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
-
-	if (m_bCheckRight)
-	{
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
-			return true;
-		else
-			return false;
-	}
-
-	if (m_bCheckLeft)
-	{
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
-			return true;
-		else
-			return false;
-	}
-}
-
-
 void SceneSandBox::Update(double dt)
 {
 	if (Application::IsKeyPressed('1'))
@@ -547,20 +505,10 @@ void SceneSandBox::Update(double dt)
 		HeroMoveUpDown(true, 1.f);
 	if (Application::IsKeyPressed('S'))
 		HeroMoveUpDown(false, 1.f);
-	if (Application::IsKeyPressed('A') && CheckCollision(HeroPos, false, false, true, false))
-	{
-		//if ()
-		{
-			HeroMoveLeftRIght(true, 1.f);
-		}
-	}
-	if (Application::IsKeyPressed('D') && CheckCollision(HeroPos, false, false, false, true))
-	{
-		//if ()
-		{
-			HeroMoveLeftRIght(false, 1.f);
-		}
-	}
+	if (Application::IsKeyPressed('A'))
+		HeroMoveLeftRIght(true, 1.f);
+	if (Application::IsKeyPressed('D'))
+		HeroMoveLeftRIght(false, 1.f);
 	if (Application::IsKeyPressed(' '))
 		HeroJump();
 
@@ -853,7 +801,6 @@ void SceneSandBox::RenderTerrain()
 
 void SceneSandBox::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, float y, bool rotate)
 {
-	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 800, 0, 600, -10, 10);
 	projectionStack.PushMatrix();
@@ -901,7 +848,6 @@ void SceneSandBox::Render2DMesh(Mesh *mesh, bool enableLight, float size, float 
 	modelStack.PopMatrix();
 	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
-	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneSandBox::RenderBackground()
@@ -933,18 +879,7 @@ void SceneSandBox::RenderTileMap()
 		}
 	}
 
-	//Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-
-	if(heroAnimationCounter == 0)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME0], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else if(heroAnimationCounter == 1)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME1], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else if (heroAnimationCounter == 2)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME2], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else if (heroAnimationCounter == 3)
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME3], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
-	else
-		Render2DMesh(meshList[GEO_TILEHERO_FRAME0], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
+	Render2DMesh(meshList[GEO_TILEHERO], false, 1.0f, HeroPos.x, 575 - HeroPos.y);
 }
 
 /********************************************************************************
@@ -1051,31 +986,20 @@ void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 {
 	//for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
 	{
+		int checkPosition_X = (int)ceil(((float)HeroPos.x / m_cMap->GetTileSize())) + tileOffSet_x;
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+
 		if (mode)
 		{
-			//if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
+			if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
 			{
-				//Moving Left
 				HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
 			}
-
-			heroAnimationInvert = true;
-			heroAnimationCounter--;
-			if (heroAnimationCounter == 0)
-				heroAnimationCounter = 3;
 		}
 		else
 		{
-			//if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
-			{
-				//Moving Right
+			if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
 				HeroPos.x = HeroPos.x + (int)(5.0f * timeDiff);
-			}
-
-			heroAnimationInvert = false;
-			heroAnimationCounter++;
-			if (heroAnimationCounter > 3)
-				heroAnimationCounter = 0;
 		}
 	}
 }
@@ -1107,36 +1031,6 @@ void SceneSandBox::constrainHero(const int leftBorder, const int rightBorder, co
 	}
 }
 
-void SceneSandBox::RenderRearTileMap()
-{
-	rearWallOffset_x = (int)(mapOffSet_x / 2);
-	rearWallOffset_y = 0;
-	rearWallTileOffset_y = 0;
-	rearWallTileOffset_x = (int)(rearWallOffset_x / m_cRearMap->GetTileSize());
-
-	if (rearWallTileOffset_x + m_cRearMap->GetNumOfTiles_Width() > m_cRearMap->getNumOfTiles_MapWidth())
-		rearWallTileOffset_x = m_cRearMap->getNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width();
-
-	rearWallFineOffset_x = rearWallOffset_x & m_cRearMap->GetTileSize();
-
-	int m = 0;
-	for (int i = 0; i < m_cRearMap->GetNumOfTiles_Height(); i++)
-	{
-		for (int k = 0; k < m_cRearMap->GetNumOfTiles_Width() + 1; k++)
-		{
-			m = rearWallTileOffset_x + k;
-
-			//if we have reach the right side of the map, the do not display the extra column of tiles
-			if ((rearWallTileOffset_x + k) >= m_cRearMap->getNumOfTiles_MapWidth())
-				break;
-
-			if (m_cRearMap->theScreenMap[i][m] == 3)
-			{
-				Render2DMesh(meshList[GEO_TILESTRUCTURE], false, 1.f, k * m_cRearMap->GetTileSize() - rearWallFineOffset_x, 575 - i * m_cRearMap->GetTileSize());
-			}
-		}
-	}
-}
 
 void SceneSandBox::Render()
 {
@@ -1179,18 +1073,11 @@ void SceneSandBox::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	//Render background image
-	RenderBackground();
-	//Render Tile Rear map
-	RenderRearTileMap();
+
 	//Render Tile map
 	RenderTileMap();
-
-	
-
-	
-
-
+	//Render background image
+	RenderBackground();
 
 	//On screen text
 	std::ostringstream ss;

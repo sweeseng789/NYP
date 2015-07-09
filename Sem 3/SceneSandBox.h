@@ -111,10 +111,6 @@ class SceneSandBox : public Scene
 		GEO_TILEHERO,
 		GEO_TILETREE,
 		GEO_TILESTRUCTURE,
-		GEO_TILEHERO_FRAME0,
-		GEO_TILEHERO_FRAME1,
-		GEO_TILEHERO_FRAME2,
-		GEO_TILEHERO_FRAME3,
 		NUM_GEOMETRY,
 	};
 public:
@@ -234,9 +230,6 @@ private:
 	bool hero_InMidAir_Up;
 	bool hero_InMidAir_Down;
 	int jumpspeed;
-	bool heroAnimationInvert;
-	int heroAnimationCounter;
-	bool CheckCollision(Vector3 HeroPos, bool m_bCheckUpwards, bool m_bCheckDownwards, bool m_bCheckLeft, bool m_bCheckRight);
 };
 
 #endif

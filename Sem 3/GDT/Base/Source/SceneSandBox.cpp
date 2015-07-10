@@ -201,12 +201,12 @@ void SceneSandBox::SetMesh()
 
 	//Initalise the new tile map
 	m_cMap = new CMap();
-	m_cMap->Init(600, 800, 24, 32, 600, 1600);
+	m_cMap->Init(1024, 800, 24, 32, 600, 1600);
 	m_cMap->LoadMap("Image//MapDesign.csv");
 
 	//Initalise and load rear tile map
 	m_cRearMap = new CMap();
-	m_cRearMap->Init(600, 800, 24, 32, 600, 1600);
+	m_cRearMap->Init(1024, 800, 24, 32, 600, 1600);
 	m_cRearMap->LoadMap("Image//MapDesign_Rear.csv");
 
 }
@@ -221,7 +221,7 @@ void SceneSandBox::SetParameters()
 
 	HeroPos.x = 50;
 	HeroPos.y = 575 -  100;
-	scale = 2.5;
+	scale = 3;
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -400,7 +400,7 @@ void SceneSandBox::UpdateCameraStatus(const unsigned char key)
 
 bool SceneSandBox::CheckCollision(Vector3 HeroPos, bool m_bCheckUpwards, bool m_bCheckDownwards, bool m_bCheckLeft, bool m_bCheckRight)
 {
-	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x + 20) / m_cMap->GetTileSize())) + tileOffSet_x;
+	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
 	int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 
 	if (m_bCheckRight)
@@ -505,14 +505,14 @@ void SceneSandBox::Update(double dt)
 		HeroMoveUpDown(true, 1.f);
 	if (Application::IsKeyPressed('S'))
 		HeroMoveUpDown(false, 1.f);
-	if (Application::IsKeyPressed('A') && CheckCollision(HeroPos, false, false, true, false))
+	if (Application::IsKeyPressed('A') /*&& CheckCollision(HeroPos, false, false, true, false)*/)
 	{
 		//if ()
 		{
 			HeroMoveLeftRIght(true, 1.f);
 		}
 	}
-	if (Application::IsKeyPressed('D') && CheckCollision(HeroPos, false, false, false, true))
+	if (Application::IsKeyPressed('D') /*&& CheckCollision(HeroPos, false, false, false, true)*/)
 	{
 		//if ()
 		{
@@ -870,25 +870,25 @@ void SceneSandBox::RenderTileMap()
 			if (heroAnimationInvert)
 			{
 				if (heroAnimationCounter > 0 && heroAnimationCounter <= 1)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 1 && heroAnimationCounter <= 2)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME02_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 2 && heroAnimationCounter <= 3)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME03_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 3 && heroAnimationCounter <= 4)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME04_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 4 && heroAnimationCounter <= 5)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME05_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 5 && heroAnimationCounter <= 6)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME06_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 6 && heroAnimationCounter <= 7)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME07_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 7 && heroAnimationCounter <= 8)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME08_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 8 && heroAnimationCounter <= 9)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME09_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
-				else if (heroAnimationCounter > 9 && heroAnimationCounter <= 10)
 					Render2DMesh(meshList[GEO_HERO_WALK_FRAME10_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 1 && heroAnimationCounter <= 2)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME09_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 2 && heroAnimationCounter <= 3)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME08_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 3 && heroAnimationCounter <= 4)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME07_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 4 && heroAnimationCounter <= 5)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME06_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 5 && heroAnimationCounter <= 6)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME05_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 6 && heroAnimationCounter <= 7)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME04_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 7 && heroAnimationCounter <= 8)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME03_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 8 && heroAnimationCounter <= 9)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME02_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
+				else if (heroAnimationCounter > 9 && heroAnimationCounter <= 10)
+					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
 				else
 					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, scale, HeroPos.x, 575 - HeroPos.y);
 			}
@@ -954,11 +954,10 @@ void SceneSandBox::HeroUpdate()
 		//int checkPosition_X = (int)ceil((float)mapOffSet_x + HeroPos.x / m_cMap->GetTileSize());
 		int checkPosition_X = (int)((mapOffSet_x + HeroPos.x) / m_cMap->GetTileSize());
 		int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y - 1][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
 		{
 			HeroPos.y = (checkPosition_Y + 1) * m_cMap->GetTileSize();
 			hero_InMidAir_Up = false;
-			hero_InMidAir_Down = true;
 			jumpspeed = 0;
 		}
 		else
@@ -1033,9 +1032,12 @@ void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 {
 	//for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
 	{
+		int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
+		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+
 		if (mode)
 		{
-			//if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
+			if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X - 1] != 1)
 			{
 				//Moving Left
 				HeroPos.x = HeroPos.x - (int)(5.0f * timeDiff);
@@ -1049,7 +1051,7 @@ void SceneSandBox::HeroMoveLeftRIght(const bool mode, const float timeDiff)
 		}
 		else
 		{
-			//if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
+			if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1)
 			{
 				//Moving Right
 				HeroPos.x = HeroPos.x + (int)(5.0f * timeDiff);

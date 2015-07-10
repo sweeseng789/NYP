@@ -1,6 +1,7 @@
 #ifndef SCENE_COLLISION_H
 #define SCENE_COLLISION_H
 
+#include "Camera.h"
 #include "GameObject.h"
 #include <vector>
 #include "SceneBase.h"
@@ -45,6 +46,8 @@ protected:
 	Vector3 initialMomentum, finalMomentum;
 	float initialKE, finalKE;
 	float m_estimatedTime;
+
+	//Camera camera;
 };
 
 #endif

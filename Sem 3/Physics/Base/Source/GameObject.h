@@ -10,6 +10,7 @@ struct GameObject
 		GO_NONE = 0,
 		GO_BALL,
 		GO_CUBE,
+		GO_WALL,
 		GO_ASTEROID_SMALL,
 		GO_ASTEROID_BIG,
 		GO_SHIP,

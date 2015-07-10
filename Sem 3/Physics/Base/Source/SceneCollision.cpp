@@ -80,43 +80,63 @@ float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
 
 	return t;*/
 
-	Vector3 p1 = go->pos;
-	Vector3 p2 = go2->pos;
-	Vector3 v1 = go->vel;
-	Vector3 v2 = go2->vel;
-	Vector3 D = p1 - p2;
-	Vector3 C = v1 - v2;
+	switch (go2->type)
+	{
+	case GameObject::GO_BALL:
+		{
+			Vector3 p1 = go->pos;
+			Vector3 p2 = go2->pos;
+			Vector3 v1 = go->vel;
+			Vector3 v2 = go2->vel;
+			Vector3 D = p1 - p2;
+			Vector3 C = v1 - v2;
 
-	if (C.Dot(-D) < 0)
-		return -1;
+			if (C.Dot(-D) < 0)
+				return -1;
 
-	float r = go->scale.x + go2->scale.x;
-	float a = C.Dot(C);
-	float b = 2 * C.Dot(D);
-	float c = D.Dot(D) - r * r;
-	float discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-		return -1;
+			float r = go->scale.x + go2->scale.x;
+			float a = C.Dot(C);
+			float b = 2 * C.Dot(D);
+			float c = D.Dot(D) - r * r;
+			float discriminant = b * b - 4 * a * c;
+			if (discriminant < 0)
+				return -1;
 
-	float t = (-b - sqrt(discriminant)) / (2 * a);
-	if (t < 0)
-		t = (-b + sqrt(discriminant)) / (2 * a);
-	return t;
+			float t = (-b - sqrt(discriminant)) / (2 * a);
+			if (t < 0)
+				t = (-b + sqrt(discriminant)) / (2 * a);
+			return t;
+		}
+		break;
+	}
+	return -1;
 }
 
 bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 {
-	//Exercise 1: move collision code to CheckCollision()
-	float distSquared = (go1->pos - go2->pos).LengthSquared();
-	float combinedRadius = go1->scale.x + go2->scale.x;
-	Vector3 c = go1->vel - go2->vel;
-	Vector3 d = go2->pos - go1->pos;
+	switch (go2->type)
+	{
+	case GameObject::GO_BALL:
+		{
+			//Exercise 1: move collision code to CheckCollision()
+			float distSquared = (go1->pos - go2->pos).LengthSquared();
+			float combinedRadius = go1->scale.x + go2->scale.x;
+			Vector3 c = go1->vel - go2->vel;
+			Vector3 d = go2->pos - go1->pos;
 
-	//Practical 4, Exercise 13: improve collision detection algorithm
-	if (distSquared <= combinedRadius * combinedRadius &&c.Dot(d) > 0)
-		return true;
-	else
-		return false;
+			//Practical 4, Exercise 13: improve collision detection algorithm
+			if (distSquared <= combinedRadius * combinedRadius &&c.Dot(d) > 0)
+				return true;
+			else
+				return false;
+		}
+		break;
+	case GameObject::GO_WALL:
+		{
+
+		}
+		break;
+	}
 }
 
 void SceneCollision::GOUpdate(const double dt)
@@ -178,63 +198,29 @@ void SceneCollision::GOUpdate(const double dt)
 				GameObject *go2 = static_cast<GameObject *>(*it2);
 				if (go2->active)
 				{
-					float collisionTime = CheckCollision2(go, go2);
-					if (collisionTime > 0)
-					{
-						if (m_estimatedTime < 0)
-							m_estimatedTime = collisionTime;
-						if (m_estimatedTime < collisionTime)
-							m_estimatedTime = collisionTime;
-					}
-					//std::cout << CheckCollision2(go, go2) << std::endl;
-					//collisonTime = CheckCollision2(go, go2);
-
-
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(go, go2, dt))
 					{
-						//initialMomentum = go->mass * go->vel + go2->mass * go2->vel;
+						if (go2->type == GameObject::GO_BALL)
+						{
+							m1 = go->mass;
+							m2 = go2->mass;
+							u1 = go->vel;
+							u2 = go2->vel;
 
-						////getting the translateDist
-						//Vector3 posDiff = go->pos - go2->pos;
-						////Mininum translate distance to push ball after intersecting
-						//Vector3 translateDist = posDiff *(((go->scale.x + go2->scale.x)) - posDiff.Length() / posDiff.Length());
+							initialMomentum = m1 * u1 + m2 * u2;
 
-						////inverse mass quantities
-						//float im1 = 1 / go->mass;
-						//float im2 = 1 / go2->mass;
+							Vector3 N = (go2->pos - go->pos).Normalized();
+							Vector3 u1N = u1.Dot(N) * N;
+							Vector3 u2N = u2.Dot(N) * N;
 
-						////Impact speed
-						//Vector3 velDiff = (go->vel - go2->vel);
-						//float velNormalize = velDiff.Dot(translateDist.Normalize());
+							go->vel = (2 * m2 * u2 + u1 * (m1 - m2)) * (1 / (m1 + m2));
+							go2->vel = (2 * m1 * u1 + u2 * (m2 - m1)) * (1 / (m1 + m2));
 
-						////Collision impulse
-						//float i = (-(1.f + 1) * velNormalize) / (im1 + im2);
-						//Vector3 impulse = translateDist * i;
-
-						////Change in momentum
-						//go->vel = go->vel + (impulse * im1);
-						//go2->vel = go2->vel - (impulse * im2);
-
-						//finalMomentum = go->mass * go->vel + go2->mass * go2->vel;
-
-						m1 = go->mass;
-						m2 = go2->mass;
-						u1 = go->vel;
-						u2 = go2->vel;
-
-						initialMomentum = m1 * u1 + m2 * u2;
-
-						Vector3 N = (go2->pos - go->pos).Normalized();
-						Vector3 u1N = u1.Dot(N) * N;
-						Vector3 u2N = u2.Dot(N) * N;
-
-						go->vel = (2 * m2 * u2 + u1 * (m1 - m2)) * (1 / (m1 + m2));
-						go2->vel = (2 * m1 * u1 + u2 * (m2 - m1)) * (1 / (m1 + m2));
-
-						finalMomentum = m1 * v1 + m2 * v2;
-						initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
-						finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
+							finalMomentum = m1 * v1 + m2 * v2;
+							initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
+							finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
+						}
 					}
 				}
 			}

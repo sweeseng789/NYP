@@ -10,10 +10,10 @@
 #include "Light.h"
 #include <vector>
 #include <string>
-#include "OBJ.h"
 #include "Collision.h"
-#include "Particle.h"
 #include "Map.h"
+#include "Bullet.h"
+#include "Hero.h"
 
 using std::vector;
 using std::cout;
@@ -138,6 +138,7 @@ class SceneSandBox : public Scene
 		GEO_HERO_WALK_FRAME10_INVERSE,
 		GEO_HERO_JUMP_INVERSE,
 		GEO_HERO_LAND_INVERSE,
+		GEO_HERO_BULLET,
 		NUM_GEOMETRY,
 	};
 public:
@@ -153,23 +154,16 @@ public:
 	void SetMesh();
 
 	//======================Methods for hero========================//
-	void HeroUpdate();
-	void HeroJump();
-	void HeroMoveUpDown(const bool mode, const float timeDiff);
-	void HeroMoveLeftRIght(const bool mode, const float timeDiff);
 	void constrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
 
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f, float x = 0.0f, float y = 0.0f, float z = 0.0f);
-	void RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile);
 	void RenderMesh(Mesh *mesh, bool enableLight);
-	void RenderSkybox();
-	void RenderTerrain();
 	void RenderBackground();
 	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size = 1.0f, const float x = 0.f, const float y = 0.f, const bool rotate = false);
-	
+	void fetchBullet();
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -199,7 +193,6 @@ private:
 	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
-
 	Light lights[2];
 
 	//Polymorphism
@@ -207,8 +200,7 @@ private:
 
 	//vector
 	vector<unsigned char> m_heightMap;
-	vector<COBJ *> OBJList;
-	vector<Particle *> ParticleList;
+	vector<CBullet *> bulletList;
 
 	//Vector3
 	Vector3 mapPos;
@@ -251,15 +243,8 @@ private:
 	int rearWallFineOffset_x, rearWallFineOffset_y;
 
 	//Hero Info
-	Vector3 HeroPos;
-	bool hero_InMidAir_Up;
-	bool hero_InMidAir_Down;
-	int jumpspeed;
-	bool heroAnimationInvert;
-	float heroAnimationCounter;
-	float scale;
-	bool animate;
-	bool CheckCollision(Vector3 HeroPos, bool m_bCheckUpwards, bool m_bCheckDownwards, bool m_bCheckLeft, bool m_bCheckRight);
+	CHero hero;
+	bool bulletshot;
 };
 
 #endif

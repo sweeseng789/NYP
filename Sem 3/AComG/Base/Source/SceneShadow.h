@@ -121,6 +121,7 @@ class SceneShadow : public Scene
 		GEO_MOON,
 
 		GEO_LIGHT_DEPTH_QUAD,
+		GEO_LIGHT_DEPTH_QUAD2,
 
 		NUM_GEOMETRY,
 	};

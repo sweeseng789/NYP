@@ -13,12 +13,14 @@
   <ItemGroup>
     <ClCompile Include="Source\Ammo.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera2.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\GenerateSkyPlane.cpp" />
+    <ClCompile Include="Source\Hero.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
@@ -27,8 +29,6 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MiniMap.cpp" />
-    <ClCompile Include="Source\OBJ.cpp" />
-    <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\SceneSandBox.cpp" />
     <ClCompile Include="Source\SceneSkybox.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
@@ -42,6 +42,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Ammo.h" />
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera2.h" />
     <ClInclude Include="Source\Camera3.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GenerateSkyPlane.h" />
     <ClInclude Include="Source\Geometry.h" />
+    <ClInclude Include="Source\Hero.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
@@ -58,8 +60,6 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\MiniMap.h" />
-    <ClInclude Include="Source\OBJ.h" />
-    <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneSandBox.h" />
     <ClInclude Include="Source\SceneSkybox.h" />

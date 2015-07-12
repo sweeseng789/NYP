@@ -50,92 +50,78 @@ GameObject* SceneCollision::FetchGO()
 
 float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
 {
-	/*Vector3 C = go->vel - go2->vel;
-
-	Vector3 D = go->pos - go2->pos;
-
-	float combineRadius = go->scale.x + go2->scale.x;*/
-
-	/*Vector3 p1 = go->pos;
-	Vector3 p2 = go2->pos;
-	Vector3 v1 = go->vel;
-	Vector3 v2 = go2->vel;
-	Vector3 C = p1 - p2;
-	Vector3 D = v1 - v2;
-
-	if (C.Dot(-D) < 0)
-		return -1;
-
-	float r = go->scale.x + go2->scale.x;
-	float a = C.Dot(C);
-	float b = 2 * C.Dot(D);
-	float c = D.Dot(D) - r * r;
-	float discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-		return -1;
-
-	float t = (-b - sqrt(discriminant)) / (2 * a);
-	if (t < 0)
-		t = (-b + sqrt(discriminant)) / (2 * a);
-
-	return t;*/
-
-	switch (go2->type)
+	if(go2->type == GameObject::GO_BALL)
 	{
-	case GameObject::GO_BALL:
-		{
-			Vector3 p1 = go->pos;
-			Vector3 p2 = go2->pos;
-			Vector3 v1 = go->vel;
-			Vector3 v2 = go2->vel;
-			Vector3 D = p1 - p2;
-			Vector3 C = v1 - v2;
+		Vector3 p1 = go->pos;
+		Vector3 p2 = go2->pos;
+		Vector3 v1 = go->vel;
+		Vector3 v2 = go2->vel;
+		Vector3 D = p1 - p2;
+		Vector3 C = v1 - v2;
 
-			if (C.Dot(-D) < 0)
-				return -1;
+		if (C.Dot(-D) < 0)
+			return -1;
 
-			float r = go->scale.x + go2->scale.x;
-			float a = C.Dot(C);
-			float b = 2 * C.Dot(D);
-			float c = D.Dot(D) - r * r;
-			float discriminant = b * b - 4 * a * c;
-			if (discriminant < 0)
-				return -1;
+		float r = go->scale.x + go2->scale.x;
+		float a = C.Dot(C);
+		float b = 2 * C.Dot(D);
+		float c = D.Dot(D) - r * r;
+		float discriminant = b * b - 4 * a * c;
+		if (discriminant < 0)
+			return -1;
 
-			float t = (-b - sqrt(discriminant)) / (2 * a);
-			if (t < 0)
-				t = (-b + sqrt(discriminant)) / (2 * a);
-			return t;
-		}
-		break;
+		float t = (-b - sqrt(discriminant)) / (2 * a);
+		if (t < 0)
+			t = (-b + sqrt(discriminant)) / (2 * a);
+		return t;
 	}
+
 	return -1;
 }
 
 bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 {
-	switch (go2->type)
+	if (go2->type == GameObject::GO_BALL)
 	{
-	case GameObject::GO_BALL:
-		{
-			//Exercise 1: move collision code to CheckCollision()
-			float distSquared = (go1->pos - go2->pos).LengthSquared();
-			float combinedRadius = go1->scale.x + go2->scale.x;
-			Vector3 c = go1->vel - go2->vel;
-			Vector3 d = go2->pos - go1->pos;
+		//Exercise 1: move collision code to CheckCollision()
+		float distSquared = (go1->pos - go2->pos).LengthSquared();
+		float combinedRadius = go1->scale.x + go2->scale.x;
+		Vector3 c = go1->vel - go2->vel;
+		Vector3 d = go2->pos - go1->pos;
 
-			//Practical 4, Exercise 13: improve collision detection algorithm
-			if (distSquared <= combinedRadius * combinedRadius &&c.Dot(d) > 0)
-				return true;
-			else
-				return false;
-		}
-		break;
-	case GameObject::GO_WALL:
-		{
+		//Practical 4, Exercise 13: improve collision detection algorithm
+		if (distSquared <= combinedRadius * combinedRadius &&c.Dot(d) > 0)
+			return true;
+		else
+			return false;
+	}
+	else if (go2->type == GameObject::GO_WALL)
+	{
 
-		}
-		break;
+	}
+}
+
+void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
+{
+	if (go2->type == GameObject::GO_BALL)
+	{
+		m1 = go1->mass;
+		m2 = go2->mass;
+		u1 = go1->vel;
+		u2 = go2->vel;
+
+		initialMomentum = m1 * u1 + m2 * u2;
+
+		Vector3 N = (go2->pos - go1->pos).Normalized();
+		Vector3 u1N = u1.Dot(N) * N;
+		Vector3 u2N = u2.Dot(N) * N;
+
+		go1->vel = (2 * m2 * u2 + u1 * (m1 - m2)) * (1 / (m1 + m2));
+		go2->vel = (2 * m1 * u1 + u2 * (m2 - m1)) * (1 / (m1 + m2));
+
+		finalMomentum = m1 * v1 + m2 * v2;
+		initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
+		finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 	}
 }
 
@@ -148,21 +134,9 @@ void SceneCollision::GOUpdate(const double dt)
 		{ 
 			go->pos += go->vel * static_cast<float>(dt);
 
-			//Exercise 2a: Rebound game object at screen edges
-
-			//Exercise 2b: Unspawn if it really leave the screen
-			/*	if (go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
-			{
-			go->active = false;
-			--m_objectCount;
-			}*/
 			initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 			finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 
-			/*if (go->pos.x > m_worldWidth || go->pos.x < 0)
-			{
-				go->vel.x = -go->vel.x;
-			}*/
 			if (go->pos.x > m_worldWidth - go->scale.x && go->vel.x > 0)
 			{
 				go->vel.x = -go->vel.x;
@@ -187,11 +161,6 @@ void SceneCollision::GOUpdate(const double dt)
 				this->m_objectCount--;
 			}
 
-			/*if (go->pos.y > m_worldHeight || go->pos.y < 0)
-			{
-				go->vel.y = -go->vel.y;
-			}*/
-
 
 			for (std::vector<GameObject *>::iterator it2 = it + 1; it2 != m_goList.end(); ++it2)
 			{
@@ -201,26 +170,7 @@ void SceneCollision::GOUpdate(const double dt)
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(go, go2, dt))
 					{
-						if (go2->type == GameObject::GO_BALL)
-						{
-							m1 = go->mass;
-							m2 = go2->mass;
-							u1 = go->vel;
-							u2 = go2->vel;
-
-							initialMomentum = m1 * u1 + m2 * u2;
-
-							Vector3 N = (go2->pos - go->pos).Normalized();
-							Vector3 u1N = u1.Dot(N) * N;
-							Vector3 u2N = u2.Dot(N) * N;
-
-							go->vel = (2 * m2 * u2 + u1 * (m1 - m2)) * (1 / (m1 + m2));
-							go2->vel = (2 * m1 * u1 + u2 * (m2 - m1)) * (1 / (m1 + m2));
-
-							finalMomentum = m1 * v1 + m2 * v2;
-							initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
-							finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
-						}
+						CollisionResponse(go, go2);
 					}
 				}
 			}
@@ -326,12 +276,15 @@ void SceneCollision::Update(double dt)
 		go->mass = sc * sc * sc;
 	}
 
+	if (Application::IsKeyPressed('R'))
+	{
+		
+	}
+
 	//Physics Simulation Section
 	dt *= m_speed;
 
 	GOUpdate(dt);
-
-
 }
 
 
@@ -345,6 +298,14 @@ void SceneCollision::RenderGO(GameObject *go)
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_BALL], false);
+		modelStack.PopMatrix();
+		break;
+
+	case GameObject::GO_WALL:
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
 		break;
 	}

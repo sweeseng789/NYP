@@ -29,6 +29,7 @@ public:
 
 	bool CheckCollision(GameObject *go1, GameObject *go2, float dt);
 	float CheckCollision2(GameObject* go, GameObject* go2);
+	void CollisionResponse(GameObject *go1, GameObject *go2);
 
 protected:
 

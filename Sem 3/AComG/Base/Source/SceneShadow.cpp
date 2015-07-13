@@ -228,14 +228,14 @@ void SceneShadow::Init()
 	m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
 	m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");
 
-	m_lightDepthFBO.Init(2048, 2048);
+	m_lightDepthFBO.Init(1024, 1024);
 	// Use our shader
 	glUseProgram(m_programID);
 
 	/*lights[0].type = Light::LIGHT_DIRECTIONAL;
 	lights[0].position.Set(0, 700, 0);*/
-	lights[0].type = Light::LIGHT_POINT;
-	lights[0].position.Set(0, 150, 10);
+	lights[0].type = Light::LIGHT_DIRECTIONAL;
+	lights[0].position.Set(0, 0, 2);
 	lights[0].color.Set(1, 1, 1);
 	lights[0].power = 1;
 	lights[0].kC = 1.f;
@@ -381,11 +381,11 @@ void SceneShadow::Init()
 	meshList[crosshair] = MeshBuilder::Generate2DMesh("Crosshair", Color(1, 1, 1), 0.f, 0.f, 5.f, 5.f);
 	meshList[crosshair]->textureID = LoadTGA("Image//Crosshair 3.tga");
 
-	//meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
-	//meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
-	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
-	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = LoadTGA("Image//bottom.tga");
-	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
+	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
+	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
+	//meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
+	//meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = LoadTGA("Image//bottom.tga");
+	//meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
 
 	meshList[GEO_LIGHT_DEPTH_QUAD2] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
 	meshList[GEO_LIGHT_DEPTH_QUAD2]->textureArray[0] = m_lightDepthFBO.GetTexture();
@@ -538,7 +538,7 @@ void SceneShadow::Update(double dt)
 
 	//lights[0].position.y = HeightMapScale.y * ReadHeightMap(m_heightMap, lights[0].position.x / HeightMapScale.x, lights[0].position.z / HeightMapScale.z) + 10.f;
 	
-	static float tempY = 0.f;
+	/*static float tempY = 0.f;
 	tempY = HeightMapScale.y * ReadHeightMap(m_heightMap, camera.position.x / HeightMapScale.x, camera.position.z / HeightMapScale.z) + 10.f;
 	camera.tempY = tempY;
 	if (!camera.getJumpStatus())
@@ -547,7 +547,7 @@ void SceneShadow::Update(double dt)
 		diff = tempY - camera.position.y;
 		camera.position.y += diff * (float)dt * 20;
 		camera.target.y += diff * (float)dt * 20;
-	}
+	}*/
 
 	/*camera.position.x = cubePos.x - cos(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
 	camera.position.y = cubePos.y + sin(Application::camera_pitch) * 10;
@@ -733,14 +733,15 @@ void SceneShadow::RenderWorld()
 {
 	modelStack.PushMatrix();
 	float tempY = HeightMapScale.y * ReadHeightMap(m_heightMap, 0 / HeightMapScale.x, 2 / HeightMapScale.z) + 10.f;
-	modelStack.Translate(0, tempY, 2);
+	modelStack.Translate(0, 0, -2);
 	RenderMesh(meshList[GEO_SPHERE], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, -5);
 	modelStack.Rotate(-45, 1, 0, 0);
 	//modelStack.Scale(100, 100, 100);
-	//RenderMesh(meshList[GEO_QUAD], true);
+	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();
 }
 
@@ -887,7 +888,7 @@ void SceneShadow::RenderPassGPass()
 	glUseProgram(m_gPassShaderID);
 	//These matrices should change when light position or direction changes
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
-		m_lightDepthProj.SetToOrtho(-3000, 3000, -3000, 3000, -3000, 6000);
+		m_lightDepthProj.SetToOrtho(-10, 10, -10, 10, -10, 20);
 	else
 		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 
@@ -974,8 +975,8 @@ void SceneShadow::RenderPassMain()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	//modelStack.Translate(0, 0, -20);
-	modelStack.Scale(HeightMapScale.x, HeightMapScale.y, HeightMapScale.z);
+	modelStack.Translate(0, 0, -20);
+	modelStack.Scale(30, 30 ,30);
 	RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], true);
 	modelStack.PopMatrix();
 

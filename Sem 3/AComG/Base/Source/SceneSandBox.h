@@ -16,6 +16,7 @@
 #include "Map.h"
 #include "Enemy.h"
 #include "Sound.h"
+#include "DepthFBO.h"
 
 using std::vector;
 using std::cout;
@@ -70,6 +71,10 @@ class SceneSandBox : public Scene
 		U_TYPE_FOG,
 		U_ENABLE_FOG,
 
+		U_LIGHT_DEPTH_MVP_GPASS,
+		U_LIGHT_DEPTH_MVP,
+		U_SHADOW_MAP,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -112,7 +117,14 @@ class SceneSandBox : public Scene
 		GEO_PLANK,
 		GEO_STUMP,
 		GEO_MOON,
+		GEO_LIGHT_DEPTH_QUAD,
 		NUM_GEOMETRY,
+	};
+
+	enum RENDER_PASS
+	{
+		RENDER_PASS_PRE,
+		RENDER_PASS_MAIN,
 	};
 public:
 	SceneSandBox();
@@ -147,6 +159,10 @@ public:
 	virtual void Exit();
 	// Update Camera status
 	virtual void UpdateCameraStatus(const unsigned char key);
+
+	void RenderPassGPass();
+	void RenderPassMain();
+	void RenderWorld();
 private:
 
 	//Int
@@ -212,6 +228,15 @@ private:
 	bool playSound_Thunder;
 	float countdown_Start;
 	float countdown_End;
+
+	//Shadow
+	unsigned m_gPassShaderID;
+	DepthFBO m_lightDepthFBO;
+
+	Mtx44 m_lightDepthProj;
+	Mtx44 m_lightDepthView;
+
+	RENDER_PASS m_renderPass;
 };
 
 #endif

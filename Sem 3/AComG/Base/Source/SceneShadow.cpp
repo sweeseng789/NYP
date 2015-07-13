@@ -342,6 +342,10 @@ void SceneShadow::Init()
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
 	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
+	meshList[GEO_TERRAIN]->material.kAmbient.Set(100.f, 100.f, 100.f);
+	meshList[GEO_TERRAIN]->material.kDiffuse.Set(50.f, 50.f, 50.f);
+	//meshList[GEO_TERRAIN]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_TERRAIN]->material.kShininess = 10.f;
 
 
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBj//tree.obj");

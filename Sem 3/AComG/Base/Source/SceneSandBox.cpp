@@ -229,9 +229,9 @@ void SceneSandBox::Init()
 
 	lights[0].type = Light::LIGHT_DIRECTIONAL;
 	//lights[0].position.Set(0, 700, 0);
-	lights[0].position.Set(700, 700, 700);
+	lights[0].position.Set(500, 500, 500);
 	lights[0].color.Set(1, 1, 1);
-	lights[0].power = 10;
+	lights[0].power = 1;
 	lights[0].kC = 1.f;
 	lights[0].kL = 0.01f;
 	lights[0].kQ = 0.001f;
@@ -332,9 +332,9 @@ void SceneSandBox::Init()
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
 	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
-	meshList[GEO_TERRAIN]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_TERRAIN]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_TERRAIN]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_TERRAIN]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	//meshList[GEO_TERRAIN]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_TERRAIN]->material.kShininess = 10.f;
 
 
@@ -1042,7 +1042,7 @@ void SceneSandBox::RenderWorld()
 	RenderMesh(meshList[GEO_CHURCH], true);
 	modelStack.PopMatrix();
 
-	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
+	/*for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
 	{
 		Particle * particle = (Particle*)*it;
 		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
@@ -1052,7 +1052,7 @@ void SceneSandBox::RenderWorld()
 			else
 				RenderParticle(particle);
 		}
-	}
+	}*/
 }
 
 void SceneSandBox::Render()
@@ -1064,11 +1064,11 @@ void SceneSandBox::Render()
 	//MAIN RENDER PASS
 	RenderPassMain();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(lights[0].position.x, lights[0].position.y + camera.position.y, lights[0].position.z);
-	//modelStack.Scale(10, 10, 10);
-	//RenderMesh(meshList[GEO_MOON], false);
-	//modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_MOON], false);
+	modelStack.PopMatrix();
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, camera.position.y, 0);

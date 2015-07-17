@@ -42,6 +42,7 @@ struct GameObject
 	const unsigned bulletSpeed;
 	int number;
 	float m_shieldTime;
+	Vector3 normal;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();

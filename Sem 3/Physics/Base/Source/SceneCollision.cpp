@@ -15,6 +15,9 @@ void SceneCollision::Init()
 {
 	SceneBase::Init();
 
+	m_worldHeight = 100.f;
+	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+
 	//Physics code here
 	m_speed = 1.f;
 
@@ -23,6 +26,15 @@ void SceneCollision::Init()
 	m_objectCount = 0;
 
 	m_ghost = new GameObject(GameObject::GO_BALL);
+
+	GameObject* go = FetchGO();
+	//go->active = true;
+	go->type = GameObject::GO_WALL;
+	go->pos.Set(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+	go->normal.Set(1, 1, 0);
+	go->normal.Normalize();
+	go->scale.Set(10, 80, 1);
+	//go->angle = Math::RadianToDegree(atan2(go->normal.x, go->normal.z));
 }
 
 GameObject* SceneCollision::FetchGO()
@@ -97,7 +109,23 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 	}
 	else if (go2->type == GameObject::GO_WALL)
 	{
+		//|(w0 - b1).N| < r + h / 2
+		Vector3 w0 = go2->pos;
+		Vector3 b1 = go1->pos + go1->vel * dt;
+		Vector3 N = go2->normal;
+		float r = go1->scale.x;
+		float h = go2->scale.x;
 
+
+		//|(w0 - b1).NP| < r + l / 2
+		Vector3 NP(-N.y, N.x);
+		float l = go2->scale.y;
+
+
+		if (abs((w0 - b1).Dot(N)) < r + h * 0.5 && abs((w0 - b1).Dot(NP)) < r + l * 0.5)
+			return true;
+		else
+			return false;
 	}
 }
 
@@ -123,6 +151,36 @@ void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
 		initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 		finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 	}
+	else if (go2->type == GameObject::GO_WALL)
+	{
+		Vector3 w0 = go2->pos;
+		Vector3 b1 = go1->pos;
+		Vector3 N = go2->normal;
+		float r = go1->scale.x;
+		float h = go2->scale.x;
+
+
+		//|(w0 - b1).NP| < r + l / 2
+		Vector3 NP(-N.y, N.x);
+		float l = go2->scale.y;
+
+		//Long wall
+		if (abs((w0 - b1).Dot(N)) < r + h * 0.5)
+		{
+			//v = u - (2 * u.N)N
+			Vector3 u = go1->vel;
+			Vector3 N = go2->normal;
+
+			Vector3 v = u - (2 * u.Dot(N)) * N;
+			go1->vel = v;
+		}
+		if (abs((w0 - b1).Dot(NP)) < r + l * 0.5)
+		{
+			Vector3 u = go1->vel;
+			Vector3 v = u - 2 * u.Dot(NP) * NP;
+			go1->vel = v;
+		}
+	}
 }
 
 void SceneCollision::GOUpdate(const double dt)
@@ -132,33 +190,36 @@ void SceneCollision::GOUpdate(const double dt)
 		GameObject *go = (GameObject *)*it;
 		if (go->active)
 		{ 
-			go->pos += go->vel * static_cast<float>(dt);
+			if (go->type == GameObject::GO_BALL)
+			{
+				go->pos += go->vel * static_cast<float>(dt);
 
-			initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
-			finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
+				initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
+				finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 
-			if (go->pos.x > m_worldWidth - go->scale.x && go->vel.x > 0)
-			{
-				go->vel.x = -go->vel.x;
-			}
-			else if(go->pos.x < 0 + go->scale.x && go->vel.x < 0)
-			{
-				go->vel.x = -go->vel.x;
-			}
+				if (go->pos.x > m_worldWidth - go->scale.x && go->vel.x > 0)
+				{
+					go->vel.x = -go->vel.x;
+				}
+				else if (go->pos.x < 0 + go->scale.x && go->vel.x < 0)
+				{
+					go->vel.x = -go->vel.x;
+				}
 
-			if (go->pos.y > m_worldHeight - go->scale.x && go->vel.y > 0)
-			{
-				go->vel.y = -go->vel.y;
-			}
-			else if (go->pos.y < 0 + go->scale.x && go->vel.y < 0)
-			{
-				go->vel.y = -go->vel.y;
-			}
+				if (go->pos.y > m_worldHeight - go->scale.x && go->vel.y > 0)
+				{
+					go->vel.y = -go->vel.y;
+				}
+				else if (go->pos.y < 0 + go->scale.x && go->vel.y < 0)
+				{
+					go->vel.y = -go->vel.y;
+				}
 
-			if (go->pos.x > m_worldWidth + 5 || go->pos.x < -5 || go->pos.y > m_worldHeight + 5 || go->pos.y < -5)
-			{
-				go->active = false;
-				this->m_objectCount--;
+				if (go->pos.x > m_worldWidth + 5 || go->pos.x < -5 || go->pos.y > m_worldHeight + 5 || go->pos.y < -5)
+				{
+					go->active = false;
+					this->m_objectCount--;
+				}
 			}
 
 
@@ -293,22 +354,45 @@ void SceneCollision::RenderGO(GameObject *go)
 	switch (go->type)
 	{
 	case GameObject::GO_BALL:
-		//meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
-		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-		RenderMesh(meshList[GEO_BALL], false);
-		modelStack.PopMatrix();
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_BALL], false);
+			modelStack.PopMatrix();
+		}
 		break;
 
 	case GameObject::GO_WALL:
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+
+		float angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+
+		modelStack.Rotate(angle, 0, 0, 1);
+		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		RenderMesh(meshList[GEO_CUBE], false);
+		modelStack.PopMatrix();
+	}
+		break;
+	}
+	/*if (go->type == GameObject::GO_WALL)
+	{
 		modelStack.PushMatrix();
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
-		break;
 	}
+	else if (go->type == GameObject::GO_BALL)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		RenderMesh(meshList[GEO_BALL], false);
+		modelStack.PopMatrix();
+	}*/
 }
 
 void SceneCollision::Render()

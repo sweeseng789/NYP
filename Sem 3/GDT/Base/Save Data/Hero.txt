@@ -1,0 +1,2 @@
+HeroPos_x: 50
+HeroPos_y: 100

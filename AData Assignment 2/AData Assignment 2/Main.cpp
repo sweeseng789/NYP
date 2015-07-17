@@ -84,13 +84,14 @@ void deleteData(CData data[], int &count)
 			}
 			else
 			{
-				if (data[a].getID() == toDelete)
+				/*if (data[a].getID() == toDelete)
 				{
 					data[a].resetData();
 					count--;
 					cout << "Patient's record have been removed" << endl;
 					break;
-				}
+				}*/
+				break;
 			}
 		}
 	}
@@ -150,14 +151,14 @@ void search(CData data[], int &count, int size)
 		while (first <= last)
 		{
 			mid = (first + last) / 2;
-			if (data[mid].getName() == valueToSearch || data[mid].getID() == valueToSearch)
+			if (data[mid].getName() == valueToSearch /*|| data[mid].getID() == valueToSearch*/)
 			{
 				cout << "Patient's Record Found:" << endl;
 				cout << data[mid] << endl;
 				found = true;
 				break;
 			}
-			else if (data[mid].getName() > valueToSearch || data[mid].getID() > valueToSearch)
+			else if (data[mid].getName() > valueToSearch /*|| data[mid].getID() > valueToSearch*/)
 			{
 				last = mid - 1;
 			}
@@ -258,10 +259,10 @@ void sorting(CData data[], int first, int last)
 void main()
 {
 	CData data[20];
-	data[0].setData(true, "Abby", "12345");
-	data[1].setData(true, "Zebra", "12314");
-	data[2].setData(true, "Swee Seng", "31423");
-	data[3].setData(true, "Joyce", "14233");
+	data[0].setData(true, "Abby", 12345);
+	data[1].setData(true, "Zebra", 12314);
+	data[2].setData(true, "Swee Seng", 31423);
+	data[3].setData(true, "Joyce", 14233);
 	int count = 4;
 	bool stillUsing = true;
 	int menuChoice = 0;
@@ -272,7 +273,7 @@ void main()
 		cout << "Welcome to NTU patient record system! \nEnter (1) to add patient record to the database \nEnter (2) to remove a patient record from the database \nEnter (3) to search patient records \nEnter (4) to sort patient records \nEnter (5) to print existing records \nEnter (6) to exit" << endl << "Please enter your choice: ";
 		cin >> menuChoice;
 
-		try
+		/*try
 		{
 			if (menuChoice == 1)
 				throw (CUI(CUI::ADD));
@@ -320,8 +321,10 @@ void main()
 			{
 				cout << "Error, please start over again" << endl;
 			}
-
 			system("pause");
-		}
+		}*/
+		cin >> data[6];
+		cout << data[6];
+		system("Pause");
 	}
 }

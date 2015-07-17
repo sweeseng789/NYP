@@ -346,7 +346,7 @@ void SceneSandBox::Init()
 	meshList[GEO_TREE]->textureArray[0] = LoadTGA("Image//tree.tga");
 
 	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Tree", "OBj//church.obj");
-	meshList[GEO_CHURCH]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_CHURCH]->material.kAmbient.Set(0.3f, 0.3f, 0.3f);
 	meshList[GEO_CHURCH]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CHURCH]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CHURCH]->material.kShininess = 10.f;
@@ -558,9 +558,9 @@ void SceneSandBox::Update(double dt)
 			}
 		}
 
-		/*glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 		glUniform3fv(m_parameters[U_COLOR_FOG], 1, &fogColor.r);
-		glUniform3fv(m_parameters[U_COLOR_FOG2], 1, &fogColor.g);
+		/*glUniform3fv(m_parameters[U_COLOR_FOG2], 1, &fogColor.g);
 		glUniform3fv(m_parameters[U_COLOR_FOG3], 1, &fogColor.b);*/
 	}
 	else
@@ -571,7 +571,7 @@ void SceneSandBox::Update(double dt)
 	dt *= mSpeed;
 
 
-	/*static float tempY = 0.f;
+	static float tempY = 0.f;
 	tempY = HeightMapScale.y * ReadHeightMap(m_heightMap, camera.position.x / HeightMapScale.x, camera.position.z / HeightMapScale.z) + 10.f;
 	camera.tempY = tempY;
 	if (!camera.getJumpStatus())
@@ -580,7 +580,7 @@ void SceneSandBox::Update(double dt)
 		diff = tempY - camera.position.y;
 		camera.position.y += diff * (float)dt * 20;
 		camera.target.y += diff * (float)dt * 20;
-	}*/
+	}
 
 	/*camera.position.x = cubePos.x - cos(Application::camera_yaw) * cos(Application::camera_pitch) * 3;
 	camera.position.y = cubePos.y + sin(Application::camera_pitch) * 10;
@@ -718,6 +718,7 @@ void SceneSandBox::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, flo
 
 void SceneSandBox::RenderMesh(Mesh *mesh, bool enableLight)
 {
+	glUniform1f(m_parameters[U_ENABLE_FOG], 0);
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	if (m_renderPass == RENDER_PASS_PRE)
 	{
@@ -759,6 +760,7 @@ void SceneSandBox::RenderMesh(Mesh *mesh, bool enableLight)
 		else
 			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
 	}
+	glUniform1f(m_parameters[U_ENABLE_FOG], 1);
 	mesh->Render();
 }
 
@@ -857,7 +859,16 @@ void SceneSandBox::RenderTerrain()
 
 void SceneSandBox::RenderParticle(Particle * particle)
 {
-	if (particle->ParticleType == particle->GO_BALL)
+	if (particle->ParticleType == particle->GO_RAIN)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		modelStack.Rotate(particle->angle, 0, 1, 0);
+		modelStack.Scale(particle->scale, particle->scale, particle->scale);
+		RenderMesh(meshList[GEO_RAIN], false);
+		modelStack.PopMatrix();
+	}
+	else if (particle->ParticleType == particle->GO_BALL)
 	{
 
 		modelStack.PushMatrix();
@@ -898,19 +909,9 @@ void SceneSandBox::RenderParticle(Particle * particle)
 
 void SceneSandBox::RenderParticleNoFog(Particle * particle)
 {
-	glUniform1f(m_parameters[U_ENABLE_FOG], 0);
+	/*glUniform1f(m_parameters[U_ENABLE_FOG], 0);*/
 
-	if (particle->ParticleType == particle->GO_RAIN)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		modelStack.Rotate(particle->angle, 0, 1, 0);
-		modelStack.Scale(particle->scale, particle->scale, particle->scale);
-		RenderMesh(meshList[GEO_RAIN], false);
-		modelStack.PopMatrix();
-	}
-
-	glUniform1f(m_parameters[U_ENABLE_FOG], 1);
+	/*glUniform1f(m_parameters[U_ENABLE_FOG], 1);*/
 }
 
 void SceneSandBox::RenderPassGPass()
@@ -993,11 +994,6 @@ void SceneSandBox::RenderPassMain()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -20);
 	modelStack.Scale(30, 30, 30);
 	RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], false);
@@ -1012,11 +1008,11 @@ void SceneSandBox::RenderPassMain()
 
 void SceneSandBox::RenderWorld()
 {
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	float tempY = HeightMapScale.y * ReadHeightMap(m_heightMap, 0 / HeightMapScale.x, 2 / HeightMapScale.z) + 10.f;
 	modelStack.Translate(0, 0, -2);
 	RenderMesh(meshList[GEO_SPHERE], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -5);
@@ -1025,16 +1021,22 @@ void SceneSandBox::RenderWorld()
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();*/
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(0, -5, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(10, 10, 10);
 	RenderMesh(meshList[GEO_QUAD], true);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	RenderTerrain();
 
 	RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_MOON], false);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-60, 50, -120);
@@ -1042,17 +1044,14 @@ void SceneSandBox::RenderWorld()
 	RenderMesh(meshList[GEO_CHURCH], true);
 	modelStack.PopMatrix();
 
-	/*for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
+	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
 	{
 		Particle * particle = (Particle*)*it;
-		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
+		if (particle->active && (camera.position - particle->pos).Length() < 1000)
 		{
-			if (particle->ParticleType == particle->GO_RAIN)
-				RenderParticleNoFog(particle);
-			else
-				RenderParticle(particle);
+			RenderParticle(particle);
 		}
-	}*/
+	}
 }
 
 void SceneSandBox::Render()
@@ -1063,12 +1062,6 @@ void SceneSandBox::Render()
 
 	//MAIN RENDER PASS
 	RenderPassMain();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_MOON], false);
-	modelStack.PopMatrix();
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, camera.position.y, 0);
@@ -1097,16 +1090,16 @@ void SceneSandBox::Render()
 		}
 	}*/
 
-	////On screen text
-	//std::ostringstream ss;
-	//ss.precision(5);
-	//ss << "FPS: " << fps;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+	//On screen text
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "FPS: " << fps;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
 
-	//std::ostringstream ss1;
-	//ss1.precision(4);
-	//ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+	std::ostringstream ss1;
+	ss1.precision(4);
+	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
 
 	//==============Testing===============//
 }

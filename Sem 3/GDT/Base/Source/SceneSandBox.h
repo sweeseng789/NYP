@@ -231,19 +231,20 @@ private:
 	void RenderTileMap();
 
 	//Code for Smooth scroling
-	int mapOffSet_x, mapOffset_y;
-	int tileOffSet_x, tileOffset_y;
-	int mapFineOffSet_x, mapFineOffset_y;
+	/*int mapOffSet_x, mapOffset_y;
+	int tileOffSet_x, tileOffSet_x;
+	int mapFineOffSet_x, mapFineOffset_y;*/
 
 	//Code for Parallax Scrolling
 	CMap * m_cRearMap;
 	void RenderRearTileMap();
+	int tileOffset_x, tileOffSet_y;
 	int rearWallOffset_x, rearWallOffset_y;
 	int rearWallTileOffset_x, rearWallTileOffset_y;
 	int rearWallFineOffset_x, rearWallFineOffset_y;
 
 	//Hero Info
-	CHero hero;
+	CHero* hero;
 	bool bulletshot;
 };
 

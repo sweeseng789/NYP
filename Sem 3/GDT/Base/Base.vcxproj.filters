@@ -30,6 +30,12 @@
     <Filter Include="Source Files\Camera Folder\Shader">
       <UniqueIdentifier>{1f23b25b-bf0b-42ee-b624-3b1e1bd70bd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility Folder">
+      <UniqueIdentifier>{aef4e3b8-3f1f-46d3-ba2a-3154dc178e2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility Folder">
+      <UniqueIdentifier>{b4d3877c-4cac-4cdd-82d3-683671562b57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -95,13 +101,7 @@
     <ClCompile Include="Source\SpriteAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneSandBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Map.cpp">
@@ -112,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="Source\Hero.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision.cpp">
+      <Filter>Source Files\Utility Folder</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound.cpp">
+      <Filter>Source Files\Utility Folder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,13 +196,7 @@
     <ClInclude Include="Source\SpriteAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collision.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneSandBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Map.h">
@@ -207,6 +207,12 @@
     </ClInclude>
     <ClInclude Include="Source\Hero.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound.h">
+      <Filter>Header Files\Utility Folder</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision.h">
+      <Filter>Header Files\Utility Folder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

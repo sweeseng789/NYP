@@ -2,7 +2,8 @@
 
 
 
-CData::CData(): taken(false), name(""), ID("")
+
+CData::CData(): taken(false), name(""), ID(0)
 {
 }
 
@@ -11,7 +12,7 @@ CData::~CData()
 {
 }
 
-void CData::setData(bool taken, string name, string ID)
+void CData::setData(bool taken, string name, int ID)
 {
 	this->taken = taken;
 	this->name = name;
@@ -22,7 +23,7 @@ void CData::resetData()
 {
 	taken = false;
 	name = "";
-	ID = "";
+	ID = 0;
 }
 
 bool CData::getTaken()
@@ -35,7 +36,7 @@ string CData::getName()
 	return name;
 }
 
-string CData::getID()
+int CData::getID()
 {
 	return ID;
 }
@@ -57,7 +58,7 @@ void checkStringForNumber(bool & allNum, string ID)
 istream & operator>>(istream & input, CData & data)
 {
 	string name = "";
-	string ID = "";
+	int ID = 0;
 	bool allNum = false;
 
 	cout << "Please enter your name" << endl;
@@ -71,16 +72,15 @@ istream & operator>>(istream & input, CData & data)
 	cout << endl;
 
 	cout << "Please enter your ID" << endl;
-	getline(input, ID);
-
+	cin >> ID;
 	//Check if ID contain stuff other than numbers or ID size is more than 5 digit
-	checkStringForNumber(allNum, ID);
-	while (allNum == true || ID.size() > 5)
-	{
-		cout << "Error, please enter the patient's ID again" << endl;
-		getline(input, ID);
-		checkStringForNumber(allNum, ID);
-	}
+	//checkStringForNumber(allNum, ID);
+	//while (allNum == true /*|| ID.size() > 5*/)
+	//{
+	//	cout << "Error, please enter the patient's Data again" << endl;
+	//	getline(input, ID);
+	//	checkStringForNumber(allNum, ID);
+	//}
 
 	data.setData(true, name, ID);
 	return input;

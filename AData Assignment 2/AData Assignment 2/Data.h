@@ -20,13 +20,13 @@ public:
 	~CData();
 
 	//Setter
-	void setData(bool taken, string name, string ID);
+	void setData(bool taken, string name, int ID);
 	void resetData();
 
 	//Getter
 	bool getTaken();
 	string getName();
-	string getID();
+	int getID();
 
 	//Overator Overload
 	friend istream& operator>>(istream &input, CData &data);
@@ -35,6 +35,6 @@ public:
 private:
 	bool taken;
 	string name;
-	string ID;
+	int ID;
 };
 

@@ -33,3 +33,23 @@ bool Collision::SphereToSphere(Vector3 pos1, Vector3 pos2, float scale1, float s
 	else
 		return false;
 }
+
+bool Collision::AABB(Vector3 pos1, Vector3 pos2, float offSet_x, float offSet_y)
+{
+	/*if (pos1.x > pos2.x - offSet_x && pos1.x < pos2.x + offSet_x)
+	{
+		if (pos1.y > pos2.y - offSet_y && pos1.y < pos2.y + offSet_y)
+			return false;
+		else
+			return true;
+	}*/
+
+	if (pos1.x > pos2.x - offSet_x && pos1.x < pos2.x + offSet_x)
+	{
+		if (pos1.y > pos2.y - offSet_y && pos1.y < pos2.y + offSet_y)
+			return true;
+		else
+			return false;
+	}
+
+}

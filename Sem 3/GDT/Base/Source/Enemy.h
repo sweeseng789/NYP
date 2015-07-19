@@ -19,38 +19,27 @@ public:
 	~CEnemy(void);
 
 	//Getter
-	int getEnemyHealth();
-	bool returnRenderHead();
-	bool returnRenderLeftArm();
-	bool returnRenderRightArm();
-	float getRotateAngle();
 	Vector3 getEnemyPos();
+	bool getActive();
+	float getScale();
+	
 
 	//Setter
-	void update(float dt, Vector3 pos);
-	void findDiff(Vector3 pos);
-	void setPos(Vector3 pos, Vector3 target);
-	void minusHealth(int valueToMinus);
+	void update(float dt);
+	void setPos(Vector3 pos);
 
-	//Variable
+	//Bool
 	bool active;
+	Vector3 vel;
 private:
 	//Int
 	int EnemyHealth;
 
 	//Float
-	float rotateAngle;
-
-	//Bool
-	bool renderHead;
-	bool renderLeftArm;
-	bool renderRightArm;
+	float scale;
 
 	//Vector3
-	Vector3 EnemyPosition;
-	Vector3 EnemyTarget;
-	Vector3 EnemyView;
-	Vector3 EnemyDiff;
+	Vector3 pos;
 };
 
 #endif

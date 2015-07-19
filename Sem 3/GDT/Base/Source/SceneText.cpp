@@ -40,7 +40,7 @@ void SceneText::SetParameters()
 	Sniper.setBulletAndRounds(8, 2, 1.2f, 5.f);
 	SMG.setBulletAndRounds(90, 3, 0.2f, 5.f);
 	enemyCount = 0;
-	enemy.setPos(Vector3(0, 0, 0), Vector3(0, 0, 1));
+	//enemy.setPos(Vector3(0, 0, 0), Vector3(0, 0, 1));
 	restockTime = 10;
 	FApos.SetZero();
 	restocking = false;

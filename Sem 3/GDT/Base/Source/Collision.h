@@ -20,6 +20,7 @@ public:
 	static bool PointDistance(Vector3 pos1, Vector3 pos2, float range);
 	static bool PointDistanceSqrt(Vector3 pos1, Vector3 pos2, float range);
 	static bool SphereToSphere(Vector3 pos1, Vector3 pos2, float scale1, float scale2);
+	static bool AABB(Vector3 pos1, Vector3 pos2, float offSet_x, float offSet_y);
 };
 
 #endif

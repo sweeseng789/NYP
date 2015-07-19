@@ -19,7 +19,6 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
-    <ClCompile Include="Source\GenerateSkyPlane.cpp" />
     <ClCompile Include="Source\Hero.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -30,9 +29,6 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MiniMap.cpp" />
     <ClCompile Include="Source\SceneSandBox.cpp" />
-    <ClCompile Include="Source\SceneSkybox.cpp" />
-    <ClCompile Include="Source\SceneText.cpp" />
-    <ClCompile Include="Source\SceneTexture.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Sound.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
@@ -48,7 +44,6 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\Enemy.h" />
-    <ClInclude Include="Source\GenerateSkyPlane.h" />
     <ClInclude Include="Source\Geometry.h" />
     <ClInclude Include="Source\Hero.h" />
     <ClInclude Include="Source\Light.h" />
@@ -62,9 +57,6 @@
     <ClInclude Include="Source\MiniMap.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneSandBox.h" />
-    <ClInclude Include="Source\SceneSkybox.h" />
-    <ClInclude Include="Source\SceneText.h" />
-    <ClInclude Include="Source\SceneTexture.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />

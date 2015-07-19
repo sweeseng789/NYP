@@ -9,14 +9,19 @@ public:
 	~CBullet();
 
 	void update(double dt);
+	void setData(Vector3 pos, bool inverted);
+	void setActive();
 
 	bool getActive();
 	Vector3 getPos();
+	float getScale();
 
+	bool active;
 private:
 	Vector3 pos;
 	bool inverted;
-	bool active;
+	float scale;
+
 	double time;
 };
 

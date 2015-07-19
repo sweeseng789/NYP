@@ -3,6 +3,7 @@
 #include <string>
 #include <istream>
 #include <ostream>
+#include "UI.h"
 
 using std::cout;
 using std::cin;

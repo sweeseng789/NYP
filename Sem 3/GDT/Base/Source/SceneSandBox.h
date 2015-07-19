@@ -14,6 +14,7 @@
 #include "Map.h"
 #include "Bullet.h"
 #include "Hero.h"
+#include "Enemy.h"
 
 using std::vector;
 using std::cout;
@@ -139,6 +140,7 @@ class SceneSandBox : public Scene
 		GEO_HERO_JUMP_INVERSE,
 		GEO_HERO_LAND_INVERSE,
 		GEO_HERO_BULLET,
+		GEO_ENEMY_DEFAULT,
 		NUM_GEOMETRY,
 	};
 public:
@@ -163,7 +165,8 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderBackground();
 	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size = 1.0f, const float x = 0.f, const float y = 0.f, const bool rotate = false);
-	void fetchBullet();
+	CBullet* fetchBullet();
+	void RenderHero();
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -201,6 +204,7 @@ private:
 	//vector
 	vector<unsigned char> m_heightMap;
 	vector<CBullet *> bulletList;
+	vector<CEnemy *> enemyList;
 
 	//Vector3
 	Vector3 mapPos;
@@ -231,20 +235,19 @@ private:
 	void RenderTileMap();
 
 	//Code for Smooth scroling
-	/*int mapOffSet_x, mapOffset_y;
-	int tileOffSet_x, tileOffSet_x;
-	int mapFineOffSet_x, mapFineOffset_y;*/
+	int mapOffSet_x, mapOffset_y;
+	int tileOffSet_x, tileOffset_y;
+	int mapFineOffSet_x, mapFineOffset_y;
 
 	//Code for Parallax Scrolling
 	CMap * m_cRearMap;
 	void RenderRearTileMap();
-	int tileOffset_x, tileOffSet_y;
 	int rearWallOffset_x, rearWallOffset_y;
 	int rearWallTileOffset_x, rearWallTileOffset_y;
 	int rearWallFineOffset_x, rearWallFineOffset_y;
 
 	//Hero Info
-	CHero* hero;
+	CHero hero;
 	bool bulletshot;
 };
 

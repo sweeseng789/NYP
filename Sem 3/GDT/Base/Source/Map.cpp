@@ -129,3 +129,8 @@ int CMap::getNumOfTiles_MapWidth(void)
 {
 	return theNumOfTiles_MapWidth;
 }
+
+int CMap::getScreenWidth()
+{
+	return theScreen_Width;
+}

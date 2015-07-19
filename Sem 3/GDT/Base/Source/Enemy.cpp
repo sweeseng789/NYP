@@ -2,85 +2,39 @@
 #include "Application.h"
 
 
-CEnemy::CEnemy(void)
+CEnemy::CEnemy(void): active(true), scale(2.2)
 {
-	EnemyPosition.Set(0.f, 0.f, 0.f);
-	EnemyHealth = 100;
-	renderHead = false;
-	renderLeftArm = true;
-	renderRightArm = true;
-	active = true;
-	rotateAngle = 0;
+	vel.x = 3;
 }
 CEnemy::~CEnemy(void)
 {
 
 }
 
-bool CEnemy::returnRenderHead()
+void CEnemy::setPos(Vector3 pos)
 {
-	return renderHead;
-}
-
-bool CEnemy::returnRenderLeftArm()
-{
-	return renderLeftArm;
-}
-
-bool CEnemy::returnRenderRightArm()
-{
-	return renderRightArm;
-}
-
-int CEnemy::getEnemyHealth()
-{
-	return this->EnemyHealth;
+	this->pos = pos;
 }
 
 Vector3 CEnemy::getEnemyPos()
 {
-	return EnemyPosition;
+	return pos;
 }
 
-void CEnemy::findDiff(Vector3 pos)
+bool CEnemy::getActive()
 {
-	EnemyDiff = pos - EnemyPosition;
+	return active;
 }
 
-void CEnemy::setPos(Vector3 pos, Vector3 target)
+float CEnemy::getScale()
 {
-	EnemyPosition = pos;
-	EnemyTarget = target;
-	EnemyView = (EnemyTarget - EnemyPosition).Normalized();
+	return scale;
 }
 
-float CEnemy::getRotateAngle()
+void CEnemy::update(float dt)
 {
-	return rotateAngle;
-}
-
-void CEnemy::minusHealth(int value)
-{
-	EnemyHealth -= value;
-}
-
-void CEnemy::update(float dt, Vector3 pos)
-{
-	Vector3 temp;
-	float hyp = 0;
-	temp.x = pos.x - EnemyPosition.x;
-	temp.z = pos.z - EnemyPosition.z;
-	hyp = sqrt(temp.x * temp.x + temp.z * temp.z);
-	temp.x /= hyp;
-	temp.z /= hyp;
-
-	EnemyPosition += temp * 30 * dt;
-
-	findDiff(pos);
-
-	rotateAngle = Math::RadianToDegree(acos(EnemyView.Dot(EnemyDiff) / (EnemyView.Length() * EnemyDiff.Length())));
-	if (EnemyView.Cross(EnemyDiff).y > 1)
-		rotateAngle *= 1;
-	else
-		rotateAngle *= -1;
+	if (Application::IsKeyPressed('8'))
+	{
+		pos.x += 100 * dt;
+	}
 }

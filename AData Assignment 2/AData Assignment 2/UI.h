@@ -10,6 +10,7 @@ public:
 		SORT,
 		PRINT,
 		EXIT,
+		VALID,
 		INVALID,
 		MENU_LAST
 	};

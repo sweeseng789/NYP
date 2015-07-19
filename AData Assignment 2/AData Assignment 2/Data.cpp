@@ -41,17 +41,14 @@ int CData::getID()
 	return ID;
 }
 
-void checkStringForNumber(bool & allNum, string ID)
+bool checkStringForNumber( string ID)
 {
 	for (unsigned a = 0; a < ID.size(); ++a)
 	{
 		if (!isdigit(ID[a]))
-		{
-			allNum = true;
-			break;
-		}
+			return true;
 		else
-			allNum = false;
+			return false;
 	}
 }
 
@@ -59,6 +56,7 @@ istream & operator>>(istream & input, CData & data)
 {
 	string name = "";
 	int ID = 0;
+	string IDtoCheck = "";
 	bool allNum = false;
 
 	cout << "Please enter your name" << endl;
@@ -72,17 +70,27 @@ istream & operator>>(istream & input, CData & data)
 	cout << endl;
 
 	cout << "Please enter your ID" << endl;
-	cin >> ID;
-	//Check if ID contain stuff other than numbers or ID size is more than 5 digit
-	//checkStringForNumber(allNum, ID);
-	//while (allNum == true /*|| ID.size() > 5*/)
-	//{
-	//	cout << "Error, please enter the patient's Data again" << endl;
-	//	getline(input, ID);
-	//	checkStringForNumber(allNum, ID);
-	//}
+	getline(input, IDtoCheck);
 
-	data.setData(true, name, ID);
+	try{
+		//Check if ID contain stuff other than numbers or ID size is more than 5 digit
+		if (checkStringForNumber(IDtoCheck) || IDtoCheck.size() > 5)
+			throw CUI(CUI::INVALID);
+		else
+			throw CUI(CUI::VALID);
+	}
+	catch (CUI ui)
+	{
+		if (ui.getType() == CUI::VALID)
+		{
+			ID = stoi(IDtoCheck);
+			data.setData(true, name, ID);
+		}
+		else
+		{
+			cout << "Error, please try again later" << endl;
+		}
+	}
 	return input;
 }
 

@@ -71,6 +71,7 @@ public:
 		GEO_TEXT,
 		GEO_BALL,
 		GEO_CUBE,
+		GEO_CUBE2,
 		NUM_GEOMETRY,
 	};
 public:

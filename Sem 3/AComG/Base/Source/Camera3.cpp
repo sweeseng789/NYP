@@ -216,11 +216,11 @@ void Camera3::Update(double dt)
 		Reset();
 	}*/
 
-	/*if (myKeys[32] == true)
+	if (myKeys[32] == true)
 	{
 		Jump( dt );
 		myKeys[32] = false;
-	}*/
+	}
 
 
 	//===============Crouching==============//

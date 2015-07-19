@@ -6,14 +6,15 @@ using std::cout;
 using std::endl;
 
 
-CBullet::CBullet()
+CBullet::CBullet() : active(true), time(3.f), scale(1)
 {
 }
 
-CBullet::CBullet(Vector3 pos, bool inverted) : active(true), time(3.f)
+void CBullet::setActive()
 {
-	this->pos = pos;
-	this->inverted = inverted;
+	active = true;
+	time = 3.f;
+	scale = 1;
 }
 
 
@@ -23,7 +24,7 @@ CBullet::~CBullet()
 
 void CBullet::update(double dt)
 {
-	time -= dt;
+	//time -= dt;
 
 	if (inverted)
 		pos -= 600 * dt;
@@ -33,8 +34,13 @@ void CBullet::update(double dt)
 	if (time <= 0)
 	{
 		active = false;
-		cout << "h" << endl;
 	}
+}
+
+void CBullet::setData(Vector3 pos, bool inverted)
+{
+	this->pos = pos;
+	this->inverted = inverted;
 }
 
 Vector3 CBullet::getPos()
@@ -45,4 +51,9 @@ Vector3 CBullet::getPos()
 bool CBullet::getActive()
 {
 	return active;
+}
+
+float CBullet::getScale()
+{
+	return scale;
 }

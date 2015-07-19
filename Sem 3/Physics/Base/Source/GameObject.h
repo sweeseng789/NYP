@@ -11,6 +11,7 @@ struct GameObject
 		GO_BALL,
 		GO_CUBE,
 		GO_WALL,
+		GO_WALL2,
 		GO_ASTEROID_SMALL,
 		GO_ASTEROID_BIG,
 		GO_SHIP,

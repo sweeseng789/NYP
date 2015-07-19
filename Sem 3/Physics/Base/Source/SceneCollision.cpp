@@ -27,14 +27,114 @@ void SceneCollision::Init()
 
 	m_ghost = new GameObject(GameObject::GO_BALL);
 
+
 	GameObject* go = FetchGO();
 	//go->active = true;
 	go->type = GameObject::GO_WALL;
-	go->pos.Set(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->normal.Set(1, 1, 0);
+	go->pos.Set(35, m_worldHeight * 0.5f, 0);
+	go->normal.Set(1, 0, 0);
 	go->normal.Normalize();
-	go->scale.Set(10, 80, 1);
-	//go->angle = Math::RadianToDegree(atan2(go->normal.x, go->normal.z));
+	go->scale.Set(5, 80, 1);
+	go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+
+	GameObject* go2 = FetchGO();
+	//go->active = true;
+	go2->type = GameObject::GO_WALL;
+	go2->pos.Set(m_worldWidth - 35, m_worldHeight * 0.5f, 0);
+	go2->normal.Set(-1, 0, 0);
+	go2->normal.Normalize();
+	go2->scale.Set(5, 80, 1);
+	go2->angle = Math::RadianToDegree(atan2(go2->normal.y, go2->normal.x));
+
+	GameObject* go3 = FetchGO();
+	//go->active = true;
+	go3->type = GameObject::GO_WALL2;
+	go3->pos.Set(35, m_worldHeight - 5, 0);
+	go3->normal.Set(1, 0, 0);
+	go3->normal.Normalize();
+	go3->scale.Set(5, 10, 1);
+	go3->angle = Math::RadianToDegree(atan2(go3->normal.y, go3->normal.x));
+
+	GameObject* go5 = FetchGO();
+	//go->active = true;
+	go5->type = GameObject::GO_WALL2;
+	go5->pos.Set(38.5, m_worldHeight - 1, 0);
+	go5->normal.Set(0, 1, 0);
+	go5->normal.Normalize();
+	go5->scale.Set(3, 5, 1);
+	go5->angle = Math::RadianToDegree(atan2(go5->normal.y, go5->normal.x));
+
+	GameObject* go6 = FetchGO();
+	//go->active = true;
+	go6->type = GameObject::GO_WALL;
+	go6->pos.Set(m_worldWidth * 0.5f, m_worldHeight - 1, 0);
+	go6->normal.Set(0, 1, 0);
+	go6->normal.Normalize();
+	go6->scale.Set(3, 52, 1);
+	go6->angle = Math::RadianToDegree(atan2(go6->normal.y, go6->normal.x));
+
+	GameObject* go4 = FetchGO();
+	//go->active = true;
+	go4->type = GameObject::GO_WALL;
+	go4->pos.Set(m_worldWidth * 0.5f, 1, 0);
+	go4->normal.Set(0, 1, 0);
+	go4->normal.Normalize();
+	go4->scale.Set(3, 52, 1);
+	go4->angle = Math::RadianToDegree(atan2(go4->normal.y, go4->normal.x));
+
+	GameObject* go7 = FetchGO();
+	//go->active = true;
+	go7->type = GameObject::GO_WALL2;
+	go7->pos.Set(m_worldWidth -38.5, m_worldHeight - 1, 0);
+	go7->normal.Set(0, 1, 0);
+	go7->normal.Normalize();
+	go7->scale.Set(3, 5, 1);
+	go7->angle = Math::RadianToDegree(atan2(go7->normal.y, go7->normal.x));
+
+	GameObject* go8 = FetchGO();
+	//go->active = true;
+	go8->type = GameObject::GO_WALL2;
+	go8->pos.Set(m_worldWidth - 35, m_worldHeight - 5, 0);
+	go8->normal.Set(1, 0, 0);
+	go8->normal.Normalize();
+	go8->scale.Set(5, 10, 1);
+	go8->angle = Math::RadianToDegree(atan2(go8->normal.y, go8->normal.x));
+
+	GameObject* go9 = FetchGO();
+	//go->active = true;
+	go9->type = GameObject::GO_WALL2;
+	go9->pos.Set(m_worldWidth - 35, 5, 0);
+	go9->normal.Set(1, 0, 0);
+	go9->normal.Normalize();
+	go9->scale.Set(5, 10, 1);
+	go9->angle = Math::RadianToDegree(atan2(go9->normal.y, go9->normal.x));
+
+	GameObject* go10 = FetchGO();
+	//go->active = true;
+	go10->type = GameObject::GO_WALL2;
+	go10->pos.Set( 35, 5, 0);
+	go10->normal.Set(1, 0, 0);
+	go10->normal.Normalize();
+	go10->scale.Set(5, 10, 1);
+	go10->angle = Math::RadianToDegree(atan2(go10->normal.y, go10->normal.x));
+
+	GameObject* go12 = FetchGO();
+	//go->active = true;
+	go12->type = GameObject::GO_WALL2;
+	go12->pos.Set(m_worldWidth - 38.5, 1, 0);
+	go12->normal.Set(0, 1, 0);
+	go12->normal.Normalize();
+	go12->scale.Set(3, 5, 1);
+	go12->angle = Math::RadianToDegree(atan2(go12->normal.y, go12->normal.x));
+
+	GameObject* go11 = FetchGO();
+	//go->active = true;
+	go11->type = GameObject::GO_WALL2;
+	go11->pos.Set(38.5, 1, 0);
+	go11->normal.Set(0, 1, 0);
+	go11->normal.Normalize();
+	go11->scale.Set(3, 5, 1);
+	go11->angle = Math::RadianToDegree(atan2(go11->normal.y, go11->normal.x));
 }
 
 GameObject* SceneCollision::FetchGO()
@@ -104,10 +204,9 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 		//Practical 4, Exercise 13: improve collision detection algorithm
 		if (distSquared <= combinedRadius * combinedRadius &&c.Dot(d) > 0)
 			return true;
-		else
-			return false;
+		return false;
 	}
-	else if (go2->type == GameObject::GO_WALL)
+	if (go2->type == GameObject::GO_WALL || go2->type == GameObject::GO_WALL2)
 	{
 		//|(w0 - b1).N| < r + h / 2
 		Vector3 w0 = go2->pos;
@@ -124,8 +223,7 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 
 		if (abs((w0 - b1).Dot(N)) < r + h * 0.5 && abs((w0 - b1).Dot(NP)) < r + l * 0.5)
 			return true;
-		else
-			return false;
+		return false;
 	}
 }
 
@@ -151,7 +249,7 @@ void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
 		initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 		finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 	}
-	else if (go2->type == GameObject::GO_WALL)
+	else if (go2->type == GameObject::GO_WALL || go2->type == GameObject::GO_WALL2)
 	{
 		Vector3 w0 = go2->pos;
 		Vector3 b1 = go1->pos;
@@ -193,6 +291,8 @@ void SceneCollision::GOUpdate(const double dt)
 			if (go->type == GameObject::GO_BALL)
 			{
 				go->pos += go->vel * static_cast<float>(dt);
+				/*go->vel.x = (go->vel.x / 100) * 99.2;
+				go->vel.y = (go->vel.y / 100) * 99.2;*/
 
 				initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 				finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
@@ -215,11 +315,11 @@ void SceneCollision::GOUpdate(const double dt)
 					go->vel.y = -go->vel.y;
 				}
 
-				if (go->pos.x > m_worldWidth + 5 || go->pos.x < -5 || go->pos.y > m_worldHeight + 5 || go->pos.y < -5)
+				/*if (go->pos.x > m_worldWidth + 5 || go->pos.x < -5 || go->pos.y > m_worldHeight + 5 || go->pos.y < -5)
 				{
 					go->active = false;
 					this->m_objectCount--;
-				}
+				}*/
 			}
 
 
@@ -228,10 +328,19 @@ void SceneCollision::GOUpdate(const double dt)
 				GameObject *go2 = static_cast<GameObject *>(*it2);
 				if (go2->active)
 				{
-					//Practical 4, Exercise 13: improve collision detection algorithm
-					if (CheckCollision(go, go2, dt))
+					GameObject *goA = go;
+					GameObject *goB = go2;
+					if (go->type != GameObject::GO_BALL)
 					{
-						CollisionResponse(go, go2);
+						if (go2->type != GameObject::GO_BALL)
+							continue;
+						goA = go2;
+						goB = go;
+					}
+					//Practical 4, Exercise 13: improve collision detection algorithm
+					if (CheckCollision(goA, goB, dt))
+					{
+						CollisionResponse(goA, goB);
 					}
 				}
 			}
@@ -251,6 +360,18 @@ void SceneCollision::Update(double dt)
 	if (Application::IsKeyPressed('0'))
 	{
 		m_speed += 0.1f;
+	}
+
+	if (Application::IsKeyPressed('C'))
+	{
+		for (std::vector<GameObject*>::iterator it = m_goList.begin(); it != m_goList.end(); it++)
+		{
+			GameObject * go = (GameObject*)*it;
+			if (go->active && go->type == GameObject::GO_BALL)
+			{
+				go->active = false;
+			}
+		}
 	}
 
 	//Mouse Section
@@ -364,17 +485,24 @@ void SceneCollision::RenderGO(GameObject *go)
 		break;
 
 	case GameObject::GO_WALL:
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-
-		float angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-
-		modelStack.Rotate(angle, 0, 0, 1);
-		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
-		RenderMesh(meshList[GEO_CUBE], false);
-		modelStack.PopMatrix();
-	}
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(go->angle, 0, 0, 1);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_CUBE], false);
+			modelStack.PopMatrix();
+		}
+		break;
+	case GameObject::GO_WALL2:
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+			modelStack.Rotate(go->angle, 0, 0, 1);
+			modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+			RenderMesh(meshList[GEO_CUBE2], false);
+			modelStack.PopMatrix();
+		}
 		break;
 	}
 	/*if (go->type == GameObject::GO_WALL)

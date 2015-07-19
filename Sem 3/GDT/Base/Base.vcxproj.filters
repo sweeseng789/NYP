@@ -15,26 +15,14 @@
     <Filter Include="Header Files\Camera Folder">
       <UniqueIdentifier>{7bbdf4d7-35f2-4824-9ca7-5cfbedb0e040}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Scene Folder">
-      <UniqueIdentifier>{64308afb-6a65-475f-9f73-0029dd3ac9a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Weapon Folder">
       <UniqueIdentifier>{4ff6fe36-7416-474b-a18a-2ab4fa4d0c1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene Folder">
-      <UniqueIdentifier>{32963df3-4b0e-4610-8fd9-7aab892436e3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Camera Folder">
       <UniqueIdentifier>{d030a9a6-710c-4581-87d5-7c48d6b18be8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Camera Folder\Shader">
       <UniqueIdentifier>{1f23b25b-bf0b-42ee-b624-3b1e1bd70bd0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Utility Folder">
-      <UniqueIdentifier>{aef4e3b8-3f1f-46d3-ba2a-3154dc178e2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Utility Folder">
-      <UniqueIdentifier>{b4d3877c-4cac-4cdd-82d3-683671562b57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -86,22 +74,16 @@
     <ClCompile Include="Source\Camera2.cpp">
       <Filter>Source Files\Camera Folder</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneTexture.cpp">
-      <Filter>Source Files\Scene Folder</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneSkybox.cpp">
-      <Filter>Source Files\Scene Folder</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
-      <Filter>Source Files\Scene Folder</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GenerateSkyPlane.cpp">
-      <Filter>Source Files\Scene Folder</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SpriteAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SceneSandBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Map.cpp">
@@ -112,12 +94,6 @@
     </ClCompile>
     <ClCompile Include="Source\Hero.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Collision.cpp">
-      <Filter>Source Files\Utility Folder</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Sound.cpp">
-      <Filter>Source Files\Utility Folder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,25 +154,16 @@
     <ClInclude Include="Source\Camera3.h">
       <Filter>Header Files\Camera Folder</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneTexture.h">
-      <Filter>Header Files\Scene Folder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Header Files\Scene Folder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneSkybox.h">
-      <Filter>Header Files\Scene Folder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
-      <Filter>Header Files\Scene Folder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GenerateSkyPlane.h">
-      <Filter>Header Files\Scene Folder</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SpriteAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SceneSandBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Map.h">
@@ -208,11 +175,8 @@
     <ClInclude Include="Source\Hero.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Sound.h">
-      <Filter>Header Files\Utility Folder</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collision.h">
-      <Filter>Header Files\Utility Folder</Filter>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

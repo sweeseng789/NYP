@@ -14,9 +14,9 @@
 #include "Collision.h"
 #include "Particle.h"
 #include "Map.h"
-#include "Enemy.h"
 #include "Sound.h"
 #include "DepthFBO.h"
+#include "NPC.h"
 
 using std::vector;
 using std::cout;
@@ -118,6 +118,7 @@ class SceneSandBox : public Scene
 		GEO_STUMP,
 		GEO_MOON,
 		GEO_LIGHT_DEPTH_QUAD,
+		GEO_WOLFSA,
 		NUM_GEOMETRY,
 	};
 
@@ -132,7 +133,6 @@ public:
 
 
 	//======================Getter=========================//
-	float calculatingFPS(float dt);
 	Particle* fetchOBJ();
 
 	//======================Setter========================//
@@ -150,7 +150,7 @@ public:
 	void RenderSkybox();
 	void RenderTerrain();
 	void RenderParticle(Particle * particle);
-	void RenderParticleNoFog(Particle * particle);
+	void RenderSpriteAnimation(CNPC* npc);
 
 	//======================Virtual Function========================//
 	virtual void Init();
@@ -173,6 +173,7 @@ private:
 	//Float
 	float rotateAngle, rotateAngle2;
 	float fps;
+	float offSet_y;
 
 	//Double
 	double moving;
@@ -192,15 +193,15 @@ private:
 
 	//vector
 	vector<unsigned char> m_heightMap;
-	vector<COBJ *> OBJList;
 	vector<Particle *> ParticleList;
-	vector<CEnemy *> EnemyList;
+	vector<CNPC *> npcList;
 
 	//Vector3
 	Vector3 mapPos;
 	Vector3 leonPos;
 	Vector3 cubePos;
 	Vector3 HeightMapScale;
+	Vector3 churchPos;
 
 	//Camera3
 	Camera3 camera;

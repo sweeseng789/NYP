@@ -37,7 +37,7 @@ void SceneShadow::SetParameters()
 	off_Thunder = false;
 	playSound_Thunder = true;
 
-	for (unsigned a = 0; a < 30; a++)
+	/*for (unsigned a = 0; a < 30; a++)
 	{
 		Vector3 pos;
 		pos.x = Math::RandFloatMinMax(-1000, 1000);
@@ -107,7 +107,7 @@ void SceneShadow::SetParameters()
 		Particle * particle = new Particle();
 		particle->CreateRain();
 		ParticleList.push_back(particle);
-	}
+	}*/
 
 	mSpeed = 1.f;
 	OBJCount = 0;
@@ -287,7 +287,7 @@ void SceneShadow::Init()
 	fogEnd = 1000.f;
 	fogDensity = 10.f;
 	fogType = 0;
-	fogEnabled = 0;//Enable
+	fogEnabled = 1;//Enable
 
 	glUniform3fv(m_parameters[U_COLOR_FOG], 1, &fogColor.r);
 	glUniform3fv(m_parameters[U_COLOR_FOG2], 1, &fogColor.g);
@@ -563,7 +563,7 @@ void SceneShadow::Update(double dt)
 		Particle * particle = (Particle*)*it;
 		if (particle->active == true)
 		{
-			particle->update(dt, camera.position);
+			particle->update(dt, camera.position, camera.direction);
 		}
 	}
 
@@ -974,7 +974,7 @@ void SceneShadow::RenderPassMain()
 	RenderWorld();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	modelStack.Translate(lights[0].position.x, lights[0].position.y + camera.position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 

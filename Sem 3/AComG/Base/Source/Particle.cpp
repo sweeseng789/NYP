@@ -20,7 +20,7 @@ Particle::~Particle()
 
 void Particle::CreateRain()
 {
-	view.Set(0, 0, 1);
+	//view.Set(0, 0, 1);
 	pos.x = Math::RandFloatMinMax(-1000, 1000);
 	pos.y = 500;
 	pos.z = Math::RandFloatMinMax(-1000, 1000);
@@ -32,6 +32,27 @@ void Particle::CreateRain()
 	mass = scale * scale  * scale;
 	ParticleType = GO_RAIN;
 }
+
+void Particle::CreateRain2(Vector3 cameraPos, Vector3 cameraTarget)
+{
+	/*pos.x = Math::RandFloatMinMax(cameraPos.x - 400, cameraPos.x + 400);
+	pos.y = 500;
+	pos.z = Math::RandFloatMinMax(cameraPos.z - 400, cameraPos.z + 400);*/
+
+	//This would give give the rain particle the position that is always infront of the camera
+	float directionOffSet = 8;
+	pos.x = cameraPos.x + Math::RandFloatMinMax(cameraTarget.x - directionOffSet, cameraTarget.x + directionOffSet) * Math::RandFloatMinMax(50, 100);
+	pos.y = 500;
+	pos.z = cameraPos.z + Math::RandFloatMinMax(cameraTarget.z - directionOffSet, cameraTarget.z + directionOffSet) * Math::RandFloatMinMax(50, 100);
+	defaultPos = pos;
+	vel.x = Math::RandFloatMinMax(-10, 10);
+	vel.z = Math::RandFloatMinMax(-10, 10);
+	vel.y = Math::RandFloatMinMax(-70, -170);
+	defaultScale = scale = 3;
+	mass = scale * scale  * scale;
+	ParticleType = GO_RAIN;
+}
+
 
 void Particle::CreateBall()
 {
@@ -54,7 +75,7 @@ void Particle::CreateStaticOBJ(Vector3 pos)
 	vel.SetZero();
 }
 
-void Particle::update(double dt, Vector3 CameraPos)
+void Particle::update(double dt, Vector3 CameraPos, Vector3 CameraTarget)
 {
 	pos += vel * (100 / mass) * (float)dt;
 
@@ -72,7 +93,7 @@ void Particle::update(double dt, Vector3 CameraPos)
 	{
 		if (pos.y < 0)
 		{
-			CreateRain();
+			CreateRain2(CameraPos, CameraTarget);
 		}
 
 		//atan2(difference about x axis, difference about z axis) == angle

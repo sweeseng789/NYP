@@ -120,11 +120,11 @@ float getShadowEffect()
 	float visibility = 1.0;
 	float bias = 0.005;
 	
-	for(int i = 0; i < 4; ++i)
+	for(int i = 0; i < 16; ++i)
 	{
-		if(texture2D(shadowMap, shadowCoord.xy + poissonDisk[i] / 700.0).x < shadowCoord.z - bias)
+		if(texture2D(shadowMap, shadowCoord.xy + poissonDisk[i] / 1000.0).x < shadowCoord.z - bias)
 		{
-			visibility -= 1.0 / 4;
+			visibility -= 1.0 / 16;
 		}
 	}
 	return max(0.25, visibility);

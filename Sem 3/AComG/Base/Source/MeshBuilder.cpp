@@ -582,7 +582,9 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 	const float SCALE_FACTOR = 256.0f;
-
+	Vector3 N;
+	Vector3 test1;
+	Vector3 test2;
 	if (!LoadHeightMap(file_path.c_str(), heightMap))
 		return NULL;
 
@@ -595,6 +597,16 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 			float scaledHeight = (float)heightMap[z * terrainSize + x] / SCALE_FACTOR;
 
 			v.pos.Set(static_cast<float>(x) / terrainSize - 0.5f, scaledHeight, static_cast<float>(z) / terrainSize - 0.5f);
+			//v.normal.Set(0, 1, 0);
+
+			if (x < terrainSize && z < terrainSize)
+			{
+				N.x = static_cast<unsigned>((x + 0.5f) * terrainSize);
+				N.z = static_cast<unsigned>((z + 0.5f) * terrainSize);
+				//N.y = static_cast<float>(heightMap[N.x * terrainSize + N.z] / SCALE_FACTOR);
+				N.Normalize();
+				v.normal = N;
+			}
 
 			//For rendering height map without texture
 			v.color.Set(scaledHeight, scaledHeight, scaledHeight);
@@ -842,6 +854,7 @@ SpriteAnimation * MeshBuilder::GenerateSpriteAnimation(const std::string & meshN
 			offset += 4;
 		}
 	}
+
 
 	SpriteAnimation* sprite = new SpriteAnimation(meshName, numRow, numCol);
 

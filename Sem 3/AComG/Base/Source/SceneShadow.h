@@ -14,7 +14,6 @@
 #include "Collision.h"
 #include "Particle.h"
 #include "Map.h"
-#include "Enemy.h"
 #include "Sound.h"
 #include "DepthFBO.h"
 
@@ -178,6 +177,7 @@ private:
 	//Float
 	float rotateAngle, rotateAngle2;
 	float fps;
+	float offSet_y;
 
 	//Double
 	double moving;
@@ -199,7 +199,6 @@ private:
 	vector<unsigned char> m_heightMap;
 	vector<COBJ *> OBJList;
 	vector<Particle *> ParticleList;
-	vector<CEnemy *> EnemyList;
 
 	//Vector3
 	Vector3 mapPos;

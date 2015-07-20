@@ -25,10 +25,11 @@ public:
 
 	//Create Particle
 	void CreateRain();
+	void CreateRain2(Vector3 cameraPos, Vector3 CameraTarget);
 	void CreateBall();
 	void CreateStaticOBJ(Vector3 pos);
 
-	void update(double dt, Vector3 CameraPos);
+	void update(double dt, Vector3 CameraPos, Vector3 CameraTarget);
 
 	Vector3 pos;
 	Vector3 defaultPos;

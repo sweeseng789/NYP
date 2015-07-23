@@ -582,9 +582,6 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 	const float SCALE_FACTOR = 256.0f;
-	Vector3 N;
-	Vector3 test1;
-	Vector3 test2;
 	if (!LoadHeightMap(file_path.c_str(), heightMap))
 		return NULL;
 
@@ -598,15 +595,6 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 
 			v.pos.Set(static_cast<float>(x) / terrainSize - 0.5f, scaledHeight, static_cast<float>(z) / terrainSize - 0.5f);
 			//v.normal.Set(0, 1, 0);
-
-			if (x < terrainSize && z < terrainSize)
-			{
-				N.x = static_cast<unsigned>((x + 0.5f) * terrainSize);
-				N.z = static_cast<unsigned>((z + 0.5f) * terrainSize);
-				//N.y = static_cast<float>(heightMap[N.x * terrainSize + N.z] / SCALE_FACTOR);
-				N.Normalize();
-				v.normal = N;
-			}
 
 			//For rendering height map without texture
 			v.color.Set(scaledHeight, scaledHeight, scaledHeight);
@@ -630,6 +618,41 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 		}
 	}
 
+	Vector3 frontPos, right, rightPos, top, pos, front;
+	for (unsigned z = 0; z < terrainSize - 1; ++z)
+	{
+		for (unsigned x = 1; x < terrainSize ; ++x)
+		{
+			unsigned index = x + z * terrainSize;
+			pos.Set(vertex_buffer_data[index].pos.x, vertex_buffer_data[index].pos.y, vertex_buffer_data[index].pos.z);
+
+			//vector front
+			index = (x - 1) + (z * terrainSize);
+			frontPos.Set(vertex_buffer_data[index].pos.x, vertex_buffer_data[index].pos.y, vertex_buffer_data[index].pos.z);
+			front = (frontPos - pos);
+
+			index = x + (z + 1) * terrainSize;
+			rightPos.Set(vertex_buffer_data[index].pos.x, vertex_buffer_data[index].pos.y, vertex_buffer_data[index].pos.z);
+			right = rightPos - pos;
+
+			index = x + z * terrainSize;
+			top = front.Cross(right);
+			vertex_buffer_data[index].normal = top;
+		}
+	}
+
+	Vector3 averageNormal;
+	for (unsigned i = 0; i < index_buffer_data.size(); i += 3)
+	{
+		averageNormal = vertex_buffer_data[index_buffer_data[i]].normal + vertex_buffer_data[index_buffer_data[i + 1]].normal + vertex_buffer_data[index_buffer_data[i + 2]].normal;
+		averageNormal.x /= 3;
+		averageNormal.y /= 3;
+		averageNormal.z /= 3;
+
+		vertex_buffer_data[index_buffer_data[i]].normal = averageNormal;
+		vertex_buffer_data[index_buffer_data[i + 1]].normal = averageNormal;
+		vertex_buffer_data[index_buffer_data[i + 2]].normal = averageNormal;
+	}
 	Mesh *mesh = new Mesh(meshName);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex),

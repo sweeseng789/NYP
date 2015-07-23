@@ -7,6 +7,7 @@
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
+#include "Strategy_Kill.h"
 
 SceneSandBox::SceneSandBox():
 	m_cMap(NULL),
@@ -201,6 +202,12 @@ void SceneSandBox::SetMesh()
 	meshList[GEO_ENEMY_DEFAULT] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
 	meshList[GEO_ENEMY_DEFAULT]->textureID = LoadTGA("Image//Enemy_Default.tga");
 
+	meshList[GEO_TILE_SAFEZONE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
+	meshList[GEO_TILE_SAFEZONE]->textureID = LoadTGA("Image//tile11_safezone.tga");
+
+	meshList[GEO_TILE_KILLZONE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
+	meshList[GEO_TILE_KILLZONE]->textureID = LoadTGA("Image//tile10_killzone.tga");
+
 	//Initalise the new tile map
 	m_cMap = new CMap();
 	m_cMap->Init(1024, 800, 24, 32, 600, 1600);
@@ -222,6 +229,12 @@ void SceneSandBox::SetParameters()
 
 	hero.setData(Vector3(50, 575 - 100, 0), 3);
 	hero.setMap(m_cMap);
+	
+	CEnemy *enemy = new CEnemy();
+	enemy->ChangeStrategy(NULL, false);
+	enemy->SetPos_x(575);
+	enemy->SetPos_y(100);
+	//enemyList.push_back(enemy);
 }
 
 float SceneSandBox::calculatingFPS(float dt)
@@ -388,21 +401,6 @@ void SceneSandBox::Init()
 	rotateAngle = rotateAngle2 = 0;
 
 	bLightEnabled = true;
-
-	int m = 0;
-	for (int i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
-	{
-		for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
-		{
-			m = tileOffSet_x + k;
-			if (m_cMap->theScreenMap[i][m] == 3)
-			{
-				CEnemy * enemy = new CEnemy();
-				enemy->setPos(Vector3(k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize(), 0));
-				enemyList.push_back(enemy);
-			}
-		}
-	}
 }
 
 /******************************************************************************
@@ -462,7 +460,7 @@ void SceneSandBox::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-	camera.Update(dt);
+	//camera.Update(dt);
 	fps = calculatingFPS((float)dt);
 
 	/*static float tempY = 0.f;
@@ -510,37 +508,41 @@ void SceneSandBox::Update(double dt)
 			CBullet* bullet = (CBullet*)*it;
 			CEnemy * enemy = (CEnemy*)*it2;
 
-			if (enemy->active)
-				enemy->update(dt);
+			/*if (enemy->active)
+				enemy->update(dt);*/
 
 			if (bullet->getActive())
 				bullet->update(dt);
 
-			if (enemy->active && bullet->active)
-			{
-				int m = 0;
-				for (int i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
-				{
-					for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
-					{
-						m = tileOffSet_x + k;
-						if (m_cMap->theScreenMap[i][m] == 3)
-						{
-							Vector3 bulletPos;
-							bulletPos.x = bullet->getPos().x;
-							bulletPos.y = bullet->getPos().y - 25;
+			//if (enemy->active && bullet->active)
+			//{
+			//	//int m = 0;
+			//	//for (int i = 0; i < m_cMap->GetNumOfTiles_Height(); i++)
+			//	//{
+			//	//	for (int k = 0; k < m_cMap->GetNumOfTiles_Width() + 1; k++)
+			//	//	{
+			//	//		m = tileOffSet_x + k;
+			//	//		if (m_cMap->theScreenMap[i][m] == 3)
+			//	//		{
+			//	//			Vector3 bulletPos;
+			//	//			bulletPos.x = bullet->getPos().x;
+			//	//			bulletPos.y = bullet->getPos().y - 25;
 
-							Vector3 enemyPos;
-							enemyPos.x = k*m_cMap->GetTileSize() - mapFineOffSet_x;
-							enemyPos.y = 575 - i*m_cMap->GetTileSize();
+			//	//			Vector3 enemyPos;
+			//	//			/*enemyPos.x = k*m_cMap->GetTileSize() - mapFineOffSet_x;
+			//	//			enemyPos.y = 575 - i*m_cMap->GetTileSize();*/
+			//	//			enemyPos = enemy->getEnemyPos();
+			//	//			enemyPos.x += 10 * dt;
 
-							if (Collision::AABB(bulletPos, enemyPos, 5, 20) == true)
-								enemy->active = bullet->active = false;
-						}
-					}
-				}
+			//	//			enemy->setPos(Vector3(k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize(), 0));
 
-			}
+			//	//			if (Collision::AABB(bulletPos, enemyPos, 5, 20) == true)
+			//	//				enemy->active = bullet->active = false;
+			//	//		}
+			//	//	}
+			//	//}
+
+			//}
 		}
 	}
 
@@ -555,6 +557,34 @@ void SceneSandBox::Update(double dt)
 
 	hero.update(dt, mapOffSet_x, mapOffset_y, tileOffSet_x, tileOffset_y, mapFineOffSet_x, mapFineOffset_y);
 	constrainHero(25, 750, 25, 575, 1.f);
+
+	int checkPosition_X = (int)(mapOffSet_x + hero.getPos().x) / m_cMap->GetTileSize();
+	int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int)((hero.getPos().y + m_cMap->GetTileSize()) / m_cMap->GetTileSize());
+	/*for (vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		CEnemy* enemy = (CEnemy*)*it;*/
+
+		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 10)
+		{
+			enemy->SetDestination(hero.getPos().x, hero.getPos().y);
+			enemy->ChangeStrategy(new CStrategy_Kill());
+		}
+		else if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 11)
+		{
+			enemy->SetDestination(hero.getPos().x, hero.getPos().y);
+			enemy->ChangeStrategy(NULL);
+		}
+		/*else if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+		{
+			cout << "hi" << endl;
+		}*/
+		else
+		{
+			enemy->ChangeStrategy(NULL);
+		}
+		enemy->Update(m_cMap);
+	//}
+	//int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
 }
 
 static const float SKYBOXSIZE = 1000.f;
@@ -772,95 +802,98 @@ void SceneSandBox::RenderBackground()
 
 void SceneSandBox::RenderHero()
 {
-	if (hero.getInvert())
-	{
-		if (hero.getMidAirUp() && !hero.getMidAirDown())
-			Render2DMesh(meshList[GEO_HERO_JUMP_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
+	//static float renderHeroSize = 1;
+	//if (hero.getInvert())
+	//{
+	//	if (hero.getMidAirUp() && !hero.getMidAirDown())
+	//		Render2DMesh(meshList[GEO_HERO_JUMP_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
 
-		else if (!hero.getMidAirUp() && hero.getMidAirDown())
-			Render2DMesh(meshList[GEO_HERO_LAND_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-	}
-	else
-	{
-		if (hero.getMidAirUp() && !hero.getMidAirDown())
-			Render2DMesh(meshList[GEO_HERO_JUMP], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-		else if (!hero.getMidAirUp() && hero.getMidAirDown())
-			Render2DMesh(meshList[GEO_HERO_LAND], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-	}
+	//	else if (!hero.getMidAirUp() && hero.getMidAirDown())
+	//		Render2DMesh(meshList[GEO_HERO_LAND_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//}
+	//else
+	//{
+	//	if (hero.getMidAirUp() && !hero.getMidAirDown())
+	//		Render2DMesh(meshList[GEO_HERO_JUMP], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//	else if (!hero.getMidAirUp() && hero.getMidAirDown())
+	//		Render2DMesh(meshList[GEO_HERO_LAND], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//}
 
-	if (hero.notInAir())
-	{
-		if (Application::IsKeyPressed('P') && bulletshot == true)
-		{
-			if (hero.getInvert())
-				Render2DMesh(meshList[GEO_HERO_SHOOT_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-			else
-				Render2DMesh(meshList[GEO_HERO_SHOOT], false, 3, hero.getPos().x, 575 - hero.getPos().y);
+	//if (hero.notInAir())
+	//{
+	//	if (Application::IsKeyPressed('P') && bulletshot == true)
+	//	{
+	//		if (hero.getInvert())
+	//			Render2DMesh(meshList[GEO_HERO_SHOOT_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//		else
+	//			Render2DMesh(meshList[GEO_HERO_SHOOT], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
 
-			if (bulletshot == true)
-				bulletshot = false;
-		}
+	//		if (bulletshot == true)
+	//			bulletshot = false;
+	//	}
 
-		if (hero.getAnimate())
-		{
-			if (hero.getInvert())
-			{
-				if (hero.getAnimationCounter() > 0 && hero.getAnimationCounter() <= 1)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME10_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 1 && hero.getAnimationCounter() <= 2)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME09_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 2 && hero.getAnimationCounter() <= 3)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME08_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 3 && hero.getAnimationCounter() <= 4)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME07_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 4 && hero.getAnimationCounter() <= 5)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME06_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 5 && hero.getAnimationCounter() <= 6)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME05_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 6 && hero.getAnimationCounter() <= 7)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME04_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 7 && hero.getAnimationCounter() <= 8)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME03_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 8 && hero.getAnimationCounter() <= 9)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME02_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 9 && hero.getAnimationCounter() <= 10)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-			}
-			else
-			{
-				if (hero.getAnimationCounter() > 0 && hero.getAnimationCounter() <= 1)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 1 && hero.getAnimationCounter() <= 2)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME02], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 2 && hero.getAnimationCounter() <= 3)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME03], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 3 && hero.getAnimationCounter() <= 4)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME04], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 4 && hero.getAnimationCounter() <= 5)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME05], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 5 && hero.getAnimationCounter() <= 6)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME06], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 6 && hero.getAnimationCounter() <= 7)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME07], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 7 && hero.getAnimationCounter() <= 8)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME08], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 8 && hero.getAnimationCounter() <= 9)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME09], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else if (hero.getAnimationCounter() > 9 && hero.getAnimationCounter() <= 10)
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME10], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-				else
-					Render2DMesh(meshList[GEO_HERO_WALK_FRAME01], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-			}
-		}
-		else
-			if (hero.getInvert())
-			Render2DMesh(meshList[GEO_HERO_DEFAULT_INVERSE], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-			else
-				Render2DMesh(meshList[GEO_HERO_DEFAULT], false, 3, hero.getPos().x, 575 - hero.getPos().y);
-		//else if(heroAnimationCounter > 2 && < 3)
-	}
+	//	if (hero.getAnimate())
+	//	{
+	//		if (hero.getInvert())
+	//		{
+	//			if (hero.getAnimationCounter() > 0 && hero.getAnimationCounter() <= 1)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME10_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 1 && hero.getAnimationCounter() <= 2)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME09_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 2 && hero.getAnimationCounter() <= 3)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME08_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 3 && hero.getAnimationCounter() <= 4)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME07_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 4 && hero.getAnimationCounter() <= 5)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME06_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 5 && hero.getAnimationCounter() <= 6)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME05_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 6 && hero.getAnimationCounter() <= 7)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME04_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 7 && hero.getAnimationCounter() <= 8)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME03_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 8 && hero.getAnimationCounter() <= 9)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME02_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 9 && hero.getAnimationCounter() <= 10)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME01_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//		}
+	//		else
+	//		{
+	//			if (hero.getAnimationCounter() > 0 && hero.getAnimationCounter() <= 1)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME01], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 1 && hero.getAnimationCounter() <= 2)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME02], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 2 && hero.getAnimationCounter() <= 3)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME03], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > renderHeroSize && hero.getAnimationCounter() <= 4)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME04], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 4 && hero.getAnimationCounter() <= 5)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME05], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 5 && hero.getAnimationCounter() <= 6)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME06], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 6 && hero.getAnimationCounter() <= 7)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME07], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 7 && hero.getAnimationCounter() <= 8)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME08], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 8 && hero.getAnimationCounter() <= 9)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME09], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else if (hero.getAnimationCounter() > 9 && hero.getAnimationCounter() <= 10)
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME10], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//			else
+	//				Render2DMesh(meshList[GEO_HERO_WALK_FRAME01], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//		}
+	//	}
+	//	else
+	//		if (hero.getInvert())
+	//		Render2DMesh(meshList[GEO_HERO_DEFAULT_INVERSE], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//		else
+	//			Render2DMesh(meshList[GEO_HERO_DEFAULT], false, renderHeroSize, hero.getPos().x, 575 - hero.getPos().y);
+	//	//else if(heroAnimationCounter > 2 && < 3)
+	//}
+
+	Render2DMesh(meshList[GEO_TILEHERO], false, 1, hero.getPos().x, 575 - hero.getPos().y);
 
 
 	for (vector<CBullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
@@ -895,19 +928,40 @@ void SceneSandBox::RenderTileMap()
 			{
 				Render2DMesh(meshList[GEO_TILETREE], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize());
 			}
-			else if (m_cMap->theScreenMap[i][m] == 3)
+			else if (m_cMap->theScreenMap[i][m] == 10)
+			{
+				Render2DMesh(meshList[GEO_TILE_KILLZONE], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize());
+			}
+			else if (m_cMap->theScreenMap[i][m] == 11)
+			{
+				Render2DMesh(meshList[GEO_TILE_SAFEZONE], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize());
+			}
+			/*else if (m_cMap->theScreenMap[i][m] == 3)
 			{
 				for (vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 				{
 					CEnemy * enemy = (CEnemy*)*it;
 					if (enemy->active)
 					{
-						Render2DMesh(meshList[GEO_ENEMY_DEFAULT], false, enemy->getScale(), k*m_cMap->GetTileSize() - mapFineOffSet_x, 575 - i*m_cMap->GetTileSize());
+						Render2DMesh(meshList[GEO_ENEMY_DEFAULT], false, enemy->getScale(), k*m_cMap->GetTileSize() - mapFineOffSet_x + enemy->vel.x, enemy->getEnemyPos().y, 0);
 					}
 				}
-			}
+			}*/
 		}
 	}
+	/*for (vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		CEnemy * enemy = (CEnemy*)*it;*/
+		int enemy_x = enemy->GetPos_x() - mapFineOffSet_x;
+		int enemy_y = enemy->GetPos_y();
+
+		if (enemy_x >= 0 && enemy_x < 800 && enemy_y >= 0 && enemy_y < 600)
+		{
+			Render2DMesh(meshList[GEO_ENEMY_DEFAULT], false, 1,  enemy_x, enemy_y, 0);
+		}
+			//Render2DMesh(meshList[GEO_ENEMY_DEFAULT], false, enemy->getScale(), enemy->getEnemyPos().x ,enemy->getEnemyPos().y, 0);
+		
+	//}
 
 	RenderHero();
 }

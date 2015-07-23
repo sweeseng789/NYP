@@ -24,16 +24,16 @@ CBullet::~CBullet()
 
 void CBullet::update(double dt)
 {
-	//time -= dt;
+	time -= dt;
 
 	if (inverted)
-		pos -= 600 * dt;
+		pos -= 100 * dt;
 	else
-		pos += 600 * dt;
+		pos += 100 * dt;
 
 	if (time <= 0)
 	{
-		active = false;
+		//active = false;
 	}
 }
 

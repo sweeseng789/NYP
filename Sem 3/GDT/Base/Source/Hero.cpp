@@ -162,61 +162,61 @@ void CHero::ModifyPos_x(float HerePos_x)
 
 void CHero::update(double dt, int mapOffSet_x, int mapOffset_y, int tileOffSet_x, int tileOffset_y, int mapFineOffSet_x, int mapFineOffset_y)
 {
-	if (hero_InMidAir_Up == false && hero_InMidAir_Down == false)
-	{
-		//Don't Jump
-		/*int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
-		int checkPosition_Y = (int)ceil(((float)HeroPos.y + m_cMap->GetTileSize()) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1 && m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] != 1)
-		{
-			hero_InMidAir_Up = false;
-			hero_InMidAir_Down = true;
-			jumpspeed = 10;
-		}*/
-	}
-	else if (hero_InMidAir_Up == true && hero_InMidAir_Down == false)
-	{
-		// Check if the hero can move up into mid air...
-		int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
-		int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
-		{
-			HeroPos.y = (checkPosition_Y + 1.5) * m_cMap->GetTileSize();
-			hero_InMidAir_Up = false;
-			hero_InMidAir_Down = true;
-			jumpspeed = 0;
-		}
-		else
-		{
-			HeroPos.y -= jumpspeed;
-			jumpspeed -= 1;
-			if (jumpspeed == 0)
-			{
-				hero_InMidAir_Up = false;
-				hero_InMidAir_Down = true;
-			}
-		}
-	}
-	else if (hero_InMidAir_Up == false && hero_InMidAir_Down == true)
-	{
-		int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
-		int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
-		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1)
-		{
-			// Since the new position does not allow the hero to move into, then go back to the old position
-			HeroPos.y = (checkPosition_Y - 1) * m_cMap->GetTileSize();
-			hero_InMidAir_Down = false;
-			jumpspeed = 0;
-		}
-		else
-		{
-			HeroPos.y += jumpspeed;
-			jumpspeed += 1;
-		}
-	}
+	//if (hero_InMidAir_Up == false && hero_InMidAir_Down == false)
+	//{
+	//	//Don't Jump
+	//	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
+	//	int checkPosition_Y = (int)ceil(((float)HeroPos.y + m_cMap->GetTileSize()) / m_cMap->GetTileSize());
+	//	if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] != 1 && m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] != 1)
+	//	{
+	//		hero_InMidAir_Up = false;
+	//		hero_InMidAir_Down = true;
+	//		jumpspeed = 10;
+	//	}
+	//}
+	//else if (hero_InMidAir_Up == true && hero_InMidAir_Down == false)
+	//{
+	//	// Check if the hero can move up into mid air...
+	//	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
+	//	int checkPosition_Y = (int)floor(((float)HeroPos.y - jumpspeed) / m_cMap->GetTileSize());
+	//	if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1)
+	//	{
+	//		HeroPos.y = (checkPosition_Y + 1.5) * m_cMap->GetTileSize();
+	//		hero_InMidAir_Up = false;
+	//		hero_InMidAir_Down = true;
+	//		jumpspeed = 0;
+	//	}
+	//	else
+	//	{
+	//		HeroPos.y -= jumpspeed;
+	//		jumpspeed -= 1;
+	//		if (jumpspeed == 0)
+	//		{
+	//			hero_InMidAir_Up = false;
+	//			hero_InMidAir_Down = true;
+	//		}
+	//	}
+	//}
+	//else if (hero_InMidAir_Up == false && hero_InMidAir_Down == true)
+	//{
+	//	int checkPosition_X = (int)ceil(((float)(HeroPos.x + mapFineOffSet_x) / m_cMap->GetTileSize())) + tileOffSet_x;
+	//	int checkPosition_Y = (int)ceil(((float)HeroPos.y + jumpspeed) / m_cMap->GetTileSize());
+	//	if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == 1 || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == 1)
+	//	{
+	//		// Since the new position does not allow the hero to move into, then go back to the old position
+	//		HeroPos.y = (checkPosition_Y - 1) * m_cMap->GetTileSize();
+	//		hero_InMidAir_Down = false;
+	//		jumpspeed = 0;
+	//	}
+	//	else
+	//	{
+	//		HeroPos.y += jumpspeed;
+	//		jumpspeed += 1;
+	//	}
+	//}
 
 
-	//constrainHero(25, 750, 25, 575, mapOffSet_x);
+	////constrainHero(25, 750, 25, 575, mapOffSet_x);
 	MoveLeftRight(mapFineOffSet_x, tileOffSet_x);
-	jump();
+	//jump();
 }

@@ -119,7 +119,7 @@ void SceneSandBox::SetParameters()
 		ParticleList.push_back(particle);
 	}
 
-	for (unsigned a = 0; a < 100; a++)
+	for (unsigned a = 0; a < 10; a++)
 	{
 		CNPC * npc = new CNPC();
 		Vector3 pos;
@@ -341,8 +341,8 @@ void SceneSandBox::Init()
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//terrain.raw", m_heightMap);
 	meshList[GEO_TERRAIN]->textureArray[0] = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TERRAIN]->textureArray[1] = LoadTGA("Image//Wet Ground.tga");
-	meshList[GEO_TERRAIN]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_TERRAIN]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_TERRAIN]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
+	meshList[GEO_TERRAIN]->material.kDiffuse.Set(0.4f, 0.4f, 0.4f);
 	//meshList[GEO_TERRAIN]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	//meshList[GEO_TERRAIN]->material.kShininess = 0.f;
 
@@ -490,15 +490,6 @@ void SceneSandBox::Update(double dt)
 	{
 		lights[0].type = Light::LIGHT_SPOT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
-	}
-	else if (Application::IsKeyPressed('8'))
-	{
-		//bLightEnabled = true;
-		fogColor.r += 1;
-	}
-	else if (Application::IsKeyPressed('9'))
-	{
-		//bLightEnabled = false;
 	}
 
 	if (Application::IsKeyPressed('I'))

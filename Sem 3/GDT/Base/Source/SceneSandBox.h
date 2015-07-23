@@ -141,6 +141,8 @@ class SceneSandBox : public Scene
 		GEO_HERO_LAND_INVERSE,
 		GEO_HERO_BULLET,
 		GEO_ENEMY_DEFAULT,
+		GEO_TILE_KILLZONE,
+		GEO_TILE_SAFEZONE,
 		NUM_GEOMETRY,
 	};
 public:
@@ -249,6 +251,7 @@ private:
 	//Hero Info
 	CHero hero;
 	bool bulletshot;
+	CEnemy *enemy;
 };
 
 #endif

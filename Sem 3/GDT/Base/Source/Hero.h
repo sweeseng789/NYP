@@ -24,12 +24,13 @@ public:
 	bool getAnimate();
 	bool getMidAirUp();
 	bool getMidAirDown();
+	int jumpspeed;
 
 private:
 	Vector3 HeroPos;
 	bool hero_InMidAir_Up;
 	bool hero_InMidAir_Down;
-	int jumpspeed;
+
 	bool heroAnimationInvert;
 	float heroAnimationCounter;
 	float HeroScale;

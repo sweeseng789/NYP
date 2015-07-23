@@ -2,6 +2,7 @@
 #include "Vector2.h"
 #include "Map.h"
 #include "Strategy.h"
+
 class CEnemy
 {
 	// friend class CStrategy;
@@ -16,6 +17,7 @@ public:
 		GEO_TILEENEMY_FRAME3,
 		NUM_GEOMETRY,
 	};
+
 	// Initialise this class instance
 	void Init(void);
 	// Set position x of the player
@@ -34,6 +36,7 @@ public:
 	int GetDestination_y(void);
 	// ENEMY Update
 	void Update(CMap* m_cMap);
+
 	// Strategy
 	void ChangeStrategy(CStrategy* theNewStrategy, bool bDelete = true);
 	// Set Animation Invert status of the player
@@ -44,11 +47,13 @@ public:
 	void SetAnimationCounter(int ENEMYAnimationCounter);
 	// Get Animation Counter of the player
 	int GetAnimationCounter(void);
+
 private:
 	// ENEMY's information
 	Vector2 theENEMYPosition;
 	bool enemyAnimationInvert;
 	int enemyAnimationCounter;
+
 	// The Destination is the position of the Hero
 	Vector2 theDestination;
 	CStrategy* theStrategy;

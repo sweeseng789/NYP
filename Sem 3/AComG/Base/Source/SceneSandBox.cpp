@@ -1075,33 +1075,6 @@ void SceneSandBox::Render()
 	//MAIN RENDER PASS
 	RenderPassMain();
 
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, camera.position.y, 0);
-	//RenderMesh(meshList[GEO_AXES], false);
-	//modelStack.PopMatrix();
-
-	/*RenderTerrain();
-
-	RenderSkyPlane(meshList[GEO_SKYPLANE], Color(1, 1, 1), 128, 200.0f, 1000.0f, 1.0f, 1.0f);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-60, 50, -120);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[GEO_CHURCH], true);
-	modelStack.PopMatrix();
-
-	for (vector<Particle*>::iterator it = ParticleList.begin(); it != ParticleList.end(); it++)
-	{
-		Particle * particle = (Particle*)*it;
-		if (particle->active == true && (camera.position - particle->pos).Length() < 1000)
-		{
-			if (particle->ParticleType == particle->GO_RAIN)
-				RenderParticleNoFog(particle);
-			else
-				RenderParticle(particle);
-		}
-	}*/
-
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -1112,8 +1085,6 @@ void SceneSandBox::Render()
 	ss1.precision(4);
 	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
-
-	//==============Testing===============//
 }
 
 void SceneSandBox::Exit()

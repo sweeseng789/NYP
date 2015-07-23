@@ -1,8 +1,8 @@
 #pragma once
 #include "Strategy.h"
 #include "Vector2.h"
-class CStrategy_Kill
-	: public CStrategy
+
+class CStrategy_Kill : public CStrategy
 {
 public:
 	CStrategy_Kill(void);
@@ -11,6 +11,7 @@ public:
 	void SetDestination(const float x, const float y);
 	void GetEnemyPosition(float& x, float& y);
 	void SetEnemyPosition(const float x, const float y);
+
 private:
 	// The Destination is the position of the target
 	Vector2 theDestination;

@@ -39,6 +39,7 @@ protected:
 	float m_worldWidth;
 	float m_worldHeight;
 	GameObject *m_ghost;
+	GameObject * ball;
 	int m_objectCount;
 
 	//Auditing

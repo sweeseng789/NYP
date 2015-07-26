@@ -1,10 +1,17 @@
 #ifndef SCENE_COLLISION_H
 #define SCENE_COLLISION_H
 
+#include <fstream>
+#include <string>
 #include "Camera.h"
 #include "GameObject.h"
 #include <vector>
 #include "SceneBase.h"
+
+using std::ifstream;
+using std::string;
+using std::getline;
+using std::stoi;
 
 class SceneCollision : public SceneBase
 {
@@ -24,6 +31,13 @@ public:
 
 	void RenderGO(GameObject *go);
 	void GOUpdate(const double dt);
+	void PlayerControl(double dt);
+	void GameMenuUpdate(double dt);
+
+	void RenderPowerBar();
+	void RenderBlackScreen();
+	void RenderText();
+	void RenderPlayerTurn();
 
 	GameObject* FetchGO();
 
@@ -49,6 +63,15 @@ protected:
 	float initialKE, finalKE;
 	float m_estimatedTime;
 
+	float powerBar_y;
+	float moveGameMenu;
+	bool showGameMenu;
+	bool movingBall;
+	int player1Score;
+	int player2Score;
+	int turn;
+	bool player1Turn;
+	bool player2Turn;
 	//Camera camera;
 };
 

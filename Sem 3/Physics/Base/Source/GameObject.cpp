@@ -1,7 +1,7 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject(GAMEOBJECT_TYPE typeValue) 
+GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 	: type(typeValue),
 	scale(1, 1, 1),
 	active(false),
@@ -12,7 +12,8 @@ GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 	ScaleSize(0.0),
 	bombDuration(0.f),
 	number(0),
-	m_shieldTime(0)
+	m_shieldTime(0),
+	tempPos(NULL)
 {
 }
 

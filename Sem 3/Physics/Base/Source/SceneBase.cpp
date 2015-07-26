@@ -102,12 +102,38 @@ void SceneBase::Init()
 		meshList[i] = NULL;
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_LINE] = MeshBuilder::GenerateLine("reference", Color(0, 1, 0), 100);
+	meshList[GEO_POWERBAR_LINE] = MeshBuilder::GenerateLine("reference", Color(1, 1, 1), 4);
+	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 0), 10, 10, 1.f);
+	meshList[GEO_BALL2] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 0), 10, 10, 1.f);
+	meshList[GEO_BALL3] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 1), 10, 10, 1.f);
+	meshList[GEO_BALL4] = MeshBuilder::GenerateSphere("ball", Color(0, 1,0), 10, 10, 1.f);
+	meshList[GEO_BALL5] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 0), 10, 10, 1.f);
+	meshList[GEO_BALL6] = MeshBuilder::GenerateSphere("ball", Color(0, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL7] = MeshBuilder::GenerateSphere("ball", Color(0, 0, 1), 10, 10, 1.f);
+	meshList[GEO_BALL8] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL9] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL10] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL11] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL12] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL13] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL14] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL15] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(0.48235294117, 0.26274509803, 0.21176470588), 1.f);
 	meshList[GEO_CUBE2] = MeshBuilder::GenerateCube("cube", Color(0.32156862745, 0.32156862745, 0.32156862745), 1.f);
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+
+	meshList[Power_Bar] = MeshBuilder::GenerateQuad("Gameover screen", Color(1, 1, 1), 1);
+	meshList[Power_Bar]->textureID = LoadTGA("Image//Phyics//Power Bar.tga");
+
+	meshList[GEO_PLAYER1_TURN] = MeshBuilder::GenerateQuad("Gameover screen", Color(1, 1, 1), 1);
+	meshList[GEO_PLAYER1_TURN]->textureID = LoadTGA("Image//Phyics//Player1Turn.tga");
+
+	meshList[GEO_PLAYER2_TURN] = MeshBuilder::GenerateQuad("Gameover screen", Color(1, 1, 1), 1);
+	meshList[GEO_PLAYER2_TURN]->textureID = LoadTGA("Image//Phyics//Player2Turn.tga");
+
 
 	meshList[Spaceship] = MeshBuilder::GenerateQuad("Spaceship", Color(1, 1, 1), 1);
 	meshList[Spaceship]->textureID = LoadTGA("Image//Spaceship.tga");
@@ -284,7 +310,7 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
-	
+
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 	if(enableLight && bLightEnabled)

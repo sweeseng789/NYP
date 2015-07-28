@@ -864,23 +864,6 @@ void SceneShadow::RenderParticle(Particle * particle)
 	}*/
 }
 
-void SceneShadow::RenderParticleNoFog(Particle * particle)
-{
-	glUniform1f(m_parameters[U_ENABLE_FOG], 0);
-
-	if (particle->ParticleType == particle->GO_RAIN)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		modelStack.Rotate(particle->angle, 0, 1, 0);
-		modelStack.Scale(particle->scale, particle->scale, particle->scale);
-		RenderMesh(meshList[GEO_RAIN], false);
-		modelStack.PopMatrix();
-	}
-
-	glUniform1f(m_parameters[U_ENABLE_FOG], 1);
-}
-
 void SceneShadow::RenderPassGPass()
 {
 	//RenderWorld();

@@ -34,6 +34,11 @@ void SceneCollision::Init()
 	player1Score = 0;
 	player2Score = 0;
 	turn = 1;
+	highestValue = 0;
+	lowestValue = 0;
+
+	highX = highY = lowX = lowY = 0;
+	offSet_highX = 0, offSet_highY = 0, offSet_lowX = 0, offSet_lowY = 0;
 
 	int i = Math::RandIntMinMax(0, 1);
 	if (i == 0)
@@ -53,24 +58,30 @@ void SceneCollision::Init()
 	ball->scale.Set(2, 2, 2);
 	ball->mass = 2 * 2 * 2;
 	ball->angle = 0;
+	ball->offset = 0;
 
+	std::cout << GameObject::GO_BALL16 << std::endl;
 	ifstream ballPos("Text/ballPos.txt");
 	if (ballPos.is_open())
 	{
 		while (!ballPos.eof())
 		{
-			static int testing = -1;
-			testing++;
+			static int testing = GameObject::GO_BALL;
+			static int count = 1;
 			string posX, posY;
 			getline(ballPos, posX, ',');
 			getline(ballPos, posY);
 			posY.erase(0, 1);
 
 			GameObject* go = FetchGO();
-			go->type = GameObject::GO_BALL;
+			//go->type = static_cast<GameObject::GAMEOBJECT_TYPE>(testing);
+			go->type = GameObject::GO_BALL2;
 			go->pos.Set(stoi(posX), stoi(posY), 0);
 			go->scale.Set(2, 2, 2);
 			go->mass = 2 * 2 * 2;
+			go->offset = count;
+			testing += 1;
+			//count += 1;
 		}
 		ballPos.close();
 	}
@@ -252,43 +263,79 @@ void SceneCollision::GOUpdate(const double dt)
 		GameObject *go = (GameObject *)*it;
 		if (go->active)
 		{ 
-			if (go->type == GameObject::GO_BALL)
+			if (go->type >= GameObject::GO_BALL && go->type <= GameObject::GO_BALL16)
 			{
 				go->pos += go->vel * static_cast<float>(dt);
 
 				initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 				finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 
-				/*if (go->pos.x > m_worldWidth - go->scale.x && go->vel.x > 0)
-				{
-					go->vel.x = -go->vel.x;
-				}
-				else if (go->pos.x < 0 + go->scale.x && go->vel.x < 0)
-				{
-					go->vel.x = -go->vel.x;
-				}
-
-				if (go->pos.y > m_worldHeight - go->scale.x && go->vel.y > 0)
-				{
-					go->vel.y = -go->vel.y;
-				}
-				else if (go->pos.y < 0 + go->scale.x && go->vel.y < 0)
-				{
-					go->vel.y = -go->vel.y;
-				}*/
-
 				go->vel -= go->vel * 0.6 * dt;
+
+				if (go->vel.x < 1 && go->vel.x > -1)
+				{
+					if (go->vel.y < 1 && go->vel.y > -1)
+					{
+						go->vel.SetZero();
+					}
+				}
+
+				if (go->vel.x > highX)
+				{
+					offSet_highX = go->offset;
+					highX = go->vel.x;
+				}
+				else if (go->vel.x < lowX)
+				{
+					offSet_lowX = go->offset;
+					lowX = go->vel.x;
+				}
+
+				if (go->vel.y > highY)
+				{
+					offSet_highY = go->offset;
+					highY = go->vel.y;
+				}
+				else if (go->vel.y < lowY)
+				{
+					offSet_lowY = go->offset;
+					lowY = go->vel.y;
+				}
+
+				if (offSet_highX == go->offset)
+				{
+					if (go->vel.IsZero())
+						highX = 0;
+				}
+
+				if (offSet_highY == go->offset)
+				{
+					if (go->vel.IsZero())
+						highY = 0;
+				}
+
+				if (offSet_lowX == go->offset)
+				{
+					if (go->vel.IsZero())
+						lowX = 0;
+				}
+
+				if (offSet_lowY == go->offset)
+				{
+					if (go->vel.IsZero())
+						lowY = 0;
+				}
+
 
 				if (go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
 				{
 					go->active = false;
 					this->m_objectCount--;
 
-					if (player1Turn == true && player2Turn == false)
+					if (go->type != GameObject::GO_BALL)
+					{
 						player1Score++;
-					else if (player1Turn == false && player2Turn == true)
-						player2Score++;
-
+					}
 				}
 			}
 
@@ -300,17 +347,25 @@ void SceneCollision::GOUpdate(const double dt)
 				{
 					GameObject *goA = go;
 					GameObject *goB = go2;
-					if (go->type != GameObject::GO_BALL)
+					if (go->type != GameObject::GO_BALL && go->type != GameObject::GO_BALL2)
 					{
-						if (go2->type != GameObject::GO_BALL)
+						if (go2->type != GameObject::GO_BALL && go2->type != GameObject::GO_BALL2)
 							continue;
 						goA = go2;
 						goB = go;
 					}
+
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(goA, goB, dt))
 					{
 						CollisionResponse(goA, goB);
+					}
+
+					float collisionTime = CheckCollision2(goA, goB);
+					if (collisionTime > 0)
+					{
+						if (m_estimatedTime < 0)
+							m_estimatedTime = collisionTime;
 					}
 				}
 			}
@@ -321,10 +376,6 @@ void SceneCollision::GOUpdate(const double dt)
 
 void SceneCollision::PlayerControl(double dt)
 {
-	//Set tempPos to ball previous position
-	if (movingBall == false)
-		ball->tempPos = ball->pos;
-
 	//Set ball to previous pos if it becomes inactive
 	if (ball->active == false)
 	{
@@ -333,45 +384,32 @@ void SceneCollision::PlayerControl(double dt)
 		ball->vel.SetZero();
 	}
 
-	//if ball velocity is between 1 and -1, set velocity to 0
-	if (movingBall == true)
-	{
-		if (ball->vel.x < 1 && ball->vel.x > -1)
-		{
-			if (ball->vel.y < 1 && ball->vel.y > -1)
-			{
-				movingBall = false;
-				ball->vel.SetZero();
-				turn++;
-
-				if (player1Turn == true && player2Turn == false)
-				{
-					player1Turn = false;
-					player2Turn = true;
-				}
-				else if (player1Turn == false && player2Turn == true)
-				{
-					player1Turn = true;
-					player2Turn = false;
-				}
-			}
-		}
-	}
-
 	//Player Control
-	if (movingBall == false)
+	//Check whether all the balls have stopped moving
+	if (highX == 0 && highY == 0 && lowX == 0 && lowY == 0)
 	{
-		if (Application::IsKeyPressed(' '))
+		if (movingBall == false)
 		{
-			movingBall = true;
-			ball->vel.x = cos(Math::DegreeToRadian(ball->angle)) * powerBar_y * 200 * (float)dt;
-			ball->vel.y = sin(Math::DegreeToRadian(ball->angle)) * powerBar_y * 200 * (float)dt;
-		}
+			//Set ball to previous position
+			ball->tempPos = ball->pos;
 
-		if (Application::IsKeyPressed('A'))
-			ball->angle += 50 * dt;
-		if (Application::IsKeyPressed('D'))
-			ball->angle -= 50 * dt;
+			if (Application::IsKeyPressed(' '))
+			{
+				movingBall = true;
+				ball->vel.x = cos(Math::DegreeToRadian(ball->angle)) * powerBar_y * 250 * (float)dt;
+				ball->vel.y = sin(Math::DegreeToRadian(ball->angle)) * powerBar_y * 250 * (float)dt;
+			}
+
+			if (Application::IsKeyPressed('A'))
+				ball->angle += 100 * dt;
+			if (Application::IsKeyPressed('D'))
+				ball->angle -= 100 * dt;
+		}
+		else
+		{
+			turn++;
+			movingBall = false;
+		}
 	}
 
 	if (ball->angle < 0)
@@ -406,16 +444,19 @@ void SceneCollision::GameMenuUpdate(double dt)
 
 	if (movingBall == true)
 	{
-		lockMenu = 0;
+		lockMenu = true;
 		showGameMenu = false;
 		moveGameMenu = -35;
 	}
 	else
 	{
-		if (lockMenu == 0 && showGameMenu == false)
+		if (lockMenu == true && showGameMenu == false)
 		{
-			lockMenu = 1;
-			showGameMenu = true;
+			if(highestValue.IsZero() == true)
+			{
+				lockMenu = false;
+				showGameMenu = true;
+			}
 		}
 	}
 
@@ -427,7 +468,7 @@ void SceneCollision::GameMenuUpdate(double dt)
 			moveGameMenu = -35;
 		}
 	}
-	if (showGameMenu == true && moveGameMenu < 0)
+	else if (showGameMenu == true && moveGameMenu < 0)
 	{
 		moveGameMenu += 50 * dt;
 		if (moveGameMenu > 0)
@@ -450,22 +491,13 @@ void SceneCollision::Update(double dt)
 		m_speed += 0.1f;
 	}*/
 
-	if (Application::IsKeyPressed('C'))
-	{
-		for (std::vector<GameObject*>::iterator it = m_goList.begin(); it != m_goList.end(); it++)
-		{
-			GameObject * go = (GameObject*)*it;
-			if (go->active && go->type == GameObject::GO_BALL)
-			{
-				go->active = false;
-			}
-		}
-	}
-
 
 	//Physics Simulation Section
 	dt *= m_speed;
 
+
+	if (player1Score >= 15)
+		std::cout << "Finish" << std::endl;
 	GOUpdate(dt);
 	PlayerControl(dt);
 	GameMenuUpdate(dt);
@@ -474,7 +506,7 @@ void SceneCollision::Update(double dt)
 
 void SceneCollision::RenderGO(GameObject *go)
 {
-	switch (go->type)
+	/*switch (go->type)
 	{
 	case GameObject::GO_BALL:
 		{
@@ -506,11 +538,12 @@ void SceneCollision::RenderGO(GameObject *go)
 			modelStack.PopMatrix();
 		}
 		break;
-	}
-	/*if (go->type == GameObject::GO_WALL)
+	}*/
+	if (go->type == GameObject::GO_WALL)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Rotate(go->angle, 0, 0, 1);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
@@ -522,7 +555,15 @@ void SceneCollision::RenderGO(GameObject *go)
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_BALL], false);
 		modelStack.PopMatrix();
-	}*/
+	}
+	else if (go->type == GameObject::GO_BALL2)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		RenderMesh(meshList[GEO_BALL2], false);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneCollision::RenderPowerBar()
@@ -559,28 +600,28 @@ void SceneCollision::RenderText()
 	//On screen text
 	std::ostringstream ss;
 	ss << "Player 1 Score: " << player1Score;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 18 + moveGameMenu);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 18);
 
 	ss.str(std::string());
 	ss.precision(5);
-	ss << "Player 2 Score: " << player2Score;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 15 + moveGameMenu);
+	ss << "Player 2 Score: " << m_estimatedTime;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 15);
 
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "Turns: " << turn;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 12 + moveGameMenu);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 12);
 
 	ss.str(std::string());
 	ss.precision(3);
 	ss << "Speed: " << m_speed;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 9 + moveGameMenu);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 9);
 
 	//Exercise 3: render initial and final kinetic energy
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6 + moveGameMenu);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
 }
 
 void SceneCollision::RenderPlayerTurn()
@@ -626,8 +667,6 @@ void SceneCollision::Render()
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
-	//RenderMesh(meshList[GEO_AXES], false);
-
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
@@ -637,7 +676,7 @@ void SceneCollision::Render()
 		}
 	}
 
-	if (movingBall == false)
+	if (movingBall == false && highX == 0 && highY == 0 && lowX == 0 && lowY == 0)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(ball->pos.x, ball->pos.y, 0);
@@ -649,9 +688,8 @@ void SceneCollision::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, moveGameMenu, 0);
 
-	RenderBlackScreen();
+	//RenderBlackScreen();
 	RenderPowerBar();
-	RenderPlayerTurn();
 
 	modelStack.PopMatrix();
 

@@ -72,6 +72,12 @@ protected:
 	int turn;
 	bool player1Turn;
 	bool player2Turn;
+
+	bool ball1, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, ball11, ball12, ball13, ball14, ball15, ball16;
+	Vector3 highestValue;
+	Vector3 lowestValue;
+	float highX, highY, lowX, lowY;
+	int offSet_highX, offSet_highY, offSet_lowX , offSet_lowY ;
 	//Camera camera;
 };
 

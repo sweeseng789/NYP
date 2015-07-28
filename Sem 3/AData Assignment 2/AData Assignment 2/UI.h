@@ -4,12 +4,6 @@ class CUI
 public:
 	enum MENU_OPTION
 	{
-		ADD,
-		DELETE,
-		SEARCH,
-		SORT,
-		PRINT,
-		EXIT,
 		VALID,
 		INVALID,
 		MENU_LAST

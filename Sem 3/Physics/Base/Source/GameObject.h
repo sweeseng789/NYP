@@ -23,6 +23,7 @@ struct GameObject
 		GO_BALL13,
 		GO_BALL14,
 		GO_BALL15,
+		GO_BALL16,
 		GO_CUBE,
 		GO_WALL,
 		GO_WALL2,
@@ -59,6 +60,7 @@ struct GameObject
 	float m_shieldTime;
 	Vector3 normal;
 	Vector3 tempPos;
+	int offset;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();

@@ -249,18 +249,6 @@ void SceneSandBox::Init()
 	lights[0].exponent = 3.f;
 	lights[0].spotDirection.Set(0.f, 1.f, 0.f);
 
-	lights[1].type = Light::LIGHT_DIRECTIONAL;
-	lights[1].position.Set(1, 1, 0);
-	lights[1].color.Set(1, 1, 0.5f);
-	lights[1].power = 0.f;
-	//lights[1].kC = 1.f;
-	//lights[1].kL = 0.01f;
-	//lights[1].kQ = 0.001f;
-	//lights[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	//lights[1].cosInner = cos(Math::DegreeToRadian(30));
-	//lights[1].exponent = 3.f;
-	//lights[1].spotDirection.Set(0.f, 1.f, 0.f);
-
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 
@@ -1020,12 +1008,14 @@ void SceneSandBox::RenderPassMain()
 void SceneSandBox::RenderSpriteAnimation(CNPC * npc)
 {
 	glDisable(GL_CULL_FACE);
+
 	modelStack.PushMatrix();
 	modelStack.Translate(npc->getPos().x, npc->getPos().y, npc->getPos().z);
 	modelStack.Rotate(npc->getAngle(), 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_WOLFSA], false);
 	modelStack.PopMatrix();
+
 	glEnable(GL_CULL_FACE);
 }
 

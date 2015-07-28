@@ -13,7 +13,8 @@ GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 	bombDuration(0.f),
 	number(0),
 	m_shieldTime(0),
-	tempPos(NULL)
+	tempPos(NULL),
+	offset(0)
 {
 }
 

@@ -9,31 +9,83 @@ using std::endl;
 using std::getline;
 using std::string;
 
+bool checkForDuplicateID(CData data[], int numToCheck)
+{
+	for (unsigned a = 0; a < 20; ++a)
+	{
+		if (data[a].getTaken() == true)
+		{
+			if (data[a].getID() == numToCheck)
+				return true;
+			else
+				return false;
+		}
+	}
+}
+bool checkStringForNumber(string ID)
+{
+	for (unsigned a = 0; a < ID.size(); ++a)
+	{
+		if (!isdigit(ID[a]))
+			return true;
+		else
+			return false;
+	}
+}
+void addData(CData data[], int location)
+{
+	int check = -1;
+	string name = "";
+	int ID = 0;
+	string IDtoCheck = "";
+	bool allNum = false;
+
+	cout << "Please enter your name" << endl;
+	cin.ignore();
+	getline(cin, name);
+
+	//Check if there is more than 32 character, if true then shorten it to 32
+	if (name.size() > 32)
+		name.resize(32);
+
+	cout << endl;
+
+	cout << "Please enter your ID" << endl;
+	getline(cin, IDtoCheck);
+
+	try {
+		//Check if ID contain stuff other than numbers or ID size is more than 5 digit
+		if (checkStringForNumber(IDtoCheck) || IDtoCheck.size() > 5)
+			throw CUI(CUI::INVALID);
+		else
+			throw CUI(CUI::VALID);
+	}
+	catch (CUI ui)
+	{
+		if (ui.getType() == CUI::VALID)
+		{
+			ID = stoi(IDtoCheck);
+
+			if (checkForDuplicateID(data, ID))
+				cout << "There should only be one unique ID at any given time" << endl;
+			else
+				data[location].setData(true, name, ID);
+		}
+		else
+		{
+			cout << "Error, please try again later" << endl;
+		}
+	}
+}
 void add(CData data[], int &count, bool &listSorted)
 {
 	if (count < 20)
 	{
 		for (unsigned a = 0; a < 20; ++a)
 		{
-			if (!data[a].getTaken())
+			if (data[a].getTaken() == false)
 			{
-				cin >> data[a];
-				listSorted = false;
-
-
-				//Checking if there is any duplicate of ID
-				for (unsigned i = 0; i < 20; ++i)
-				{
-					if (data[i].getTaken())
-					{
-						if (data[a].getID() == data[i].getID())
-						{
-							cout << "Error, there should be one unique ID at any time" << endl;
-							data[a].resetData();
-						}
-					}
-				}
-				count++;
+				addData(data, a);
 				break;
 			}
 		}

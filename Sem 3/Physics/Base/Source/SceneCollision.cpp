@@ -33,9 +33,12 @@ void SceneCollision::Init()
 	movingBall = false;
 	player1Score = 0;
 	player2Score = 0;
-	turn = 1;
+	turn = 9;
 	highestValue = 0;
 	lowestValue = 0;
+	elapsedTime = 0;
+	showBlock = 0;
+	calculateShowBlock = false;
 
 	highX = highY = lowX = lowY = 0;
 	offSet_highX = 0, offSet_highY = 0, offSet_lowX = 0, offSet_lowY = 0;
@@ -54,13 +57,75 @@ void SceneCollision::Init()
 
 
 	ball = FetchGO();
-	ball->pos.Set(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+	ball->pos.Set(m_worldWidth * 0.5f - 50, m_worldHeight * 0.5f, 0);
 	ball->scale.Set(2, 2, 2);
 	ball->mass = 2 * 2 * 2;
 	ball->angle = 0;
 	ball->offset = 0;
 
-	std::cout << GameObject::GO_BALL16 << std::endl;
+	//Obstacle 1
+	GameObject* go2 = FetchGO();
+	go2->type = GameObject::GO_WALL;
+	go2->active = false;
+	go2->pos.Set(9, m_worldHeight - 9, 0);
+	go2->normal.Set(-1, 1, 0);
+	go2->normal.Normalize();
+	go2->scale.Set(5, 20, 0);
+	go2->offset = 1;
+	go2->angle = Math::RadianToDegree(atan2(go2->normal.y, go2->normal.x));
+
+	//Obstacle 2
+	GameObject* go3 = FetchGO();
+	go3->type = GameObject::GO_WALL;
+	go3->active = false;
+	go3->pos.Set(m_worldWidth - 9, m_worldHeight - 9, 0);
+	go3->normal.Set(-1, -1, 0);
+	go3->normal.Normalize();
+	go3->scale.Set(5, 20, 0);
+	go3->offset = 2;
+	go3->angle = Math::RadianToDegree(atan2(go3->normal.y, go3->normal.x));
+
+	GameObject* go4 = FetchGO();
+	go4->type = GameObject::GO_WALL;
+	go4->pos.Set(9, 9, 0);
+	go4->normal.Set(-1, -1, 0);
+	go4->normal.Normalize();
+	go4->scale.Set(5, 20, 0);
+	go4->offset = 3;
+	go4->active = false;
+	go4->angle = Math::RadianToDegree(atan2(go4->normal.y, go4->normal.x));
+
+	GameObject* go5 = FetchGO();
+	go5->type = GameObject::GO_WALL;
+	go5->pos.Set(m_worldWidth - 9, 9, 0);
+	go5->normal.Set(-1, 1, 0);
+	go5->normal.Normalize();
+	go5->scale.Set(5, 20, 0);
+	go5->offset = 4;
+	go5->active = false;
+	go5->angle = Math::RadianToDegree(atan2(go5->normal.y, go5->normal.x));
+
+	GameObject* go6 = FetchGO();
+	go6->type = GameObject::GO_WALL;
+	go6->pos.Set(m_worldWidth * 0.5, m_worldHeight - 7, 0);
+	go6->normal.Set(0, 1, 0);
+	go6->normal.Normalize();
+	go6->scale.Set(5, 20, 0);
+	go6->offset = 5;
+	go6->active = false;
+	go6->angle = Math::RadianToDegree(atan2(go6->normal.y, go6->normal.x));
+
+	GameObject* go7 = FetchGO();
+	go7->type = GameObject::GO_WALL;
+	go7->pos.Set(m_worldWidth * 0.5, 7, 0);
+	go7->normal.Set(0, 1, 0);
+	go7->normal.Normalize();
+	go7->scale.Set(5, 20, 0);
+	go7->offset = 6;
+	go7->active = false;
+	go7->angle = Math::RadianToDegree(atan2(go7->normal.y, go7->normal.x));
+
+
 	ifstream ballPos("Text/ballPos.txt");
 	if (ballPos.is_open())
 	{
@@ -109,6 +174,22 @@ void SceneCollision::Init()
 			go->scale.Set(stoi(scaleX), stoi(scaleY), stoi(scaleZ));
 			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
 		}
+		wallPos.close();
+	}
+
+	ifstream highScore_Text("Text/BestRecords.txt");
+	if (highScore_Text.is_open())
+	{
+		while (!highScore_Text.eof())
+		{
+			string hsm;
+			string time;
+			getline(highScore_Text, hsm, ',');
+			getline(highScore_Text, time);
+			highScore = stoi(hsm);
+			fastestTiming = stoi(time);
+		}
+		highScore_Text.close();
 	}
 }
 
@@ -178,10 +259,13 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 
 		//Practical 4, Exercise 13: improve collision detection algorithm
 		if (distSquared <= combinedRadius * combinedRadius && c.Dot(d) > 0)
+		{
+			Sound::playCollidingSound();
 			return true;
+		}
 		return false;
 	}
-	if (go2->type == GameObject::GO_WALL || go2->type == GameObject::GO_WALL2)
+	if (go2->type == GameObject::GO_WALL)
 	{
 		//|(w0 - b1).N| < r + h / 2
 		Vector3 w0 = go2->pos;
@@ -195,10 +279,14 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 		Vector3 NP(-N.y, N.x);
 		float l = go2->scale.y;
 
-
 		if (abs((w0 - b1).Dot(N)) < r + h * 0.5 && abs((w0 - b1).Dot(NP)) < r + l * 0.5)
+		{
+			//Sound::playCollidingSound_Wall();
+			//Sound::playCollidingSound();
 			return true;
-		return false;
+		}
+		else
+			return false;
 	}
 }
 
@@ -334,8 +422,28 @@ void SceneCollision::GOUpdate(const double dt)
 
 					if (go->type != GameObject::GO_BALL)
 					{
+						Sound::playWinningSound();
 						player1Score++;
 					}
+					else
+						Sound::playBooing();
+				}
+			}
+			else if (go->type == GameObject::GO_WALL)
+			{
+				if (showBlock != 0 && calculateShowBlock == true)
+				{
+					//if (go->offset == showBlock)
+					//{
+					//	go->active = true;
+					//	//go->turns++;
+					//	std::cout << go->turns << std::endl;
+					//}
+					//else
+					//{
+					//	std::cout << go->offset << std::endl;
+					std::cout << go->offset << std::endl;
+					//}
 				}
 			}
 
@@ -452,7 +560,7 @@ void SceneCollision::GameMenuUpdate(double dt)
 	{
 		if (lockMenu == true && showGameMenu == false)
 		{
-			if(highestValue.IsZero() == true)
+			if(highestValue.IsZero() == true )
 			{
 				lockMenu = false;
 				showGameMenu = true;
@@ -491,10 +599,16 @@ void SceneCollision::Update(double dt)
 		m_speed += 0.1f;
 	}*/
 
+	if (turn % 10 == 0 && calculateShowBlock == false)
+	{
+		calculateShowBlock = true;
+		showBlock = Math::RandIntMinMax(1, 6);
+	}
 
 	//Physics Simulation Section
 	dt *= m_speed;
 
+	elapsedTime += dt;
 
 	if (player1Score >= 15)
 		std::cout << "Finish" << std::endl;
@@ -599,12 +713,12 @@ void SceneCollision::RenderText()
 {
 	//On screen text
 	std::ostringstream ss;
-	ss << "Player 1 Score: " << player1Score;
+	ss << "Player Score: " << player1Score;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 18);
 
 	ss.str(std::string());
 	ss.precision(5);
-	ss << "Player 2 Score: " << m_estimatedTime;
+	ss << "Elapsed Time: " << elapsedTime;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 15);
 
 	ss.str(std::string());
@@ -622,6 +736,16 @@ void SceneCollision::RenderText()
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+
+	ss.str(std::string());
+	ss.precision(5);
+	ss << "Highscore: " << highScore;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
+
+	ss.str(std::string());
+	ss.precision(5);
+	ss << "Fastest timing: " << fastestTiming;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 0);
 }
 
 void SceneCollision::RenderPlayerTurn()
@@ -699,6 +823,17 @@ void SceneCollision::Render()
 void SceneCollision::Exit()
 {
 	SceneBase::Exit();
+
+	if (player1Score == 16 && elapsedTime < fastestTiming)
+	{
+		ofstream highScore_Text("Text/BestRecords.txt");
+		if (highScore_Text.is_open())
+		{
+			highScore_Text << player1Score << "," << elapsedTime;
+			highScore_Text.close();
+		}
+	}
+
 	//Cleanup GameObjects
 	while (m_goList.size() > 0)
 	{
@@ -711,4 +846,5 @@ void SceneCollision::Exit()
 		delete m_ghost;
 		m_ghost = NULL;
 	}
+
 }

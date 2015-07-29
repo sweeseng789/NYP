@@ -61,6 +61,7 @@ struct GameObject
 	Vector3 normal;
 	Vector3 tempPos;
 	int offset;
+	int turns;
 
 	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
 	~GameObject();

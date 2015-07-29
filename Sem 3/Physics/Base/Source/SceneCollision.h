@@ -7,8 +7,10 @@
 #include "GameObject.h"
 #include <vector>
 #include "SceneBase.h"
+#include "Sound.h"
 
 using std::ifstream;
+using std::ofstream;
 using std::string;
 using std::getline;
 using std::stoi;
@@ -78,6 +80,11 @@ protected:
 	Vector3 lowestValue;
 	float highX, highY, lowX, lowY;
 	int offSet_highX, offSet_highY, offSet_lowX , offSet_lowY ;
+	float elapsedTime;
+	int highScore;
+	float fastestTiming;
+	int showBlock;
+	bool calculateShowBlock;
 	//Camera camera;
 };
 

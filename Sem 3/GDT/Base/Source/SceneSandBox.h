@@ -12,6 +12,9 @@
 #include "Vector2.h"
 #include "hero.h"
 #include "Enemy.h"
+#include "GoodiesFactory.h"
+#include "Goodies.h"
+#include "TreasureChest.h"
 
 class SceneSandBox : public Scene
 {
@@ -94,6 +97,7 @@ class SceneSandBox : public Scene
 		GEO_TILESTRUCTURE,
 		GEO_OBJECT,
 		GEO_TEXT,
+		GEO_TILE_TREASURECHEST,
 		NUM_GEOMETRY,
 	};
 
@@ -175,6 +179,10 @@ private:
 
 	// Enemis
 	CEnemy* theEnemy;
+
+	CGoodiesFactory theGoodiesFactory;
+	CGoodies** theArrayOfGoodies;
+	void RenderGoodies();
 };
 
 #endif

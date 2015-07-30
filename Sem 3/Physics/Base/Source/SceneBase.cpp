@@ -106,7 +106,7 @@ void SceneBase::Init()
 	meshList[GEO_POWERBAR_LINE] = MeshBuilder::GenerateLine("reference", Color(1, 1, 1), 4);
 	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
 	meshList[GEO_BALL2] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 0), 10, 10, 1.f);
-	meshList[GEO_BALL3] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 0), 10, 10, 1.f);
+	meshList[GEO_BALL3] = MeshBuilder::GenerateSphere("ball", Color(0, 0, 0), 10, 10, 1.f);
 	meshList[GEO_BALL4] = MeshBuilder::GenerateSphere("ball", Color(0, 1, 0), 10, 10, 1.f);
 	meshList[GEO_BALL5] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 1), 10, 10, 1.f);
 	meshList[GEO_BALL6] = MeshBuilder::GenerateSphere("ball", Color(0, 1, 1), 10, 10, 1.f);
@@ -155,6 +155,9 @@ void SceneBase::Init()
 
 	meshList[WinScreen] = MeshBuilder::GenerateQuad("Gameover screen", Color(1, 1, 1), 1);
 	meshList[WinScreen]->textureID = LoadTGA("Image//MenuTGA//Win.tga");
+
+	meshList[Background] = MeshBuilder::GenerateQuad("Background", Color(1, 1, 1), 1);
+	meshList[Background]->textureID = LoadTGA("Image//Phyics//PoolTable.tga");
 
 	bLightEnabled = false;
 }

@@ -14,7 +14,8 @@ GameObject::GameObject(GAMEOBJECT_TYPE typeValue)
 	number(0),
 	m_shieldTime(0),
 	tempPos(NULL),
-	offset(0)
+	offset(0),
+	turns(0)
 {
 }
 

@@ -33,12 +33,13 @@ void SceneCollision::Init()
 	movingBall = false;
 	player1Score = 0;
 	player2Score = 0;
-	turn = 9;
+	turn = 1;
 	highestValue = 0;
 	lowestValue = 0;
 	elapsedTime = 0;
 	showBlock = 0;
 	calculateShowBlock = false;
+	ballCount = 0;
 
 	highX = highY = lowX = lowY = 0;
 	offSet_highX = 0, offSet_highY = 0, offSet_lowX = 0, offSet_lowY = 0;
@@ -63,69 +64,6 @@ void SceneCollision::Init()
 	ball->angle = 0;
 	ball->offset = 0;
 
-	//Obstacle 1
-	GameObject* go2 = FetchGO();
-	go2->type = GameObject::GO_WALL;
-	go2->active = false;
-	go2->pos.Set(9, m_worldHeight - 9, 0);
-	go2->normal.Set(-1, 1, 0);
-	go2->normal.Normalize();
-	go2->scale.Set(5, 20, 0);
-	go2->offset = 1;
-	go2->angle = Math::RadianToDegree(atan2(go2->normal.y, go2->normal.x));
-
-	//Obstacle 2
-	GameObject* go3 = FetchGO();
-	go3->type = GameObject::GO_WALL;
-	go3->active = false;
-	go3->pos.Set(m_worldWidth - 9, m_worldHeight - 9, 0);
-	go3->normal.Set(-1, -1, 0);
-	go3->normal.Normalize();
-	go3->scale.Set(5, 20, 0);
-	go3->offset = 2;
-	go3->angle = Math::RadianToDegree(atan2(go3->normal.y, go3->normal.x));
-
-	GameObject* go4 = FetchGO();
-	go4->type = GameObject::GO_WALL;
-	go4->pos.Set(9, 9, 0);
-	go4->normal.Set(-1, -1, 0);
-	go4->normal.Normalize();
-	go4->scale.Set(5, 20, 0);
-	go4->offset = 3;
-	go4->active = false;
-	go4->angle = Math::RadianToDegree(atan2(go4->normal.y, go4->normal.x));
-
-	GameObject* go5 = FetchGO();
-	go5->type = GameObject::GO_WALL;
-	go5->pos.Set(m_worldWidth - 9, 9, 0);
-	go5->normal.Set(-1, 1, 0);
-	go5->normal.Normalize();
-	go5->scale.Set(5, 20, 0);
-	go5->offset = 4;
-	go5->active = false;
-	go5->angle = Math::RadianToDegree(atan2(go5->normal.y, go5->normal.x));
-
-	GameObject* go6 = FetchGO();
-	go6->type = GameObject::GO_WALL;
-	go6->pos.Set(m_worldWidth * 0.5, m_worldHeight - 7, 0);
-	go6->normal.Set(0, 1, 0);
-	go6->normal.Normalize();
-	go6->scale.Set(5, 20, 0);
-	go6->offset = 5;
-	go6->active = false;
-	go6->angle = Math::RadianToDegree(atan2(go6->normal.y, go6->normal.x));
-
-	GameObject* go7 = FetchGO();
-	go7->type = GameObject::GO_WALL;
-	go7->pos.Set(m_worldWidth * 0.5, 7, 0);
-	go7->normal.Set(0, 1, 0);
-	go7->normal.Normalize();
-	go7->scale.Set(5, 20, 0);
-	go7->offset = 6;
-	go7->active = false;
-	go7->angle = Math::RadianToDegree(atan2(go7->normal.y, go7->normal.x));
-
-
 	ifstream ballPos("Text/ballPos.txt");
 	if (ballPos.is_open())
 	{
@@ -146,6 +84,7 @@ void SceneCollision::Init()
 			go->mass = 2 * 2 * 2;
 			go->offset = count;
 			testing += 1;
+			ballCount ++;
 			//count += 1;
 		}
 		ballPos.close();
@@ -191,6 +130,42 @@ void SceneCollision::Init()
 		}
 		highScore_Text.close();
 	}
+
+	GameObject* go = FetchGO();
+	go->type = GameObject::GO_BALL3;
+	go->pos.Set(m_worldWidth * 0.5f, m_worldHeight + 1.5, 0);
+	go->scale.Set(7, 7, 7);
+	go->vel.SetZero();
+
+	GameObject* go2 = FetchGO();
+	go2->type = GameObject::GO_BALL3;
+	go2->pos.Set(m_worldWidth - 2, m_worldHeight - 4, 0);
+	go2->scale.Set(9, 9, 9);
+	go2->vel.SetZero();
+
+	GameObject* go3 = FetchGO();
+	go3->type = GameObject::GO_BALL3;
+	go3->pos.Set(m_worldWidth - 2, 4, 0);
+	go3->scale.Set(9, 9, 9);
+	go3->vel.SetZero();
+
+	GameObject* go4 = FetchGO();
+	go4->type = GameObject::GO_BALL3;
+	go4->pos.Set(m_worldWidth * 0.5f, -1.5, 0);
+	go4->scale.Set(7, 7, 7);
+	go4->vel.SetZero();
+
+	GameObject* go5 = FetchGO();
+	go5->type = GameObject::GO_BALL3;
+	go5->pos.Set(2, 4, 0);
+	go5->scale.Set(9, 9, 9);
+	go5->vel.SetZero();
+
+	GameObject* go6 = FetchGO();
+	go6->type = GameObject::GO_BALL3;
+	go6->pos.Set(2, m_worldHeight - 4, 0);
+	go6->scale.Set(9, 9, 9);
+	go6->vel.SetZero();
 }
 
 GameObject* SceneCollision::FetchGO()
@@ -218,7 +193,7 @@ GameObject* SceneCollision::FetchGO()
 
 float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
 {
-	if(go2->type == GameObject::GO_BALL)
+	if (go2->type == GameObject::GO_BALL)
 	{
 		Vector3 p1 = go->pos;
 		Vector3 p2 = go2->pos;
@@ -249,7 +224,7 @@ float SceneCollision::CheckCollision2(GameObject* go, GameObject* go2)
 
 bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 {
-	if (go2->type >= GameObject::GO_BALL && go2->type <= GameObject::GO_BALL15)
+	if (go2->type >= GameObject::GO_BALL && go2->type <= GameObject::GO_BALL3)
 	{
 		//Exercise 1: move collision code to CheckCollision()
 		float distSquared = (go1->pos - go2->pos).LengthSquared();
@@ -265,7 +240,7 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 		}
 		return false;
 	}
-	if (go2->type == GameObject::GO_WALL)
+	if (go2->type == GameObject::GO_WALL || go2->type == GameObject::GO_WALL3)
 	{
 		//|(w0 - b1).N| < r + h / 2
 		Vector3 w0 = go2->pos;
@@ -290,9 +265,9 @@ bool SceneCollision::CheckCollision(GameObject *go1, GameObject *go2, float dt)
 	}
 }
 
-void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
+void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2, float dt)
 {
-	if (go2->type >= GameObject::GO_BALL && go2->type <= GameObject::GO_BALL15)
+	if (go2->type == GameObject::GO_BALL || go2->type == GameObject::GO_BALL2)
 	{
 		m1 = go1->mass;
 		m2 = go2->mass;
@@ -312,7 +287,7 @@ void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
 		initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
 		finalKE = 0.5f * m1 * v1.Dot(v1) + 0.5f * m2 * v2.Dot(v2);
 	}
-	else if (go2->type == GameObject::GO_WALL || go2->type == GameObject::GO_WALL2)
+	else if (go2->type == GameObject::GO_WALL || go2->type == GameObject::GO_WALL3)
 	{
 		Vector3 w0 = go2->pos;
 		Vector3 b1 = go1->pos;
@@ -342,6 +317,17 @@ void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2)
 			go1->vel = v;
 		}
 	}
+	else if(go2->type == GameObject::GO_BALL3 && go1->type == GameObject::GO_BALL)
+	{
+		Sound::playBooing();
+		go1->active = false;
+	}
+	else if(go2->type == GameObject::GO_BALL3 && go1->type == GameObject::GO_BALL2)
+	{
+		Sound::playWinningSound();
+		go1->active = false;
+		player1Score ++;
+	}
 }
 
 void SceneCollision::GOUpdate(const double dt)
@@ -349,9 +335,9 @@ void SceneCollision::GOUpdate(const double dt)
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
-		if (go->active)
-		{ 
-			if (go->type >= GameObject::GO_BALL && go->type <= GameObject::GO_BALL16)
+		if (go->active == true)
+		{
+			if (go->type >= GameObject::GO_BALL && go->type <= GameObject::GO_BALL2)
 			{
 				go->pos += go->vel * static_cast<float>(dt);
 
@@ -413,40 +399,23 @@ void SceneCollision::GOUpdate(const double dt)
 					if (go->vel.IsZero())
 						lowY = 0;
 				}
-
-
-				if (go->pos.x > m_worldWidth || go->pos.x < 0 || go->pos.y > m_worldHeight || go->pos.y < 0)
-				{
-					go->active = false;
-					this->m_objectCount--;
-
-					if (go->type != GameObject::GO_BALL)
-					{
-						Sound::playWinningSound();
-						player1Score++;
-					}
-					else
-						Sound::playBooing();
-				}
 			}
-			else if (go->type == GameObject::GO_WALL)
+			else if (go->type == GameObject::GO_WALL3)
 			{
-				if (showBlock != 0 && calculateShowBlock == true)
+				if (showBlock == go->offset && calculateShowBlock == true)
 				{
-					//if (go->offset == showBlock)
-					//{
-					//	go->active = true;
-					//	//go->turns++;
-					//	std::cout << go->turns << std::endl;
-					//}
-					//else
-					//{
-					//	std::cout << go->offset << std::endl;
-					std::cout << go->offset << std::endl;
-					//}
+					if (highX == 0 && highY == 0 && lowX == 0 && lowY == 0 && movingBall == true)
+							go->turns++;
+
+					if (go->turns >= 5)
+					{
+						go->turns = 0;
+						go->active = false;
+						calculateShowBlock = false;
+						showBlock = 0;
+					}
 				}
 			}
-
 
 			for (std::vector<GameObject *>::iterator it2 = it + 1; it2 != m_goList.end(); ++it2)
 			{
@@ -466,7 +435,7 @@ void SceneCollision::GOUpdate(const double dt)
 					//Practical 4, Exercise 13: improve collision detection algorithm
 					if (CheckCollision(goA, goB, dt))
 					{
-						CollisionResponse(goA, goB);
+						CollisionResponse(goA, goB, dt);
 					}
 
 					float collisionTime = CheckCollision2(goA, goB);
@@ -501,7 +470,7 @@ void SceneCollision::PlayerControl(double dt)
 			//Set ball to previous position
 			ball->tempPos = ball->pos;
 
-			if (Application::IsKeyPressed(' '))
+			if (Application::IsKeyPressed(' ') && GetAsyncKeyState(VK_SPACE) < 0)
 			{
 				movingBall = true;
 				ball->vel.x = cos(Math::DegreeToRadian(ball->angle)) * powerBar_y * 250 * (float)dt;
@@ -560,7 +529,7 @@ void SceneCollision::GameMenuUpdate(double dt)
 	{
 		if (lockMenu == true && showGameMenu == false)
 		{
-			if(highestValue.IsZero() == true )
+			if (highestValue.IsZero() == true)
 			{
 				lockMenu = false;
 				showGameMenu = true;
@@ -589,7 +558,7 @@ void SceneCollision::GameMenuUpdate(double dt)
 void SceneCollision::Update(double dt)
 {
 	SceneBase::Update(dt);
-
+	std::cout << ballCount << std::endl;
 	/*if (Application::IsKeyPressed('9'))
 	{
 		m_speed = Math::Max(0.f, m_speed - 0.1f);
@@ -598,11 +567,72 @@ void SceneCollision::Update(double dt)
 	{
 		m_speed += 0.1f;
 	}*/
+	Sound::playAmbience(dt);
 
 	if (turn % 10 == 0 && calculateShowBlock == false)
 	{
 		calculateShowBlock = true;
 		showBlock = Math::RandIntMinMax(1, 6);
+		std::cout << showBlock << std::endl;
+
+		GameObject * go = FetchGO();
+		go->type = GameObject::GO_WALL3;
+		go->offset = 0;
+
+		if (showBlock == 1)
+		{
+			go->pos.Set(9, m_worldHeight - 9, 0);
+			go->normal.Set(-1, 1, 0);
+			go->normal.Normalize();
+			go->scale.Set(5, 20, 0);
+			go->offset = showBlock;
+			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+		}
+		else if (showBlock == 2)
+		{
+			go->pos.Set(m_worldWidth - 9, m_worldHeight - 9, 0);
+			go->normal.Set(-1, -1, 0);
+			go->normal.Normalize();
+			go->scale.Set(5, 20, 0);
+			go->offset = showBlock;
+			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+		}
+		else if(showBlock == 3)
+		{
+			go->pos.Set(9, 9, 0);
+			go->normal.Set(-1, -1, 0);
+			go->normal.Normalize();
+			go->scale.Set(5, 20, 0);
+			go->offset = showBlock;
+			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+		}
+		else if (showBlock == 4)
+		{
+			go->pos.Set(m_worldWidth - 9, 9, 0);
+			go->normal.Set(-1, 1, 0);
+			go->normal.Normalize();
+			go->scale.Set(5, 20, 0);
+			go->offset = showBlock;
+			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+		}
+		else if (showBlock == 5)
+		{
+			go->pos.Set(m_worldWidth * 0.5, m_worldHeight - 7, 0);
+			go->normal.Set(0, 1, 0);
+			go->normal.Normalize();
+			go->scale.Set(5, 20, 0);
+			go->offset = showBlock;
+			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+		}
+		else if(showBlock == 6)
+		{
+			go->pos.Set(m_worldWidth * 0.5, 7, 0);
+			go->normal.Set(0, 1, 0);
+			go->normal.Normalize();
+			go->scale.Set(5, 20, 0);
+			go->offset = showBlock;
+			go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+		}
 	}
 
 	//Physics Simulation Section
@@ -610,7 +640,7 @@ void SceneCollision::Update(double dt)
 
 	elapsedTime += dt;
 
-	if (player1Score >= 15)
+	if (player1Score >= ballCount)
 		std::cout << "Finish" << std::endl;
 	GOUpdate(dt);
 	PlayerControl(dt);
@@ -662,6 +692,15 @@ void SceneCollision::RenderGO(GameObject *go)
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
 	}
+	else if (go->type == GameObject::GO_WALL3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Rotate(go->angle, 0, 0, 1);
+		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		RenderMesh(meshList[GEO_CUBE], false);
+		modelStack.PopMatrix();
+	}
 	else if (go->type == GameObject::GO_BALL)
 	{
 		modelStack.PushMatrix();
@@ -676,6 +715,14 @@ void SceneCollision::RenderGO(GameObject *go)
 		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
 		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
 		RenderMesh(meshList[GEO_BALL2], false);
+		modelStack.PopMatrix();
+	}
+	else if (go->type == GameObject::GO_BALL3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		RenderMesh(meshList[GEO_BALL3], false);
 		modelStack.PopMatrix();
 	}
 }
@@ -714,38 +761,38 @@ void SceneCollision::RenderText()
 	//On screen text
 	std::ostringstream ss;
 	ss << "Player Score: " << player1Score;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 18);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 18 + moveGameMenu);
 
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "Elapsed Time: " << elapsedTime;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 15);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 15 + moveGameMenu);
 
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "Turns: " << turn;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 12);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 12 + moveGameMenu);
 
 	ss.str(std::string());
 	ss.precision(3);
 	ss << "Speed: " << m_speed;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 9);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 9 + moveGameMenu);
 
 	//Exercise 3: render initial and final kinetic energy
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6 + moveGameMenu);
 
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "Highscore: " << highScore;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3 + moveGameMenu);
 
 	ss.str(std::string());
 	ss.precision(5);
 	ss << "Fastest timing: " << fastestTiming;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 0 + moveGameMenu);
 }
 
 void SceneCollision::RenderPlayerTurn()
@@ -791,6 +838,12 @@ void SceneCollision::Render()
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, -2);
+	modelStack.Scale(133.5, 100, 10);
+	RenderMesh(meshList[Background], false);
+	modelStack.PopMatrix();
+
 	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 	{
 		GameObject *go = (GameObject *)*it;
@@ -824,7 +877,7 @@ void SceneCollision::Exit()
 {
 	SceneBase::Exit();
 
-	if (player1Score == 16 && elapsedTime < fastestTiming)
+	if (player1Score >= ballCount && elapsedTime < fastestTiming)
 	{
 		ofstream highScore_Text("Text/BestRecords.txt");
 		if (highScore_Text.is_open())

@@ -10,5 +10,6 @@ public:
 	static void playCollidingSound_Wall();
 	static void playWinningSound();
 	static void playBooing();
+	static void playAmbience(float dt);
 };
 

@@ -46,6 +46,12 @@ SceneSandBox::~SceneSandBox()
 		delete m_cMinimap;
 		m_cMinimap = NULL;
 	}
+
+	for(unsigned i = 0; i < 10; i++)
+	{
+		delete theArrayOfGoodies[i];
+	}
+	delete theArrayOfGoodies;
 }
 
 void SceneSandBox::Init()
@@ -250,6 +256,15 @@ void SceneSandBox::Init()
 	theEnemy->ChangeStrategy(NULL, false);
 	theEnemy->SetPos_x(575);
 	theEnemy->SetPos_y(100);
+
+	theArrayOfGoodies = new CGoodies*[10];
+	for(unsigned i = 0; i < 10; i++)
+	{
+		theArrayOfGoodies[i] = theGoodiesFactory.Create(TREASURECHEST);
+		theArrayOfGoodies[i]->SetPos(150 + i * 25, 150);
+		theArrayOfGoodies[i]->setMesh(MeshBuilder::Generate2DMesh("Hello World", Color(1, 1, 1), 0.f, 0.f, 25.f, 25.f));
+		theArrayOfGoodies[i]->SetTextureID(LoadTGA("Image//tile4_treasurechest.tga"));
+	}    
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -658,6 +673,14 @@ void SceneSandBox::RenderBackground()
 	Render2DMesh(meshList[GEO_BACKGROUND], false, 1.0f);
 }
 
+void SceneSandBox::RenderGoodies()
+{
+	for(unsigned i = 0; i < 10; i++)
+	{
+		Render2DMesh(theArrayOfGoodies[i]->getMesh(), false, 1.f, theArrayOfGoodies[i]->GetPos_x(), theArrayOfGoodies[i]->GetPos_y());
+	}
+}
+
 void SceneSandBox::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -684,6 +707,9 @@ void SceneSandBox::Render()
 
 	// Render the tile map
 	RenderTileMap();
+
+	//Render the goodies
+	RenderGoodies();
 
 	//On screen text
 	std::ostringstream ss3;

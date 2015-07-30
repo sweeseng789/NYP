@@ -39,18 +39,21 @@ void Sound::playAmbience(float dt)
 {
 	//sound->play3D("../irrKlang/media/Ambience.mp3", vec3df(0, 0, 0), true);
 
-	static float ambienceSound = 30;
-
-	if(ambienceSound < 30)
-		ambienceSound += dt;
+	static float ambienceSound = 29;
 
 	static bool playSound = true;
 
-	if(ambienceSound >= 30 && playSound == true)
+	if(ambienceSound < 29)
+		ambienceSound += dt;
+	//if(ambienceSound >= 29 && playSound == true)
+	else
 	{
-		playSound = false;
-		ambienceSound = 0;
-		sound->setSoundVolume(0.2);
-		sound->play3D("../irrKlang/media/Ambience.mp3", vec3df(0, 0, 0), true);
+		if (playSound == true)
+		{
+			playSound = false;
+			ambienceSound = 0;
+			sound->setSoundVolume(0.5);
+			sound->play3D("../irrKlang/media/Ambience.mp3", vec3df(0, 0, 0), true);
+		}
 	}
 }

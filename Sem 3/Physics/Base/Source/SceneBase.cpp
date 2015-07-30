@@ -105,10 +105,13 @@ void SceneBase::Init()
 	meshList[GEO_LINE] = MeshBuilder::GenerateLine("reference", Color(0, 1, 0), 100);
 	meshList[GEO_POWERBAR_LINE] = MeshBuilder::GenerateLine("reference", Color(1, 1, 1), 4);
 	meshList[GEO_BALL] = MeshBuilder::GenerateSphere("ball", Color(1, 1, 1), 10, 10, 1.f);
+	meshList[GEO_BALL2] = MeshBuilder::GenerateOBJ("", "OBJ//ball.obj");
 	meshList[GEO_BALL2] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 0), 10, 10, 1.f);
 	meshList[GEO_BALL3] = MeshBuilder::GenerateSphere("ball", Color(0, 0, 0), 10, 10, 1.f);
-	meshList[GEO_BALL4] = MeshBuilder::GenerateSphere("ball", Color(0, 1, 0), 10, 10, 1.f);
-	meshList[GEO_BALL5] = MeshBuilder::GenerateSphere("ball", Color(1, 0, 1), 10, 10, 1.f);
+	meshList[GEO_BALL4] = MeshBuilder::GenerateOBJ("", "OBJ//ball.obj");
+	meshList[GEO_BALL4]->textureID = LoadTGA("Image//Phyics//AntMan.tga");
+	meshList[GEO_BALL5] = MeshBuilder::GenerateOBJ("", "OBJ//FrictionBall.obj");
+	meshList[GEO_BALL5]->textureID = LoadTGA("Image//Phyics//Friction.tga");
 	meshList[GEO_BALL6] = MeshBuilder::GenerateSphere("ball", Color(0, 1, 1), 10, 10, 1.f);
 	meshList[GEO_BALL7] = MeshBuilder::GenerateSphere("ball", Color(0, 0, 1), 10, 10, 1.f);
 	meshList[GEO_BALL8] = MeshBuilder::GenerateSphere("ball", Color(1, 0.2, 0.6), 10, 10, 1.f);

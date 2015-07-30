@@ -8,6 +8,7 @@
 #include <vector>
 #include "SceneBase.h"
 #include "Sound.h"
+#include "StartMenu.h"
 
 using std::ifstream;
 using std::ofstream;
@@ -86,6 +87,20 @@ protected:
 	int showBlock;
 	bool calculateShowBlock;
 	int ballCount;
+	bool powerUp;
+
+	int powerUpType;
+	bool powerUpSpawned;
+	bool AntManPowerUp;
+	bool FrictionPowerUp;
+	int powerUpTurns;
+	int previousTurn;
+	double frictionSpeed;
+	bool godMode;
+
+	float rotateSpeed;
+
+	CStartMenu menu;
 	//Camera camera;
 };
 

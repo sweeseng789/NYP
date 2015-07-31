@@ -11,10 +11,8 @@ SceneCollision::~SceneCollision()
 {
 }
 
-void SceneCollision::Init()
+void SceneCollision::setParameters()
 {
-	SceneBase::Init();
-
 	m_worldHeight = 100.f;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
@@ -25,7 +23,7 @@ void SceneCollision::Init()
 
 	m_objectCount = 0;
 
-	m_ghost = new GameObject(GameObject::GO_BALL);
+	//m_ghost = new GameObject(GameObject::GO_BALL);
 
 	powerBar_y = 0;
 	moveGameMenu = 0;
@@ -51,6 +49,8 @@ void SceneCollision::Init()
 	frictionSpeed = 0.6;
 	godMode = false;
 
+	pause = false; 
+
 	rotateSpeed = 100;
 
 	highX = highY = lowX = lowY = 0;
@@ -70,6 +70,7 @@ void SceneCollision::Init()
 
 
 	ball = FetchGO();
+	ball->type = GameObject::GO_BALL;
 	ball->pos.Set(m_worldWidth * 0.5f - 50, m_worldHeight * 0.5f, 0);
 	ball->scale.Set(2, 2, 2);
 	ball->mass = 2 * 2 * 2;
@@ -178,6 +179,13 @@ void SceneCollision::Init()
 	go6->pos.Set(2, m_worldHeight - 4, 0);
 	go6->scale.Set(9, 9, 9);
 	go6->vel.SetZero();
+}
+
+void SceneCollision::Init()
+{
+	SceneBase::Init();
+
+	setParameters();
 }
 
 GameObject* SceneCollision::FetchGO()
@@ -294,6 +302,13 @@ void SceneCollision::CollisionResponse(GameObject *go1, GameObject *go2, float d
 
 		go1->vel = u1 + 2 * m2 / (m1 + m2) * (u2N - u1N);
 		go2->vel = u2 + 2 * m1 / (m1 + m2) * (u1N - u2N);
+
+		if(go2->type == GameObject::GO_BALL2 && this->FrictionPowerUp == true)
+		{
+			go2->vel.x = (go2->vel.x / 100) * 180;
+			go2->vel.y = (go2->vel.y / 100) * 180;
+			go2->vel.z = (go2->vel.z / 100) * 180;
+		}
 
 		finalMomentum = m1 * v1 + m2 * v2;
 		initialKE = 0.5f * m1 * u1.Dot(u1) + 0.5f * m2 * u2.Dot(u2);
@@ -645,6 +660,22 @@ void SceneCollision::GameMenuUpdate(double dt)
 	}
 }
 
+void SceneCollision::reset()
+{
+	for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+	{
+		GameObject *go = (GameObject *)*it;
+		if (go->active == true)
+		{
+			go->active = false;
+			go->vel.SetZero();
+		}
+	}
+
+	setParameters();
+	menu.reset();
+}
+
 void SceneCollision::Update(double dt)
 {
 	SceneBase::Update(dt);
@@ -652,158 +683,169 @@ void SceneCollision::Update(double dt)
 	Sound::playAmbience(dt);
 	menu.MenuUpdate(dt);
 
+	if(Application::IsKeyPressed(VK_TAB))
+		reset();
+
+	if(Application::IsKeyPressed('O'))
+		pause = true;
+
+	if(Application::IsKeyPressed('I') && pause == true)
+		pause = false;
+
 	if (menu.getStartGame())
 	{
-		/*if (Application::IsKeyPressed('9'))
+		if(pause == false)
 		{
+			/*if (Application::IsKeyPressed('9'))
+			{
 			m_speed = Math::Max(0.f, m_speed - 0.1f);
-		}
-		if (Application::IsKeyPressed('0'))
-		{
+			}
+			if (Application::IsKeyPressed('0'))
+			{
 			m_speed += 0.1f;
-		}*/
+			}*/
 
-		if (FrictionPowerUp == true)
-			frictionSpeed = 0.2;
-		else
-			frictionSpeed = 0.6;
+			if (FrictionPowerUp == true)
+				frictionSpeed = 0.2;
+			else
+				frictionSpeed = 0.6;
 
-		if (AntManPowerUp == true || FrictionPowerUp == true)
-		{
-			if (highX == 0 && highY == 0 && lowX == 0 && lowY == 0)
+			if (AntManPowerUp == true || FrictionPowerUp == true)
 			{
-				if (movingBall == true)
-					powerUpTurns++;
+				if (highX == 0 && highY == 0 && lowX == 0 && lowY == 0)
+				{
+					if (movingBall == true)
+						powerUpTurns++;
+				}
+
+				if (powerUpTurns >= 5)
+				{
+					powerUp = false;
+					powerUpType = 0;
+					powerUpSpawned = false;
+					AntManPowerUp = false;
+					powerUpTurns = 0;
+					FrictionPowerUp = false;
+				}
 			}
 
-			if (powerUpTurns >= 5)
+			if (elapsedTime > 5)
 			{
-				powerUp = false;
-				powerUpType = 0;
-				powerUpSpawned = false;
-				AntManPowerUp = false;
-				powerUpTurns = 0;
-				FrictionPowerUp = false;
-			}
-		}
-
-		if (elapsedTime > 5)
-		{
-			if (fmod(elapsedTime, 50) < 0.5 && powerUp == false)
-			{
-				powerUp = true;
-				powerUpType = Math::RandIntMinMax(1, 2);
-			}
-		}
-
-		if (powerUpSpawned == false)
-		{
-			switch (powerUpType)
-			{
-			case(1) :
-			{
-				GameObject* go = FetchGO();
-				go->type = GameObject::GO_BALL4;
-				go->pos.Set(Math::RandFloatMinMax(5, m_worldWidth - 10), Math::RandFloatMinMax(5, m_worldHeight - 10), 0);
-				go->scale.Set(3, 3, 3);
-				go->mass = go->scale.x * go->scale.y * go->scale.z;
-				powerUpSpawned = true;
-				break;
+				if (fmod(elapsedTime, 50) < 0.5 && powerUp == false)
+				{
+					powerUp = true;
+					powerUpType = Math::RandIntMinMax(1, 2);
+				}
 			}
 
-			case(2) :
+			if (powerUpSpawned == false)
 			{
-				GameObject* go = FetchGO();
-				go->type = GameObject::GO_BALL5;
-				go->pos.Set(Math::RandFloatMinMax(5, m_worldWidth - 10), Math::RandFloatMinMax(5, m_worldHeight - 10), 0);
-				go->scale.Set(3, 3, 3);
-				go->mass = go->scale.x * go->scale.y * go->scale.z;
-				powerUpSpawned = true;
-				break;
+				switch (powerUpType)
+				{
+				case(1) :
+					{
+						GameObject* go = FetchGO();
+						go->type = GameObject::GO_BALL4;
+						go->pos.Set(Math::RandFloatMinMax(5, m_worldWidth - 10), Math::RandFloatMinMax(5, m_worldHeight - 10), 0);
+						go->scale.Set(3, 3, 3);
+						go->mass = go->scale.x * go->scale.y * go->scale.z;
+						powerUpSpawned = true;
+						break;
+					}
+
+				case(2) :
+					{
+						GameObject* go = FetchGO();
+						go->type = GameObject::GO_BALL5;
+						go->pos.Set(Math::RandFloatMinMax(5, m_worldWidth - 10), Math::RandFloatMinMax(5, m_worldHeight - 10), 0);
+						go->scale.Set(3, 3, 3);
+						go->mass = go->scale.x * go->scale.y * go->scale.z;
+						powerUpSpawned = true;
+						break;
+					}
+
+				default:
+					break;
+				}
 			}
 
-			default:
-				break;
-			}
-		}
+			if (turn % 10 == 0 && calculateShowBlock == false)
+			{
+				calculateShowBlock = true;
+				showBlock = Math::RandIntMinMax(1, 6);
+				std::cout << showBlock << std::endl;
 
-		if (turn % 10 == 0 && calculateShowBlock == false)
-		{
-			calculateShowBlock = true;
-			showBlock = Math::RandIntMinMax(1, 6);
-			std::cout << showBlock << std::endl;
+				GameObject * go = FetchGO();
+				go->type = GameObject::GO_WALL3;
+				go->offset = 0;
 
-			GameObject * go = FetchGO();
-			go->type = GameObject::GO_WALL3;
-			go->offset = 0;
+				if (showBlock == 1)
+				{
+					go->pos.Set(9, m_worldHeight - 9, 0);
+					go->normal.Set(-1, 1, 0);
+					go->normal.Normalize();
+					go->scale.Set(5, 20, 0);
+					go->offset = showBlock;
+					go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+				}
+				else if (showBlock == 2)
+				{
+					go->pos.Set(m_worldWidth - 9, m_worldHeight - 9, 0);
+					go->normal.Set(-1, -1, 0);
+					go->normal.Normalize();
+					go->scale.Set(5, 20, 0);
+					go->offset = showBlock;
+					go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+				}
+				else if (showBlock == 3)
+				{
+					go->pos.Set(9, 9, 0);
+					go->normal.Set(-1, -1, 0);
+					go->normal.Normalize();
+					go->scale.Set(5, 20, 0);
+					go->offset = showBlock;
+					go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+				}
+				else if (showBlock == 4)
+				{
+					go->pos.Set(m_worldWidth - 9, 9, 0);
+					go->normal.Set(-1, 1, 0);
+					go->normal.Normalize();
+					go->scale.Set(5, 20, 0);
+					go->offset = showBlock;
+					go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+				}
+				else if (showBlock == 5)
+				{
+					go->pos.Set(m_worldWidth * 0.5, m_worldHeight - 7, 0);
+					go->normal.Set(0, 1, 0);
+					go->normal.Normalize();
+					go->scale.Set(5, 20, 0);
+					go->offset = showBlock;
+					go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+				}
+				else if (showBlock == 6)
+				{
+					go->pos.Set(m_worldWidth * 0.5, 7, 0);
+					go->normal.Set(0, 1, 0);
+					go->normal.Normalize();
+					go->scale.Set(5, 20, 0);
+					go->offset = showBlock;
+					go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
+				}
+			}
 
-			if (showBlock == 1)
-			{
-				go->pos.Set(9, m_worldHeight - 9, 0);
-				go->normal.Set(-1, 1, 0);
-				go->normal.Normalize();
-				go->scale.Set(5, 20, 0);
-				go->offset = showBlock;
-				go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-			}
-			else if (showBlock == 2)
-			{
-				go->pos.Set(m_worldWidth - 9, m_worldHeight - 9, 0);
-				go->normal.Set(-1, -1, 0);
-				go->normal.Normalize();
-				go->scale.Set(5, 20, 0);
-				go->offset = showBlock;
-				go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-			}
-			else if (showBlock == 3)
-			{
-				go->pos.Set(9, 9, 0);
-				go->normal.Set(-1, -1, 0);
-				go->normal.Normalize();
-				go->scale.Set(5, 20, 0);
-				go->offset = showBlock;
-				go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-			}
-			else if (showBlock == 4)
-			{
-				go->pos.Set(m_worldWidth - 9, 9, 0);
-				go->normal.Set(-1, 1, 0);
-				go->normal.Normalize();
-				go->scale.Set(5, 20, 0);
-				go->offset = showBlock;
-				go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-			}
-			else if (showBlock == 5)
-			{
-				go->pos.Set(m_worldWidth * 0.5, m_worldHeight - 7, 0);
-				go->normal.Set(0, 1, 0);
-				go->normal.Normalize();
-				go->scale.Set(5, 20, 0);
-				go->offset = showBlock;
-				go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-			}
-			else if (showBlock == 6)
-			{
-				go->pos.Set(m_worldWidth * 0.5, 7, 0);
-				go->normal.Set(0, 1, 0);
-				go->normal.Normalize();
-				go->scale.Set(5, 20, 0);
-				go->offset = showBlock;
-				go->angle = Math::RadianToDegree(atan2(go->normal.y, go->normal.x));
-			}
-		}
+			//Physics Simulation Section
+			dt *= m_speed;
 
-		//Physics Simulation Section
-		dt *= m_speed;
-
-		if (godMode == false)
 			elapsedTime += dt;
 
-		if (player1Score >= ballCount)
-			std::cout << "Finish" << std::endl;
-		GOUpdate(dt);
-		PlayerControl(dt);
-		GameMenuUpdate(dt);
+			if (player1Score >= ballCount)
+				std::cout << "Finish" << std::endl;
+			GOUpdate(dt);
+			PlayerControl(dt);
+			GameMenuUpdate(dt);
+		}
 	}
 }
 
@@ -1016,33 +1058,45 @@ void SceneCollision::Render()
 
 	if (!menu.getStartGame())
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 9);
-		modelStack.Scale(135, 158, 100);
-		RenderMesh(meshList[StartMenu], false);
-		modelStack.PopMatrix();
-		if (menu.StartConfirm())
+		if(menu.getShowControl() == false)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 10);
-			modelStack.Scale(100, 100, 100);
-			RenderMesh(meshList[StartTrue], false);
+			modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 9);
+			modelStack.Scale(135, 160, 100);
+			RenderMesh(meshList[StartMenu], false);
 			modelStack.PopMatrix();
+
+			if (menu.StartConfirm())
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 10);
+				modelStack.Scale(100, 100, 100);
+				RenderMesh(meshList[StartTrue], false);
+				modelStack.PopMatrix();
+			}
+			else if (menu.ControlConfirm())
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 10);
+				modelStack.Scale(100, 100, 100);
+				RenderMesh(meshList[ControlTrue], false);
+				modelStack.PopMatrix();
+			}
+			else if (menu.ExitConfirm())
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 10);
+				modelStack.Scale(100, 100, 100);
+				RenderMesh(meshList[ExitTrue], false);
+				modelStack.PopMatrix();
+			}
 		}
-		else if (menu.ControlConfirm())
+		else
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 10);
-			modelStack.Scale(100, 100, 100);
-			RenderMesh(meshList[ControlTrue], false);
-			modelStack.PopMatrix();
-		}
-		else if (menu.ExitConfirm())
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 10);
-			modelStack.Scale(100, 100, 100);
-			RenderMesh(meshList[ExitTrue], false);
+			modelStack.Scale(135, 160 ,100);
+			RenderMesh(meshList[ShowControl], false);
 			modelStack.PopMatrix();
 		}
 	}
@@ -1105,11 +1159,6 @@ void SceneCollision::Exit()
 		GameObject *go = m_goList.back();
 		delete go;
 		m_goList.pop_back();
-	}
-	if (m_ghost)
-	{
-		delete m_ghost;
-		m_ghost = NULL;
 	}
 
 }

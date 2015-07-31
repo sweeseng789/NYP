@@ -42,6 +42,9 @@ public:
 	void RenderText();
 	void RenderPlayerTurn();
 
+
+	void setParameters();
+	void reset();
 	GameObject* FetchGO();
 
 	bool CheckCollision(GameObject *go1, GameObject *go2, float dt);
@@ -97,6 +100,8 @@ protected:
 	int previousTurn;
 	double frictionSpeed;
 	bool godMode;
+
+	bool pause;
 
 	float rotateSpeed;
 

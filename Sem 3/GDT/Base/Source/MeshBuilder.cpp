@@ -775,38 +775,12 @@ Mesh* MeshBuilder::GenerateMinimapAvatar(const std::string &meshName, Color colo
 	mesh->mode = Mesh::DRAW_TRIANGLES;
 	return mesh;
 }
+
 SpriteAnimation * MeshBuilder::GenerateSpriteAnimation(const std::string & meshName, unsigned numRow, unsigned numCol)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
-
-	/*v.pos.Set(-0.5f, -0.5f, 0);
-	v.normal.Set(0, 0, 1);
-	v.texCoord.Set(0, 0);
-	vertex_buffer_data.push_back(v);
-
-	v.pos.Set(0.5f , -0.5f,0);
-	v.normal.Set(0, 0, 1);
-	v.texCoord.Set(1.0f, 0);
-	vertex_buffer_data.push_back(v);
-
-	v.pos.Set(0.5f, 0.5f,0);
-	v.normal.Set(0, 0, 1);
-	v.texCoord.Set(1.0f, 1.0f);
-	vertex_buffer_data.push_back(v);
-
-	v.pos.Set(-0.5f, 0.5f, 0);
-	v.normal.Set(0, 0, 1);
-	v.texCoord.Set(0, 1.0f);
-	vertex_buffer_data.push_back(v);
-
-	index_buffer_data.push_back(3);
-	index_buffer_data.push_back(0);
-	index_buffer_data.push_back(2);
-	index_buffer_data.push_back(1);
-	index_buffer_data.push_back(2);
-	index_buffer_data.push_back(0);*/
 
 	float width = 1.f / numCol;
 	float height = 1.f / numRow;
@@ -817,6 +791,7 @@ SpriteAnimation * MeshBuilder::GenerateSpriteAnimation(const std::string & meshN
 		{
 			float u1 = j * width;
 			float v1 = 1.f - height - i * height;
+
 			v.pos.Set(-0.5f, -0.5f, 0);
 			v.texCoord.Set(u1, v1);
 			vertex_buffer_data.push_back(v);
@@ -839,6 +814,75 @@ SpriteAnimation * MeshBuilder::GenerateSpriteAnimation(const std::string & meshN
 			index_buffer_data.push_back(offset + 0);
 			index_buffer_data.push_back(offset + 2);
 			index_buffer_data.push_back(offset + 3);
+			offset += 4;
+		}
+	}
+
+	SpriteAnimation* sprite = new SpriteAnimation(meshName, numRow, numCol);
+
+	glBindBuffer(GL_ARRAY_BUFFER, sprite->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex),
+		&vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	sprite->indexSize = index_buffer_data.size();
+	sprite->mode = Mesh::DRAW_TRIANGLES;
+
+	return sprite;
+}
+
+SpriteAnimation * MeshBuilder::Generate2DSpriteAnimation(const std::string & meshName, unsigned numRow, unsigned numCol, Color color, double width, double height)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float widthSA = 1.f / numCol;
+	float heightSA = 1.f / numRow;
+	int offset = 0;
+	for (unsigned i = 0; i < numRow; ++i)
+	{
+		for (unsigned j = 0; j < numCol; ++j)
+		{
+			float u1 = j * widthSA;
+			float v1 = 1.f - heightSA - i * heightSA;
+
+			//Vertex 1
+			v.pos.Set(0, 0, 0);
+			v.color = color;
+			v.normal.Set(0, 0, 1);
+			v.texCoord.Set(u1, v1);
+			vertex_buffer_data.push_back(v);
+
+			//Vertex 2
+			v.pos.Set(width, 0, 0);
+			v.color = color;
+			v.normal.Set(0, 0, 1);
+			v.texCoord.Set(u1 + widthSA, v1);
+			vertex_buffer_data.push_back(v);
+
+
+			//Vertex 3
+			v.pos.Set(width, height, 0);
+			v.color = color;
+			v.normal.Set(0, 0, 1);
+			v.texCoord.Set(u1 + widthSA, v1 + heightSA);
+			vertex_buffer_data.push_back(v);
+
+			//Vertex 4
+			v.pos.Set(0, height, 0);
+			v.color = color;
+			v.normal.Set(0, 0, 1);
+			v.texCoord.Set(u1, v1 + heightSA);
+			vertex_buffer_data.push_back(v);
+
+			index_buffer_data.push_back(offset + 3);
+			index_buffer_data.push_back(offset + 0);
+			index_buffer_data.push_back(offset + 2);
+			index_buffer_data.push_back(offset + 1);
+			index_buffer_data.push_back(offset + 2);
+			index_buffer_data.push_back(offset + 0);
 			offset += 4;
 		}
 	}
@@ -880,7 +924,6 @@ Mesh* MeshBuilder::Generate2DMesh(const std::string & meshName, Color color, dou
 	v.normal.Set(0, 0, 1);
 	v.texCoord.Set(0, 0);
 	vertex_buffer_data.push_back(v);
-
 
 	//Vertex 2
 	v.pos.Set(width, 0, 0);

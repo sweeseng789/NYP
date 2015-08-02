@@ -229,6 +229,16 @@ void SceneSandBox::Init()
 	meshList[GEO_TILESTRUCTURE] = MeshBuilder::Generate2DMesh("GEO_TILESTRUCTURE", Color(1, 1, 1), 0.0f, 0.0f, 25.0f, 25.0f);
 	meshList[GEO_TILESTRUCTURE]->textureID = LoadTGA("Image//tile3_structure.tga");
 
+
+	meshList[GEO_SOCCERSA] = MeshBuilder::Generate2DSpriteAnimation("Soccer Sprite Animation", 6, 6, Color(1, 1, 1), 50.f, 50.f);
+	meshList[GEO_SOCCERSA]->textureID = LoadTGA("Image//WolfTest.tga");
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SOCCERSA]);
+	if (sa)
+	{
+		sa->m_anim = new Animation();
+		sa->m_anim->Set(0, 5, 0, 2.f);
+	}
+
 	// Initialise and load the tile map
 	m_cMap = new CMap();
 	m_cMap->Init(600, 800, 24, 32, 600, 1600);
@@ -379,6 +389,10 @@ void SceneSandBox::Update(double dt)
 	theEnemy->Update(m_cMap);
 
 	fps = (float)(1.f / dt);
+
+	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SOCCERSA]);
+	if (sa)
+		sa->Update(dt);
 }
 
 /********************************************************************************
@@ -778,7 +792,8 @@ void SceneSandBox::RenderTileMap()
 		}
 	}
 
-	if (theHero->GetAnimationInvert() == false)
+	Render2DMesh(meshList[GEO_SOCCERSA], false, 1.f, theHero->GetPos_x(), theHero->GetPos_y());
+	/*if (theHero->GetAnimationInvert() == false)
 	{
 		if (theHero->GetAnimationCounter() == 0)
 			Render2DMesh(meshList[GEO_TILEHERO_FRAME0], false, 1.0f, theHero->GetPos_x(), theHero->GetPos_y());
@@ -803,7 +818,7 @@ void SceneSandBox::RenderTileMap()
 			Render2DMesh(meshList[GEO_TILEHERO_FRAME3], false, 1.0f, theHero->GetPos_x(), theHero->GetPos_y());
 		else
 			Render2DMesh(meshList[GEO_TILEHERO_FRAME0], false, 1.0f, theHero->GetPos_x(), theHero->GetPos_y());
-	}
+	}*/
 
 	// Render the enemy
 	int theEnemy_x = theEnemy->GetPos_x() - theHero->GetMapFineOffset_x();

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 class CUI
 {
 public:
@@ -13,8 +14,13 @@ public:
 	CUI(MENU_OPTION type);
 	~CUI();
 
-	MENU_OPTION getType();
+	static void renderMainMenu();
+	static void renderErrorMessage();
+	static void renderRecordIsFull();
+	static void renderRecordIsEmpty();
+	static void renderNoDataFound();
 
+	MENU_OPTION getType();
 private:
 	MENU_OPTION type;
 };

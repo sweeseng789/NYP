@@ -98,6 +98,7 @@ class SceneSandBox : public Scene
 		GEO_OBJECT,
 		GEO_TEXT,
 		GEO_TILE_TREASURECHEST,
+		GEO_SOCCERSA,
 		NUM_GEOMETRY,
 	};
 

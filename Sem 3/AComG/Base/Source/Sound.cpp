@@ -38,3 +38,22 @@ void Sound::Thunder()
 {
 	sound->play3D("../irrKlang/media/Thunder2.mp3", vec3df(0, 0, 0), false);
 }
+
+void Sound::Rain(float dt)
+{
+	static float RainDropSound = 70;
+	static bool playSound = true;
+
+	if (RainDropSound < 70)
+		RainDropSound += dt;
+	else
+	{
+		if (playSound == true)
+		{
+			playSound = false;
+			RainDropSound = 0;
+			sound->setSoundVolume(0.5);
+			sound->play3D("../irrKlang/media/RainDrop.mp3", vec3df(0, 0, 0), true);
+		}
+	}
+}

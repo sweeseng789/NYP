@@ -43,9 +43,9 @@ public:
 	int ParticleType;
 	float angle;
 
-	bool rotateX;
-	bool rotateY;
-	bool rotateZ;
+	float rotateX;
+	float rotateY;
+	float rotateZ;
 private:
 };
 

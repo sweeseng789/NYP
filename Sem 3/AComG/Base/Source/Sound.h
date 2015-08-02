@@ -11,5 +11,6 @@ public:
 	static void Jump();
 	static void Land();
 	static void Thunder();
+	static void Rain(float dt);
 };
 

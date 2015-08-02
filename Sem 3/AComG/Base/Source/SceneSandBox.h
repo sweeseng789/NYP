@@ -131,15 +131,12 @@ public:
 	SceneSandBox();
 	~SceneSandBox();
 
-
-	//======================Getter=========================//
-	Particle* fetchOBJ();
-
 	//======================Setter========================//
 	void SetParameters();
-	void view();
 	void SAInit();
 	void SAUpdate(double dt);
+	void ThunderUpdate(double dt);
+	void vectorUpdate(double dt);
 
 	//======================Render========================//
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -147,7 +144,6 @@ public:
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX = 1.0f, float sizeY = 1.0f, float x = 0.0f, float y = 0.0f, float z = 0.0f);
 	void RenderSkyPlane(Mesh* mesh, Color color, int slices, float PlanetRadius, float height, float hTile, float vTile);
 	void RenderMesh(Mesh *mesh, bool enableLight);
-	void RenderSkybox();
 	void RenderTerrain();
 	void RenderParticle(Particle * particle);
 	void RenderSpriteAnimation(CNPC* npc);
@@ -177,9 +173,6 @@ private:
 
 	//Double
 	double moving;
-	double m_dElapsedTime;
-	double m_dAccumulatedTime_RenderScene;
-	double m_dAccumulatedTime_RenderText;
 
 	//Class
 	MS modelStack;

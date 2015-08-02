@@ -21,7 +21,7 @@ void SceneBase::Init()
 	// Black background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// Enable depth test
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS); 
 	
@@ -133,13 +133,13 @@ void SceneBase::Init()
 	meshList[Power_Bar]->textureID = LoadTGA("Image//Phyics//Power Bar.tga");
 
 	meshList[GEO_PLAYER1_TURN] = MeshBuilder::GenerateQuad("Gameover screen", Color(1, 1, 1), 1);
-	meshList[GEO_PLAYER1_TURN]->textureID = LoadTGA("Image//Phyics//Player1Turn.tga");
+	meshList[GEO_PLAYER1_TURN]->textureID = LoadTGA("Image//Phyics//PauseMenu.tga");
 
 	meshList[GEO_PLAYER2_TURN] = MeshBuilder::GenerateQuad("Gameover screen", Color(1, 1, 1), 1);
 	meshList[GEO_PLAYER2_TURN]->textureID = LoadTGA("Image//Phyics//Player2Turn.tga");
 
 	meshList[StartMenu] = MeshBuilder::GenerateQuad("Main menu screen", Color(1, 1, 1), 1);
-	meshList[StartMenu]->textureID = LoadTGA("Image//MenuTGA//StartScreen.tga");
+	meshList[StartMenu]->textureID = LoadTGA("Image//MenuTGA//StartScreen.tga");	
 
 	meshList[StartTrue] = MeshBuilder::GenerateQuad("Start is true", Color(1, 1, 1), 1);
 	meshList[StartTrue]->textureID = LoadTGA("Image//MenuTGA//StartTrue.tga");

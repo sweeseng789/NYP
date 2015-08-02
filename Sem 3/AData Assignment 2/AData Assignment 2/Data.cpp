@@ -41,58 +41,56 @@ int CData::getID()
 	return ID;
 }
 
-//bool checkStringForNumber(string ID)
-//{
-//	for (unsigned a = 0; a < ID.size(); ++a)
-//	{
-//		if (!isdigit(ID[a]))
-//			return true;
-//		else
-//			return false;
-//	}
-//}
-//
-//istream & operator>>(istream & input, CData & data)
-//{
-//	string name = "";
-//	int ID = 0;
-//	string IDtoCheck = "";
-//	bool allNum = false;
-//
-//	cout << "Please enter your name" << endl;
-//	cin.ignore();
-//	getline(input, name);
-//
-//	//Check if there is more than 32 character, if true then shorten it to 32
-//	if (name.size() > 32)
-//		name.resize(32);
-//
-//	cout << endl;
-//
-//	cout << "Please enter your ID" << endl;
-//	getline(input, IDtoCheck);
-//
-//	try{
-//		//Check if ID contain stuff other than numbers or ID size is more than 5 digit
-//		if (checkStringForNumber(IDtoCheck) || IDtoCheck.size() > 5)
-//			throw CUI(CUI::INVALID);
-//		else
-//			throw CUI(CUI::VALID);
-//	}
-//	catch (CUI ui)
-//	{
-//		if (ui.getType() == CUI::VALID)
-//		{
-//			ID = stoi(IDtoCheck);
-//			data.setData(true, name, ID);
-//		}
-//		else
-//		{
-//			cout << "Error, please try again later" << endl;
-//		}
-//	}
-//	return input;
-//}
+bool checkStringForNumber(string ID)
+{
+	for (unsigned a = 0; a < ID.size(); ++a)
+	{
+		if (!isdigit(ID[a]))
+			return true;
+		else
+			return false;
+	}
+}
+
+istream & operator>>(istream & input, CData & data)
+{
+	string name = "";
+	int ID = 0;
+	string IDtoCheck = "";
+	bool allNum = false;
+
+	cout << "Please enter your name" << endl;
+	cin.ignore();
+	getline(input, name);
+
+	//Check if there is more than 32 character, if true then shorten it to 32
+	if (name.size() > 32)
+		name.resize(32);
+
+	cout << endl;
+
+	cout << "Please enter your ID" << endl;
+	getline(input, IDtoCheck);
+
+	try{
+		//Check if ID contain stuff other than numbers or ID size is more than 5 digit
+		if (checkStringForNumber(IDtoCheck) || IDtoCheck.size() > 5)
+			throw CUI(CUI::INVALID);
+		else
+			throw CUI(CUI::VALID);
+	}
+	catch (CUI ui)
+	{
+		if (ui.getType() == CUI::VALID)
+		{
+			ID = stoi(IDtoCheck);
+			data.setData(true, name, ID);
+		}
+		else
+			CUI::renderErrorMessage();
+	}
+	return input;
+}
 
 ostream & operator<<(ostream & output, CData & data)
 {

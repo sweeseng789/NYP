@@ -36,12 +36,13 @@ public:
 	void GOUpdate(const double dt);
 	void PlayerControl(double dt);
 	void GameMenuUpdate(double dt);
+	void PowerupUpdate();
+	void ObstacleUpdate();
 
 	void RenderPowerBar();
 	void RenderBlackScreen();
 	void RenderText();
 	void RenderPlayerTurn();
-
 
 	void setParameters();
 	void reset();
@@ -102,6 +103,8 @@ protected:
 	bool godMode;
 
 	bool pause;
+
+	bool finishGame;
 
 	float rotateSpeed;
 

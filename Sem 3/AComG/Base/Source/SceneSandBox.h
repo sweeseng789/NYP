@@ -118,7 +118,7 @@ class SceneSandBox : public Scene
 		GEO_STUMP,
 		GEO_MOON,
 		GEO_LIGHT_DEPTH_QUAD,
-		GEO_WOLFSA,
+		GEO_WOLFSA, 
 		NUM_GEOMETRY,
 	};
 

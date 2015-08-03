@@ -457,6 +457,8 @@ void SceneSandBox::vectorUpdate(double dt)
 		Particle * particle = (Particle*)*it;
 		if (particle->active == true)
 		{
+			float tempY = HeightMapScale.y * ReadHeightMap(m_heightMap, particle->pos.x / HeightMapScale.x, particle->pos.z / HeightMapScale.z);
+			particle->setTerrainYPos(tempY);
 			particle->update(dt, camera.position, camera.direction);
 		}
 	}

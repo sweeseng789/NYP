@@ -75,6 +75,11 @@ void Particle::CreateStaticOBJ(Vector3 pos)
 	vel.SetZero();
 }
 
+void Particle::setTerrainYPos(float tempY)
+{
+	this->tempY = tempY;
+}
+
 void Particle::update(double dt, Vector3 CameraPos, Vector3 CameraTarget)
 {
 	pos += vel * (100 / mass) * (float)dt;
@@ -91,7 +96,7 @@ void Particle::update(double dt, Vector3 CameraPos, Vector3 CameraTarget)
 	}*/
 	if (ParticleType == GO_RAIN)
 	{
-		if (pos.y < 0)
+		if (pos.y < tempY)
 		{
 			CreateRain2(CameraPos, CameraTarget);
 		}

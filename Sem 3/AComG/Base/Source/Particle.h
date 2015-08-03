@@ -16,6 +16,7 @@ public:
 		GO_STATICOBJ,
 		GO_STATICOBJ2,
 		GO_STATICOBJ3,
+		GO_ROCK,
 		GO_MOON,
 		GO_TOTAL, //must be last
 	};
@@ -28,8 +29,8 @@ public:
 	void CreateRain2(Vector3 cameraPos, Vector3 CameraTarget);
 	void CreateBall();
 	void CreateStaticOBJ(Vector3 pos);
-
 	void update(double dt, Vector3 CameraPos, Vector3 CameraTarget);
+	void setTerrainYPos(float tempY);
 
 	Vector3 pos;
 	Vector3 defaultPos;
@@ -42,6 +43,7 @@ public:
 	Material material;
 	int ParticleType;
 	float angle;
+	float tempY;
 
 	float rotateX;
 	float rotateY;

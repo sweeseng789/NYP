@@ -363,6 +363,10 @@ void SceneSandBox::Update(double dt)
 	theHero->HeroUpdate(m_cMap);
 
 	tileOffset_x = (int)(theHero->GetMapOffset_x() / m_cMap->GetTileSize());
+	tileOffset_y = (int)(theHero->GetMapOffset_y() / m_cMap->GetTileSize());
+	if (tileOffset_y + m_cMap->GetNumOfTiles_Height() > m_cMap->getNumOfTiles_MapHeight())
+		tileOffset_y = m_cMap->getNumOfTiles_MapHeight() - m_cMap->GetNumOfTiles_Height();
+
 	if (tileOffset_x + m_cMap->GetNumOfTiles_Width() > m_cMap->getNumOfTiles_MapWidth())
 		tileOffset_x = m_cMap->getNumOfTiles_MapWidth() - m_cMap->GetNumOfTiles_Width();
 

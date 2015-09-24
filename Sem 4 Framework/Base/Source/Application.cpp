@@ -30,6 +30,7 @@ int Application::m_window_width = Application::init_window_width;
 int Application::m_window_height = Application::init_window_height;
 std::string Application::windowName = "Sem 4 Framework";
 bool Application::b_enableMouseUpdate = false;
+bool Application::b_quitProgramme = false;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -54,6 +55,15 @@ bool Application::IsKeyPressed(unsigned short key)
 {
     return ((GetAsyncKeyState(key) & 0x8001) != 0);
 }
+
+bool Application::IsMousePressed(unsigned short key)
+{
+	//0 = Left
+	//1 = Right
+	//2 = Middle
+	return glfwGetMouseButton(m_window, key) != 0;
+}
+
 
 bool Application::GetMouseUpdate()
 {
@@ -124,6 +134,11 @@ void Application::setFullscreen()
 	toggleFullscreen = true;
 }
 
+void Application::quitProgramme()
+{
+	b_quitProgramme = true;
+}
+
 void Application::getMousePos(double &pos_x, double &pos_y)
 {
 	double *mousePos_x = new double;
@@ -136,6 +151,11 @@ void Application::getMousePos(double &pos_x, double &pos_y)
 
 	delete mousePos_x;
 	delete mousePos_y;
+}
+
+bool Application::getFullscreen()
+{
+	return isFullscreen;
 }
 
 void Application::setMouseUpdate()
@@ -214,8 +234,13 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 							 
 	//Check if the ESC key had been pressed or if the window had been closed
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(m_window) && !b_quitProgramme)
 	{
+		if (Application::IsKeyPressed('K'))
+		{
+			b_quitProgramme = true;
+		}
+
 		if (b_enableMouseUpdate)
 		{
 			GetMouseUpdate();

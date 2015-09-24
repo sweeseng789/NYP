@@ -197,14 +197,7 @@ void SceneText::InitVariables()
 
 	MousePos.SetZero();
 
-	/*Text* text = new Text(Vector3(10, 30, 0), Vector3(3.5, 3.5, 0), "Play", Color(0, 0, 0));
-	textList.push_back(text);
-
-	text = new Text(Vector3(10, 26, 0), Vector3(3.5, 3.5, 0), "Option", Color(0, 0, 0));
-	textList.push_back(text);
-
-	text = new Text(Vector3(10, 22, 0), Vector3(3.5, 3.5, 0), "Exit", Color(0, 0, 0));
-	textList.push_back(text);*/
+	b_atMainMenu = true;
 
 	std::ifstream menu("Text/Menu/Menu.txt");
 	if (menu.is_open())
@@ -213,7 +206,7 @@ void SceneText::InitVariables()
 		{
 			Text * text = new Text();
 			unsigned lastPos = 0;
-			std::string menuText[5];
+			std::string menuText[6];
 
 			//Position
 			std::getline(menu, menuText[0], ',');
@@ -228,11 +221,14 @@ void SceneText::InitVariables()
 			std::getline(menu, menuText[3], ',');
 
 			//Text
-			std::getline(menu, menuText[4]);
+			std::getline(menu, menuText[4], ',');
+
+			//Type
+			std::getline(menu, menuText[5]);
 
 
 			//Clearing whitespace
-			for (unsigned a = 1; a < 5; a++)
+			for (unsigned a = 1; a < sizeof(menuText) / sizeof(*menuText); a++)
 			{
 				menuText[a].erase(0, 1);
 			}
@@ -244,7 +240,7 @@ void SceneText::InitVariables()
 				std::string posX = "", posY = "";
 
 				//Check whether the element is text
-				if (i != 4)
+				if (i < 4)
 				{
 					//Getting x value
 					for (unsigned a = 0; menuText[i][a] != 'x'; a++)
@@ -287,7 +283,21 @@ void SceneText::InitVariables()
 				}
 				else
 				{
-					text->setText(menuText[i]);
+					if (i == 4)
+					{
+						text->setText(menuText[i]);
+					}
+					else
+					{
+						if (menuText[i] == "Main")
+						{
+							text->setType(Text::MENU_MAINMENU);
+						}
+						else if (menuText[i] == "Option")
+						{
+							text->setType(Text::MENU_OPTION);
+						}
+					}
 				}
 			}
 
@@ -304,6 +314,50 @@ void SceneText::Init()
 
 	//Initalize variables
 	InitVariables();
+}
+
+void SceneText::TextUpdate(const double &dt)
+{
+	static bool bLButtonState = false;
+
+	for (std::vector<Text*>::iterator it = textList.begin(); it != textList.end(); it++)
+	{
+		Text* text = static_cast<Text*>(*it);
+
+		if (text->getActive())
+		{
+			if (SSDLC::intersect2D(text->getCB_TopLeft(), text->getCB_BottomRight(), MousePos))
+			{
+				text->set_TextSelected();
+
+				if (SSDLC::LeftMousePressing())
+				{
+					if (b_atMainMenu)
+					{
+						if (text->getText() == "Option")
+						{
+							b_atMainMenu = false;
+						}
+						else if (text->getText() == "Exit")
+						{
+							Application::quitProgramme();
+						}
+					}
+					else
+					{
+						if (text->getText() == "Toggle Fullscreen")
+						{
+							Application::setFullscreen();
+						}
+					}
+				}
+			}
+			else
+			{
+				text->set_TextNotSelected();
+			}
+		}
+	}
 }
 
 void SceneText::Update(double dt)
@@ -364,30 +418,15 @@ void SceneText::Update(double dt)
 	Application::getMousePos(x, y);
 	MousePos.x = static_cast<float>(x) / Application::getWorld_Width() * Application::getWorld_Width();
 	MousePos.y = (Application::getWorld_Height() - static_cast<float>(y)) / Application::getWorld_Height() * Application::getWorld_Height();
-	std::cout << MousePos << std::endl;
+	//std::cout << MousePos << std::endl;
 
-	for (std::vector<Text*>::iterator it = textList.begin(); it != textList.end(); it++)
+	TextUpdate(dt);
+
+	/*if (Application::IsKeyPressed(VK_F1))
 	{
-		Text* text = static_cast<Text*>(*it);
-
-		if (text->getActive())
-		{
-			if (SSDLC::intersect2D(text->getCB_TopLeft(), text->getCB_BottomRight(), MousePos))
-			{
-				text->set_TextSelected();
-			}
-			else
-			{
-				text->set_TextNotSelected();
-			}
-		}
+		
 	}
-
-	if (Application::IsKeyPressed(VK_F1))
-	{
-		Application::setFullscreen();
-	}
-	else if (Application::IsKeyPressed(VK_F2))
+	else*/ if (Application::IsKeyPressed(VK_F2))
 	{
 		Application::setMouseUpdate();
 	}
@@ -700,7 +739,20 @@ void SceneText::Render()
 
 		if (text->getActive())
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor(), text->getScale(), text->getPos());
+			if (b_atMainMenu)
+			{
+				if (text->getType() == Text::MENU_MAINMENU)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor(), text->getScale(), text->getPos());
+				}
+			}
+			else
+			{
+				if (text->getType() == Text::MENU_OPTION)
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor(), text->getScale(), text->getPos());
+				}
+			}
 		}
 	}
 

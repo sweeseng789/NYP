@@ -23,6 +23,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SSDLC.cpp" />
     <ClCompile Include="Source\Text.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
@@ -42,6 +43,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\SSDLC.h" />
     <ClInclude Include="Source\Text.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />

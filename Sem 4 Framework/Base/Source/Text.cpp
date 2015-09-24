@@ -12,19 +12,6 @@ Text::Text():
 {
 }
 
-Text::Text(Vector3 pos, Vector3 CB_TopLeft, Vector3 CB_BottomRight, std::string text, Vector3 scale, Color color)
-{
-	active = true;
-	this->pos = pos;
-	this->CB_TopLeft = CB_TopLeft;
-	this->CB_BottomRight = CB_BottomRight;
-	this->text = text;
-	this->scale = scale;
-	this->color = color;
-	this->defaultColor = color;
-}
-
-
 Text::~Text()
 {
 }
@@ -64,6 +51,11 @@ void Text::set_TextNotSelected()
 	this->color = defaultColor;
 }
 
+void Text::setType(MENU_TYPE type)
+{
+	this->type = type;
+}
+
 
 bool Text::getActive()
 {
@@ -97,4 +89,9 @@ Vector3 Text::getCB_TopLeft()
 Vector3 Text::getCB_BottomRight()
 {
 	return CB_BottomRight;
+}
+
+Text::MENU_TYPE Text::getType()
+{
+	return type;
 }

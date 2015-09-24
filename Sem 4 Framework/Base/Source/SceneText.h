@@ -95,6 +95,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	void TextUpdate(const double &dt);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, Vector3 scale, Vector3 pos);
@@ -125,6 +126,7 @@ private:
 	std::vector<Text*> textList;
 
 	Vector3 MousePos;
+	bool b_atMainMenu;
 };
 
 #endif

@@ -20,6 +20,7 @@ public:
 
 	//Getter
 	static bool IsKeyPressed(unsigned short key);
+	static bool IsMousePressed(unsigned short key);
 	static bool GetMouseUpdate();
 	static double getCamera_yaw();
 	static double getCamera_pitch();
@@ -27,10 +28,12 @@ public:
 	static int getWorld_Height();
 	static bool get_enableMouseUpdate();
 	static void getMousePos(double &pos_x, double &pos_y);
+	static bool getFullscreen();
 
 	//Setter
 	static void setMouseUpdate();
 	static void setFullscreen();
+	static void quitProgramme();
 private:
 	Application();
 	~Application();
@@ -46,8 +49,9 @@ private:
 	static bool toggleFullscreen;
 	static bool isFullscreen;
 
-	//Window name
+	//Window
 	static std::string windowName;
+	static bool b_quitProgramme;
 
 	//Mouse Update
 	static bool b_enableMouseUpdate;

@@ -1,3 +1,4 @@
-10x30y, 199x370y, 114x348y, 3.5x3.5y, Play
-10x26y, 246x322y, 112x300y, 3.5x3.5y, Option
-10x22y, 193x274y, 114x252y, 3.5x3.5y, Exit
+10x30y, 199x370y, 114x348y, 3.5x3.5y, Play, Main
+10x26y, 246x322y, 112x300y, 3.5x3.5y, Option, Main
+10x22y, 193x274y, 114x252y, 3.5x3.5y, Exit, Main
+10x22y, 506x275y, 113x253y, 3.5x3.5y, Toggle Fullscreen, Option

@@ -6,8 +6,13 @@
 class Text
 {
 public:
+	enum MENU_TYPE
+	{
+		MENU_MAINMENU,
+		MENU_OPTION
+	};
+
 	Text();
-	Text(Vector3 pos, Vector3 CB_TopLeft, Vector3 CB_BottomRight, std::string text, Vector3 scale = Vector3(3.5, 3.5, 0), Color color = Color(0, 0, 0));
 	~Text();
 
 
@@ -19,6 +24,7 @@ public:
 	void setCB_BottomRight(Vector3 CB_BottomRight);
 	void set_TextSelected();
 	void set_TextNotSelected();
+	void setType(MENU_TYPE type);
 
 
 	//Getter
@@ -29,6 +35,7 @@ public:
 	Color getColor();
 	Vector3 getCB_TopLeft();
 	Vector3 getCB_BottomRight();
+	MENU_TYPE getType();
 
 private:
 	bool active;
@@ -38,6 +45,7 @@ private:
 	Vector3 CB_BottomRight;
 	std::string text;
 	Color color;
+	MENU_TYPE type;
 
 	static Color defaultColor;
 	static Color selectedColor;

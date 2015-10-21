@@ -14,7 +14,7 @@ Handles AI position and physics
 #include "CharacterObject.h"
 #include "ItemObject.h"
 #include "WeaponsObject.h"
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 #include "Collision.h"
 #include "Mtx44.h"
 

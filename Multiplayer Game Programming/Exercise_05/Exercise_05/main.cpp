@@ -26,19 +26,19 @@ int main(void)
 	sockaddr_in ServerAddress;
 
 	// Address of connected socket from client.
-	sockaddr_in ClientAddress;           
+	sockaddr_in ClientAddress;
 
 	// Message buffer to recv from socket
 	char        MessageBuffer[DEFAULT_BUFLEN];
 
 	// Length of the message buffer
-	int         MessageBufferlen = DEFAULT_BUFLEN; 
+	int         MessageBufferlen = DEFAULT_BUFLEN;
 
 	// Length for sockaddr_in.
 	int         ClientAddressLen;
 
 	// used to return function results
-	int         Result = 0;                        
+	int         Result = 0;
 
 
 	//===============Initialize Winsock===============//
@@ -74,7 +74,7 @@ int main(void)
 	ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//===============Bind the Socket===============//
-	ConnectedSocket = bind(ListenSocket, (SOCKADDR *)&ServerAddress, sizeof (ServerAddress));
+	ConnectedSocket = bind(ListenSocket, (SOCKADDR *)&ServerAddress, sizeof(ServerAddress));
 	if (SOCKET_ERROR == ConnectedSocket)
 	{
 		std::cout << "Binding failed with error: " << WSAGetLastError() << std::endl;
@@ -101,10 +101,12 @@ int main(void)
 	std::cout << "Waiting for new clients to connect" << std::endl;
 
 	ClientAddressLen = sizeof(ClientAddress);
-	while (1)
+	while (ClientAddressLen > 0)
 	{
 		//===============Accepting the connection===============//
 		ConnectedSocket = accept(ListenSocket, (struct sockaddr*)&ClientAddress, &ClientAddressLen);
+
+		//Fail connection
 		if (INVALID_SOCKET == ConnectedSocket)
 		{
 			std::cout << "Accept failed with error: " << WSAGetLastError() << std::endl;
@@ -114,13 +116,8 @@ int main(void)
 		}
 		else
 		{
-			wprintf(L"Client connected. IP Address : %d.%d.%d.%d, Port Number :%d\n",
-				ClientAddress.sin_addr.S_un.S_un_b.s_b1,
-				ClientAddress.sin_addr.S_un.S_un_b.s_b2,
-				ClientAddress.sin_addr.S_un.S_un_b.s_b3,
-				ClientAddress.sin_addr.S_un.S_un_b.s_b4,
-				ntohs(ClientAddress.sin_port));
-
+			std::cout << "Client connected. IP Address: " << (int)ClientAddress.sin_addr.S_un.S_un_b.s_b1 << '.' << (int)ClientAddress.sin_addr.S_un.S_un_b.s_b2 << '.' << (int)ClientAddress.sin_addr.S_un.S_un_b.s_b3 << '.' << (int)ClientAddress.sin_addr.S_un.S_un_b.s_b4 << std::endl;
+			std::cout << "Port number: " << ntohs(ClientAddress.sin_port) << std::endl;
 		}
 
 		//===============Receive and cout the message until the peer closes the connection===============//
@@ -159,7 +156,7 @@ int main(void)
 
 	//===============Close an existing socket===============//
 	closesocket(ListenSocket);
-	
+
 
 	//===============Terminate use of the Winsock 2 DLL (Ws2_32.dll)===============//
 	WSACleanup();

@@ -548,8 +548,10 @@ void MenuScene::UpdateButtons(void)
 		Button *m_B = (Button *)*it;
 
 		Vector3 offset = v3_Menupos[MENU_STATE];
+		Vector3 topLeft = m_B->Position + offset + m_B->Scale;
+		Vector3 bottomRight = m_B->Position + offset - m_B->Scale;
 
-		if (intersect2D(m_B->Position + offset + m_B->Scale, m_B->Position + offset - m_B->Scale, Vector3(MousePosX, MousePosY, 0)))
+		if (intersect2D(topLeft, bottomRight, Vector3(MousePosX, MousePosY, 0)))
 		{
 			m_B->active = true;
 			m_B->color = UIColorPressed;
@@ -575,7 +577,7 @@ void MenuScene::Update(double dt)	//TODO: Reduce complexity of MenuScene::Update
 	double x, y;
 	Application::GetMousePos(x, y);
 	MousePosX = static_cast<float>(x) / Application::GetWindowWidth() * Application::GetWindowWidth() + v3_MenuCam.x;
-	MousePosY = (Application::GetWindowHeight() - static_cast<float>(y)) / Application::GetWindowHeight() * Application::GetWindowHeight() + v3_MenuCam.y;//*/
+	MousePosY = (Application::GetWindowHeight() - static_cast<float>(y)) / Application::GetWindowHeight() * Application::GetWindowHeight() + v3_MenuCam.y;
 
 	static bool bLButtonState = false;
 
@@ -618,182 +620,182 @@ void MenuScene::Update(double dt)	//TODO: Reduce complexity of MenuScene::Update
 
 	switch (MENU_STATE)
 	{
-	case E_M_LOADING:
-	{
-		e_nextScene = Application::E_SCENE_MAIN2;
-		break;
-	}
-	case E_M_MAIN:
-	{
-		if (!bLButtonState && Application::IsKeyPressed(VK_LBUTTON))
+		case E_M_LOADING:
 		{
-			bLButtonState = true;
+			e_nextScene = Application::E_SCENE_MAIN2;
+			break;
 		}
-		if (bLButtonState && !Application::IsKeyPressed(VK_LBUTTON))
+		case E_M_MAIN:
 		{
-			bLButtonState = false;
+			if (!bLButtonState && Application::IsKeyPressed(VK_LBUTTON))
+			{
+				bLButtonState = true;
+			}
+			if (bLButtonState && !Application::IsKeyPressed(VK_LBUTTON))
+			{
+				bLButtonState = false;
 
-			if (FetchTB("Play")->active)
-			{
-				PREV_STATE = MENU_STATE;
-				MENU_STATE = E_M_LOADING;
+				if (FetchTB("Play")->active)
+				{
+					PREV_STATE = MENU_STATE;
+					MENU_STATE = E_M_LOADING;
+				}
+				else if (FetchTB("Options")->active)
+				{
+					SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
+					PREV_STATE = MENU_STATE;
+					MENU_STATE = E_M_OPTIONS;
+				}
+				else if (FetchTB("Quit")->active)
+				{
+					e_nextScene = Application::E_SCENE_QUIT;
+				}
 			}
-			else if (FetchTB("Options")->active)
-			{
-				SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
-				PREV_STATE = MENU_STATE;
-				MENU_STATE = E_M_OPTIONS;
-			}
-			else if (FetchTB("Quit")->active)
-			{
-				e_nextScene = Application::E_SCENE_QUIT;
-			}
+			break;
 		}
-		break;
-	}
-	case E_M_OPTIONS:
-	{
-		if (!bLButtonState && Application::IsKeyPressed(VK_LBUTTON))
+		case E_M_OPTIONS:
 		{
-			bLButtonState = true;
-		}
-		if (bLButtonState && !Application::IsKeyPressed(VK_LBUTTON))
-		{
-			bLButtonState = false;
+			if (!bLButtonState && Application::IsKeyPressed(VK_LBUTTON))
+			{
+				bLButtonState = true;
+			}
+			if (bLButtonState && !Application::IsKeyPressed(VK_LBUTTON))
+			{
+				bLButtonState = false;
 
-			if (FetchTB("Controls")->active)
-			{
-				SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
-				PREV_STATE = MENU_STATE;
-				MENU_STATE = E_M_OPTIONS_CONTROLS;
-			}
-			else if (FetchTB("Toggle Fullscreen")->active)
-			{
-				SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
-				Application::fullscreentoggle();
-			}
-			else if (FetchBUTTON(BI_BACK)->active)
-			{
-				SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
-				PREV_STATE = MENU_STATE;
-				MENU_STATE = E_M_MAIN;
-			}
-			else if (FetchBUTTON(BI_FOV_INCREASE)->active)
-			{
-				if (f_fov_target < 120)
+				if (FetchTB("Controls")->active)
 				{
-					f_fov_target += 5;
+					SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
+					PREV_STATE = MENU_STATE;
+					MENU_STATE = E_M_OPTIONS_CONTROLS;
 				}
-			}
-			else if (FetchBUTTON(BI_FOV_DECREASE)->active)
-			{
-				if (f_fov_target > 45)
+				else if (FetchTB("Toggle Fullscreen")->active)
 				{
-					f_fov_target -= 5;
+					SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
+					Application::fullscreentoggle();
 				}
-			}
-			else if (FetchBUTTON(BI_SENSITIVITY_INCREASE)->active)
-			{
-				if (f_mouseSensitivity < 50)
+				else if (FetchBUTTON(BI_BACK)->active)
 				{
-					f_mouseSensitivity += 0.1f;
+					SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
+					PREV_STATE = MENU_STATE;
+					MENU_STATE = E_M_MAIN;
 				}
-			}
-			else if (FetchBUTTON(BI_SENSITIVITY_DECREASE)->active)
-			{
-				if (f_mouseSensitivity > 0.1)
+				else if (FetchBUTTON(BI_FOV_INCREASE)->active)
 				{
-					f_mouseSensitivity -= 0.1f;
-				}
-			}
-			else if (FetchBUTTON(BI_GRAPHICS_INCREASE)->active)
-			{
-				if (Graphics > GRA_MAX)
-				{
-					--Graphics;
-				}
-			}
-			else if (FetchBUTTON(BI_GRAPHICS_DECREASE)->active)
-			{
-				if (Graphics < GRA_SHIT)
-				{
-					++Graphics;
-				}
-			}
-		}
-		break;
-	}
-	case E_M_OPTIONS_CONTROLS:
-	{
-		if (!bLButtonState && Application::IsKeyPressed(VK_LBUTTON))
-		{
-			bLButtonState = true;
-		}
-		if (bLButtonState && !Application::IsKeyPressed(VK_LBUTTON))
-		{
-			bLButtonState = false;
-
-			if (FetchBUTTON(BI_BACK)->active)
-			{
-				SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
-				PREV_STATE = MENU_STATE;
-				MENU_STATE = E_M_OPTIONS;
-			}
-
-			for (unsigned i = 0; i < E_CTRL_TOTAL; ++i)
-			{
-				if (FetchTB(us_controlCB[i].text) != NULL)
-				{
-					if (FetchTB(us_controlCB[i].text)->active)
+					if (f_fov_target < 120)
 					{
-						SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
-						us_ControlChange = &us_control[i];
-						i_ControlChange = i;
-						PREV_STATE = MENU_STATE;
-						MENU_STATE = E_M_OPTIONS_CONTROLS_SETCONTROL;
+						f_fov_target += 5;
+					}
+				}
+				else if (FetchBUTTON(BI_FOV_DECREASE)->active)
+				{
+					if (f_fov_target > 45)
+					{
+						f_fov_target -= 5;
+					}
+				}
+				else if (FetchBUTTON(BI_SENSITIVITY_INCREASE)->active)
+				{
+					if (f_mouseSensitivity < 50)
+					{
+						f_mouseSensitivity += 0.1f;
+					}
+				}
+				else if (FetchBUTTON(BI_SENSITIVITY_DECREASE)->active)
+				{
+					if (f_mouseSensitivity > 0.1)
+					{
+						f_mouseSensitivity -= 0.1f;
+					}
+				}
+				else if (FetchBUTTON(BI_GRAPHICS_INCREASE)->active)
+				{
+					if (Graphics > GRA_MAX)
+					{
+						--Graphics;
+					}
+				}
+				else if (FetchBUTTON(BI_GRAPHICS_DECREASE)->active)
+				{
+					if (Graphics < GRA_SHIT)
+					{
+						++Graphics;
 					}
 				}
 			}
+			break;
 		}
-		break;
-	}
-	case E_M_OPTIONS_CONTROLS_SETCONTROL:
-	{
-		for (size_t i = 1; i < VK_OEM_CLEAR; ++i)
+		case E_M_OPTIONS_CONTROLS:
 		{
-			if ((GetAsyncKeyState(i) & 0x8000))
+			if (!bLButtonState && Application::IsKeyPressed(VK_LBUTTON))
 			{
-				if (i == 12)
-				{
-					continue;
-				}
-
-				if (i == 160 || i == 161)
-				{
-					i = 16;
-				}
-				if (i == 162 || i == 163)
-				{
-					i = 17;
-				}
-
-				*us_ControlChange = i;
-				UpdateControlSettingLabels(i, i_ControlChange);
-				MENU_STATE = E_M_OPTIONS_CONTROLS;
-				SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK_2]);
-				break;
+				bLButtonState = true;
 			}
+			if (bLButtonState && !Application::IsKeyPressed(VK_LBUTTON))
+			{
+				bLButtonState = false;
+
+				if (FetchBUTTON(BI_BACK)->active)
+				{
+					SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
+					PREV_STATE = MENU_STATE;
+					MENU_STATE = E_M_OPTIONS;
+				}
+
+				for (unsigned i = 0; i < E_CTRL_TOTAL; ++i)
+				{
+					if (FetchTB(us_controlCB[i].text) != NULL)
+					{
+						if (FetchTB(us_controlCB[i].text)->active)
+						{
+							SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK]);
+							us_ControlChange = &us_control[i];
+							i_ControlChange = i;
+							PREV_STATE = MENU_STATE;
+							MENU_STATE = E_M_OPTIONS_CONTROLS_SETCONTROL;
+						}
+					}
+				}
+			}
+			break;
 		}
-		break;
-	}
-	case E_M_SPLASH:
-	{
-		if (f_timer > 0.5f)
+		case E_M_OPTIONS_CONTROLS_SETCONTROL:
 		{
-			MENU_STATE = E_M_MAIN;
+			for (size_t i = 1; i < VK_OEM_CLEAR; ++i)
+			{
+				if ((GetAsyncKeyState(i) & 0x8000))
+				{
+					if (i == 12)
+					{
+						continue;
+					}
+
+					if (i == 160 || i == 161)
+					{
+						i = 16;
+					}
+					if (i == 162 || i == 163)
+					{
+						i = 17;
+					}
+
+					*us_ControlChange = i;
+					UpdateControlSettingLabels(i, i_ControlChange);
+					MENU_STATE = E_M_OPTIONS_CONTROLS;
+					SE_Engine.playSound2D(SoundList[ST_BUTTON_CLICK_2]);
+					break;
+				}
+			}
+			break;
 		}
-		break;
-	}
+		case E_M_SPLASH:
+		{
+			if (f_timer > 0.5f)
+			{
+				MENU_STATE = E_M_MAIN;
+			}
+			break;
+		}
 	}
 }
 

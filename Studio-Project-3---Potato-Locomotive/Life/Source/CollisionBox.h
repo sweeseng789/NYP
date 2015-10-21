@@ -1,7 +1,7 @@
 #ifndef COLLISIONBOX_H
 #define COLLISIONBOX_H
 
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 
 class CollisionBox
 {

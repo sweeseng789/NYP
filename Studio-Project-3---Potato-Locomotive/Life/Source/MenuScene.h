@@ -19,7 +19,7 @@ Main menu for the openGL framework
 #include "SaveHandler.h"
 #include "TextButton.h"
 #include "Button.h"
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 #include "SoundEngine.h"
 #include <string>
 #include <iostream>

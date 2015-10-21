@@ -11,7 +11,7 @@ Custom made camera
 #define CUSTOMCAM1_H
 
 #include "Camera.h"
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 
 class CustomCam1 : public Camera
 {

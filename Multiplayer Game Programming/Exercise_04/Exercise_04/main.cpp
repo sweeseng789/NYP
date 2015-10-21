@@ -26,19 +26,19 @@ int main(void)
 	sockaddr_in ServerAddress;
 
 	// Address of connected socket from client.
-	sockaddr_in ClientAddress;           
+	sockaddr_in ClientAddress;
 
 	// Message buffer to recv from socket
 	char        MessageBuffer[DEFAULT_BUFLEN];
 
 	// Length of the message buffer
-	int         MessageBufferlen = DEFAULT_BUFLEN; 
+	int         MessageBufferlen = DEFAULT_BUFLEN;
 
 	// Length for sockaddr_in.
 	int         ClientAddressLen;
 
 	// used to return function results
-	int         Result = 0;                        
+	int         Result = 0;
 
 
 	//===============Initialize Winsock===============//
@@ -74,7 +74,7 @@ int main(void)
 	ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//===============Bind the Socket===============//
-	ConnectedSocket = bind(ListenSocket, (SOCKADDR *)&ServerAddress, sizeof (ServerAddress));
+	ConnectedSocket = bind(ListenSocket, (SOCKADDR *)&ServerAddress, sizeof(ServerAddress));
 	if (SOCKET_ERROR == ConnectedSocket)
 	{
 		std::cout << "Binding failed with error: " << WSAGetLastError() << std::endl;
@@ -127,7 +127,7 @@ int main(void)
 		do
 		{
 			memset(MessageBuffer, '\0', DEFAULT_BUFLEN);
-			MessageBufferlen = 2;
+			MessageBufferlen = 100;
 			Result = recv(ConnectedSocket, MessageBuffer, MessageBufferlen, 0);
 			if (0 < Result)
 			{
@@ -159,7 +159,7 @@ int main(void)
 
 	//===============Close an existing socket===============//
 	closesocket(ListenSocket);
-	
+
 
 	//===============Terminate use of the Winsock 2 DLL (Ws2_32.dll)===============//
 	WSACleanup();

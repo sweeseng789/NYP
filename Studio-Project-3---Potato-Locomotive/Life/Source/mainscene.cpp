@@ -2616,7 +2616,10 @@ void mainscene::UpdateButtons(void)
 		TextButton *S_MB = (TextButton *)*it;
 		if (S_MB->gamestate == GAMESTATE)
 		{
-			if (intersect2D((S_MB->pos + Vector3(S_MB->text.length() * (S_MB->scale.x) - S_MB->scale.x, S_MB->scale.y*0.4f, 0)), S_MB->pos + Vector3(-S_MB->scale.x*0.5f, -(S_MB->scale.y*0.4f), 0), Vector3(mousePosX, mousePosY, 0)))
+			Vector3 topLeft = S_MB->pos + Vector3(S_MB->text.length() * S_MB->scale.x - S_MB->scale.x, S_MB->scale.y * 0.4f, 0);
+			Vector3 bottomRight = S_MB->pos + Vector3(-S_MB->scale.x*0.5f, -(S_MB->scale.y * 0.4f), 0);
+
+			if (intersect2D(topLeft, bottomRight, Vector3(mousePosX, mousePosY, 0)))
 			{
 				S_MB->active = true;
 				S_MB->color = UIColorPressed;

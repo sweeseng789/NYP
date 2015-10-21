@@ -26,7 +26,7 @@
     <ClCompile Include="Source\Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Gabe.cpp">
+    <ClCompile Include="Source\SSDLC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,7 +49,7 @@
     <ClInclude Include="Source\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Gabe.h">
+    <ClInclude Include="Source\SSDLC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -418,7 +418,6 @@ void SceneText::Update(double dt)
 	Application::getMousePos(x, y);
 	MousePos.x = static_cast<float>(x) / Application::getWorld_Width() * Application::getWorld_Width();
 	MousePos.y = (Application::getWorld_Height() - static_cast<float>(y)) / Application::getWorld_Height() * Application::getWorld_Height();
-	//std::cout << MousePos << std::endl;
 
 	TextUpdate(dt);
 

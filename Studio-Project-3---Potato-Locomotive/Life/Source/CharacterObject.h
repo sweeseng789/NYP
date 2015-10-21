@@ -19,7 +19,7 @@ Character Object used by AI and player
 #include "Anim4.h"
 #include "ItemObject.h"
 #include "Mtx44.h"
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 
 class CharacterObject : public GameObject
 {

@@ -2,7 +2,7 @@
 #define SECURITYCAM_H
 
 #include "GameObject.h"
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 #include "Collision.h"
 #include "AI.h"
 #include "CharacterObject.h"

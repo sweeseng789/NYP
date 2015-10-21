@@ -32,7 +32,7 @@ Main scene
 #include "SaveHandler.h"
 #include "DepthFBO.h"
 #include "GBuffer.h"
-#include "GabrielDLC.h"
+#include "SSDLC.h"
 
 #include "CharacterObject.h"
 #include "Player.h"

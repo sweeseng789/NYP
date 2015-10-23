@@ -16,7 +16,8 @@ CSceneManager::CSceneManager(void)
 }
 
 CSceneManager::CSceneManager(const int m_window_width, const int m_window_height)
-	: m_cMinimap(NULL)
+	: m_cMinimap(NULL),
+	m_cAvatar(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -24,6 +25,12 @@ CSceneManager::CSceneManager(const int m_window_width, const int m_window_height
 
 CSceneManager::~CSceneManager(void)
 {
+	if (m_cAvatar)
+	{
+		delete m_cAvatar;
+		m_cAvatar = NULL;
+	}
+
 	if (m_cMinimap)
 	{
 		delete m_cMinimap;
@@ -193,6 +200,11 @@ void CSceneManager::Init()
 	m_cMinimap->SetBorder( MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f) );
 	m_cMinimap->SetAvatar( MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f) );
 
+
+	//Initialise and load a model into it
+	m_cAvatar = new CPlayInfo3PV();
+	m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1.f, 0.3f), 36, 10.f, 10.f));
+
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -254,6 +266,8 @@ void CSceneManager::Update(double dt)
 
 	rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
 
+	m_cAvatar->Update(dt);
+	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection());
 	camera.Update(dt);
 
 	fps = (float)(1.f / dt);
@@ -265,6 +279,14 @@ void CSceneManager::Update(double dt)
 void CSceneManager::UpdateCameraStatus(const unsigned char key, const bool status)
 {
 	camera.UpdateStatus(key, status);
+}
+
+/********************************************************************************
+Update Avatar position
+********************************************************************************/
+void CSceneManager::UpdateAvatarStatus(const unsigned char key, const bool status)
+{
+	m_cAvatar->UpdateMovement(key, status);
 }
 
 /********************************************************************************
@@ -474,6 +496,11 @@ void CSceneManager::RenderMobileObjects()
 	modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y - 10.f, m_cAvatar->GetPosition().z);
+	RenderMesh(m_cAvatar->theAvatarMesh, false);
 	modelStack.PopMatrix();
 }
 

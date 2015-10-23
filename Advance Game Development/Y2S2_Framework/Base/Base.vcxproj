@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -25,6 +25,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minimap.cpp" />
     <ClCompile Include="Source\PlayerInfo.cpp" />
+    <ClCompile Include="Source\PlayInfo3PV.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneManager2D.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minimap.h" />
     <ClInclude Include="Source\PlayerInfo.h" />
+    <ClInclude Include="Source\PlayInfo3PV.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneManager2D.h" />
@@ -71,12 +73,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

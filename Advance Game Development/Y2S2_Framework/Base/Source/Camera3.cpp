@@ -4,6 +4,7 @@
 
 // The default camera speed
 static const float CAMERA_SPEED = 200.f;
+const float m_fTPVCameraOffset = 30.f;
 
 /********************************************************************************
  Constructor
@@ -140,6 +141,35 @@ void Camera3::Update(double dt)
 void Camera3::UpdateStatus(const unsigned char key, const bool status)
 {
 	myKeys[key] = status;
+}
+
+/********************************************************************************
+Update the camera for Third Person View
+********************************************************************************/
+void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection)
+{
+	position = newPosition - newDirection.Normalized() * m_fTPVCameraOffset;
+	//Yaw = left and right
+	//Pitch = up and down
+
+	//Looking down
+	if (Application::camera_pitch > 0.0)
+	{
+
+	}
+	//Looking Up
+	else if (Application::camera_pitch < 0.0)
+	{
+	}
+
+	if (Application::camera_yaw > 0.0)
+	{
+		std::cout << "Looking right" << std::endl;
+	}
+	else if (Application::camera_yaw < 0.0)
+	{
+		std::cout << "Looking left" << std::endl;
+	}
 }
 
 /********************************************************************************

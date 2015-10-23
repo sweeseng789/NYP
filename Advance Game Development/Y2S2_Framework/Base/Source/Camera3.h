@@ -18,6 +18,8 @@ public:
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
+	//For third person camera
+	virtual void UpdatePosition(Vector3 position, Vector3 newDirection);
 	// Update Camera status
 	virtual void UpdateStatus(const unsigned char key, const bool status = true);
 	virtual void Reset();

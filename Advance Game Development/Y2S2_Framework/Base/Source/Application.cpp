@@ -98,35 +98,35 @@ bool Application::GetKeyboardUpdate()
 {
 	if (IsKeyPressed('A'))
 	{
-		scene->UpdateCameraStatus('a');
+		scene->UpdateAvatarStatus('a');
 	}
 	else
 	{
-		scene->UpdateCameraStatus('a', false);
+		scene->UpdateAvatarStatus('a', false);
 	}
 	if (IsKeyPressed('D'))
 	{
-		scene->UpdateCameraStatus('d');
+		scene->UpdateAvatarStatus('d');
 	}
 	else
 	{
-		scene->UpdateCameraStatus('d', false);
+		scene->UpdateAvatarStatus('d', false);
 	}
 	if (IsKeyPressed('W'))
 	{
-		scene->UpdateCameraStatus('w');
+		scene->UpdateAvatarStatus('w');
 	}
 	else
 	{
-		scene->UpdateCameraStatus('w', false);
+		scene->UpdateAvatarStatus('w', false);
 	}
 	if (IsKeyPressed('S'))
 	{
-		scene->UpdateCameraStatus('s');
+		scene->UpdateAvatarStatus('s');
 	}
 	else
 	{
-		scene->UpdateCameraStatus('s', false);
+		scene->UpdateAvatarStatus('s', false);
 	}
 	// Jump
 	if (IsKeyPressed(32))

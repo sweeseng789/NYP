@@ -8,6 +8,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Minimap.h"
+#include "PlayInfo3PV.h"
 
 const float SKYBOXSIZE = 1000.f;
 
@@ -92,6 +93,8 @@ public:
 	virtual void Update(double dt);
 	// Update Camera status
 	virtual void UpdateCameraStatus(const unsigned char key, const bool status = true);
+	//Update Avatar position
+	virtual void UpdateAvatarStatus(const unsigned char key, const bool status = true);
 	// Update Weapon status
 	virtual void UpdateWeaponStatus(const unsigned char key);
 	virtual void Render();
@@ -148,6 +151,9 @@ private:
 
 	// Handle to the minimap
 	CMinimap* m_cMinimap;
+
+	//Handle to 3rd Person View's Avatar
+	CPlayInfo3PV* m_cAvatar;
 };
 
 #endif

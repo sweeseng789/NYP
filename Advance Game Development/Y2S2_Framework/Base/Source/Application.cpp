@@ -18,6 +18,17 @@ double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
 	   Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0,
 	   Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
 double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
+double Application::d_mouseScroll = 0.0;
+
+
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	if (Application::d_mouseScroll == 0)
+	{
+		Application::d_mouseScroll = yoffset;
+	}
+}
 
 /********************************************************************************
  Define an error callback
@@ -54,6 +65,14 @@ bool Application::IsKeyPressed(unsigned short key)
 }
 
 /********************************************************************************
+Get mouse's key states
+********************************************************************************/
+bool Application::IsMousePressed(unsigned short key) //0 - Left, 1 - Right, 2 - Middle
+{
+	return glfwGetMouseButton(m_window, key) != 0;
+}
+
+/********************************************************************************
  Get mouse updates
  ********************************************************************************/
 bool Application::GetMouseUpdate()
@@ -80,6 +99,7 @@ bool Application::GetMouseUpdate()
 		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 	}
 
+
 	// Store the current position as the last position
 	mouse_last_x = mouse_current_x;
 	mouse_last_y = mouse_current_y;
@@ -96,6 +116,7 @@ bool Application::GetMouseUpdate()
  ********************************************************************************/
 bool Application::GetKeyboardUpdate()
 {
+	//Press A
 	if (IsKeyPressed('A'))
 	{
 		scene->UpdateAvatarStatus('a');
@@ -104,6 +125,8 @@ bool Application::GetKeyboardUpdate()
 	{
 		scene->UpdateAvatarStatus('a', false);
 	}
+
+	//Press D
 	if (IsKeyPressed('D'))
 	{
 		scene->UpdateAvatarStatus('d');
@@ -112,6 +135,8 @@ bool Application::GetKeyboardUpdate()
 	{
 		scene->UpdateAvatarStatus('d', false);
 	}
+
+	//Press W
 	if (IsKeyPressed('W'))
 	{
 		scene->UpdateAvatarStatus('w');
@@ -120,6 +145,8 @@ bool Application::GetKeyboardUpdate()
 	{
 		scene->UpdateAvatarStatus('w', false);
 	}
+
+	//Press S
 	if (IsKeyPressed('S'))
 	{
 		scene->UpdateAvatarStatus('s');
@@ -128,6 +155,7 @@ bool Application::GetKeyboardUpdate()
 	{
 		scene->UpdateAvatarStatus('s', false);
 	}
+
 	// Jump
 	if (IsKeyPressed(32))
 	{
@@ -169,6 +197,8 @@ bool Application::GetKeyboardUpdate()
     return true;
 }
 
+
+
 /********************************************************************************
  Constructor
  ********************************************************************************/
@@ -182,6 +212,25 @@ Application::Application()
  ********************************************************************************/
 Application::~Application()
 {
+}
+
+void Application::updateMouseScrolling()
+{
+	glfwSetScrollCallback(m_window, scroll_callback);
+
+	if (d_mouseScroll != 0)
+	{
+		static double timeLimit = 0.5;
+		static double currentTime = 0.0;
+
+		currentTime += m_dElapsedTime;
+
+		if (currentTime > timeLimit)
+		{
+			currentTime = 0.0;
+			d_mouseScroll = 0;
+		}
+	}
 }
 
 /********************************************************************************
@@ -236,7 +285,7 @@ void Application::Init()
 	}
 
 	// Hide the cursor
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// Set these 2 variables to zero
 	m_dElapsedTime = 0.0;
@@ -266,6 +315,7 @@ void Application::Run()
 		if (m_dAccumulatedTime_ThreadOne > 0.03)
 		{
 			GetMouseUpdate();
+			updateMouseScrolling();
 			GetKeyboardUpdate();
 			scene->Update(m_dElapsedTime);
 			m_dAccumulatedTime_ThreadOne = 0.0;

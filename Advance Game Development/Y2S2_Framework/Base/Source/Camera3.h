@@ -18,8 +18,10 @@ public:
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
+
 	//For third person camera
-	virtual void UpdatePosition(Vector3 position, Vector3 newDirection);
+	virtual void UpdatePosition(Vector3 position, Vector3 newDirection, const double &dt);
+
 	// Update Camera status
 	virtual void UpdateStatus(const unsigned char key, const bool status = true);
 	virtual void Reset();
@@ -52,6 +54,8 @@ public:
 	float MoveVel_A;
 	float MoveVel_D;
 
+
+	float getAngleAroundObj();
 private:
 	bool myKeys[255];
 
@@ -62,6 +66,17 @@ private:
 	float GRAVITY;
 	float JumpVel;
 	float JUMPMAXSPEED, JUMPACCEL;
+
+
+	//3rd Person Camera
+	float angleAroundObj;
+	float distanceFromObj;
+	float Obj_pitch;
+	float Obj_yaw;
+
+	//Mouse
+	float mouseVel;
+	void thirdPersonView_YawUpdate(const double &dt);
 
 	// Maximum movement speed and acceleration
 	float CAMERA_ACCEL;

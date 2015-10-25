@@ -32,6 +32,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
+	this->direction = this->target - this->position;
 	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	right.y = 0;
@@ -55,6 +56,13 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	// Maximum movement speed
 	CAMERA_ACCEL = 10.0f;
+
+	distanceFromObj = 100;
+	angleAroundObj = 0;
+	Obj_pitch = 20;
+	Obj_yaw = 0;
+
+	mouseVel = 0.f;
 }
 
 /********************************************************************************
@@ -141,35 +149,6 @@ void Camera3::Update(double dt)
 void Camera3::UpdateStatus(const unsigned char key, const bool status)
 {
 	myKeys[key] = status;
-}
-
-/********************************************************************************
-Update the camera for Third Person View
-********************************************************************************/
-void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection)
-{
-	position = newPosition - newDirection.Normalized() * m_fTPVCameraOffset;
-	//Yaw = left and right
-	//Pitch = up and down
-
-	//Looking down
-	if (Application::camera_pitch > 0.0)
-	{
-
-	}
-	//Looking Up
-	else if (Application::camera_pitch < 0.0)
-	{
-	}
-
-	if (Application::camera_yaw > 0.0)
-	{
-		std::cout << "Looking right" << std::endl;
-	}
-	else if (Application::camera_yaw < 0.0)
-	{
-		std::cout << "Looking left" << std::endl;
-	}
 }
 
 /********************************************************************************
@@ -424,6 +403,72 @@ void Camera3::Jump(const double dt)
 	}
 }
 
+void Camera3::thirdPersonView_YawUpdate(const double &dt)
+{
+	if (Application::camera_yaw > 0.0)
+	{
+		//angleAroundObj -= m_fTPVCameraOffset * dt;
+		mouseVel += m_fTPVCameraOffset * static_cast<float>(dt);
+	}
+	else if (Application::camera_yaw < 0.0)
+	{
+		//angleAroundObj += m_fTPVCameraOffset * dt;
+		mouseVel -= m_fTPVCameraOffset * static_cast<float>(dt);
+	}
+
+	if (mouseVel != 0)
+	{
+		float Fforce = 0 - mouseVel;
+		mouseVel += Fforce * static_cast<float>(dt) * 5.f;
+	}
+
+	angleAroundObj -= mouseVel;
+}
+
+/********************************************************************************
+Update the camera for third person view
+Vector3 newPosition is the new position where the camera is to be based on
+********************************************************************************/
+void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const double &dt)
+{
+	direction = target - position;
+
+	//Camera Yaw
+	thirdPersonView_YawUpdate(dt);
+
+	//Distance From Obj
+	if (Application::d_mouseScroll < 0.0)
+	{
+		if (distanceFromObj < 150)
+		{
+			distanceFromObj += 50 * static_cast<float>(dt);
+		}
+	}
+	else if (Application::d_mouseScroll > 0.0)
+	{
+		if (distanceFromObj > 25)
+		{
+			distanceFromObj -= 50 * static_cast<float>(dt);
+		}
+	}
+
+	float horizontalDistance = distanceFromObj * cos(Math::DegreeToRadian(Obj_pitch));
+	float verticalDistance = distanceFromObj * sin(Math::DegreeToRadian(Obj_pitch));
+
+	Vector3 offSet;
+	offSet.x = horizontalDistance * sin(Math::DegreeToRadian(angleAroundObj));
+	offSet.z = horizontalDistance * cos(Math::DegreeToRadian(angleAroundObj));
+
+	position.x = newPosition.x - offSet.x;
+	position.z = newPosition.z - offSet.z;
+	position.y = newPosition.y + verticalDistance;
+
+	target = newPosition;
+
+	//position = newPosition - newDirection.Normalized() * m_fTPVCameraOffset;
+	//target = newPosition;
+}
+
 /********************************************************************************
  Update Jump
  ********************************************************************************/
@@ -432,7 +477,7 @@ void Camera3::UpdateJump(const double dt)
 	if (m_bJumping == true)
 	{
 		// Factor in gravity
-		JumpVel += GRAVITY * dt;
+		JumpVel += GRAVITY * static_cast<float>(dt);
 
 		// Update the camera and target position
 		position.y += JumpVel * (float)dt;
@@ -447,4 +492,9 @@ void Camera3::UpdateJump(const double dt)
 			m_bJumping = false;
 		}
 	}
+}
+
+float Camera3::getAngleAroundObj()
+{
+	return angleAroundObj;
 }

@@ -93,8 +93,10 @@ public:
 	virtual void Update(double dt);
 	// Update Camera status
 	virtual void UpdateCameraStatus(const unsigned char key, const bool status = true);
-	//Update Avatar position
+
+	//Update Avatar Position
 	virtual void UpdateAvatarStatus(const unsigned char key, const bool status = true);
+
 	// Update Weapon status
 	virtual void UpdateWeaponStatus(const unsigned char key);
 	virtual void Render();
@@ -152,7 +154,7 @@ private:
 	// Handle to the minimap
 	CMinimap* m_cMinimap;
 
-	//Handle to 3rd Person View's Avatar
+	//Handle to 3rd person view's avatar
 	CPlayInfo3PV* m_cAvatar;
 };
 

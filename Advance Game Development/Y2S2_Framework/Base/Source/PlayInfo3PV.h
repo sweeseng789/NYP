@@ -1,6 +1,9 @@
 #pragma once
 #include "Vector3.h"
 #include "Mesh.h"
+#include "Camera3.h"
+#include "SSDLC.h"
+#include "Mtx44.h"
 
 class CPlayInfo3PV
 {
@@ -18,7 +21,7 @@ public:
 	void Init(void);
 
 	// Set Model
-	bool SetModel(Mesh* theAvatarMesh);
+	bool SetModel( Mesh* theAvatarMesh );
 
 	// Returns true if the player is on ground
 	bool isOnGround(void);
@@ -37,7 +40,7 @@ public:
 	// Set position y of the player
 	void SetPos_y(int pos_y);
 	// Set position z of the player
-	void SetPos_z(int pos_y);
+	void SetPos_z(int pos_y);	
 	// Set Jumpspeed of the player
 	void SetJumpspeed(int jumpspeed);
 
@@ -65,21 +68,27 @@ public:
 	// Update
 	void UpdateMovement(const unsigned char key, const bool status = true);
 	// Update
-	void Update(double dt);
+	void Update(double dt, Camera3 &camera);
 
 	// Constrain the position of the Hero to within the border
-	void ConstrainHero(const int leftBorder, const int rightBorder,
-		const int topBorder, const int bottomBorder,
-		float timeDiff);
+	void ConstrainHero(const int leftBorder, const int rightBorder, 
+					   const int topBorder, const int bottomBorder, 
+					   float timeDiff);
 
 	// Avatar's Mesh
 	Mesh*	theAvatarMesh;
+
+	float getRotationAngle();
 
 private:
 	// Hero's information
 	Vector3 curPosition;
 	Vector3 curDirection;
+	Vector3 target;
+	Vector3 vel;
+	static float velSpeed;
 	int jumpspeed;
+	float rotateAngle;
 
 	bool myKeys[255];
 };

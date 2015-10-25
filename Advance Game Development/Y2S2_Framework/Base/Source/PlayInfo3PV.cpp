@@ -1,9 +1,11 @@
 #include "PlayInfo3PV.h"
 #include "MeshBuilder.h"
 
+float CPlayInfo3PV::velSpeed = 30.f;
+
 CPlayInfo3PV::CPlayInfo3PV(void)
-: theAvatarMesh(NULL)
-, jumpspeed(0)
+	: theAvatarMesh(NULL)
+	, jumpspeed(0)
 {
 	Init();
 }
@@ -21,17 +23,20 @@ CPlayInfo3PV::~CPlayInfo3PV(void)
 // Initialise this class instance
 void CPlayInfo3PV::Init(void)
 {
-	curPosition.Set(0, 0, 0);
-	curDirection.Set(0, 0, 1);
+	curPosition.Set( 0, 0, 0);
+	curDirection.Set( 0, 0, 1 );
 
 	// Initialise the Avatar's movement flags
-	for (int i = 0; i<255; i++){
+	for(int i=0; i<255; i++){
 		myKeys[i] = false;
 	}
+
+	vel.SetZero();
+	rotateAngle = 0.f;
 }
 
 // Set Model
-bool CPlayInfo3PV::SetModel(Mesh* theAvatarMesh)
+bool CPlayInfo3PV::SetModel( Mesh* theAvatarMesh )
 {
 	this->theAvatarMesh = theAvatarMesh;
 	if (this->theAvatarMesh == NULL)
@@ -107,32 +112,32 @@ void CPlayInfo3PV::SetToStop(void)
 }
 
 /********************************************************************************
-Hero Move Up Down
-********************************************************************************/
+ Hero Move Up Down
+ ********************************************************************************/
 void CPlayInfo3PV::MoveFrontBack(const bool mode, const float timeDiff)
 {
 	if (mode)
 	{
-		curPosition.z = curPosition.z - (int)(200.0f * timeDiff);
+		curPosition.z = curPosition.z - (int) (200.0f * timeDiff);
 	}
 	else
 	{
-		curPosition.z = curPosition.z + (int)(200.0f * timeDiff);
+		curPosition.z = curPosition.z + (int) (200.0f * timeDiff);
 	}
 }
 
 /********************************************************************************
-Hero Move Left Right
-********************************************************************************/
+ Hero Move Left Right
+ ********************************************************************************/
 void CPlayInfo3PV::MoveLeftRight(const bool mode, const float timeDiff)
 {
 	if (mode)
 	{
-		curPosition.x = curPosition.x + (int)(200.0f * timeDiff);
+		curPosition.x = curPosition.x + (int) (200.0f * timeDiff);
 	}
 	else
 	{
-		curPosition.x = curPosition.x - (int)(200.0f * timeDiff);
+		curPosition.x = curPosition.x - (int) (200.0f * timeDiff);
 	}
 }
 
@@ -191,9 +196,9 @@ void CPlayInfo3PV::UpdateFreeFall()
 }
 
 // Constrain the position of the Hero to within the border
-void CPlayInfo3PV::ConstrainHero(const int leftBorder, const int rightBorder,
-	const int topBorder, const int bottomBorder,
-	float timeDiff)
+void CPlayInfo3PV::ConstrainHero(const int leftBorder, const int rightBorder, 
+								  const int topBorder, const int bottomBorder, 
+								  float timeDiff)
 {
 	if (curPosition.x < leftBorder)
 	{
@@ -210,91 +215,116 @@ void CPlayInfo3PV::ConstrainHero(const int leftBorder, const int rightBorder,
 		curPosition.y = bottomBorder;
 }
 
+float CPlayInfo3PV::getRotationAngle()
+{
+	return rotateAngle;
+}
+
 
 /********************************************************************************
-Update Movement
-********************************************************************************/
+ Update Movement
+ ********************************************************************************/
 void CPlayInfo3PV::UpdateMovement(const unsigned char key, const bool status)
 {
 	myKeys[key] = status;
 }
 
 /********************************************************************************
-Update
-********************************************************************************/
-void CPlayInfo3PV::Update(double dt)
+ Update
+ ********************************************************************************/
+void CPlayInfo3PV::Update(double dt, Camera3 &camera)
 {
+	Vector3 view = camera.direction;
+	view.Normalize();
+	view.y = 0;
+
+	Vector3 right = view.Cross(camera.up);
+	right.y = 0;
+	right.Normalize();
+
 	// WASD movement
-	if (myKeys['w'] == true)
+	if ( myKeys['w'] == true)
 	{
-		MoveFrontBack(false, dt);
+		vel += view * velSpeed * dt;
 	}
-	else
-	{
-		//		MoveVel_W = 0.0f;
-	}
+
 	if (myKeys['s'] == true)
 	{
-		MoveFrontBack(true, dt);
+		vel -= view * velSpeed * dt;
 	}
-	else
-	{
-		//		MoveVel_S = 0.0f;
-	}
+
 	if (myKeys['a'] == true)
 	{
-		MoveLeftRight(true, dt);
+		vel -= right * velSpeed * dt;
 	}
-	else
-	{
-		//		MoveVel_A = 0.0f;
-	}
+
 	if (myKeys['d'] == true)
 	{
-		MoveLeftRight(false, dt);
+		vel += right * velSpeed * dt;
 	}
-	else
+
+
+	//Friction
+	if (vel.x != 0)
 	{
-		//		MoveVel_D = 0.0f;
+		float Fforce_x = 0 - vel.x;
+		vel.x += Fforce_x * dt * 5.f;
+	}
+
+	if (vel.z != 0)
+	{
+		float Fforce_z = 0 - vel.z;
+		vel.z += Fforce_z * dt * 5.f;
+	}
+
+	curPosition += vel;
+
+	if (curDirection != view)
+	{
+		target = curPosition + curDirection;
+
+		float rotationDiff = SSDLC::findAngleFromPos(target, curPosition) - SSDLC::findAngleFromPos(target, curPosition);
+
+		rotateAngle = -rotationDiff;
 	}
 
 	// Rotation
 	/*
 	if ( myKeys[VK_UP] == true)
 	{
-	LookUp( dt );
+		LookUp( dt );
 	}
 	if (myKeys[VK_DOWN] == true)
 	{
-	LookUp( -dt );
+		LookUp( -dt );
 	}
 	if (myKeys[VK_LEFT] == true)
 	{
-	TurnLeft( -dt );
+		TurnLeft( -dt );
 	}
 	if (myKeys[VK_RIGHT] == true)
 	{
-	TurnRight( dt );
+		TurnRight( dt );
 	}
 
 	// Jump
 	if (myKeys[32] == true)
 	{
-	Jump( dt );
-	myKeys[32]	= false;
+		Jump( dt );
+		myKeys[32]	= false;
 	}
 	UpdateJump(dt);
 
 	//Update the camera direction based on mouse move
 	// left-right rotate
 	if ( Application::camera_yaw != 0 )
-	Yaw( dt );
+		Yaw( dt );
 	if ( Application::camera_pitch != 0 )
-	Pitch( dt );
+		Pitch( dt );
 
 	if(Application::IsKeyPressed('R'))
 	{
-	Reset();
+		Reset();
 	}
 	*/
 }

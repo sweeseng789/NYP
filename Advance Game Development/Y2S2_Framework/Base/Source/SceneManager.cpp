@@ -163,8 +163,8 @@ void CSceneManager::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
+	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Head.obj");//MeshBuilder::GenerateCube("cube", 1);
+	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Head.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
@@ -200,10 +200,9 @@ void CSceneManager::Init()
 	m_cMinimap->SetBorder( MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f) );
 	m_cMinimap->SetAvatar( MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f) );
 
-
-	//Initialise and load a model into it
+	//Initialise and load a model
 	m_cAvatar = new CPlayInfo3PV();
-	m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1.f, 0.3f), 36, 10.f, 10.f));
+	m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -266,9 +265,9 @@ void CSceneManager::Update(double dt)
 
 	rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
 
-	m_cAvatar->Update(dt);
-	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection());
-	camera.Update(dt);
+	m_cAvatar->Update(dt, camera);
+	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
+	//camera.Update(dt);
 
 	fps = (float)(1.f / dt);
 }
@@ -483,7 +482,7 @@ void CSceneManager::RenderGUI()
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
-	
+
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 }
 
@@ -499,8 +498,10 @@ void CSceneManager::RenderMobileObjects()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y - 10.f, m_cAvatar->GetPosition().z);
-	RenderMesh(m_cAvatar->theAvatarMesh, false);
+	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
+	modelStack.Rotate(camera.getAngleAroundObj(), 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_OBJECT], false);
 	modelStack.PopMatrix();
 }
 

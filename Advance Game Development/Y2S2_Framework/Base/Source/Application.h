@@ -17,8 +17,10 @@ public:
 	}
 
 	static bool IsKeyPressed(unsigned short key);
+	static bool IsMousePressed(unsigned short key);
 	bool GetMouseUpdate();
 	bool GetKeyboardUpdate();
+	void updateMouseScrolling();
 
 	void Init();
 	void Run();
@@ -27,13 +29,14 @@ public:
 	//Declare variables to store the last and current mouse position
 	static double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;
 	static double camera_yaw, camera_pitch;
-
+	//Mouse scroll variable
+	static double d_mouseScroll;
 private:
 	Application();
 	~Application();
 
 	// Declare the window width and height as constant integer
-	const static int m_window_deadzone = 100;
+	const static int m_window_deadzone = 99999;
 	const static int m_window_width = 800;
 	const static int m_window_height = 600;
 	//Declare a window object

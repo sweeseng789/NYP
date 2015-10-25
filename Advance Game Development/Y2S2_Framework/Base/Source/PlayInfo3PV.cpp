@@ -5,6 +5,12 @@ float CPlayInfo3PV::velSpeed = 30.f;
 
 CPlayInfo3PV::CPlayInfo3PV(void)
 	: theAvatarMesh(NULL)
+	, head(NULL)
+	, torso(NULL)
+	, leftArm(NULL)
+	, leftLeg(NULL)
+	, rightArm(NULL)
+	, rightLeg(NULL)
 	, jumpspeed(0)
 {
 	Init();
@@ -33,6 +39,7 @@ void CPlayInfo3PV::Init(void)
 
 	vel.SetZero();
 	rotateAngle = 0.f;
+	isMoving = false;
 }
 
 // Set Model
@@ -220,6 +227,11 @@ float CPlayInfo3PV::getRotationAngle()
 	return rotateAngle;
 }
 
+Vector3 CPlayInfo3PV::getVel()
+{
+	return vel;
+}
+
 
 /********************************************************************************
  Update Movement
@@ -234,6 +246,8 @@ void CPlayInfo3PV::UpdateMovement(const unsigned char key, const bool status)
  ********************************************************************************/
 void CPlayInfo3PV::Update(double dt, Camera3 &camera)
 {
+	animation.Update(dt, vel.LengthSquared() * 15);
+
 	Vector3 view = camera.direction;
 	view.Normalize();
 	view.y = 0;
@@ -269,24 +283,25 @@ void CPlayInfo3PV::Update(double dt, Camera3 &camera)
 	{
 		float Fforce_x = 0 - vel.x;
 		vel.x += Fforce_x * dt * 5.f;
+
+		if (vel.x < 0.1 && vel.x > -0.1)
+		{
+			vel.x = 0;
+		}
 	}
 
 	if (vel.z != 0)
 	{
 		float Fforce_z = 0 - vel.z;
 		vel.z += Fforce_z * dt * 5.f;
+
+		if (vel.z < 0.1 && vel.z > -0.1)
+		{
+			vel.z = 0;
+		}
 	}
 
 	curPosition += vel;
-
-	if (curDirection != view)
-	{
-		target = curPosition + curDirection;
-
-		float rotationDiff = SSDLC::findAngleFromPos(target, curPosition) - SSDLC::findAngleFromPos(target, curPosition);
-
-		rotateAngle = -rotationDiff;
-	}
 
 	// Rotation
 	/*

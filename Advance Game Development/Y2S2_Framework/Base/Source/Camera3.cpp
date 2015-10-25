@@ -59,7 +59,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	distanceFromObj = 100;
 	angleAroundObj = 0;
-	Obj_pitch = 20;
+	Obj_pitch = 10;
 	Obj_yaw = 0;
 
 	mouseVel = 0.f;
@@ -431,7 +431,9 @@ Vector3 newPosition is the new position where the camera is to be based on
 ********************************************************************************/
 void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const double &dt)
 {
+	newPosition.y += 30;
 	direction = target - position;
+	direction.Normalize();
 
 	//Camera Yaw
 	thirdPersonView_YawUpdate(dt);
@@ -453,7 +455,7 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const do
 	}
 
 	float horizontalDistance = distanceFromObj * cos(Math::DegreeToRadian(Obj_pitch));
-	float verticalDistance = distanceFromObj * sin(Math::DegreeToRadian(Obj_pitch));
+	float verticalDistance = distanceFromObj * sin(Math::DegreeToRadian(Obj_pitch)) + 10;
 
 	Vector3 offSet;
 	offSet.x = horizontalDistance * sin(Math::DegreeToRadian(angleAroundObj));

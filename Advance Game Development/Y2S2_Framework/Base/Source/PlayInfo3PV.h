@@ -4,6 +4,7 @@
 #include "Camera3.h"
 #include "SSDLC.h"
 #include "Mtx44.h"
+#include "CharAnimation.h"
 
 class CPlayInfo3PV
 {
@@ -78,7 +79,18 @@ public:
 	// Avatar's Mesh
 	Mesh*	theAvatarMesh;
 
+	Mesh* head;
+	Mesh* torso;
+	Mesh* leftArm;
+	Mesh* rightArm;
+	Mesh* leftLeg;
+	Mesh* rightLeg;
+	CharAnimation animation;
+
 	float getRotationAngle();
+
+	Vector3 getVel();
+	bool isMoving;
 
 private:
 	// Hero's information
@@ -89,6 +101,7 @@ private:
 	static float velSpeed;
 	int jumpspeed;
 	float rotateAngle;
+	
 
 	bool myKeys[255];
 };

@@ -163,11 +163,11 @@ void CSceneManager::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Head.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Head.tga");
+	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
+	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36, 10.f);
 	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
@@ -200,9 +200,33 @@ void CSceneManager::Init()
 	m_cMinimap->SetBorder( MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f) );
 	m_cMinimap->SetAvatar( MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f) );
 
+	//Unicorn Gundam
+	meshList[GEO_UNICORN_LEFT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
+	meshList[GEO_UNICORN_LEFT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
+
+	meshList[GEO_UNICORN_RIGHT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
+	meshList[GEO_UNICORN_RIGHT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
+
 	//Initialise and load a model
 	m_cAvatar = new CPlayInfo3PV();
-	m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f));
+	//m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f));
+	m_cAvatar->head = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Head.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->head->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Head.tga");
+
+	m_cAvatar->torso = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Torso.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->torso->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Torso.tga");
+
+	m_cAvatar->leftArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->leftArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
+
+	m_cAvatar->rightArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->rightArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
+
+	m_cAvatar->leftLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->leftLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
+
+	m_cAvatar->rightLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->rightLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -213,6 +237,70 @@ void CSceneManager::Init()
 	rotateAngle = 0;
 
 	bLightEnabled = true;
+}
+
+void CSceneManager::createParticle(const double &dt)
+{
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		//Creating thruster effect when using exhaust
+		Vector3 right = camera.direction.Cross(camera.up);
+		Vector3 pos = m_cAvatar->GetPosition();
+		static double timeLimit = 0.1;
+
+		//Top left thruster
+		Vector3 topLeft_pos = pos;
+		topLeft_pos.y += 20;
+		topLeft_pos.x -= camera.direction.x * 5 + right.x * 4.2;
+		topLeft_pos.z -= camera.direction.z * 5 + right.z * 4.2;
+
+		Vector3 topLeft_vel;
+		topLeft_vel.x = Math::RandFloatMinMax(-right.x * 2, -right.x * 10);
+		topLeft_vel.z = Math::RandFloatMinMax(-right.z * 2, -right.z * 10);
+		topLeft_vel.y = Math::RandFloatMinMax(-2, -5);
+
+		Particle* topLeft = fetchParticle(topLeft_pos, topLeft_vel, timeLimit);
+
+
+		//Top right thruster
+		Vector3 topRight_pos = pos;
+		topRight_pos.y += 20;
+		topRight_pos.x -= camera.direction.x * 5 - right.x * 4.2;
+		topRight_pos.z -= camera.direction.z * 5 - right.z * 4.2;
+
+		Vector3 topRight_vel;
+		topRight_vel.x = Math::RandFloatMinMax(right.x * 2, right.x * 10);
+		topRight_vel.z = Math::RandFloatMinMax(right.z * 2, right.z * 10);
+		topRight_vel.y = Math::RandFloatMinMax(-2, -5);
+
+		Particle* topRight = fetchParticle(topRight_pos, topRight_vel, timeLimit);
+
+		//Bottom left thruster
+		Vector3 bottomLeft_pos = pos;
+		bottomLeft_pos.y += 10;
+		bottomLeft_pos.x -= camera.direction.x * 3 + right.x * 4.2;
+		bottomLeft_pos.z -= camera.direction.z * 3 + right.z * 4.2;
+
+		Vector3 bottomLeft_vel;
+		bottomLeft_vel.x = Math::RandFloatMinMax(-camera.direction.x * 5, -camera.direction.x * 10);
+		bottomLeft_vel.z = Math::RandFloatMinMax(-camera.direction.z * 5, -camera.direction.z * 10);
+		bottomLeft_vel.y = Math::RandFloatMinMax(-2, -5);
+
+		Particle* bottomLeft = fetchParticle(bottomLeft_pos, bottomLeft_vel, timeLimit);
+
+		//Bottom right thruster
+		Vector3 bottomRight_pos = pos;
+		bottomRight_pos.y += 10;
+		bottomRight_pos.x -= camera.direction.x * 3 - right.x * 4.2;
+		bottomRight_pos.z -= camera.direction.z * 3 - right.z * 4.2;
+
+		Vector3 bottomRight_vel;
+		bottomRight_vel.x = Math::RandFloatMinMax(-camera.direction.x * 10, -camera.direction.x * 15);
+		bottomRight_vel.z = Math::RandFloatMinMax(-camera.direction.z * 10, -camera.direction.z * 15);
+		bottomRight_vel.y = Math::RandFloatMinMax(-2, -5);
+
+		Particle* bottomRight = fetchParticle(bottomRight_pos, bottomRight_vel, timeLimit);
+	}
 }
 
 void CSceneManager::Update(double dt)
@@ -269,7 +357,23 @@ void CSceneManager::Update(double dt)
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
 	//camera.Update(dt);
 
+	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		Particle* particle = static_cast<Particle*>(*it);
+
+		if (particle->getActive())
+		{
+			particle->update(dt);
+		}
+	}
+
+	if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE))
+	{
+		rotateAngle = camera.getAngleAroundObj();
+	}
+
 	fps = (float)(1.f / dt);
+	createParticle(dt);
 }
 
 /********************************************************************************
@@ -497,11 +601,85 @@ void CSceneManager::RenderMobileObjects()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
+	//modelStack.PushMatrix();
+	//modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
+	////modelStack.Rotate(camera.getAngleAroundObj(), 0, 1, 0);
+	//modelStack.Scale(10, 10, 10);
+	//RenderMesh(meshList[GEO_UNICORN_LEFT_LEG], false);
+	//modelStack.PopMatrix();
+
+	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		Particle* particle = static_cast<Particle*>(*it);
+
+		if (particle->getActive())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(particle->getPos().x, particle->getPos().y, particle->getPos().z);
+			modelStack.Scale(particle->getScale(), particle->getScale(), particle->getScale());
+			RenderMesh(meshList[GEO_SPHERE], false);
+			modelStack.PopMatrix();
+		}
+	}
+
+	//Render Character
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
-	modelStack.Rotate(camera.getAngleAroundObj(), 0, 1, 0);
+	modelStack.Rotate(rotateAngle, 0, 1, 0);
 	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_OBJECT], false);
+
+	//Head
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 3, 0);
+	RenderMesh(m_cAvatar->head, false);
+	modelStack.PopMatrix();
+
+	//Torso
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 1.61, 0);
+	RenderMesh(m_cAvatar->torso, false);
+	modelStack.PopMatrix();
+
+	static float Leg_offset = 0.33;
+	static float Arm_offset = 0.98;
+
+	//Left Arm
+	modelStack.PushMatrix();
+	modelStack.Translate(Arm_offset, 1.61, 0);
+	modelStack.Translate(0, 0.5, 0);
+	modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
+	modelStack.Translate(0, -0.5, 0);
+	RenderMesh(m_cAvatar->leftArm, false);
+	modelStack.PopMatrix();
+
+	//Right Arm
+	modelStack.PushMatrix();
+	modelStack.Translate(-Arm_offset, 1.61, 0);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Translate(0, 0.5, 0);
+	modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
+	modelStack.Translate(0, -0.5, 0);
+	RenderMesh(m_cAvatar->rightArm, false);
+	modelStack.PopMatrix();
+
+	//Left Leg
+	modelStack.PushMatrix();
+	modelStack.Translate(Leg_offset, 0, 0);
+	modelStack.Translate(0, 1, 0);
+	modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
+	modelStack.Translate(0, -1, 0);
+	RenderMesh(m_cAvatar->leftLeg, false);
+	modelStack.PopMatrix();
+
+	//Right Leg
+	modelStack.PushMatrix();
+	modelStack.Translate(-Leg_offset, 0, 0);
+	modelStack.Translate(0, 1, 0);
+	modelStack.Rotate(m_cAvatar->animation.vel_RightLeg, 1, 0, 0);
+	modelStack.Translate(0, -1, 0);
+	RenderMesh(m_cAvatar->rightLeg, false);
+	modelStack.PopMatrix();
+
 	modelStack.PopMatrix();
 }
 
@@ -647,6 +825,31 @@ void CSceneManager::RenderSkybox()
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
+}
+
+Particle * CSceneManager::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
+{
+	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); it++)
+	{
+		Particle* particle = static_cast<Particle*>(*it);
+
+		if (!particle->getActive())
+		{
+			particle->restartParticles(pos, vel, timeLimit);
+			return particle;
+		}
+	}
+
+	for (unsigned a = 0; a < 10; ++a)
+	{
+		Particle* particle = new Particle();
+		particleList.push_back(particle);
+	}
+
+	Particle* particle = particleList.back();
+	particle->restartParticles(pos, vel, timeLimit);
+
+	return particle;
 }
 
 /********************************************************************************

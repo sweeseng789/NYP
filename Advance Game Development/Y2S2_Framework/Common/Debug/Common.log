@@ -1,8 +1,15 @@
-﻿Build started 25/10/2015 11:33:20 AM.
+﻿Build started 25/10/2015 6:15:29 PM.
      1>Project "C:\Users\Ong\Desktop\NYP\Advance Game Development\Y2S2_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\VS 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SSDLC.cpp
+         D:\VS 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mtx44.cpp Source\SSDLC.cpp Source\timer.cpp Source\Vector2.cpp Source\Vector3.cpp
+         Vector3.cpp
+         Vector2.cpp
+         timer.cpp
          SSDLC.cpp
+         Mtx44.cpp
+         MatrixStack.cpp
+         MathUtility.cpp
+         Generating Code...
        Lib:
          D:\VS 2013\VC\bin\Lib.exe /OUT:"C:\Users\Ong\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Common.lib" /NOLOGO Debug\MathUtility.obj
          Debug\MatrixStack.obj
@@ -16,4 +23,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.39
+Time Elapsed 00:00:01.91

@@ -9,6 +9,8 @@
 #include "Light.h"
 #include "Minimap.h"
 #include "PlayInfo3PV.h"
+#include "Particle.h"
+#include <vector>
 
 const float SKYBOXSIZE = 1000.f;
 
@@ -81,6 +83,10 @@ class CSceneManager : public Scene
 		GEO_GRASS_LIGHTGREEN,
 		GEO_OBJECT,
 		GEO_TEXT,
+
+		GEO_UNICORN_LEFT_LEG,
+		GEO_UNICORN_RIGHT_LEG,
+
 		NUM_GEOMETRY,
 	};
 
@@ -115,6 +121,11 @@ public:
 	void RenderLights();
 	void RenderGround();
 	void RenderSkybox();
+
+	//Particle
+	std::vector<Particle*> particleList;
+	Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
+	void createParticle(const double &dt);
 
 	enum WEAPON_ACTION
 	{
@@ -156,6 +167,8 @@ private:
 
 	//Handle to 3rd person view's avatar
 	CPlayInfo3PV* m_cAvatar;
+
+	
 };
 
 #endif

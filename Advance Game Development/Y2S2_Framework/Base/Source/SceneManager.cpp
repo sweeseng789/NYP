@@ -234,6 +234,9 @@ void CSceneManager::Init()
 	m_cAvatar->shield = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
 	m_cAvatar->shield->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Shield.tga");
 
+	m_cAvatar->saber = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Beam_Saber.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->saber->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Saber.tga");
+
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -628,11 +631,6 @@ void CSceneManager::RenderMobileObjects()
 		}
 	}
 
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_UNICORN_LEFT_LEG], false);
-	modelStack.PopMatrix();
-
 	//Render Character
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
@@ -684,6 +682,7 @@ void CSceneManager::RenderMobileObjects()
 	RenderMesh(m_cAvatar->rifle, false);
 	modelStack.PopMatrix();
 
+
 	RenderMesh(m_cAvatar->rightArm, false);
 	modelStack.PopMatrix();
 
@@ -703,6 +702,20 @@ void CSceneManager::RenderMobileObjects()
 	modelStack.Rotate(m_cAvatar->animation.vel_RightLeg, 1, 0, 0);
 	modelStack.Translate(0, -1, 0);
 	RenderMesh(m_cAvatar->rightLeg, false);
+	modelStack.PopMatrix();
+
+	//Mounting Weapon
+
+	//Left Beam Saber
+	modelStack.PushMatrix();
+	modelStack.Translate(0.3, 2.68, -0.62);
+	RenderMesh(m_cAvatar->saber, false);
+	modelStack.PopMatrix();
+
+	//Right Beam Saber
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.3, 2.68, -0.62);
+	RenderMesh(m_cAvatar->saber, false);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();

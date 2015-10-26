@@ -13,6 +13,7 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 	, rightLeg(NULL)
 	, rifle(NULL)
 	, shield(NULL)
+	, saber(NULL)
 	, jumpspeed(0)
 {
 	Init();

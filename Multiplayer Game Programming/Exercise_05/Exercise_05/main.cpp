@@ -4,6 +4,7 @@
 #include <winsock2.h>
 #include <stdio.h>
 #include <iostream>
+#include <string>
 
 /// Link with ws2_32.lib
 #pragma comment(lib, "Ws2_32.lib")
@@ -124,12 +125,21 @@ int main(void)
 		do
 		{
 			memset(MessageBuffer, '\0', DEFAULT_BUFLEN);
-			MessageBufferlen = 2;
+			MessageBufferlen = 100;
 			Result = recv(ConnectedSocket, MessageBuffer, MessageBufferlen, 0);
 			if (0 < Result)
 			{
+				std::string messageToPrint = "";
+				char returnClient[] = "Receive Okay";
+
 				std::cout << "Bytes received: " << Result << std::endl;
 				std::cout << "Buffer received: " << MessageBuffer << std::endl;
+
+				//Return result to client
+				send(ConnectedSocket, returnClient, 13, 0);
+
+				std::cout << std::endl;
+
 			}
 			else if (0 == Result)
 			{

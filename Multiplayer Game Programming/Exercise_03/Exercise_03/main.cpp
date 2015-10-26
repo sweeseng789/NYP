@@ -101,6 +101,10 @@ int main(void)
 
 		std::cout << "Bytes sent: " << Result << std::endl;
 
+		for (unsigned a = 0; a < DEFAULT_BUFLEN; ++a)
+		{
+			MessageBuffer[a] = '\0';
+		}
 		Result = recv(ConnectSocket, MessageBuffer, DEFAULT_BUFLEN, 0);
 		if (Result > 0)
 		{

@@ -145,7 +145,7 @@ int main(void)
 				break;
 			}
 
-			/// Echo same message to client
+			// Echo same message to client
 			Result = send(ConnectedSocket, MessageBuffer, Result, 0);
 			if (SOCKET_ERROR == Result)
 			{

@@ -19,6 +19,8 @@ double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
 	   Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
 double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
 double Application::d_mouseScroll = 0.0;
+bool Application::d_isMouseScrolling = false;
+int Application::scrollCount = 3, Application::scrollCount_min = 0, Application::scrollCount_max = 6;
 
 
 
@@ -220,15 +222,27 @@ void Application::updateMouseScrolling()
 
 	if (d_mouseScroll != 0)
 	{
+		d_isMouseScrolling = true;
+
 		static double timeLimit = 0.5;
 		static double currentTime = 0.0;
 
 		currentTime += m_dElapsedTime;
 
-		if (currentTime > timeLimit)
+		if (currentTime >= timeLimit)
 		{
+			if (d_mouseScroll < 0.0 && scrollCount < scrollCount_max)
+			{
+				scrollCount += 1;
+			}
+			else if (d_mouseScroll > 0.0 && scrollCount > scrollCount_min)
+			{
+				scrollCount -= 1;
+			}
+
 			currentTime = 0.0;
-			d_mouseScroll = 0;
+			d_mouseScroll = 0.0;
+			d_isMouseScrolling = false;
 		}
 	}
 }
@@ -285,7 +299,7 @@ void Application::Init()
 	}
 
 	// Hide the cursor
-	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// Set these 2 variables to zero
 	m_dElapsedTime = 0.0;

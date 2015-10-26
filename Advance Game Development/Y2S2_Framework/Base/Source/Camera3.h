@@ -75,8 +75,10 @@ private:
 	float Obj_yaw;
 
 	//Mouse
-	float mouseVel;
+	Vector3 mouseVel;
 	void thirdPersonView_YawUpdate(const double &dt);
+	void thirdPersonView_PitchUpdate(const double &dt);
+	void thirdPersonView_DistanceFromObj(const double &dt);
 
 	// Maximum movement speed and acceleration
 	float CAMERA_ACCEL;

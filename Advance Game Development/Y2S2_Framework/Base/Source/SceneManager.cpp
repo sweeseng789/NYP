@@ -201,8 +201,8 @@ void CSceneManager::Init()
 	m_cMinimap->SetAvatar( MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f) );
 
 	//Unicorn Gundam
-	meshList[GEO_UNICORN_LEFT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_UNICORN_LEFT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
+	meshList[GEO_UNICORN_LEFT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
+	meshList[GEO_UNICORN_LEFT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Shield.tga");
 
 	meshList[GEO_UNICORN_RIGHT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
 	meshList[GEO_UNICORN_RIGHT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
@@ -217,16 +217,22 @@ void CSceneManager::Init()
 	m_cAvatar->torso->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Torso.tga");
 
 	m_cAvatar->leftArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->leftArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
+	m_cAvatar->leftArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_ArmLeft.tga");
 
 	m_cAvatar->rightArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->rightArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
+	m_cAvatar->rightArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_ArmRight.tga");
 
 	m_cAvatar->leftLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
 	m_cAvatar->leftLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
 
 	m_cAvatar->rightLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
 	m_cAvatar->rightLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
+
+	m_cAvatar->rifle = MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj");
+	m_cAvatar->rifle->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Magnum.tga");
+
+	m_cAvatar->shield = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
+	m_cAvatar->shield->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Shield.tga");
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -573,7 +579,7 @@ void CSceneManager::RenderMesh(Mesh *mesh, bool enableLight)
 void CSceneManager::RenderGUI()
 {
 	// Render the crosshair
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
+	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 
 	// Render the crosshair
 	// Note that Ortho is set to this size -> 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -622,6 +628,11 @@ void CSceneManager::RenderMobileObjects()
 		}
 	}
 
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_UNICORN_LEFT_LEG], false);
+	modelStack.PopMatrix();
+
 	//Render Character
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
@@ -647,18 +658,32 @@ void CSceneManager::RenderMobileObjects()
 	modelStack.PushMatrix();
 	modelStack.Translate(Arm_offset, 1.61, 0);
 	modelStack.Translate(0, 0.5, 0);
-	modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
+	modelStack.Rotate(m_cAvatar->animation.vel_LeftArm, 1, 0, 0);
 	modelStack.Translate(0, -0.5, 0);
+
+	//Shield
+	modelStack.PushMatrix();
+	modelStack.Translate(0.4, 0, 0);
+	RenderMesh(m_cAvatar->shield, false);
+	modelStack.PopMatrix();
+
 	RenderMesh(m_cAvatar->leftArm, false);
 	modelStack.PopMatrix();
 
 	//Right Arm
 	modelStack.PushMatrix();
 	modelStack.Translate(-Arm_offset, 1.61, 0);
-	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Translate(0, 0.5, 0);
-	modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
+	modelStack.Rotate(m_cAvatar->animation.vel_RightArm, 1, 0, 0);
 	modelStack.Translate(0, -0.5, 0);
+	
+	//Weapon
+	modelStack.PushMatrix();
+	modelStack.Translate(0.2, -1.5, 0.4);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(m_cAvatar->rifle, false);
+	modelStack.PopMatrix();
+
 	RenderMesh(m_cAvatar->rightArm, false);
 	modelStack.PopMatrix();
 

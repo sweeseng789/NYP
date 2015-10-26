@@ -31,6 +31,9 @@ public:
 	static double camera_yaw, camera_pitch;
 	//Mouse scroll variable
 	static double d_mouseScroll;
+	static bool d_isMouseScrolling;
+	static int scrollCount;
+	static int scrollCount_min, scrollCount_max;
 private:
 	Application();
 	~Application();

@@ -408,21 +408,68 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 	if (Application::camera_yaw > 0.0)
 	{
 		//angleAroundObj -= m_fTPVCameraOffset * dt;
-		mouseVel += m_fTPVCameraOffset * static_cast<float>(dt);
+		mouseVel.x += m_fTPVCameraOffset * static_cast<float>(dt);
 	}
 	else if (Application::camera_yaw < 0.0)
 	{
 		//angleAroundObj += m_fTPVCameraOffset * dt;
-		mouseVel -= m_fTPVCameraOffset * static_cast<float>(dt);
+		mouseVel.x -= m_fTPVCameraOffset * static_cast<float>(dt);
 	}
 
-	if (mouseVel != 0)
+	if (mouseVel.x != 0)
 	{
-		float Fforce = 0 - mouseVel;
-		mouseVel += Fforce * static_cast<float>(dt) * 5.f;
+		float Fforce = 0 - mouseVel.x;
+		mouseVel.x += Fforce * static_cast<float>(dt) * 5.f;
 	}
 
-	angleAroundObj -= mouseVel;
+	angleAroundObj -= mouseVel.x;
+}
+
+void Camera3::thirdPersonView_PitchUpdate(const double &dt)
+{
+	if (Application::camera_pitch > 0.0)
+	{
+		if (Obj_pitch < 25)
+			mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
+		else
+			mouseVel.y = 0;
+	}
+	else if (Application::camera_pitch < 0.0)
+	{
+
+		if (Obj_pitch > -25)
+			mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
+		else
+		{
+			mouseVel.y = 0;
+		}
+	}
+
+	if (mouseVel.y != 0)
+	{
+		float Fforce = 0 - mouseVel.y;
+		mouseVel.y += Fforce * static_cast<float>(dt) * 10.f;
+	}
+
+	Obj_pitch -= mouseVel.y;
+}
+
+void Camera3::thirdPersonView_DistanceFromObj(const double &dt)
+{
+	if (Application::d_isMouseScrolling)
+	{
+		if (Application::d_mouseScroll != 0.0)
+		{
+			if (Application::d_mouseScroll < 0.0 && Application::scrollCount < Application::scrollCount_max)
+			{
+				distanceFromObj += m_fTPVCameraOffset * dt;
+			}
+			else if (Application::d_mouseScroll > 0.0 && Application::scrollCount > Application::scrollCount_min)
+			{
+				distanceFromObj -= m_fTPVCameraOffset * dt;
+			}
+		}
+	}
 }
 
 /********************************************************************************
@@ -431,31 +478,23 @@ Vector3 newPosition is the new position where the camera is to be based on
 ********************************************************************************/
 void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const double &dt)
 {
+	//Offset the camera y position
 	newPosition.y += 30;
+
 	direction = target - position;
 	direction.Normalize();
 
 	//Camera Yaw
 	thirdPersonView_YawUpdate(dt);
 
+	//Camera Pitch
+	thirdPersonView_PitchUpdate(dt);
+
 	//Distance From Obj
-	if (Application::d_mouseScroll < 0.0)
-	{
-		if (distanceFromObj < 150)
-		{
-			distanceFromObj += 50 * static_cast<float>(dt);
-		}
-	}
-	else if (Application::d_mouseScroll > 0.0)
-	{
-		if (distanceFromObj > 25)
-		{
-			distanceFromObj -= 50 * static_cast<float>(dt);
-		}
-	}
+	thirdPersonView_DistanceFromObj(dt);
 
 	float horizontalDistance = distanceFromObj * cos(Math::DegreeToRadian(Obj_pitch));
-	float verticalDistance = distanceFromObj * sin(Math::DegreeToRadian(Obj_pitch)) + 10;
+	float verticalDistance = distanceFromObj * sin(Math::DegreeToRadian(Obj_pitch));
 
 	Vector3 offSet;
 	offSet.x = horizontalDistance * sin(Math::DegreeToRadian(angleAroundObj));

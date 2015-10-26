@@ -85,6 +85,8 @@ public:
 	Mesh* rightArm;
 	Mesh* leftLeg;
 	Mesh* rightLeg;
+	Mesh* rifle;
+	Mesh* shield;
 	CharAnimation animation;
 
 	float getRotationAngle();

@@ -429,7 +429,7 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 {
 	if (Application::camera_pitch > 0.0)
 	{
-		if (Obj_pitch < 25)
+		if (Obj_pitch < 30)
 			mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
 		else
 			mouseVel.y = 0;
@@ -437,7 +437,7 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 	else if (Application::camera_pitch < 0.0)
 	{
 
-		if (Obj_pitch > -25)
+		if (Obj_pitch > -30)
 			mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
 		else
 		{
@@ -448,7 +448,7 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 	if (mouseVel.y != 0)
 	{
 		float Fforce = 0 - mouseVel.y;
-		mouseVel.y += Fforce * static_cast<float>(dt) * 10.f;
+		mouseVel.y += Fforce * static_cast<float>(dt) * 5.f;
 	}
 
 	Obj_pitch -= mouseVel.y;

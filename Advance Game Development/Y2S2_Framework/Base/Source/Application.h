@@ -4,8 +4,11 @@
 #include "timer.h"
 #include "SceneManager.h"
 #include "SceneManager2D.h"
+#include "GameStateManager.h"
+#include "PlayState.h"
+#include "IntroState.h"
 
-#define TYPE_OF_VIEW 3	// 2 = 2D, 3 = 3D
+#define TYPE_OF_VIEW 2	// 2 = 2D, 3 = 3D
 
 class Application
 {
@@ -34,6 +37,7 @@ public:
 	static bool d_isMouseScrolling;
 	static int scrollCount;
 	static int scrollCount_min, scrollCount_max;
+	static int button_Left, button_Middle, button_Right;
 private:
 	Application();
 	~Application();
@@ -54,6 +58,9 @@ private:
 	#else
 		CSceneManager2D *scene;	// Use this for 2D gameplay
 	#endif
+
+	//Game State Management
+	CGameStateManager* theGSM;
 };
 
 #endif

@@ -55,6 +55,7 @@ class CSceneManager2D : public Scene
 
 public:
 	CSceneManager2D();
+	CSceneManager2D(const int m_window_width, const int m_window_height);
 	~CSceneManager2D();
 
 	virtual void Init();
@@ -122,6 +123,9 @@ private:
 	CGoodiesFactory theGoodiesFactory;
 	CGoodies** theArrayOfGoodies;
 	void RenderGoodies(void);
+	int m_window_width;
+	int m_window_height;
 };
+
 
 #endif

@@ -22,7 +22,27 @@ CSceneManager2D::CSceneManager2D()
 	, rearWallFineOffset_x(0)
 	, rearWallFineOffset_y(0)
 	, theEnemy(NULL)
+	, m_window_height(600)
+	, m_window_width(800)
 {
+}
+
+CSceneManager2D::CSceneManager2D(const int m_window_width, const int m_windowHeight)
+: m_cMinimap(NULL)
+, m_cMap(NULL)
+, tileOffset_x(0)
+, tileOffset_y(0)
+, m_cRearMap(NULL)
+, rearWallOffset_x(0)
+, rearWallOffset_y(0)
+, rearWallTileOffset_x(0)
+, rearWallTileOffset_y(0)
+, rearWallFineOffset_x(0)
+, rearWallFineOffset_y(0)
+, theEnemy(NULL)
+{
+	this->m_window_width = m_window_width;
+	this->m_window_height = m_windowHeight;
 }
 
 CSceneManager2D::~CSceneManager2D()
@@ -230,7 +250,7 @@ void CSceneManager2D::Update(double dt)
 	// Update the enemies
 	theEnemy->SetDestination( theHero->GetPos_x(), theHero->GetPos_y() );
 	theEnemy->Update( m_cMap );
-
+	std::cout << "Hello World" << std::endl;
 	fps = (float)(1.f / dt);
 }
 
@@ -373,21 +393,26 @@ void CSceneManager2D::Render()
 	// Render the background image
 	RenderBackground();
 	// Render the rear tile map
-	RenderRearTileMap();
-	// Render the tile map
-	RenderTileMap();
-	// Render the goodies
-	RenderGoodies();
+	//RenderRearTileMap();
+	//// Render the tile map
+	//RenderTileMap();
+	//// Render the goodies
+	//RenderGoodies();
 
-	//On screen text
+	////On screen text
+	//std::ostringstream ss;
+	//ss.precision(5);
+	//ss << "theEnemy: " << theEnemy->GetPos_x() << ", " << theEnemy->GetPos_y();
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
+	//std::ostringstream sss;
+	//sss.precision(5);
+	//sss << "mapOffset_x: "<<theHero->GetMapOffset_x();
+	//RenderTextOnScreen(meshList[GEO_TEXT], sss.str(), Color(0, 1, 0), 30, 0, 30);
+
 	std::ostringstream ss;
 	ss.precision(5);
-	ss << "theEnemy: " << theEnemy->GetPos_x() << ", " << theEnemy->GetPos_y();
+	ss << "Welcome to the Intro screen";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
-	std::ostringstream sss;
-	sss.precision(5);
-	sss << "mapOffset_x: "<<theHero->GetMapOffset_x();
-	RenderTextOnScreen(meshList[GEO_TEXT], sss.str(), Color(0, 1, 0), 30, 0, 30);
 }
 
 /********************************************************************************

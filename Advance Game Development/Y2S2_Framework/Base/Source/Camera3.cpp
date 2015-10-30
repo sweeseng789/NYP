@@ -62,7 +62,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	Obj_pitch = 10;
 	Obj_yaw = 0;
 
-	mouseVel = 0.f;
+	mouseVel.SetZero();
 }
 
 /********************************************************************************
@@ -429,18 +429,22 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 {
 	if (Application::camera_pitch > 0.0)
 	{
-		if (Obj_pitch < 30)
+		if (Obj_pitch < 25)
 			mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
 		else
+		{
+			Obj_pitch = 25;
 			mouseVel.y = 0;
+		}
 	}
 	else if (Application::camera_pitch < 0.0)
 	{
 
-		if (Obj_pitch > -30)
+		if (Obj_pitch > -25)
 			mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
 		else
 		{
+			Obj_pitch = -25;
 			mouseVel.y = 0;
 		}
 	}
@@ -489,7 +493,7 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const do
 
 	//Camera Pitch
 	thirdPersonView_PitchUpdate(dt);
-
+	std::cout << mouseVel << std::endl;
 	//Distance From Obj
 	thirdPersonView_DistanceFromObj(dt);
 

@@ -1,7 +1,7 @@
-﻿Build started 24/9/2015 10:46:24 PM.
+﻿Build started 1/11/2015 10:03:28 AM.
      1>Project "C:\Users\Ong\Desktop\NYP\Sem 4 Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         d:\VS 2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mtx44.cpp Source\timer.cpp Source\Vector2.cpp Source\Vector3.cpp
+         D:\VS 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mtx44.cpp Source\timer.cpp Source\Vector2.cpp Source\Vector3.cpp
          Vector3.cpp
          Vector2.cpp
          timer.cpp
@@ -10,7 +10,7 @@
          MathUtility.cpp
          Generating Code...
        Lib:
-         d:\VS 2010\VC\bin\Lib.exe /OUT:"C:\Users\Ong\Desktop\NYP\Sem 4 Framework\Debug\Common.lib" /NOLOGO Debug\MathUtility.obj
+         D:\VS 2013\VC\bin\Lib.exe /OUT:"C:\Users\Ong\Desktop\NYP\Sem 4 Framework\Debug\Common.lib" /NOLOGO Debug\MathUtility.obj
          Debug\MatrixStack.obj
          Debug\Mtx44.obj
          Debug\timer.obj
@@ -21,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.80
+Time Elapsed 00:00:01.71

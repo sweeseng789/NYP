@@ -2,13 +2,14 @@
 
 #include "GameStateManager.h"
 
-#define GSM_DEBUG_MODE TRUE
+#define GSM_DEBUG_MODE FALSE
 
 class CGameState
 {
 public:
 	virtual void Init() = 0;
 	virtual void Init(const int width, const int height) = 0;
+	virtual void InitShaders() = 0;
 	virtual void Cleanup() = 0;
 
 	virtual void Pause() = 0;

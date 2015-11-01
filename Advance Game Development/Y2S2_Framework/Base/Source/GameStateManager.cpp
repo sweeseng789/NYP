@@ -17,6 +17,11 @@ void CGameStateManager::Init(const char* title, int width, int height, int bpp, 
 #endif
 }
 
+void CGameStateManager::InitShaders()
+{
+	StackOfStates.back()->InitShaders();
+}
+
 void CGameStateManager::Cleanup()
 {
 	// cleanup the all states
@@ -105,7 +110,7 @@ void CGameStateManager::HandleEvents(const unsigned char key, const bool status)
 void CGameStateManager::HandleEvents(const double mouse_x, const double mouse_y, const int button_Left, const int button_Middle, const int button_Right)
 {
 	// let the state handle events
-	//StackOfStates.back()->HandleEvents(this, mouse_x, mouse_y, button_Left, button_Middle, button_Right);
+	StackOfStates.back()->HandleEvents(this, mouse_x, mouse_y, button_Left, button_Middle, button_Right);
 #if GSM_DEBUG_MODE
 	cout << "CGameStateManager::HandleEvents\n" << endl;
 #endif

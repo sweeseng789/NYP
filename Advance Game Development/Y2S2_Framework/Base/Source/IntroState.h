@@ -8,6 +8,7 @@ class CIntroState : public CGameState
 public:
 	void Init();
 	void Init(const int width, const int height);
+	void InitShaders();
 	void Cleanup();
 
 	void Pause();
@@ -31,5 +32,5 @@ protected:
 private:
 	static CIntroState theIntroState;
 
-	CSceneManager2D *scene;
+	SceneGame2D *scene;
 };

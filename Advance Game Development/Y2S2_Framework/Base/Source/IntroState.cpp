@@ -15,7 +15,7 @@ void CIntroState::Init()
 	cout << "CIntroState::Init\n" << endl;
 #endif
 
-	scene = new CSceneManager2D();
+	scene = new SceneGame2D();
 	scene->Init();
 }
 
@@ -25,8 +25,13 @@ void CIntroState::Init(const int width, const int height)
 	cout << "CIntroState::Init\n" << endl;
 #endif
 
-	scene = new CSceneManager2D();
+	scene = new SceneGame2D();
 	scene->Init();
+}
+
+void CIntroState::InitShaders()
+{
+	scene->InitShaders();
 }
 
 void CIntroState::Cleanup()

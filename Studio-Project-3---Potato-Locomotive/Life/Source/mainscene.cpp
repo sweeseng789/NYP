@@ -2650,6 +2650,7 @@ void mainscene::Update(double dt)
 	mousePosX = (static_cast<float>(x) / static_cast<float>(Application::GetWindowWidth()) * static_cast<float>(Application::GetWindowWidth())*0.1f);
 	mousePosY = ((static_cast<float>(Application::GetWindowHeight()) - static_cast<float>(y)) / static_cast<float>(Application::GetWindowHeight()) * static_cast<float>(Application::GetWindowHeight())*0.1f);
 
+	
 	if (f_fov != f_targetfov)
 	{
 		float diff = f_targetfov - f_fov;

@@ -16,9 +16,9 @@ void CPlayState::Init()
 	counter = 0;
 
 	#if TYPE_OF_VIEW == 3
-		scene = new CSceneManager(800, 600);	// Use this for 3D gameplay
+		scene = new SceneGame(800, 600);	// Use this for 3D gameplay
 	#else
-		scene = new CSceneManager2D(800, 600);	// Use this for 2D gameplay
+		scene = new SceneGame2D(800, 600);	// Use this for 2D gameplay
 	#endif
 	scene->Init();
 }
@@ -31,11 +31,16 @@ void CPlayState::Init(const int width, const int height)
 	counter = 0;
 
 	#if TYPE_OF_VIEW == 3
-		scene = new CSceneManager(width, height);	// Use this for 3D gameplay
+		scene = new SceneGame(width, height);	// Use this for 3D gameplay
 	#else
-		scene = new CSceneManager2D(width, height);	// Use this for 2D gameplay
+		scene = new SceneGame2D(width, height);	// Use this for 2D gameplay
 	#endif
 	scene->Init();
+}
+
+void CPlayState::InitShaders()
+{
+	scene->InitShaders();
 }
 
 void CPlayState::Cleanup()

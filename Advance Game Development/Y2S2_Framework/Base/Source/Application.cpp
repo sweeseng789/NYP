@@ -14,14 +14,21 @@
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
+int Application::m_window_width = Application::init_window_width, Application::m_window_height = Application::init_window_height;
+
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, 
 	   Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0,
-	   Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
-double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
-double Application::d_mouseScroll = 0.0;
-bool Application::d_isMouseScrolling = false;
-int Application::scrollCount = 3, Application::scrollCount_min = 0, Application::scrollCount_max = 6;
-int Application::button_Left = 0, Application::button_Middle = 0, Application::button_Right = 0;
+	   Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0,
+		Application::camera_yaw = 0.0, Application::camera_pitch = 0.0,
+		Application::d_mouseScroll = 0.0;
+
+bool Application::d_isMouseScrolling = false, Application::updateMouse = false,
+	Application::toggleFullscreen = false, Application::FULL_SCREEN = false,
+	Application::b_exitGame = false;
+
+int Application::scrollCount = 3, Application::scrollCount_min = 0, Application::scrollCount_max = 6, 
+	Application::button_Left = 0, Application::button_Middle = 0, Application::button_Right = 0;
+
 
 
 
@@ -80,28 +87,34 @@ bool Application::IsMousePressed(unsigned short key) //0 - Left, 1 - Right, 2 - 
  ********************************************************************************/
 bool Application::GetMouseUpdate()
 {
+	//Mouse Scrolling
+	updateMouseScrolling();
+
     glfwGetCursorPos(m_window, &mouse_current_x, &mouse_current_y);
 
-	//Getting thw differenece
-	mouse_diff_x = mouse_current_x - mouse_last_x;
-	mouse_diff_y = mouse_current_y - mouse_last_y;
-
-	//Updating camera pitch and yaw
-	camera_yaw = (float)mouse_diff_x * 0.0174555555555556f;// * 3.142f / 180.0f;
-	camera_pitch = mouse_diff_y * 0.0174555555555556f;// 3.142f / 180.0f );
-
-	//Wrap around
-	//X - Axis
-	if (mouse_current_x < m_window_deadzone || mouse_current_x > m_window_width - m_window_deadzone)
+	if (updateMouse)
 	{
-		mouse_current_x = m_window_width >> 1;
+		//Getting thw differenece
+		mouse_diff_x = mouse_current_x - mouse_last_x;
+		mouse_diff_y = mouse_current_y - mouse_last_y;
+
+		//Updating camera pitch and yaw
+		camera_yaw = (float)mouse_diff_x * 0.0174555555555556f;// * 3.142f / 180.0f;
+		camera_pitch = mouse_diff_y * 0.0174555555555556f;// 3.142f / 180.0f );
+
+		//Wrap around
+		//X - Axis
+		if (mouse_current_x < m_window_deadzone || mouse_current_x > m_window_width - m_window_deadzone)
+		{
+			mouse_current_x = m_window_width >> 1;
+		}
+		//Y - Axis
+		if (mouse_current_y < m_window_deadzone || mouse_current_y > m_window_width - m_window_deadzone)
+		{
+			mouse_current_y = m_window_height >> 1;
+		}
+		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 	}
-	//Y - Axis
-	if (mouse_current_y < m_window_deadzone || mouse_current_y > m_window_width - m_window_deadzone)
-	{
-		mouse_current_y = m_window_height >> 1;
-	}
-	glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 
 	//Get the mouse button status
 	button_Left = glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT);
@@ -260,6 +273,63 @@ void Application::updateMouseScrolling()
 	}
 }
 
+void Application::activateMouse(bool status)
+{
+	if (updateMouse == true)
+	{
+		//Show cursor
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+		//Hide Cursor
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSetCursorPos(m_window, m_window_width / 2, m_window_height / 2);
+	}
+	
+	updateMouse = status;
+}
+
+int Application::getWindow_Height()
+{
+	return m_window_height;
+}
+
+int Application::getWindow_Width()
+{
+	return m_window_width;
+}
+
+void Application::GetMousePos(float & mousePos_x, float & mousePos_Y)
+{
+	double *xpos = new double;
+	double *ypos = new double;
+
+	glfwGetCursorPos(m_window, xpos, ypos);
+
+	mousePos_x = static_cast<float>(*xpos);
+	mousePos_Y = static_cast<float>(*ypos);
+
+	delete xpos;
+	delete ypos;
+}
+
+void Application::startGame()
+{
+	CMenuState::startGame();
+	activateMouse(true);
+}
+
+void Application::fullscreenToggle()
+{
+	toggleFullscreen = true;
+}
+
+void Application::quitGame()
+{
+	b_exitGame = true;
+}
+
 /********************************************************************************
  Initialise this program
  ********************************************************************************/
@@ -311,9 +381,6 @@ void Application::Init()
 		//return -1;
 	}
 
-	// Hide the cursor
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
 	// Set these 2 variables to zero
 	m_dElapsedTime = 0.0;
 	m_dAccumulatedTime_ThreadOne = 0.0;
@@ -321,7 +388,7 @@ void Application::Init()
 
 	theGSM = new CGameStateManager();
 	theGSM->Init("DM220 With Game State Management", Application::m_window_width, Application::m_window_height);
-	theGSM->ChangeState(CIntroState::Instance());
+	theGSM->ChangeState(CMenuState::Instance());
 }
 
 /********************************************************************************
@@ -330,23 +397,24 @@ void Application::Init()
 void Application::Run()
 {
 	#if TYPE_OF_VIEW == 3
-		scene = new CSceneManager(m_window_width, m_window_height);	// Use this for 3D gameplay
+		scene = new SceneMenu(m_window_width, m_window_height);	// Use this for 3D gameplay
 	#else
-		scene = new CSceneManager2D(m_window_width, m_window_height);	// Use this for 2D gameplay
+		scene = new SceneGame2D(m_window_width, m_window_height);	// Use this for 2D gameplay
 	#endif
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(m_window) && !b_exitGame)
 	{
 		// Get the elapsed time
 		m_dElapsedTime = m_timer.getElapsedTime();
 		m_dAccumulatedTime_ThreadOne += m_dElapsedTime;
 		m_dAccumulatedTime_ThreadTwo += m_dElapsedTime;
+
+
 		if (m_dAccumulatedTime_ThreadOne > 0.03)
 		{
 			GetMouseUpdate();
-			updateMouseScrolling();
 			GetKeyboardUpdate();
 			theGSM->HandleEvents();
 			theGSM->Update(m_dElapsedTime);
@@ -363,7 +431,34 @@ void Application::Run()
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
 		glfwPollEvents();
-        m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
+        m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.
+
+		if (toggleFullscreen)
+		{
+			glfwDestroyWindow(m_window);
+
+			//Currently in fullscreen
+			if (FULL_SCREEN)
+			{
+				FULL_SCREEN = false;
+				m_window_width = init_window_width;
+				m_window_height = init_window_height;
+				m_window = glfwCreateWindow(m_window_width, m_window_height, "Testing Fullscreen", NULL, NULL);
+			}
+			//Not in fullscreen
+			else
+			{
+				FULL_SCREEN = true;
+				const GLFWvidmode *win_data = glfwGetVideoMode(glfwGetPrimaryMonitor());
+				m_window_width = win_data->width;
+				m_window_height = win_data->height;
+				m_window = glfwCreateWindow(win_data->width, win_data->height, "Tetsing Part 2", glfwGetPrimaryMonitor(), NULL);
+			}
+
+			toggleFullscreen = false;
+			glfwMakeContextCurrent(m_window);
+			scene->Init();
+		}
 
 	} //Check if the ESC key had been pressed or if the window had been closed
 

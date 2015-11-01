@@ -9,8 +9,8 @@ class CGameStateManager
 {
 public:
 
-	void Init(const char* title, int width=640, int height=480, 
-		      int bpp=0, bool fullscreen=false);
+	void Init(const char* title, int width=640, int height=480, int bpp=0, bool fullscreen=false);
+	void InitShaders();
 	void Cleanup();
 
 	void ChangeState(CGameState* state);
@@ -19,13 +19,19 @@ public:
 
 	void HandleEvents();
 	void HandleEvents(const unsigned char key, const bool status = true);
-	void HandleEvents(const double mouse_x, const double mouse_y,
-					  const int button_Left, const int button_Middle, const int button_Right);
+	void HandleEvents(const double mouse_x, const double mouse_y, const int button_Left, const int button_Middle, const int button_Right);
 	void Update(const double m_dElapsedTime);
 	void Draw();
 
-	bool Running() { return m_bRunning; }
-	void Quit() { m_bRunning = false; }
+	bool Running() 
+	{ 
+		return m_bRunning; 
+	}
+
+	void Quit() 
+	{ 
+		m_bRunning = false; 
+	}
 
 private:
 	// the stack of states

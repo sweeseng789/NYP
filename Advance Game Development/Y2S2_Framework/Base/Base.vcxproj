@@ -32,8 +32,9 @@
     <ClCompile Include="Source\PlayerInfo.cpp" />
     <ClCompile Include="Source\PlayInfo3PV.cpp" />
     <ClCompile Include="Source\PlayState.cpp" />
-    <ClCompile Include="Source\SceneManager.cpp" />
+    <ClCompile Include="Source\SceneGame.cpp" />
     <ClCompile Include="Source\SceneManager2D.cpp" />
+    <ClCompile Include="Source\SceneMenu.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Strategy.cpp" />
     <ClCompile Include="Source\Strategy_Kill.cpp" />
@@ -67,8 +68,9 @@
     <ClInclude Include="Source\PlayInfo3PV.h" />
     <ClInclude Include="Source\PlayState.h" />
     <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\SceneManager.h" />
+    <ClInclude Include="Source\SceneGame.h" />
     <ClInclude Include="Source\SceneManager2D.h" />
+    <ClInclude Include="Source\SceneMenu.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Strategy.h" />
     <ClInclude Include="Source\Strategy_Kill.h" />

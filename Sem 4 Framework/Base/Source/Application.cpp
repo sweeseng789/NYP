@@ -259,10 +259,11 @@ void Application::Run()
 
 		if (toggleFullscreen)
 		{
+			glfwDestroyWindow(m_window);
+
 			if (isFullscreen == false)
 			{
 				isFullscreen = true;
-				glfwDestroyWindow(m_window);
 				const GLFWvidmode *monitorData = glfwGetVideoMode(glfwGetPrimaryMonitor());
 				m_window_height = monitorData->height;
 				m_window_width = monitorData->width;
@@ -271,7 +272,6 @@ void Application::Run()
 			else
 			{
 				isFullscreen = false;
-				glfwDestroyWindow(m_window);
 				m_window_width = init_window_width;
 				m_window_height = init_window_height;
 				m_window = glfwCreateWindow(m_window_width, m_window_height, windowName.c_str(), NULL, NULL);

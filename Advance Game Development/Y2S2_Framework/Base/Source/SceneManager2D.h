@@ -18,7 +18,7 @@
 #include "Goodies.h"
 #include "TreasureChest.h"
 
-class CSceneManager2D : public Scene
+class SceneGame2D : public Scene
 {
 	enum UNIFORM_TYPE
 	{
@@ -54,11 +54,12 @@ class CSceneManager2D : public Scene
 	};
 
 public:
-	CSceneManager2D();
-	CSceneManager2D(const int m_window_width, const int m_window_height);
-	~CSceneManager2D();
+	SceneGame2D();
+	SceneGame2D(const int m_window_width, const int m_window_height);
+	~SceneGame2D();
 
 	virtual void Init();
+	virtual void InitShaders();
 	virtual void Update(double dt);
 	// Update Camera status
 	virtual void UpdateCameraStatus(const unsigned char key, const bool status = true);

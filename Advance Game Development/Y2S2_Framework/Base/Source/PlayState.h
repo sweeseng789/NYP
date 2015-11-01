@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameState.h"
-#include "SceneManager.h"
+#include "SceneGame.h"
 #include "SceneManager2D.h"
 #include "timer.h"
 
@@ -18,6 +18,7 @@ class CPlayState : public CGameState
 public:
 	void Init();
 	void Init(const int width, const int height);
+	void InitShaders();
 	void Cleanup();
 
 	void Pause();
@@ -50,8 +51,8 @@ private:
 
 	// The handler for the scene
 	#if TYPE_OF_VIEW == 3
-		CSceneManager *scene;	// Use this for 3D gameplay
+		SceneGame *scene;	// Use this for 3D gameplay
 	#else
-		CSceneManager2D *scene;	// Use this for 2D gameplay
+		SceneGame2D *scene;	// Use this for 2D gameplay
 	#endif
 };

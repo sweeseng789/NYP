@@ -8,12 +8,17 @@ using namespace std;
 #include "menustate.h"
 
 CMenuState CMenuState::theMenuState;
+bool CMenuState::switchToPlay = false;
+
 
 void CMenuState::Init()
 {
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Init\n" << endl;
 #endif
+
+	scene = new SceneMenu(800, 600);
+	scene->Init();
 }
 
 void CMenuState::Init(const int width, const int height)
@@ -21,6 +26,14 @@ void CMenuState::Init(const int width, const int height)
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Init\n" << endl;
 #endif
+
+	scene = new SceneMenu(width, height);
+	scene->Init();
+}
+
+void CMenuState::InitShaders()
+{
+	scene->InitShaders();
 }
 
 void CMenuState::Cleanup()
@@ -28,6 +41,10 @@ void CMenuState::Cleanup()
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Cleanup\n" << endl;
 #endif
+
+	scene->Exit();
+	delete scene;
+	scene = NULL;
 }
 
 void CMenuState::Pause()
@@ -69,12 +86,17 @@ void CMenuState::HandleEvents(CGameStateManager* theGSM)
 	//	}
 	//} while (m_iUserChoice == -1);
 #endif
+
+	if (switchToPlay)
+	{
+		theGSM->ChangeState(CPlayState::Instance());
+	}
 }
 
 void CMenuState::HandleEvents(CGameStateManager* theGSM, const unsigned char key, const bool status)
 {
 #if GSM_DEBUG_MODE
-	int m_iUserChoice = -1;
+	/*int m_iUserChoice = -1;
 
 	do {
 		cout << "CMenuState: Choose one <0> Go to Intro State, <1> Go to Play State : " ;
@@ -94,15 +116,14 @@ void CMenuState::HandleEvents(CGameStateManager* theGSM, const unsigned char key
 				m_iUserChoice = -1;
 				break;
 		}
-	} while (m_iUserChoice == -1);
+	} while (m_iUserChoice == -1);*/
 #endif
 }
 
-void CMenuState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, const double mouse_y,
-							  const int button_Left, const int button_Middle, const int button_Right)
+void CMenuState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, const double mouse_y, const int button_Left, const int button_Middle, const int button_Right)
 {
 #if GSM_DEBUG_MODE
-	int m_iUserChoice = -1;
+	/*int m_iUserChoice = -1;
 
 	do {
 		cout << "CMenuState: Choose one <0> Go to Intro State, <1> Go to Play State : " ;
@@ -122,8 +143,9 @@ void CMenuState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, c
 				m_iUserChoice = -1;
 				break;
 		}
-	} while (m_iUserChoice == -1);
+	} while (m_iUserChoice == -1);*/
 #endif
+	//DO MOUSE CODE HERE
 }
 
 void CMenuState::Update(CGameStateManager* theGSM) 
@@ -131,10 +153,13 @@ void CMenuState::Update(CGameStateManager* theGSM)
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Update\n" << endl;
 #endif
+
+	scene->Update(0.16667);
 }
 
 void CMenuState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 {
+	scene->Update(m_dElapsedTime);
 }
 
 void CMenuState::Draw(CGameStateManager* theGSM) 
@@ -142,4 +167,11 @@ void CMenuState::Draw(CGameStateManager* theGSM)
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Draw\n" << endl;
 #endif
+
+	scene->Render();
+}
+
+void CMenuState::startGame()
+{
+	switchToPlay = true;
 }

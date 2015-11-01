@@ -407,12 +407,10 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 {
 	if (Application::camera_yaw > 0.0)
 	{
-		//angleAroundObj -= m_fTPVCameraOffset * dt;
 		mouseVel.x += m_fTPVCameraOffset * static_cast<float>(dt);
 	}
 	else if (Application::camera_yaw < 0.0)
 	{
-		//angleAroundObj += m_fTPVCameraOffset * dt;
 		mouseVel.x -= m_fTPVCameraOffset * static_cast<float>(dt);
 	}
 
@@ -427,30 +425,30 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 
 void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 {
-	if (Application::camera_pitch > 0.0)
-	{
-		if (Obj_pitch < 25)
-			mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
-		else
-		{
-			Obj_pitch = 25;
-			mouseVel.y = 0;
-		}
-	}
-	else if (Application::camera_pitch < 0.0)
-	{
+	static double pitchLimit = 25;
 
-		if (Obj_pitch > -25)
-			mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
-		else
-		{
-			Obj_pitch = -25;
-			mouseVel.y = 0;
-		}
+	if (Application::camera_pitch > 0.0 && Obj_pitch <= pitchLimit)
+	{
+		mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
+	}
+	else if (Application::camera_pitch < 0.0 && Obj_pitch >= -pitchLimit)
+	{
+		mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
 	}
 
 	if (mouseVel.y != 0)
 	{
+		//if pitch exceed the pitch limit, then it would slowly bring it back to before pitch limit
+		while (Obj_pitch > pitchLimit)
+		{
+			Obj_pitch -= 1 * dt;
+		}
+
+		while (Obj_pitch < -pitchLimit)
+		{
+			Obj_pitch += 1 * dt;
+		}
+
 		float Fforce = 0 - mouseVel.y;
 		mouseVel.y += Fforce * static_cast<float>(dt) * 5.f;
 	}
@@ -466,11 +464,11 @@ void Camera3::thirdPersonView_DistanceFromObj(const double &dt)
 		{
 			if (Application::d_mouseScroll < 0.0 && Application::scrollCount < Application::scrollCount_max)
 			{
-				distanceFromObj += m_fTPVCameraOffset * dt;
+				distanceFromObj += m_fTPVCameraOffset * static_cast<float>(dt);
 			}
 			else if (Application::d_mouseScroll > 0.0 && Application::scrollCount > Application::scrollCount_min)
 			{
-				distanceFromObj -= m_fTPVCameraOffset * dt;
+				distanceFromObj -= m_fTPVCameraOffset * static_cast<float>(dt);
 			}
 		}
 	}
@@ -493,7 +491,7 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const do
 
 	//Camera Pitch
 	thirdPersonView_PitchUpdate(dt);
-	std::cout << mouseVel << std::endl;
+
 	//Distance From Obj
 	thirdPersonView_DistanceFromObj(dt);
 
@@ -509,9 +507,6 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const do
 	position.y = newPosition.y + verticalDistance;
 
 	target = newPosition;
-
-	//position = newPosition - newDirection.Normalized() * m_fTPVCameraOffset;
-	//target = newPosition;
 }
 
 /********************************************************************************

@@ -9,7 +9,7 @@
 #include <sstream>
 #include "Strategy_Kill.h"
 
-CSceneManager2D::CSceneManager2D()
+SceneGame2D::SceneGame2D()
 	: m_cMinimap(NULL)
 	, m_cMap(NULL)
 	, tileOffset_x(0)
@@ -27,7 +27,7 @@ CSceneManager2D::CSceneManager2D()
 {
 }
 
-CSceneManager2D::CSceneManager2D(const int m_window_width, const int m_windowHeight)
+SceneGame2D::SceneGame2D(const int m_window_width, const int m_windowHeight)
 : m_cMinimap(NULL)
 , m_cMap(NULL)
 , tileOffset_x(0)
@@ -45,7 +45,7 @@ CSceneManager2D::CSceneManager2D(const int m_window_width, const int m_windowHei
 	this->m_window_height = m_windowHeight;
 }
 
-CSceneManager2D::~CSceneManager2D()
+SceneGame2D::~SceneGame2D()
 {
 	for (int i=0; i<10; i++)
 	{
@@ -72,14 +72,14 @@ CSceneManager2D::~CSceneManager2D()
 	}
 }
 
-void CSceneManager2D::Init()
+void SceneGame2D::InitShaders()
 {
 	// Blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// Switch on culling
 	glEnable(GL_CULL_FACE);
-	
+
 	// Render mode
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -92,8 +92,8 @@ void CSceneManager2D::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	// Load the shaders
-	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
-	
+	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
+
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 	//m_parameters[U_MODEL] = glGetUniformLocation(m_programID, "M");
@@ -106,7 +106,7 @@ void CSceneManager2D::Init()
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-	
+
 	// Use our shader
 	glUseProgram(m_programID);
 
@@ -114,6 +114,11 @@ void CSceneManager2D::Init()
 
 	// Initialise the camera
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+}
+
+void SceneGame2D::Init()
+{
+	InitShaders();
 
 	// Create the meshes
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
@@ -197,7 +202,7 @@ void CSceneManager2D::Init()
 	rotateAngle = 0;
 }
 
-void CSceneManager2D::Update(double dt)
+void SceneGame2D::Update(double dt)
 {
 	if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
@@ -257,7 +262,7 @@ void CSceneManager2D::Update(double dt)
 /********************************************************************************
  Update Camera position
  ********************************************************************************/
-void CSceneManager2D::UpdateCameraStatus(const unsigned char key, const bool status)
+void SceneGame2D::UpdateCameraStatus(const unsigned char key, const bool status)
 {
 	//camera.UpdateStatus(key, status);
 
@@ -267,7 +272,7 @@ void CSceneManager2D::UpdateCameraStatus(const unsigned char key, const bool sta
 /********************************************************************************
  Update Weapon status
  ********************************************************************************/
-void CSceneManager2D::UpdateWeaponStatus(const unsigned char key)
+void SceneGame2D::UpdateWeaponStatus(const unsigned char key)
 {
 	if (key == WA_FIRE)
 	{
@@ -278,7 +283,7 @@ void CSceneManager2D::UpdateWeaponStatus(const unsigned char key)
 /********************************************************************************
  Render text onto the screen
  ********************************************************************************/
-void CSceneManager2D::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SceneGame2D::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if(!mesh || mesh->textureID <= 0)
 		return;
@@ -319,7 +324,7 @@ void CSceneManager2D::RenderTextOnScreen(Mesh* mesh, std::string text, Color col
 /********************************************************************************
  Render 2D Mesh
  ********************************************************************************/
-void CSceneManager2D::Render2DMesh(Mesh *mesh, bool enableLight, int size, int x, int y, bool rotate, bool flip)
+void SceneGame2D::Render2DMesh(Mesh *mesh, bool enableLight, int size, int x, int y, bool rotate, bool flip)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 800, 0, 600, -10, 10);
@@ -363,7 +368,7 @@ void CSceneManager2D::Render2DMesh(Mesh *mesh, bool enableLight, int size, int x
 /********************************************************************************
  Render the background
  ********************************************************************************/
-void CSceneManager2D::RenderBackground()
+void SceneGame2D::RenderBackground()
 {
 	// Render the crosshair
 	Render2DMesh(meshList[GEO_BACKGROUND], false, 1);
@@ -372,7 +377,7 @@ void CSceneManager2D::RenderBackground()
 /********************************************************************************
  Render this scene
  ********************************************************************************/
-void CSceneManager2D::Render()
+void SceneGame2D::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	Mtx44 perspective;
@@ -418,7 +423,7 @@ void CSceneManager2D::Render()
 /********************************************************************************
  Exit this scene
  ********************************************************************************/
-void CSceneManager2D::Exit()
+void SceneGame2D::Exit()
 {
 	// Cleanup VBO
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
@@ -433,7 +438,7 @@ void CSceneManager2D::Exit()
 /********************************************************************************
  Render the tile map. This is a private function for use in this class only
  ********************************************************************************/
-void CSceneManager2D::RenderTileMap()
+void SceneGame2D::RenderTileMap()
 {
 	int m = 0;
 	for(int i = 0; i < m_cMap->GetNumOfTiles_Height(); i ++)
@@ -503,7 +508,7 @@ void CSceneManager2D::RenderTileMap()
 /********************************************************************************
  Render the rear tile map. This is a private function for use in this class only
  ********************************************************************************/
-void CSceneManager2D::RenderRearTileMap()
+void SceneGame2D::RenderRearTileMap()
 {
 	rearWallOffset_x = (int) (theHero->GetMapOffset_x() / 2);
 	rearWallOffset_y = 0;
@@ -533,7 +538,7 @@ void CSceneManager2D::RenderRearTileMap()
 /********************************************************************************
  Render the goodies. This is a private function for use in this class only
  ********************************************************************************/
-void CSceneManager2D::RenderGoodies()
+void SceneGame2D::RenderGoodies()
 {
 	// Render the goodies
 	for (int i=0; i<10; i++)

@@ -10,6 +10,7 @@
 #include "Minimap.h"
 #include "PlayInfo3PV.h"
 #include "Particle.h"
+#include "Text.h"
 #include <vector>
 
 const float SKYBOXSIZE = 1000.f;
@@ -111,7 +112,7 @@ public:
 
 	// Low level render tools
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size=1.0f, float x=0.0f, float y=0.0f, bool rotate=false);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 
@@ -168,6 +169,11 @@ private:
 
 	//Handle to 3rd person view's avatar
 	CPlayInfo3PV* m_cAvatar;
+
+	//Menu
+	Vector3 mousePos;
+	bool b_pauseGame;
+	std::vector<CText *> textList;
 
 	
 };

@@ -379,7 +379,7 @@ void SceneMenu::Update(double dt)
 		if (text->getGameState() == currentMenuState)
 		{
 			Vector3 offset = v3_MenuPos[currentMenuState];
-			std::cout << offset << std::endl;
+		
 			Vector3 topLeft = text->getPos() + Vector3(text->getText().length() * text->getScale().x - text->getScale().x, text->getScale().y, 0) + offset;
 			Vector3 bottomRight = text->getPos() + Vector3(-text->getScale().x * 0.5f, -(text->getScale().y * 0.4f), 0) + offset;
 

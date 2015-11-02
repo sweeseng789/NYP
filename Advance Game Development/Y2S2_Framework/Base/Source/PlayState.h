@@ -36,12 +36,16 @@ public:
 		return &thePlayState;
 	}
 
+
+	static void returnToMenuScene();
+
 protected:
 	CPlayState() { }
 
 private:
 	static CPlayState thePlayState;
 	int counter;
+	static bool b_goToMenu;
 
 	//Declare variables to store the last and current mouse position
 	double mouse_last_x, mouse_last_y, mouse_diff_x, mouse_diff_y;

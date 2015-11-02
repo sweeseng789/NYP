@@ -7,6 +7,7 @@ using namespace std;
 #include "menustate.h"
 
 CPlayState CPlayState::thePlayState;
+bool CPlayState::b_goToMenu = false;
 
 void CPlayState::Init()
 {
@@ -89,6 +90,12 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	//	}
 	//} while (m_iUserChoice == -1);
 #endif
+
+	if (b_goToMenu)
+	{
+		theGSM->ChangeState(CMenuState::Instance());
+		b_goToMenu = false;
+	}
 }
 
 void CPlayState::HandleEvents(CGameStateManager* theGSM, const unsigned char key, const bool status)
@@ -112,14 +119,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM, const unsigned char key
 	//	}
 	//} while (m_iUserChoice == -1);
 #endif
-	if (key == 32)
-	{
-		theGSM->ChangeState( CMenuState::Instance() );
-	}
-	else
-	{
-		scene->UpdateAvatarStatus( key, status );
-	}
+	scene->UpdateAvatarStatus(key, status);
 }
 
 void CPlayState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, const double mouse_y,
@@ -172,4 +172,9 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	// Render the scene
 	scene->Render();
+}
+
+void CPlayState::returnToMenuScene()
+{
+	b_goToMenu = true;
 }

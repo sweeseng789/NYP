@@ -251,6 +251,16 @@ void SceneGame::Init()
 	rotateAngle = 0;
 
 	bLightEnabled = true;
+
+	b_pauseGame = false;
+	mousePos.SetZero();
+
+	CText * text = new CText();
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Return To Menu");
+	textList.push_back(text);
 }
 
 void SceneGame::createParticle(const double &dt)
@@ -365,29 +375,90 @@ void SceneGame::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-	rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
+	fps = (float)(1.f / dt);
 
-	m_cAvatar->Update(dt, camera);
-	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
-	//camera.Update(dt);
+	static double d_buttonTimeLimit = 0.5;
+	static double d_buttonCurrentTime = 0;
 
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	if (d_buttonCurrentTime < d_buttonTimeLimit)
 	{
-		Particle* particle = static_cast<Particle*>(*it);
-
-		if (particle->getActive())
+		d_buttonCurrentTime += dt;
+	}
+	else
+	{
+		if (Application::IsKeyPressed(VK_TAB))
 		{
-			particle->update(dt);
+			if (!b_pauseGame)
+			{
+				Application::activateMouse(false);
+			}
+			else
+			{
+				Application::activateMouse(true);
+			}
+
+			b_pauseGame = !b_pauseGame;
+			d_buttonCurrentTime = 0;
 		}
 	}
 
-	if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE))
+	if (b_pauseGame == false)
 	{
-		rotateAngle = camera.getAngleAroundObj();
-	}
+		rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
+		if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE))
+		{
+			rotateAngle = camera.getAngleAroundObj();
+		}
 
-	fps = (float)(1.f / dt);
-	createParticle(dt);
+		createParticle(dt);
+		m_cAvatar->Update(dt, camera);
+		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
+
+
+		for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+		{
+			Particle* particle = static_cast<Particle*>(*it);
+
+			if (particle->getActive())
+			{
+				particle->update(dt);
+			}
+		}
+	}
+	else
+	{
+		float x, y;
+		Application::GetMousePos(x, y);
+		mousePos.x = x / Application::getWindow_Width() * Application::getWindow_Width() + 0;
+		mousePos.y = (Application::getWindow_Height() - y) / Application::getWindow_Height() * Application::getWindow_Height() + 0;
+
+		for (std::vector<CText*>::iterator it = textList.begin(); it != textList.end(); ++it)
+		{
+			CText* text = static_cast<CText*>(*it);
+
+			Vector3 offset = Vector3(0, 0, 0);
+
+			Vector3 topLeft = text->getPos() + Vector3(text->getText().length() * text->getScale().x - text->getScale().x, text->getScale().y, 0) + offset;
+			Vector3 bottomRight = text->getPos() + Vector3(-text->getScale().x * 0.5f, -(text->getScale().y * 0.4f), 0) + offset;
+
+			if (SSDLC::intersect2D(topLeft, bottomRight, mousePos))
+			{
+				text->setColorToOnClick();
+				
+				if (Application::IsMousePressed(0))
+				{
+					if (text->getText() == "Return To Menu")
+					{
+						Application::returnToMenu();
+					}
+				}
+			}
+			else
+			{
+				text->setColorToNotOnClick();
+			}
+		}
+	}
 }
 
 /********************************************************************************
@@ -450,44 +521,52 @@ void SceneGame::RenderText(Mesh* mesh, std::string text, Color color)
 /********************************************************************************
  Render text onto the screen
  ********************************************************************************/
-void SceneGame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void SceneGame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID <= 0)
 		return;
-	
+
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	//ortho.SetToOrtho(0, m_window_width, 0, m_window_height, -10, 10);
-	ortho.SetToOrtho(0, m_window_width, 0, m_window_height, -10, 10);
+	ortho.SetToOrtho(0, Application::getWindow_Width(), 0, Application::getWindow_Height(), -10, 10);
 	projectionStack.PushMatrix();
-		projectionStack.LoadMatrix(ortho);
-		viewStack.PushMatrix();
-			viewStack.LoadIdentity();
-			modelStack.PushMatrix();
-				modelStack.LoadIdentity();
-				modelStack.Translate(x, y, 0);
-				modelStack.Scale(size, size, size);
-				glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-				glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-				glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-				glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-				glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-				for(unsigned i = 0; i < text.length(); ++i)
-				{
-					Mtx44 characterSpacing;
-					characterSpacing.SetToTranslation( (i*0.5f) + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
-					Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-					glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	
-					mesh->Render((unsigned)text[i] * 6, 6);
-				}
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-			modelStack.PopMatrix();
-		viewStack.PopMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	/*projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(pos.x, pos.y, 0);
+	modelStack.Scale(scale.x, scale.y, scale.z);*/
+
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	for (unsigned i = 0; i < text.length(); ++i)
+	{
+		Mtx44 characterSpacing;
+		characterSpacing.SetToTranslation(i * 0.6f, 0.f, 0); //1.0f is the spacing of each character, you may change this value
+		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		mesh->Render((unsigned)text[i] * 6, 6);
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+
 	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -599,9 +678,9 @@ void SceneGame::RenderGUI()
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
 
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 }
 
 /********************************************************************************
@@ -614,13 +693,6 @@ void SceneGame::RenderMobileObjects()
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
-	////modelStack.Rotate(camera.getAngleAroundObj(), 0, 1, 0);
-	//modelStack.Scale(10, 10, 10);
-	//RenderMesh(meshList[GEO_UNICORN_LEFT_LEG], false);
-	//modelStack.PopMatrix();
 
 	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
@@ -635,6 +707,24 @@ void SceneGame::RenderMobileObjects()
 			modelStack.PopMatrix();
 		}
 	}
+
+	//Render Text
+
+	if (b_pauseGame)
+	{
+		for (std::vector<CText *>::iterator it = textList.begin(); it != textList.end(); ++it)
+		{
+			CText* text = static_cast<CText*>(*it);
+
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Translate(text->getPos().x, text->getPos().y, text->getPos().z);
+			modelStack.Scale(text->getScale().x, text->getScale().y, text->getScale().z);
+			RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor());
+			modelStack.PopMatrix();
+		}
+	}
+
 
 	//Render Character
 	modelStack.PushMatrix();
@@ -926,6 +1016,14 @@ void SceneGame::Exit()
 		if(meshList[i])
 			delete meshList[i];
 	}
+
+	while(textList.size() > 0)
+	{
+		CText *text = textList.back();
+		delete text;
+		textList.pop_back();
+	}
+
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 }

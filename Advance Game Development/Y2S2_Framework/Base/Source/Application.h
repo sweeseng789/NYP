@@ -49,6 +49,7 @@ public:
 
 	//Game status
 	static void startGame();
+	static void returnToMenu();
 
 	//Fullscreen
 	static void fullscreenToggle();

@@ -90,6 +90,7 @@ void CMenuState::HandleEvents(CGameStateManager* theGSM)
 	if (switchToPlay)
 	{
 		theGSM->ChangeState(CPlayState::Instance());
+		switchToPlay = false;
 	}
 }
 

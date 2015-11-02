@@ -320,6 +320,11 @@ void Application::startGame()
 	activateMouse(true);
 }
 
+void Application::returnToMenu()
+{
+	CPlayState::returnToMenuScene();
+}
+
 void Application::fullscreenToggle()
 {
 	toggleFullscreen = true;
@@ -455,9 +460,11 @@ void Application::Run()
 				m_window = glfwCreateWindow(win_data->width, win_data->height, "Tetsing Part 2", glfwGetPrimaryMonitor(), NULL);
 			}
 
-			toggleFullscreen = false;
 			glfwMakeContextCurrent(m_window);
+
+			toggleFullscreen = false;
 			scene->Init();
+			scene->InitShaders();
 		}
 
 	} //Check if the ESC key had been pressed or if the window had been closed

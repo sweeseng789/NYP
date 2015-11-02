@@ -43,7 +43,8 @@ void CGameStateManager::Cleanup()
 void CGameStateManager::ChangeState(CGameState* state) 
 {
 	// cleanup the current state
-	if ( !StackOfStates.empty() ) {
+	if ( !StackOfStates.empty() ) 
+	{
 		StackOfStates.back()->Cleanup();
 		StackOfStates.pop_back();
 	}
@@ -57,10 +58,25 @@ void CGameStateManager::ChangeState(CGameState* state)
 #endif
 }
 
+void CGameStateManager::toggleFullscreen(CGameState* state)
+{
+	// cleanup the current state
+	if (!StackOfStates.empty())
+	{
+		StackOfStates.back()->Cleanup();
+		StackOfStates.pop_back();
+	}
+
+	// store and init the new state
+	StackOfStates.push_back(state);
+	StackOfStates.back()->InitShaders();
+}
+
 void CGameStateManager::PushState(CGameState* state)
 {
 	// pause current state
-	if ( !StackOfStates.empty() ) {
+	if ( !StackOfStates.empty() ) 
+	{
 		StackOfStates.back()->Pause();
 	}
 

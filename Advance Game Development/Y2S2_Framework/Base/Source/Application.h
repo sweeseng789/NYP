@@ -48,13 +48,19 @@ public:
 	static int getWindow_Height();
 
 	//Game status
-	static void startGame();
-	static void returnToMenu();
+	void startGame();
+	void returnToMenu();
 
 	//Fullscreen
 	static void fullscreenToggle();
 
 	static void quitGame();
+
+	//Start game
+	static bool b_startGame;
+
+	//back to menu
+	static bool b_BacktoMenu;
 
 private:
 	Application();
@@ -80,10 +86,12 @@ private:
 	//Exit
 	static bool b_exitGame;
 
+	
+
 	// The handler for the scene
 	#if TYPE_OF_VIEW == 3
 		//SceneGame *scene;	// Use this for 3D gameplay
-	SceneMenu *scene;
+	SceneGame *scene;
 	#else
 		SceneGame2D *scene;	// Use this for 2D gameplay
 	#endif

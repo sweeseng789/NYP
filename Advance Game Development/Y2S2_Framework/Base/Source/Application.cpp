@@ -24,7 +24,7 @@ double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
 
 bool Application::d_isMouseScrolling = false, Application::updateMouse = false,
 	Application::toggleFullscreen = false, Application::FULL_SCREEN = false,
-	Application::b_exitGame = false;
+	Application::b_exitGame = false, Application::b_startGame = false, Application::b_BacktoMenu = false;
 
 int Application::scrollCount = 3, Application::scrollCount_min = 0, Application::scrollCount_max = 6, 
 	Application::button_Left = 0, Application::button_Middle = 0, Application::button_Right = 0;
@@ -177,45 +177,45 @@ bool Application::GetKeyboardUpdate()
 		theGSM->HandleEvents('s', false);
 	}
 
-	// Jump
-	if (IsKeyPressed(32))
-	{
-		theGSM->HandleEvents(32);
-	}
+	//// Jump
+	//if (IsKeyPressed(32))
+	//{
+	//	theGSM->HandleEvents(32);
+	//}
 
-	// Rotate camera
-	if (IsKeyPressed(VK_LEFT))
-	{
-		scene->UpdateCameraStatus(VK_LEFT);
-	}
-	else
-	{
-		scene->UpdateCameraStatus(VK_LEFT, false);
-	}
-	if (IsKeyPressed(VK_RIGHT))
-	{
-		scene->UpdateCameraStatus(VK_RIGHT);
-	}
-	else
-	{
-		scene->UpdateCameraStatus(VK_RIGHT, false);
-	}
-	if (IsKeyPressed(VK_UP))
-	{
-		scene->UpdateCameraStatus(VK_UP);
-	}
-	else
-	{
-		scene->UpdateCameraStatus(VK_UP, false);
-	}
-	if (IsKeyPressed(VK_DOWN))
-	{
-		scene->UpdateCameraStatus(VK_DOWN);
-	}
-	else
-	{
-		scene->UpdateCameraStatus(VK_DOWN, false);
-	}
+	//// Rotate camera
+	//if (IsKeyPressed(VK_LEFT))
+	//{
+	//	scene->UpdateCameraStatus(VK_LEFT);
+	//}
+	//else
+	//{
+	//	scene->UpdateCameraStatus(VK_LEFT, false);
+	//}
+	//if (IsKeyPressed(VK_RIGHT))
+	//{
+	//	scene->UpdateCameraStatus(VK_RIGHT);
+	//}
+	//else
+	//{
+	//	scene->UpdateCameraStatus(VK_RIGHT, false);
+	//}
+	//if (IsKeyPressed(VK_UP))
+	//{
+	//	scene->UpdateCameraStatus(VK_UP);
+	//}
+	//else
+	//{
+	//	scene->UpdateCameraStatus(VK_UP, false);
+	//}
+	//if (IsKeyPressed(VK_DOWN))
+	//{
+	//	scene->UpdateCameraStatus(VK_DOWN);
+	//}
+	//else
+	//{
+	//	scene->UpdateCameraStatus(VK_DOWN, false);
+	//}
     return true;
 }
 
@@ -314,16 +314,18 @@ void Application::GetMousePos(float & mousePos_x, float & mousePos_Y)
 	delete ypos;
 }
 
-void Application::startGame()
-{
-	CMenuState::startGame();
-	activateMouse(true);
-}
-
-void Application::returnToMenu()
-{
-	CPlayState::returnToMenuScene();
-}
+//void Application::startGame()
+//{
+//	//CMenuState::startGame();
+//	theGSM->ChangeState(CPlayState::Instance());
+//	activateMouse(true);
+//}
+//
+//void Application::returnToMenu()
+//{
+//	//CPlayState::returnToMenuScene();
+//	theGSM->ChangeState(CMenuState::Instance());
+//}
 
 void Application::fullscreenToggle()
 {
@@ -401,12 +403,12 @@ void Application::Init()
  ********************************************************************************/
 void Application::Run()
 {
-	#if TYPE_OF_VIEW == 3
-		scene = new SceneMenu(m_window_width, m_window_height);	// Use this for 3D gameplay
-	#else
-		scene = new SceneGame2D(m_window_width, m_window_height);	// Use this for 2D gameplay
-	#endif
-	scene->Init();
+	//#if TYPE_OF_VIEW == 3
+	//	scene = new SceneGame(m_window_width, m_window_height);	// Use this for 3D gameplay
+	//#else
+	//	scene = new SceneGame2D(m_window_width, m_window_height);	// Use this for 2D gameplay
+	//#endif
+	//scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !b_exitGame)
@@ -438,6 +440,8 @@ void Application::Run()
 		glfwPollEvents();
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.
 
+
+		//if player toggle fullscreen
 		if (toggleFullscreen)
 		{
 			glfwDestroyWindow(m_window);
@@ -461,10 +465,23 @@ void Application::Run()
 			}
 
 			glfwMakeContextCurrent(m_window);
-
+			theGSM->ChangeState(CMenuState::Instance());
 			toggleFullscreen = false;
-			scene->Init();
-			scene->InitShaders();
+		}
+
+		//Start game
+		if (b_startGame)
+		{
+			theGSM->ChangeState(CPlayState::Instance());
+			activateMouse(true);
+			b_startGame = false;
+		}
+
+		//Go back to menu
+		if (b_BacktoMenu)
+		{
+			theGSM->ChangeState(CMenuState::Instance());
+			b_BacktoMenu = false;
 		}
 
 	} //Check if the ESC key had been pressed or if the window had been closed

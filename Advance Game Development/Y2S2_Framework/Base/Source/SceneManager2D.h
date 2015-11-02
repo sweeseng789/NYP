@@ -60,6 +60,7 @@ public:
 
 	virtual void Init();
 	virtual void InitShaders();
+	virtual void InitMesh();
 	virtual void Update(double dt);
 	// Update Camera status
 	virtual void UpdateCameraStatus(const unsigned char key, const bool status = true);

@@ -153,11 +153,9 @@ void SceneGame::InitShaders()
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 }
 
-void SceneGame::Init()
+void SceneGame::InitMesh()
 {
-	InitShaders();
-
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
 	}
@@ -178,7 +176,7 @@ void SceneGame::Init()
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
-	
+
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
@@ -202,8 +200,8 @@ void SceneGame::Init()
 	m_cMinimap = new CMinimap();
 	m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("MINIMAP", Color(1, 1, 1), 1.f));
 	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	m_cMinimap->SetBorder( MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f) );
-	m_cMinimap->SetAvatar( MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f) );
+	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
+	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
 
 	//Unicorn Gundam
 	meshList[GEO_UNICORN_LEFT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
@@ -241,6 +239,13 @@ void SceneGame::Init()
 
 	m_cAvatar->saber = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Beam_Saber.obj");//MeshBuilder::GenerateCube("cube", 1);
 	m_cAvatar->saber->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Saber.tga");
+}
+
+void SceneGame::Init()
+{
+	InitShaders();
+
+	InitMesh();
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -449,7 +454,8 @@ void SceneGame::Update(double dt)
 				{
 					if (text->getText() == "Return To Menu")
 					{
-						Application::returnToMenu();
+						//Application::returnToMenu();
+						Application::b_BacktoMenu = true;
 					}
 				}
 			}

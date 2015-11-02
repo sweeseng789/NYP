@@ -116,12 +116,10 @@ void SceneGame2D::InitShaders()
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 }
 
-void SceneGame2D::Init()
+void SceneGame2D::InitMesh()
 {
-	InitShaders();
-
 	// Create the meshes
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
 	}
@@ -158,13 +156,13 @@ void SceneGame2D::Init()
 
 	// Initialise and load the tile map
 	m_cMap = new CMap();
-	m_cMap->Init( 600, 800, 24, 32, 600, 1600 );
-	m_cMap->LoadMap( "Image//MapDesign.csv" );
+	m_cMap->Init(600, 800, 24, 32, 600, 1600);
+	m_cMap->LoadMap("Image//MapDesign.csv");
 
 	// Initialise and load the REAR tile map
 	m_cRearMap = new CMap();
-	m_cRearMap->Init( 600, 800, 24, 32, 600, 1600 );
-	m_cRearMap->LoadMap( "Image//MapDesign_Rear.csv" );
+	m_cRearMap->Init(600, 800, 24, 32, 600, 1600);
+	m_cRearMap->LoadMap("Image//MapDesign_Rear.csv");
 
 	// Initialise the hero's position
 	theHero = new CPlayerInfo();
@@ -175,8 +173,15 @@ void SceneGame2D::Init()
 	m_cMinimap = new CMinimap();
 	m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("MINIMAP", Color(1, 1, 1), 1.f));
 	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	m_cMinimap->SetBorder( MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f) );
-	m_cMinimap->SetAvatar( MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f) );
+	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
+	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
+}
+
+void SceneGame2D::Init()
+{
+	InitShaders();
+
+	InitMesh();
 
 	// Set the strategy for the enemy
 	theEnemy = new CEnemy();

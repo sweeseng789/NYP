@@ -146,10 +146,8 @@ void SceneMenu::InitShaders()
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 }
 
-void SceneMenu::Init()
+void SceneMenu::InitMesh()
 {
-	InitShaders();
-
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
@@ -227,6 +225,13 @@ void SceneMenu::Init()
 
 	m_cAvatar->saber = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Beam_Saber.obj");//MeshBuilder::GenerateCube("cube", 1);
 	m_cAvatar->saber->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Saber.tga");
+}
+
+void SceneMenu::Init()
+{
+	InitShaders();
+
+	InitMesh();
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -393,7 +398,8 @@ void SceneMenu::Update(double dt)
 					{
 						if (text->getText() == "Play")
 						{
-							Application::startGame();
+							//Application::startGame();
+							Application::b_startGame = true;
 						}
 						else if (text->getText() == "Option")
 						{

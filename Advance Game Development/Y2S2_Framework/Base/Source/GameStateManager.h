@@ -14,6 +14,7 @@ public:
 	void Cleanup();
 
 	void ChangeState(CGameState* state);
+	void toggleFullscreen(CGameState* state);
 	void PushState(CGameState* state);
 	void PopState();
 

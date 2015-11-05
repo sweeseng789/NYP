@@ -56,6 +56,8 @@ public:
 
 	static void quitGame();
 
+	static bool b_skipSplashscreen;
+
 	//Start game
 	static bool b_startGame;
 

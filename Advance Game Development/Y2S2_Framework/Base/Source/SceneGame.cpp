@@ -266,6 +266,12 @@ void SceneGame::Init()
 	text->setScale(Vector3(35, 35, 35));
 	text->setText("Return To Menu");
 	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 60, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Exit");
+	textList.push_back(text);
 }
 
 void SceneGame::createParticle(const double &dt)
@@ -417,6 +423,7 @@ void SceneGame::Update(double dt)
 
 		createParticle(dt);
 		m_cAvatar->Update(dt, camera);
+
 		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
 
 
@@ -454,8 +461,11 @@ void SceneGame::Update(double dt)
 				{
 					if (text->getText() == "Return To Menu")
 					{
-						//Application::returnToMenu();
 						Application::b_BacktoMenu = true;
+					}
+					else if (text->getText() == "Exit")
+					{
+						Application::quitGame();
 					}
 				}
 			}

@@ -123,6 +123,9 @@
     <ClCompile Include="Source\Text.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneSplashScreen.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Source\Text.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneSplashScreen.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

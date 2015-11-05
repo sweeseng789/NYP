@@ -24,7 +24,7 @@ double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
 
 bool Application::d_isMouseScrolling = false, Application::updateMouse = false,
 	Application::toggleFullscreen = false, Application::FULL_SCREEN = false,
-	Application::b_exitGame = false, Application::b_startGame = false, Application::b_BacktoMenu = false;
+	Application::b_exitGame = false, Application::b_startGame = false, Application::b_BacktoMenu = false, Application::b_skipSplashscreen = false;
 
 int Application::scrollCount = 3, Application::scrollCount_min = 0, Application::scrollCount_max = 6, 
 	Application::button_Left = 0, Application::button_Middle = 0, Application::button_Right = 0;
@@ -314,19 +314,6 @@ void Application::GetMousePos(float & mousePos_x, float & mousePos_Y)
 	delete ypos;
 }
 
-//void Application::startGame()
-//{
-//	//CMenuState::startGame();
-//	theGSM->ChangeState(CPlayState::Instance());
-//	activateMouse(true);
-//}
-//
-//void Application::returnToMenu()
-//{
-//	//CPlayState::returnToMenuScene();
-//	theGSM->ChangeState(CMenuState::Instance());
-//}
-
 void Application::fullscreenToggle()
 {
 	toggleFullscreen = true;
@@ -395,7 +382,7 @@ void Application::Init()
 
 	theGSM = new CGameStateManager();
 	theGSM->Init("DM220 With Game State Management", Application::m_window_width, Application::m_window_height);
-	theGSM->ChangeState(CMenuState::Instance());
+	theGSM->ChangeState(CIntroState::Instance());
 }
 
 /********************************************************************************
@@ -467,6 +454,13 @@ void Application::Run()
 			glfwMakeContextCurrent(m_window);
 			theGSM->ChangeState(CMenuState::Instance());
 			toggleFullscreen = false;
+		}
+
+		//Skip splashscreen
+		if(b_skipSplashscreen)
+		{
+			theGSM->ChangeState(CMenuState::Instance());
+			b_skipSplashscreen = false;
 		}
 
 		//Start game

@@ -75,6 +75,7 @@ private:
 	float Obj_yaw;
 
 	//Mouse
+	float updateMouse;
 	Vector3 mouseVel;
 	void thirdPersonView_YawUpdate(const double &dt);
 	void thirdPersonView_PitchUpdate(const double &dt);

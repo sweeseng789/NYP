@@ -1,5 +1,5 @@
 #pragma once
-#include "SceneManager2D.h"
+#include "SceneSplashScreen.h"
 #include "gamestate.h"
 #include "Application.h"
 
@@ -32,5 +32,5 @@ protected:
 private:
 	static CIntroState theIntroState;
 
-	SceneGame2D *scene;
+	SceneSplashScreen *scene;
 };

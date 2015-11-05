@@ -63,6 +63,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	Obj_yaw = 0;
 
 	mouseVel.SetZero();
+	updateMouse = 0.f;
 }
 
 /********************************************************************************
@@ -486,11 +487,18 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const do
 	direction = target - position;
 	direction.Normalize();
 
-	//Camera Yaw
-	thirdPersonView_YawUpdate(dt);
+	if(updateMouse < 0.05)
+	{
+		updateMouse += dt;
+	}
+	else
+	{
+		//Camera Yaw
+		thirdPersonView_YawUpdate(dt);
 
-	//Camera Pitch
-	thirdPersonView_PitchUpdate(dt);
+		//Camera Pitch
+		thirdPersonView_PitchUpdate(dt);
+	}
 
 	//Distance From Obj
 	thirdPersonView_DistanceFromObj(dt);

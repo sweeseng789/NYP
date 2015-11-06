@@ -33,6 +33,10 @@
     <ClCompile Include="Source\PlayInfo3PV.cpp" />
     <ClCompile Include="Source\PlayState.cpp" />
     <ClCompile Include="Source\SceneGame.cpp" />
+    <ClCompile Include="Source\SceneGraph\Model.cpp" />
+    <ClCompile Include="Source\SceneGraph\Node.cpp" />
+    <ClCompile Include="Source\SceneGraph\SceneNode.cpp" />
+    <ClCompile Include="Source\SceneGraph\Transform.cpp" />
     <ClCompile Include="Source\SceneManager2D.cpp" />
     <ClCompile Include="Source\SceneMenu.cpp" />
     <ClCompile Include="Source\SceneSplashScreen.cpp" />
@@ -70,6 +74,10 @@
     <ClInclude Include="Source\PlayState.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneGame.h" />
+    <ClInclude Include="Source\SceneGraph\Model.h" />
+    <ClInclude Include="Source\SceneGraph\Node.h" />
+    <ClInclude Include="Source\SceneGraph\SceneNode.h" />
+    <ClInclude Include="Source\SceneGraph\Transform.h" />
     <ClInclude Include="Source\SceneManager2D.h" />
     <ClInclude Include="Source\SceneMenu.h" />
     <ClInclude Include="Source\SceneSplashScreen.h" />
@@ -93,7 +101,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>

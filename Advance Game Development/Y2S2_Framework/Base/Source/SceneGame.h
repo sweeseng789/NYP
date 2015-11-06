@@ -9,6 +9,7 @@
 #include "Light.h"
 #include "Minimap.h"
 #include "PlayInfo3PV.h"
+#include "SceneGraph\SceneNode.h"
 #include "Particle.h"
 #include "Text.h"
 #include <vector>
@@ -116,6 +117,8 @@ public:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size=1.0f, float x=0.0f, float y=0.0f, bool rotate=false);
 	void RenderMesh(Mesh *mesh, bool enableLight);
+	void PreRendering(Vector3 translate, bool enableLight);
+	void PostRendering();
 
 	// Render the main components of this scene
 	void RenderGUI();
@@ -170,6 +173,9 @@ private:
 
 	//Handle to 3rd person view's avatar
 	CPlayInfo3PV* m_cAvatar;
+
+	//Scene Graph
+	CSceneNode* m_cSceneGraph;
 
 	//Menu
 	Vector3 mousePos;

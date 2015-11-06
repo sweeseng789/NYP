@@ -31,6 +31,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{52dbf48c-7dcd-4414-ae8f-bc43d6896358}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneGraph">
+      <UniqueIdentifier>{cf00591a-dcad-497e-91a1-11bc3eabc37e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -105,15 +108,6 @@
     <ClCompile Include="Source\PlayInfo3PV.cpp">
       <Filter>Game Character</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneManager2D.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneGame.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneMenu.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera3.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -123,8 +117,29 @@
     <ClCompile Include="Source\Text.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneGame.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager2D.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneMenu.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SceneSplashScreen.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGraph\Model.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGraph\Node.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGraph\SceneNode.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGraph\Transform.cpp">
+      <Filter>SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,18 +227,6 @@
     <ClInclude Include="Source\CharAnimation.h">
       <Filter>Game Character</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneManager2D.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneGame.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneMenu.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Camera.h">
       <Filter>Camera</Filter>
     </ClInclude>
@@ -233,8 +236,32 @@
     <ClInclude Include="Source\Text.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGame.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager2D.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneMenu.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SceneSplashScreen.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGraph\Model.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGraph\Node.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGraph\SceneNode.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGraph\Transform.h">
+      <Filter>SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

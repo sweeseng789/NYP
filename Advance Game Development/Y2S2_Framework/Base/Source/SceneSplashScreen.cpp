@@ -204,7 +204,7 @@ void SceneSplashScreen::Init()
 	bLightEnabled = true;
 
 	d_currentTime = 0.0;
-	d_currentTimeLimit = 1.0;
+	d_currentTimeLimit = 0.5;
 }
 
 void SceneSplashScreen::UpdateWeaponStatus(const unsigned char key)

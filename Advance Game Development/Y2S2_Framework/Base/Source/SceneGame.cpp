@@ -12,12 +12,14 @@ SceneGame::SceneGame(void)
 	: m_cMinimap(NULL)
 	, m_window_width(800)
 	, m_window_height(600)
+	, m_cSceneGraph(NULL)
 {
 }
 
 SceneGame::SceneGame(const int m_window_width, const int m_window_height)
-	: m_cMinimap(NULL),
-	m_cAvatar(NULL)
+	: m_cMinimap(NULL)
+	,m_cAvatar(NULL)
+	, m_cSceneGraph(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -25,6 +27,12 @@ SceneGame::SceneGame(const int m_window_width, const int m_window_height)
 
 SceneGame::~SceneGame(void)
 {
+	if (m_cSceneGraph)
+	{
+		delete m_cSceneGraph;
+		m_cSceneGraph = NULL;
+	}
+
 	if (m_cAvatar)
 	{
 		delete m_cAvatar;
@@ -246,6 +254,16 @@ void SceneGame::Init()
 	InitShaders();
 
 	InitMesh();
+
+	//Create SceneGraph
+	m_cSceneGraph = new CSceneNode();
+	CModel* newModel = new CModel();
+	newModel->Init();
+	std::cout << m_cSceneGraph->SetNode(new CTransform(0, 0, 0), newModel) << std::endl;
+
+	newModel = new CModel();
+	newModel->Init();
+	std::cout << m_cSceneGraph->AddChild(new CTransform(0, 1, 0), newModel) << std::endl;
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -741,6 +759,10 @@ void SceneGame::RenderMobileObjects()
 		}
 	}
 
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	m_cSceneGraph->Draw(this);
+	modelStack.PopMatrix();
 
 	//Render Character
 	modelStack.PushMatrix();
@@ -990,6 +1012,37 @@ Particle * SceneGame::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
 	particle->restartParticles(pos, vel, timeLimit);
 
 	return particle;
+}
+
+void SceneGame::PreRendering(Vector3 translate, bool enableLight)
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(translate.x, translate.y, translate.z);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	if(enableLight && bLightEnabled)
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+		modelView = viewStack.Top() * modelStack.Top();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	}
+
+	modelStack.PopMatrix();
+}
+
+void SceneGame::PostRendering()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /********************************************************************************

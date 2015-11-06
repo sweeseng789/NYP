@@ -28,10 +28,10 @@ CModel::~CModel(void)
 	}
 }
 
-void CModel::Init(void)
+void CModel::Init(Mesh* m_cModelMesh, const char *texturePath)
 {
-	m_cModelMesh = MeshBuilder::GenerateCube("cube", Color(1, 0, 0));
-	//m_cModelMesh = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+	this->m_cModelMesh = m_cModelMesh;
+	this->m_cModelMesh->textureID = LoadTGA(texturePath);
 }
 
 void CModel::Draw(bool m_bLight)
@@ -45,6 +45,16 @@ void CModel::SetColor(const float red, const float green, const float blue)
 	this->red = red;
 	this->green = green;
 	this->blue = blue;
+}
+
+void CModel::setMesh(Mesh* m_cModelMesh)
+{
+	this->m_cModelMesh = m_cModelMesh;
+}
+
+Mesh* CModel::getMesh()
+{
+	return m_cModelMesh;
 }
 
 // Get the top left of the bounding box of the instance

@@ -1,6 +1,7 @@
 #pragma once
 #include "node.h"
 #include "Mtx44.h"
+#include "MatrixStack.h"
 
 class CSceneNode;
 

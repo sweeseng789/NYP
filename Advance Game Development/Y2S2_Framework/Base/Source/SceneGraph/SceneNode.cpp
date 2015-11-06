@@ -71,15 +71,17 @@ void CSceneNode::Draw(void)
 
 void CSceneNode::Draw(SceneGame* theSceneManager)
 {
+	this->theModel->getMesh();
 	if (theTransform)
 	{
 		theTransform->PreRendering();
 		float x,y,z;
 		theTransform->GetOffset(x,y,z);
-		theSceneManager->PreRendering(Vector3(x,y,z), false);
+		
+		theSceneManager->PreRendering(Vector3(x,y,z), false, theModel->getMesh());
 		if (theModel)
 			theModel->Draw();
-		theSceneManager->PostRendering();
+		theSceneManager->PostRendering(theModel->getMesh());
 
 		if (theChildren.size() != 0)
 		{
@@ -118,6 +120,7 @@ void CSceneNode::SetSceneNodeID(const int sceneNodeID)
 int CSceneNode::AddChild(CTransform* aNewTransform, CModel* aNewModel)
 {
 	CSceneNode* aNewNode = new CSceneNode();
+	aNewTransform->SetRotate(1, 1, 1, 1);
 	aNewNode->SetNode( aNewTransform, aNewModel );
 	aNewNode->SetSceneNodeID( sceneNodeID*10 + (theChildren.size()+1) );
 	theChildren.push_back( aNewNode );

@@ -25,8 +25,8 @@ CTransform::~CTransform(void)
 
 void CTransform::PreRendering()
 {
-	glPushMatrix();
-	glMultMatrixf(Mtx.a);
+	//glPushMatrix();
+	//glMultMatrixf(Mtx.a);
 }
 
 void CTransform::Draw(void)
@@ -48,7 +48,7 @@ void CTransform::SetTranslate( const float dx, const float dy, const float dz  )
 
 void CTransform::SetRotate( const float angle, const float rx, const float ry, const float rz  )
 {
-	Mtx44 TempMtx;
+	/*Mtx44 TempMtx;
 	TempMtx.SetToRotation( angle, rx, ry, rz );
 	
 	Mtx44 MtxBackToOrigin;
@@ -64,7 +64,10 @@ void CTransform::SetRotate( const float angle, const float rx, const float ry, c
 
 	Mtx = Mtx * MtxBackToOrigin;
 	Mtx = Mtx * TempMtx;
-	Mtx = Mtx * MtxBackToPosition;
+	Mtx = Mtx * MtxBackToPosition;*/
+
+
+
 }
 
 void CTransform::SetScale( const float sx, const float sy, const float sz  )

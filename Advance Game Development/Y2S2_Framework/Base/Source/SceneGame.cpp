@@ -258,12 +258,12 @@ void SceneGame::Init()
 	//Create SceneGraph
 	m_cSceneGraph = new CSceneNode();
 	CModel* newModel = new CModel();
-	newModel->Init();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
 	std::cout << m_cSceneGraph->SetNode(new CTransform(0, 0, 0), newModel) << std::endl;
 
 	newModel = new CModel();
-	newModel->Init();
-	std::cout << m_cSceneGraph->AddChild(new CTransform(0, 1, 0), newModel) << std::endl;
+	newModel->Init(MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
+	std::cout << m_cSceneGraph->AddChild(new CTransform(0, 1.5, 0), newModel) << std::endl;
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -443,7 +443,6 @@ void SceneGame::Update(double dt)
 		m_cAvatar->Update(dt, camera);
 
 		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
-
 
 		for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 		{
@@ -649,6 +648,53 @@ void SceneGame::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 
 }
 
+void SceneGame::PreRendering(Vector3 translate, bool enableLight, Mesh* mesh)
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(translate.x, translate.y, translate.z);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	if (enableLight && bLightEnabled)
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+		modelView = viewStack.Top() * modelStack.Top();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	}
+
+	if (mesh->textureID > 0)
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	modelStack.PopMatrix();
+}
+
+void SceneGame::PostRendering(Mesh * mesh)
+{
+	if (mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+}
+
+
 /********************************************************************************
  Render a mesh
  ********************************************************************************/
@@ -658,6 +704,7 @@ void SceneGame::RenderMesh(Mesh *mesh, bool enableLight)
 	
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
 	if(enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
@@ -708,13 +755,17 @@ void SceneGame::RenderGUI()
 	RenderMeshIn2D( m_cMinimap->GetBorder(), false, 20.0f, 68, -48);
 	RenderMeshIn2D( m_cMinimap->GetBackground(), false, 20.0f, 68, -48);
 
+
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
 
-	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(15, 15, 0);
+	modelStack.Scale(30, 30, 30);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0));
+	modelStack.PopMatrix();
 }
 
 /********************************************************************************
@@ -1012,37 +1063,6 @@ Particle * SceneGame::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
 	particle->restartParticles(pos, vel, timeLimit);
 
 	return particle;
-}
-
-void SceneGame::PreRendering(Vector3 translate, bool enableLight)
-{
-	modelStack.PushMatrix();
-	modelStack.Translate(translate.x, translate.y, translate.z);
-
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
-
-	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
-	if(enableLight && bLightEnabled)
-	{
-		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-		modelView = viewStack.Top() * modelStack.Top();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
-	}
-	else
-	{
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-	}
-
-	modelStack.PopMatrix();
-}
-
-void SceneGame::PostRendering()
-{
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /********************************************************************************

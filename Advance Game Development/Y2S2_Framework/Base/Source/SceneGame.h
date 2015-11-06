@@ -117,8 +117,8 @@ public:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size=1.0f, float x=0.0f, float y=0.0f, bool rotate=false);
 	void RenderMesh(Mesh *mesh, bool enableLight);
-	void PreRendering(Vector3 translate, bool enableLight);
-	void PostRendering();
+	void PreRendering(Vector3 translate, bool enableLight, Mesh* mesh);
+	void PostRendering(Mesh* mesh);
 
 	// Render the main components of this scene
 	void RenderGUI();

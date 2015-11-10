@@ -14,7 +14,9 @@ public class SRS_Class {
             System.out.println("Welcome to the Student Record Management");
             System.out.println("Enter 1 to add new student data");
             System.out.println("Enter 2 to show all data");
-            System.out.println("Enter 3 to terminate programme");
+            System.out.println("Enter 3 to add friend");
+            System.out.println("Enter 4 to show friends of a student");
+            System.out.println("Enter 5 to terminate programme");
             System.out.println("Please enter your choice");
             int choice = input.nextInt();
 
@@ -49,6 +51,39 @@ public class SRS_Class {
                 break;
 
                 case(3):
+                {
+                    System.out.println("Please enter the number of the student");
+                    int studentRegNo = Integer.parseInt(input.next());
+
+                    if(record.validateStudent(studentRegNo))
+                    {
+                        boolean addingFriend = true;
+                        while(addingFriend)
+                        {
+                            System.out.println("Please enter the number of the student to be friend with");
+                            System.out.println("Enter -1 to stop");
+                            int friendToBe = Integer.parseInt(input.next());
+
+                            if(friendToBe != -1)
+                                record.addFriend(friendToBe, studentRegNo);
+                            else
+                                addingFriend = false;
+                        }
+                    }
+
+                }
+                break;
+
+                case(4):
+                {
+                    System.out.println("Please enter the number of the student");
+                    int studentRegNo = Integer.parseInt(input.next());
+
+                    record.ShowFriends(studentRegNo);
+                }
+                break;
+
+                case(5):
                 {
                     System.out.println("You have exited the programme");
                     usingProgramme = false;

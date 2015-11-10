@@ -481,8 +481,18 @@ Vector3 newPosition is the new position where the camera is to be based on
 ********************************************************************************/
 void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const double &dt)
 {
+	Vector3 view = direction;
+	view.Normalize();
+	view.y = 0;
+
+	Vector3 right = view.Cross(up);
+	right.y = 0;
+	right.Normalize();
+
 	//Offset the camera y position
 	newPosition.y += 30;
+	//newPosition.x += right.x * 30;
+	//newPosition.z += right.z * 30;
 
 	direction = target - position;
 	direction.Normalize();

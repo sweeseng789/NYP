@@ -1,6 +1,7 @@
 #include "SceneNode.h"
 //#include "../SceneManager.h"
 #include "../SceneGame.h"
+#include "../SceneMenu.h"
 #include "Vector3.h"
 
 #include <cstdlib>
@@ -34,7 +35,7 @@ CSceneNode::~CSceneNode(void)
 		theChildren.clear();
 	}
 
-	if (theModel != NULL)
+	if (theModel)
 	{
 		delete theModel;
 		theModel = NULL;
@@ -46,6 +47,7 @@ CSceneNode::~CSceneNode(void)
 		theTransform = NULL;
 	}
 }
+
 
 void CSceneNode::Draw(void)
 {
@@ -69,16 +71,15 @@ void CSceneNode::Draw(void)
 	}
 }
 
+//Main game draw
 void CSceneNode::Draw(SceneGame* theSceneManager)
 {
 	this->theModel->getMesh();
 	if (theTransform)
 	{
 		theTransform->PreRendering();
-		float x,y,z;
-		theTransform->GetOffset(x,y,z);
 		
-		theSceneManager->PreRendering(Vector3(x,y,z), false, theModel->getMesh());
+		theSceneManager->PreRendering(theTransform, false, theModel->getMesh());
 		if (theModel)
 			theModel->Draw();
 		theSceneManager->PostRendering(theModel->getMesh());
@@ -92,8 +93,39 @@ void CSceneNode::Draw(SceneGame* theSceneManager)
 				((CSceneNode*)aChild)->Draw(theSceneManager);
 			}
 		}
+		/*system("cls");
+		std::cout << theTransform->GetTransform().a[0] << ", " << theTransform->GetTransform().a[4] << ", " << theTransform->GetTransform().a[8] << ", " << theTransform->GetTransform().a[12] << std::endl;
+		std::cout << theTransform->GetTransform().a[1] << ", " << theTransform->GetTransform().a[5] << ", " << theTransform->GetTransform().a[9] << ", " << theTransform->GetTransform().a[13] << std::endl;
+		std::cout << theTransform->GetTransform().a[2] << ", " << theTransform->GetTransform().a[6] << ", " << theTransform->GetTransform().a[10] << ", " << theTransform->GetTransform().a[14] << std::endl;
+		std::cout << theTransform->GetTransform().a[3] << ", " << theTransform->GetTransform().a[7] << ", " << theTransform->GetTransform().a[11] << ", " << theTransform->GetTransform().a[15] << std::endl;*/
 
-		theTransform->PostRendering();
+
+		//theTransform->PostRendering();
+	}
+}
+
+//Menu draw
+void CSceneNode::Draw(SceneMenu* theSceneManager)
+{
+	this->theModel->getMesh();
+	if (theTransform)
+	{
+		theTransform->PreRendering();
+
+		theSceneManager->PreRendering(theTransform, false, theModel->getMesh());
+		if (theModel)
+			theModel->Draw();
+		theSceneManager->PostRendering(theModel->getMesh());
+
+		if (theChildren.size() != 0)
+		{
+			CNode* aChild = NULL;
+			for (unsigned i = 0; i<theChildren.size(); i++)
+			{
+				aChild = theChildren[i];
+				((CSceneNode*)aChild)->Draw(theSceneManager);
+			}
+		}
 	}
 }
 
@@ -264,4 +296,23 @@ void CSceneNode::SetColorForChild(const int m_iChildIndex, const float red, cons
 			aChild->SetColor(red, green, blue);
 		}
 	}
+}
+void CSceneNode::findChildById(int ID, CSceneNode* &node)
+{
+	for (std::vector<CNode*>::iterator it = theChildren.begin(); it != theChildren.end(); ++it)
+	{
+		CSceneNode *sceneNode = dynamic_cast<CSceneNode*>(*it);
+
+		if (sceneNode->GetSceneNodeID() == ID)
+		{
+			node = sceneNode;
+		}
+	}
+
+	node = NULL;
+}
+
+CTransform* CSceneNode::getTransform()
+{
+	return theTransform;
 }

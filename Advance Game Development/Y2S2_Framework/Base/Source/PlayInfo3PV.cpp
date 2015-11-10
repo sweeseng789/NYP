@@ -15,6 +15,7 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 	, shield(NULL)
 	, saber(NULL)
 	, jumpspeed(0)
+	, avatarInfo(NULL)
 {
 	Init();
 }
@@ -26,6 +27,12 @@ CPlayInfo3PV::~CPlayInfo3PV(void)
 	{
 		delete theAvatarMesh;
 		theAvatarMesh = NULL;
+	}
+
+	if (avatarInfo)
+	{
+		delete avatarInfo;
+		avatarInfo = NULL;
 	}
 }
 
@@ -43,6 +50,235 @@ void CPlayInfo3PV::Init(void)
 	vel.SetZero();
 	rotateAngle = 0.f;
 	isMoving = false;
+
+	avatarInfo = new CSceneNode();
+	CModel* newModel = new CModel();
+	CTransform* transform = new CTransform();
+	std::pair<int, std::string>* nodeInfo = new std::pair<int, std::string>();
+
+	//Head
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Head", "OBJ//Unicorn_Head.obj"), "Image//Unicorn_Gundam//Unicorn_Head.tga");
+	transform->SetTranslate(0, 30.2, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->SetNode(transform, newModel);
+	nodeInfo->second = "Head";
+	nodeList.insert(*nodeInfo);
+
+	//Torso
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Torso", "OBJ//Unicorn_Torso.obj"), "Image//Unicorn_Gundam//Unicorn_Torso.tga");
+	transform->SetTranslate(0, 16.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "Torso";
+	nodeList.insert(*nodeInfo);
+
+	//Left Arm
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Left Arm", "OBJ//Unicorn_Arm.obj"), "Image//Unicorn_Gundam//Unicorn_ArmLeft.tga");
+	transform->SetTranslate(9.5, 16.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftArm";
+	nodeList.insert(*nodeInfo);
+
+	//Right Arm
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Arm", "OBJ//Unicorn_Arm.obj"), "Image//Unicorn_Gundam//Unicorn_ArmRight.tga");
+	transform->SetTranslate(-9.5, 16.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightArm";
+	nodeList.insert(*nodeInfo);
+
+	//Left Leg
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Left Leg", "OBJ//Unicorn_Leg.obj"), "Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
+	transform->SetTranslate(3.38, 0.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftLeg";
+	nodeList.insert(*nodeInfo);
+
+	//Right Leg
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Leg", "OBJ//Unicorn_Leg.obj"), "Image//Unicorn_Gundam//Unicorn_LegRight.tga");
+	transform->SetTranslate(-3.08, 0.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightLeg";
+	nodeList.insert(*nodeInfo);
+
+	//===============WEAPONS & SHIELD===============//
+
+	//Left Arm Shield
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
+	transform->SetTranslate(13, 16.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftShield";
+	nodeList.insert(*nodeInfo);
+
+	//Right Arm Shield
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
+	transform->SetTranslate(-13, 16.5, 0);
+	transform->setRotationOrientation(180, 0, 1, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightShield";
+	nodeList.insert(*nodeInfo);
+
+	//Middle Shield
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
+	transform->SetTranslate(0, 22, -10);
+	transform->setRotationOrientation(90, 0, 1, 0);
+	transform->setRotationOrientation(180, 1, 0, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "MiddleShield";
+	nodeList.insert(*nodeInfo);
+
+	//Right Beam Magnum
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
+	transform->SetTranslate(-9.5, 16.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightBeamMagnum";
+	nodeList.insert(*nodeInfo);
+
+	//Left Beam Saber
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
+	transform->SetTranslate(-3, 27.3, -6);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftBeamSaber";
+	nodeList.insert(*nodeInfo);
+
+	//RightBeamSaber
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
+	transform->SetTranslate(2.8, 27.3, -6);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightBeamSaber";
+	nodeList.insert(*nodeInfo);
+
+	//Left Rocket Launcher
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//UnicornRocketLauncherLeft.obj"), "Image//Unicorn_Gundam//UnicornRocketLauncher.tga");
+	transform->SetTranslate(8.5, 27.3, -13);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftRocketLauncher";
+	nodeList.insert(*nodeInfo);
+
+	//Right Rocket Launcher
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//UnicornRocketLauncherRight.obj"), "Image//Unicorn_Gundam//UnicornRocketLauncher.tga");
+	transform->SetTranslate(-8.5, 27.3, -13);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightRocketLauncher";
+	nodeList.insert(*nodeInfo);
+
+	//Left Mini Rocket Top
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//UnicornMiniRocket.obj"), "Image//Unicorn_Gundam//UnicornMiniRocket.tga");
+	transform->SetTranslate(10, 32, -9.5);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftMiniRocketTop";
+	nodeList.insert(*nodeInfo);
+
+	//Right Mini Rocket Top
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//UnicornMiniRocket.obj"), "Image//Unicorn_Gundam//UnicornMiniRocket.tga");
+	transform->SetTranslate(-10, 32, -9.5);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightMiniRocketTop";
+	nodeList.insert(*nodeInfo);
+
+	//Left Mini Rocket Bottom
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Left Leg", "OBJ//UnicornMiniRocket.obj"), "Image//Unicorn_Gundam//UnicornMiniRocket.tga");
+	transform->SetTranslate(7.2, 0.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftMiniRocketBottom";
+	nodeList.insert(*nodeInfo);
+
+	//Right Mini Rocket Bottom
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Leg", "OBJ//UnicornMiniRocket.obj"), "Image//Unicorn_Gundam//UnicornMiniRocket.tga");
+	transform->SetTranslate(-7, 0.5, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightMiniRocketBottom";
+	nodeList.insert(*nodeInfo);
+
+	//Left Propellant Tank
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Leg", "OBJ//PropellantTanks.obj"), "Image//Unicorn_Gundam//PropellantTanks.tga");
+	transform->SetTranslate(5, 4, -12);
+	transform->setRotationOrientation(45, 1, -1, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "LeftPropellantTanks";
+	nodeList.insert(*nodeInfo);
+
+	//Right Propellant Tank
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Leg", "OBJ//PropellantTanks.obj"), "Image//Unicorn_Gundam//PropellantTanks.tga");
+	transform->SetTranslate(-5, 4, -12);
+	transform->setRotationOrientation(45, 1, 1, 0);
+	transform->SetScale(10, 10, 10);
+	nodeInfo->first = avatarInfo->AddChild(transform, newModel);
+	nodeInfo->second = "RightPropellantTanks";
+	nodeList.insert(*nodeInfo);
 }
 
 // Set Model
@@ -251,6 +487,30 @@ void CPlayInfo3PV::Update(double dt, Camera3 &camera)
 {
 	animation.Update(dt, vel.LengthSquared() * 15);
 
+	for (std::unordered_map<int, std::string>::iterator it = nodeList.begin(); it != nodeList.end(); ++it)
+	{
+		CSceneNode* node = avatarInfo->GetNode(it->first);
+		if (node != NULL)
+		{
+			if (it->second == "LeftLeg" || it->second == "LeftMiniRocketBottom")
+			{
+				node->getTransform()->SetRotate2(animation.vel_LeftLeg, 1, 0, 0, 0, 9, 0);
+			}
+			else if (it->second == "RightLeg" || it->second == "RightMiniRocketBottom")
+			{
+				node->getTransform()->SetRotate2(animation.vel_RightLeg, 1, 0, 0, 0, 9, 0);
+			}
+			else if (it->second == "LeftArm" || it->second == "LeftShield" || it->second == "RightShield")
+			{
+				node->getTransform()->SetRotate2(animation.vel_LeftArm, 1, 0, 0, 0, 1, 0);
+			}
+			else if (it->second == "RightArm" || it->second == "RightBeamMagnum")
+			{
+				node->getTransform()->SetRotate2(animation.vel_RightArm, 1, 0, 0, 0, 1, 0);
+			}
+		}
+	}
+
 	Vector3 view = camera.direction;
 	view.Normalize();
 	view.y = 0;
@@ -345,4 +605,13 @@ void CPlayInfo3PV::Update(double dt, Camera3 &camera)
 		Reset();
 	}
 	*/
+}
+
+void CPlayInfo3PV::Exit()
+{
+	/*for (std::unordered_map<int, std::string>::iterator it = nodeList->begin(); it != nodeList->end(); ++it)
+	{
+		std::pair<int, std::string> node = *it;
+		std::cout << node.first << ", " << node.second << std::endl;
+	}*/
 }

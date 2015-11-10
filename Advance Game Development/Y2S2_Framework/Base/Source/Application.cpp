@@ -346,8 +346,56 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 
+	std::ifstream setting("Text/Setting.txt");
+	if (setting.is_open())
+	{
+		std::string settingName = "";
+		std::string settingInfo = "";
+
+		while (!setting.eof())
+		{
+			getline(setting, settingName, ':');
+			getline(setting, settingInfo);
+
+			FILE_SETTING newInfo;
+			newInfo.settingName = settingName;
+			newInfo.settingInfo = settingInfo;
+			v_fileSetting.push_back(newInfo);
+
+			//Clear whitespace
+			settingInfo.erase(remove_if(settingInfo.begin(), settingInfo.end(), isspace), settingInfo.end());
+
+			if (settingName == "Fullscreen")
+			{
+				if (settingInfo == "True")
+				{
+					FULL_SCREEN = true;
+				}
+				else
+				{
+					FULL_SCREEN = false;
+				}
+			}
+		}
+	}
+	setting.close();
+	for (std::vector<FILE_SETTING>::iterator it = v_fileSetting.begin(); it != v_fileSetting.end(); ++it)
+	{
+		std::cout << it->settingInfo << std::endl;
+	}
+
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "Y2S2_Framework", NULL, NULL);
+	if (FULL_SCREEN)
+	{
+		const GLFWvidmode *win_data = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		m_window_width = win_data->width;
+		m_window_height = win_data->height;
+		m_window = glfwCreateWindow(win_data->width, win_data->height, "Y2S2_Framework", glfwGetPrimaryMonitor(), NULL);
+	}
+	else
+	{
+		m_window = glfwCreateWindow(m_window_width, m_window_height, "Y2S2_Framework", NULL, NULL);
+	}
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -439,7 +487,7 @@ void Application::Run()
 				FULL_SCREEN = false;
 				m_window_width = init_window_width;
 				m_window_height = init_window_height;
-				m_window = glfwCreateWindow(m_window_width, m_window_height, "Testing Fullscreen", NULL, NULL);
+				m_window = glfwCreateWindow(m_window_width, m_window_height, "Y2S2_Framework", NULL, NULL);
 			}
 			//Not in fullscreen
 			else
@@ -448,7 +496,7 @@ void Application::Run()
 				const GLFWvidmode *win_data = glfwGetVideoMode(glfwGetPrimaryMonitor());
 				m_window_width = win_data->width;
 				m_window_height = win_data->height;
-				m_window = glfwCreateWindow(win_data->width, win_data->height, "Tetsing Part 2", glfwGetPrimaryMonitor(), NULL);
+				m_window = glfwCreateWindow(win_data->width, win_data->height, "Y2S2_Framework", glfwGetPrimaryMonitor(), NULL);
 			}
 
 			glfwMakeContextCurrent(m_window);
@@ -489,6 +537,39 @@ void Application::Run()
  ********************************************************************************/
 void Application::Exit()
 {
+	//Write Current Setting
+	ofstream setting;
+	setting.open("Text/Setting.txt", std::ofstream::out | std::ofstream::trunc);
+	int count = 0;
+	for (std::vector<FILE_SETTING>::iterator it = v_fileSetting.begin(); it != v_fileSetting.end(); ++it)
+	{
+		count++;
+		std::string name  = "", info = " ";
+		if (it->settingName == "Fullscreen")
+		{
+			name = it->settingName;
+
+			if (FULL_SCREEN)
+				info += "True";
+			else
+				info += "False";
+		}
+		else
+		{
+			name = it->settingName;
+			info =it->settingInfo;
+		}
+
+
+		setting << name << ":" << info;
+
+		if (count != v_fileSetting.size())
+		{
+			setting << std::endl;
+		}
+	}
+	setting.close();
+
 	//Close OpenGL window and terminate GLFW
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW

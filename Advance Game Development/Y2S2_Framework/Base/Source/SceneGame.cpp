@@ -258,12 +258,21 @@ void SceneGame::Init()
 	//Create SceneGraph
 	m_cSceneGraph = new CSceneNode();
 	CModel* newModel = new CModel();
+	CTransform* transform = new CTransform();
+
 	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
-	std::cout << m_cSceneGraph->SetNode(new CTransform(0, 0, 0), newModel) << std::endl;
+	transform->SetTranslate(10, 0, 0);
+	transform->SetRotate2(90, 1, 0, 0, 0, 1, 0);
+	transform->SetScale(10, 10, 10);
+	std::cout << m_cSceneGraph->SetNode(transform, newModel) << std::endl;
 
 	newModel = new CModel();
+	transform = new CTransform();
 	newModel->Init(MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
-	std::cout << m_cSceneGraph->AddChild(new CTransform(0, 1.5, 0), newModel) << std::endl;
+	transform->SetTranslate(0, 2, 0);
+	transform->SetRotate(0, 1, 0, 0);
+	transform->SetScale(2, 2, 2);
+	std::cout << m_cSceneGraph->AddChild(transform, newModel) << std::endl;
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -403,6 +412,20 @@ void SceneGame::Update(double dt)
 		lights[0].position.y -= (float)(10.f * dt);
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
+
+	static float variable = 0.0;
+	static double angle = 0.0;
+	variable += 100 *dt;
+	if (variable > 360)
+	{
+		variable -= 360;
+	}
+
+	CSceneNode* node = m_cSceneGraph->GetNode(1);
+	if (node != NULL)
+	{
+		node->getTransform()->SetRotate2(variable, 1, 0, 0, 0, 10, 0);
+	}
 
 	fps = (float)(1.f / dt);
 
@@ -648,10 +671,43 @@ void SceneGame::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 
 }
 
-void SceneGame::PreRendering(Vector3 translate, bool enableLight, Mesh* mesh)
+void SceneGame::PreRendering(CTransform* &transform, bool enableLight, Mesh* mesh)
 {
+	double angle;
+	Vector3 translate, scale, rotate, rotate_Offset;
+
+	transform->GetTranslation(translate.x, translate.y, translate.z);
+	transform->GetScale(scale.x, scale.y, scale.z);
+	transform->GetRotation2(angle, rotate.x, rotate.y, rotate.z, rotate_Offset.x, rotate_Offset.y, rotate_Offset.z);
+	std::vector<CTransform::ORIENTATION> rotateList = transform->getOrientation();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(translate.x, translate.y, translate.z);
+
+	if (!rotateList.empty())
+	{
+		for (std::vector<CTransform::ORIENTATION>::iterator it = rotateList.begin(); it != rotateList.end(); ++it)
+		{
+			CTransform::ORIENTATION rotateInfo = static_cast<CTransform::ORIENTATION>(*it);
+			modelStack.Rotate(rotateInfo.angle, rotateInfo.rotateDir.x, rotateInfo.rotateDir.y, rotateInfo.rotateDir.z);
+		}
+	}
+
+	if (angle != NULL)
+	{
+		if (!rotate_Offset.IsZero())
+		{
+			modelStack.Translate(rotate_Offset.x, rotate_Offset.y, rotate_Offset.z);
+		}
+
+		modelStack.Rotate(angle, rotate.x, rotate.y, rotate.z);
+
+		if (!rotate_Offset.IsZero())
+		{
+			modelStack.Translate(-rotate_Offset.x, -rotate_Offset.y, -rotate_Offset.z);
+		}
+	}
+	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -819,88 +875,89 @@ void SceneGame::RenderMobileObjects()
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
 	modelStack.Rotate(rotateAngle, 0, 1, 0);
-	modelStack.Scale(10, 10, 10);
+	//modelStack.Scale(10, 10, 10);
+	m_cAvatar->avatarInfo->Draw(this);
 
-	//Head
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 3, 0);
-	RenderMesh(m_cAvatar->head, false);
-	modelStack.PopMatrix();
+	////Head
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, 3, 0);
+	//RenderMesh(m_cAvatar->head, false);
+	//modelStack.PopMatrix();
 
-	//Torso
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 1.61, 0);
-	RenderMesh(m_cAvatar->torso, false);
-	modelStack.PopMatrix();
+	////Torso
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, 1.61, 0);
+	//RenderMesh(m_cAvatar->torso, false);
+	//modelStack.PopMatrix();
 
-	static float Leg_offset = 0.33;
-	static float Arm_offset = 0.98;
+	//static float Leg_offset = 0.33;
+	//static float Arm_offset = 0.98;
 
-	//Left Arm
-	modelStack.PushMatrix();
-	modelStack.Translate(Arm_offset, 1.61, 0);
-	modelStack.Translate(0, 0.5, 0);
-	modelStack.Rotate(m_cAvatar->animation.vel_LeftArm, 1, 0, 0);
-	modelStack.Translate(0, -0.5, 0);
+	////Left Arm
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Arm_offset, 1.61, 0);
+	//modelStack.Translate(0, 0.5, 0);
+	//modelStack.Rotate(m_cAvatar->animation.vel_LeftArm, 1, 0, 0);
+	//modelStack.Translate(0, -0.5, 0);
 
-	//Shield
-	modelStack.PushMatrix();
-	modelStack.Translate(0.4, 0, 0);
-	RenderMesh(m_cAvatar->shield, false);
-	modelStack.PopMatrix();
+	////Shield
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.4, 0, 0);
+	//RenderMesh(m_cAvatar->shield, false);
+	//modelStack.PopMatrix();
 
-	RenderMesh(m_cAvatar->leftArm, false);
-	modelStack.PopMatrix();
+	//RenderMesh(m_cAvatar->leftArm, false);
+	//modelStack.PopMatrix();
 
-	//Right Arm
-	modelStack.PushMatrix();
-	modelStack.Translate(-Arm_offset, 1.61, 0);
-	modelStack.Translate(0, 0.5, 0);
-	modelStack.Rotate(m_cAvatar->animation.vel_RightArm, 1, 0, 0);
-	modelStack.Translate(0, -0.5, 0);
-	
-	//Weapon
-	modelStack.PushMatrix();
-	modelStack.Translate(0.2, -1.5, 0.4);
-	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(m_cAvatar->rifle, false);
-	modelStack.PopMatrix();
+	////Right Arm
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-Arm_offset, 1.61, 0);
+	//modelStack.Translate(0, 0.5, 0);
+	//modelStack.Rotate(m_cAvatar->animation.vel_RightArm, 1, 0, 0);
+	//modelStack.Translate(0, -0.5, 0);
+	//
+	////Weapon
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.2, -1.5, 0.4);
+	//modelStack.Rotate(90, 1, 0, 0);
+	//RenderMesh(m_cAvatar->rifle, false);
+	//modelStack.PopMatrix();
 
 
-	RenderMesh(m_cAvatar->rightArm, false);
-	modelStack.PopMatrix();
+	//RenderMesh(m_cAvatar->rightArm, false);
+	//modelStack.PopMatrix();
 
-	//Left Leg
-	modelStack.PushMatrix();
-	modelStack.Translate(Leg_offset, 0, 0);
-	modelStack.Translate(0, 1, 0);
-	modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
-	modelStack.Translate(0, -1, 0);
-	RenderMesh(m_cAvatar->leftLeg, false);
-	modelStack.PopMatrix();
+	////Left Leg
+	//modelStack.PushMatrix();
+	//modelStack.Translate(Leg_offset, 0, 0);
+	//modelStack.Translate(0, 1, 0);
+	//modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
+	//modelStack.Translate(0, -1, 0);
+	//RenderMesh(m_cAvatar->leftLeg, false);
+	//modelStack.PopMatrix();
 
-	//Right Leg
-	modelStack.PushMatrix();
-	modelStack.Translate(-Leg_offset, 0, 0);
-	modelStack.Translate(0, 1, 0);
-	modelStack.Rotate(m_cAvatar->animation.vel_RightLeg, 1, 0, 0);
-	modelStack.Translate(0, -1, 0);
-	RenderMesh(m_cAvatar->rightLeg, false);
-	modelStack.PopMatrix();
+	////Right Leg
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-Leg_offset, 0, 0);
+	//modelStack.Translate(0, 1, 0);
+	//modelStack.Rotate(m_cAvatar->animation.vel_RightLeg, 1, 0, 0);
+	//modelStack.Translate(0, -1, 0);
+	//RenderMesh(m_cAvatar->rightLeg, false);
+	//modelStack.PopMatrix();
 
-	//Mounting Weapon
+	////Mounting Weapon
 
-	//Left Beam Saber
-	modelStack.PushMatrix();
-	modelStack.Translate(0.3, 2.68, -0.62);
-	RenderMesh(m_cAvatar->saber, false);
-	modelStack.PopMatrix();
+	////Left Beam Saber
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.3, 2.68, -0.62);
+	//RenderMesh(m_cAvatar->saber, false);
+	//modelStack.PopMatrix();
 
-	//Right Beam Saber
-	modelStack.PushMatrix();
-	modelStack.Translate(-0.3, 2.68, -0.62);
-	RenderMesh(m_cAvatar->saber, false);
-	modelStack.PopMatrix();
+	////Right Beam Saber
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-0.3, 2.68, -0.62);
+	//RenderMesh(m_cAvatar->saber, false);
+	//modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
 }

@@ -5,6 +5,8 @@
 #include "SSDLC.h"
 #include "Mtx44.h"
 #include "CharAnimation.h"
+#include "SceneGraph\SceneNode.h"
+#include <unordered_map>
 
 class CPlayInfo3PV
 {
@@ -76,6 +78,7 @@ public:
 					   const int topBorder, const int bottomBorder, 
 					   float timeDiff);
 
+	void Exit();
 	// Avatar's Mesh
 	Mesh*	theAvatarMesh;
 
@@ -95,6 +98,7 @@ public:
 	Vector3 getVel();
 	bool isMoving;
 
+	CSceneNode* avatarInfo;
 private:
 	// Hero's information
 	Vector3 curPosition;
@@ -104,7 +108,7 @@ private:
 	static float velSpeed;
 	int jumpspeed;
 	float rotateAngle;
-	
+	unordered_map<int, std::string> nodeList;
 
 	bool myKeys[255];
 };

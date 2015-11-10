@@ -8,6 +8,9 @@
 #include "PlayState.h"
 #include "IntroState.h"
 #include "MenuState.h"
+#include <fstream>
+#include <vector>
+#include <algorithm>
 
 #define TYPE_OF_VIEW 3	// 2 = 2D, 3 = 3D
 
@@ -65,6 +68,17 @@ public:
 	static bool b_BacktoMenu;
 
 private:
+	struct FILE_SETTING
+	{
+		std::string settingName;
+		std::string settingInfo;
+
+		FILE_SETTING()
+		{
+			settingInfo = settingName = "";
+		}
+	};
+
 	Application();
 	~Application();
 
@@ -88,7 +102,8 @@ private:
 	//Exit
 	static bool b_exitGame;
 
-	
+	//Setting
+	std::vector<FILE_SETTING> v_fileSetting;
 
 	// The handler for the scene
 	#if TYPE_OF_VIEW == 3

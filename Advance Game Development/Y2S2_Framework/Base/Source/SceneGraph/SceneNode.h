@@ -8,6 +8,7 @@
 using namespace std;
 
 class SceneGame;
+class SceneMenu;
 
 class CSceneNode :
 	public CNode
@@ -27,6 +28,7 @@ public:
 	// Draw this Node and its children
 	void Draw(void);
 	void Draw(SceneGame* theSceneManager);
+	void Draw(SceneMenu* theSceneManager);
 
 	// Set model and other info to this Node
 	void SetModel(CModel* theModel);
@@ -61,4 +63,7 @@ public:
 
 	// Set the Colour of a child
 	void SetColorForChild(const int m_iChildIndex, const float red, const float green, const float blue);
+
+	void findChildById(int ID, CSceneNode* &node);
+	CTransform* getTransform();
 };

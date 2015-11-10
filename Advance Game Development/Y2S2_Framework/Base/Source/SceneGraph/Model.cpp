@@ -21,7 +21,7 @@ CModel::CModel(void)
 
 CModel::~CModel(void)
 {
-	if (m_cModelMesh != NULL)
+	if (m_cModelMesh)
 	{
 		delete m_cModelMesh;
 		m_cModelMesh = NULL;

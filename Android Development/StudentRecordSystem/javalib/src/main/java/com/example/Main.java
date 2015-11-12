@@ -2,13 +2,15 @@ package com.example;
 
 import java.util.Scanner;
 
-public class SRS_Class {
+public class Main
+{
     public static void main(String[] args)
     {
-        RecordManager_Class record = new RecordManager_Class();
+        RecordManager record = new RecordManager();
         Scanner input = new Scanner(System.in);
         boolean usingProgramme = true;
 
+        record.readText();
         while(usingProgramme)
         {
             System.out.println("Welcome to the Student Record Management");
@@ -19,7 +21,6 @@ public class SRS_Class {
             System.out.println("Enter 5 to terminate programme");
             System.out.println("Please enter your choice");
             int choice = input.nextInt();
-
 
 
             switch(choice)
@@ -52,34 +53,13 @@ public class SRS_Class {
 
                 case(3):
                 {
-                    System.out.println("Please enter the number of the student");
-                    int studentRegNo = Integer.parseInt(input.next());
-
-                    if(record.validateStudent(studentRegNo))
-                    {
-                        boolean addingFriend = true;
-                        while(addingFriend)
-                        {
-                            System.out.println("Please enter the number of the student to be friend with");
-                            System.out.println("Enter -1 to stop");
-                            int friendToBe = Integer.parseInt(input.next());
-
-                            if(friendToBe != -1)
-                                record.addFriend(friendToBe, studentRegNo);
-                            else
-                                addingFriend = false;
-                        }
-                    }
 
                 }
                 break;
 
                 case(4):
                 {
-                    System.out.println("Please enter the number of the student");
-                    int studentRegNo = Integer.parseInt(input.next());
 
-                    record.ShowFriends(studentRegNo);
                 }
                 break;
 

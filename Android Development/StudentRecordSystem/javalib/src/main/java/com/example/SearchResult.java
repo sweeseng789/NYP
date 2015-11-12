@@ -2,17 +2,14 @@ package com.example;
 
 import java.util.Vector;
 
-/**
- * Created by 142128G on 11/5/2015.
- */
-public class SearchResult_Class {
+public class SearchResult {
   //  private int value;
  //   private String text;
 
     private Vector<Integer> value;
     private Vector<String> text;
 
-    public SearchResult_Class()
+    public SearchResult()
     {
         value = null;
         text = null;

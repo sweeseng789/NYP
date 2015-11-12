@@ -10,7 +10,12 @@ public class Main
         Scanner input = new Scanner(System.in);
         boolean usingProgramme = true;
 
+<<<<<<< HEAD:Android Development/StudentRecordSystem/javalib/src/main/java/com/example/Main.java
         record.readText();
+=======
+        record.ParseFile("Test.txt");
+
+>>>>>>> origin/master:Android Development/StudentRecordSystem/javalib/src/main/java/com/example/SRS_Class.java
         while(usingProgramme)
         {
             System.out.println("Welcome to the Student Record Management");
@@ -53,13 +58,42 @@ public class Main
 
                 case(3):
                 {
+<<<<<<< HEAD:Android Development/StudentRecordSystem/javalib/src/main/java/com/example/Main.java
 
+=======
+                    System.out.println("Please enter the number of the student");
+                    String studentRegNo = input.next();
+
+                    if(record.validateStudent(studentRegNo))
+                    {
+                        boolean addingFriend = true;
+                        while(addingFriend)
+                        {
+                            System.out.println("Please enter the number of the student to be friend with");
+                            System.out.println("Enter -1 to stop");
+                            String friendToBe = input.next();
+
+                            if(friendToBe != "-1")
+                            {
+                                record.addFriend(friendToBe, 1);
+                            }
+                            else
+                            {
+                                addingFriend = false;
+                            }
+                        }
+                    }
+>>>>>>> origin/master:Android Development/StudentRecordSystem/javalib/src/main/java/com/example/SRS_Class.java
                 }
                 break;
 
                 case(4):
                 {
 
+<<<<<<< HEAD:Android Development/StudentRecordSystem/javalib/src/main/java/com/example/Main.java
+=======
+                  //  record.ShowFriends(studentRegNo);
+>>>>>>> origin/master:Android Development/StudentRecordSystem/javalib/src/main/java/com/example/SRS_Class.java
                 }
                 break;
 

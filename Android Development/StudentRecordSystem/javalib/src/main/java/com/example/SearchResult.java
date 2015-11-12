@@ -6,31 +6,32 @@ public class SearchResult {
   //  private int value;
  //   private String text;
 
-    private Vector<Integer> value;
-    private Vector<String> text;
+    private int value;
+    private String text;
 
     public SearchResult()
     {
-        value = null;
-        text = null;
+        value = -1;
+        text = "";
     }
 
     //Setter
-    public void setValue(int value) {
-        //this.value = value;
-        this.value.add(value);
+    public void setValue(int value)
+    {
+        this.value = value;
     }
 
-    public void setText(String text) {
-        this.text.add(text);
+    public void setText(String text)
+    {
+        this.text = text;
     }
 
     //Getter
-    public Vector getValue() {
+    public int getValue() {
         return value;
     }
 
-    public Vector getText() {
+    public String getText() {
         return text;
     }
 }

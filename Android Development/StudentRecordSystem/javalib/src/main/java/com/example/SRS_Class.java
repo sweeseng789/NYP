@@ -9,6 +9,8 @@ public class SRS_Class {
         Scanner input = new Scanner(System.in);
         boolean usingProgramme = true;
 
+        record.ParseFile("Test.txt");
+
         while(usingProgramme)
         {
             System.out.println("Welcome to the Student Record Management");
@@ -53,7 +55,7 @@ public class SRS_Class {
                 case(3):
                 {
                     System.out.println("Please enter the number of the student");
-                    int studentRegNo = Integer.parseInt(input.next());
+                    String studentRegNo = input.next();
 
                     if(record.validateStudent(studentRegNo))
                     {
@@ -62,15 +64,18 @@ public class SRS_Class {
                         {
                             System.out.println("Please enter the number of the student to be friend with");
                             System.out.println("Enter -1 to stop");
-                            int friendToBe = Integer.parseInt(input.next());
+                            String friendToBe = input.next();
 
-                            if(friendToBe != -1)
-                                record.addFriend(friendToBe, studentRegNo);
+                            if(friendToBe != "-1")
+                            {
+                                record.addFriend(friendToBe, 1);
+                            }
                             else
+                            {
                                 addingFriend = false;
+                            }
                         }
                     }
-
                 }
                 break;
 
@@ -79,7 +84,7 @@ public class SRS_Class {
                     System.out.println("Please enter the number of the student");
                     int studentRegNo = Integer.parseInt(input.next());
 
-                    record.ShowFriends(studentRegNo);
+                  //  record.ShowFriends(studentRegNo);
                 }
                 break;
 

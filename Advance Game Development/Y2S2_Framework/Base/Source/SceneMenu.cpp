@@ -252,20 +252,14 @@ void SceneMenu::Init()
 
 	currentMenuState = E_MENU;
 	previousMenuState = currentMenuState;
-
-	while (textList.size() != 0)
-	{
-		CText *text = textList.back();
-		delete text;
-		textList.pop_back();
-	}
+	menuChoice = "";
+	isMousePressed_Left = false;
 
 	v3_MenuCam.SetZero();
 
 	v3_MenuPos[E_MENU].Set(10, 10, 0);
-	v3_MenuPos[E_OPTION].Set(40, 40, 0);
+	v3_MenuPos[E_OPTION].Set(60, 60, 0);
 
-	transcomplete = false;
 
 	CText * text;
 	text = new CText();
@@ -395,39 +389,41 @@ void SceneMenu::Update(double dt)
 
 				if (Application::IsMousePressed(0))
 				{
-					if (text->getGameState() == E_MENU)
-					{
-						if (text->getText() == "Play")
-						{
-							//Application::startGame();
-							Application::b_startGame = true;
-						}
-						else if (text->getText() == "Option")
-						{
-							currentMenuState = E_OPTION;
-						}
-						else if (text->getText() == "Exit")
-						{
-							Application::quitGame();
-						}
-					}
-					else
-					{
-						if (text->getText() == "Toggle Fullscreen")
-						{
-							Application::fullscreenToggle();
-						}
-						else if (text->getText() == "Back")
-						{
-							currentMenuState = E_MENU;
-						}
-					}
+					menuChoice = text->getText();
+				}
+				else
+				{
+					menuChoice = "";
 				}
 			}
 			else
 			{
 				text->setColorToNotOnClick();
 			}
+		}
+	}
+
+	if (menuChoice != "")
+	{
+		if (menuChoice == "Play")
+		{
+			Application::b_startGame = true;
+		}
+		else if (menuChoice == "Option")
+		{
+			currentMenuState = E_OPTION;
+		}
+		else if (menuChoice == "Exit")
+		{
+			Application::quitGame();
+		}
+		else if (menuChoice == "Toggle Fullscreen")
+		{
+			Application::fullscreenToggle();
+		}
+		else if (menuChoice == "Back")
+		{
+			currentMenuState = E_MENU;
 		}
 	}
 }

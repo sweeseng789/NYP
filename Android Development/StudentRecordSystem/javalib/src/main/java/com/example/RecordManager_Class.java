@@ -1,5 +1,6 @@
 package com.example;
 
+import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -15,20 +16,20 @@ public class RecordManager_Class {
 
     public RecordManager_Class()
     {
-        numOfStudents_Male = 0;
+        numOfStudents_Male = 2;
         numOfStudents_Female = 0;
         currentStudent_Num = 2;
 
-        Student_Class newStudent = new Student_Class(0, "Swee Seng", "142128G", 1, 4.0f);
+        Student_Class newStudent = new Student_Class("Swee Seng", "142128G", 1, 4.0f);
         studentList.put(0, newStudent);
 
-        newStudent = new Student_Class(1, "Setsuna", "142852H", 1, 4.0f);
+        newStudent = new Student_Class("Setsuna", "142852H", 1, 4.0f);
         studentList.put(1, newStudent);
     }
 
     public void AddStudent(String name, String RegistrationNum, int Gender, float GPA)
     {
-        Student_Class newStudent = new Student_Class(currentStudent_Num, name, RegistrationNum, Gender, GPA);
+        Student_Class newStudent = new Student_Class(name, RegistrationNum, Gender, GPA);
 
         //Add data to list
         studentList.put(currentStudent_Num, newStudent);
@@ -44,10 +45,9 @@ public class RecordManager_Class {
     public void ShowData()
     {
         String gender = "";
-        for (int a = 0; a < studentList.size(); ++a)
+
+        for (Student_Class student : studentList.values())
         {
-            Student_Class student = studentList.get(a);
-            System.out.println("Number: " + a);
             System.out.println("Name: " + student.getName());
             System.out.println("RegNo: " + student.getRegistrationNum());
 
@@ -90,72 +90,59 @@ public class RecordManager_Class {
             }
         }
 
+        for (Student_Class student : studentList.values())
+        {
+            if(student.getRegistrationNum().equals(regNo))
+            {
+
+            }
+        }
+
 
         return result;
     }
 
-    public boolean validateStudent(int regNo)
+    public boolean validateStudent(String regNo)
     {
-        for(int a = 0; a < studentList.size(); ++a)
+        for(Student_Class student : studentList.values())
         {
-            Student_Class student = studentList.get(a);
-
-            if(student.getStudentNum() == regNo)
+            if(student.getRegistrationNum().equals(regNo))
             {
                 return true;
             }
         }
-
         return false;
     }
 
-    public void addFriend(int regNo, int currentStudent_Num)
+    public void addFriend(String regNo, int currentStudent_Num)
     {
-        Student_Class studentToAdd = null;
-        for (int a = 0; a < studentList.size(); ++a)
+        if(validateStudent(regNo))
         {
-            if(studentList.get(a).getStudentNum() == currentStudent_Num)
-            {
-                studentToAdd = studentList.get(a);
-                break;
-            }
+            System.out.println("Everything is awesome");
         }
+    }
 
-        if(studentToAdd != null)
+    public void ShowFriends(String RegNo)
+    {
+        for(Student_Class student : studentList.values())
         {
-            for(int a = 0; a < studentList.size(); ++a)
+            if(student.getRegistrationNum().equals(RegNo))
             {
-                if(studentList.get(a).getStudentNum() == regNo && studentList.get(a) != studentToAdd)
-                {
-                    studentToAdd.friendList.name.add(studentList.get(a).getName());
-                    studentToAdd.friendList.regNo.add(studentList.get(a).getStudentNum());
-                    studentToAdd.friendList.degreeOfFriend.add(1);
-                }
+                System.out.println("Name: " + student.getName() + " RegNo: " + student.getRegistrationNum() + " Gender: " + student.getGender() + " GPA: " + student.getGPA());
             }
         }
     }
 
-    public void ShowFriends(int RegNo)
+    public void ParseFile(String Filename)
     {
-        Student_Class studentToAdd = null;
-        for (int a = 0; a < studentList.size(); ++a)
+        File file = new File("C:\\Users\\142128G\\Desktop\\Test.txt");
+        if(file.exists())
         {
-            if(studentList.get(a).getStudentNum() == RegNo)
-            {
-                studentToAdd = studentList.get(a);
-                break;
-            }
+            System.out.println("True");
         }
-
-        if(studentToAdd != null)
+        else
         {
-            for(int a = 0; a < studentToAdd.friendList.name.size(); ++a)
-            {
-                System.out.println("Friend: " + a);
-                System.out.println("Name: " + studentToAdd.friendList.name.get(a));
-                System.out.println("Number: " + studentToAdd.friendList.regNo.get(a));
-            }
+            System.out.println("Wrong");
         }
-
     }
 }

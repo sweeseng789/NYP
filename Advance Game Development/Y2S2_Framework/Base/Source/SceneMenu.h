@@ -177,7 +177,8 @@ private:
 	MENU_STATE previousMenuState;
 	Vector3 v3_MenuPos[E_M_TOTAL];
 	Vector3 v3_MenuCam;
-	bool transcomplete;
+	std::string menuChoice;
+	bool isMousePressed_Left;
 
 	//Avatar
 	CPlayInfo3PV* m_cAvatar;

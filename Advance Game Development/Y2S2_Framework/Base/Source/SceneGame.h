@@ -133,6 +133,9 @@ public:
 	Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
 	void createParticle(const double &dt);
 
+	//Menu
+	void textUpdate();
+
 	enum WEAPON_ACTION
 	{
 		WA_NIL = 0,
@@ -181,8 +184,8 @@ private:
 	Vector3 mousePos;
 	bool b_pauseGame;
 	std::vector<CText *> textList;
-
-	
+	std::string menuChoice;
+	bool isMousePressed_Left;
 };
 
 #endif

@@ -286,6 +286,8 @@ void SceneGame::Init()
 
 	b_pauseGame = false;
 	mousePos.SetZero();
+	menuChoice = "";
+	isMousePressed_Left = false;
 
 	CText * text = new CText();
 	text = new CText();
@@ -362,6 +364,43 @@ void SceneGame::createParticle(const double &dt)
 		bottomRight_vel.y = Math::RandFloatMinMax(-2, -5);
 
 		Particle* bottomRight = fetchParticle(bottomRight_pos, bottomRight_vel, timeLimit);
+	}
+}
+
+void SceneGame::textUpdate()
+{
+	if (!isMousePressed_Left && Application::IsMousePressed(0))
+	{
+		isMousePressed_Left = true;
+	}
+
+	for (std::vector<CText*>::iterator it = textList.begin(); it != textList.end(); ++it)
+	{
+		CText* text = static_cast<CText*>(*it);
+
+		Vector3 offset = Vector3(0, 0, 0);
+
+		Vector3 topLeft = text->getPos() + Vector3(text->getText().length() * text->getScale().x - text->getScale().x, text->getScale().y, 0) + offset;
+		Vector3 bottomRight = text->getPos() + Vector3(-text->getScale().x * 0.5f, -(text->getScale().y * 0.4f), 0) + offset;
+
+		if (SSDLC::intersect2D(topLeft, bottomRight, mousePos))
+		{
+			text->setColorToOnClick();
+
+			if (isMousePressed_Left && !Application::IsMousePressed(0))
+			{
+				menuChoice = text->getText();
+				isMousePressed_Left = false;
+			}
+			else
+			{
+				menuChoice = "";
+			}
+		}
+		else
+		{
+			text->setColorToNotOnClick();
+		}
 	}
 }
 
@@ -454,7 +493,7 @@ void SceneGame::Update(double dt)
 		}
 	}
 
-	if (b_pauseGame == false)
+	if (!b_pauseGame)
 	{
 		rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
 		if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE))
@@ -484,34 +523,17 @@ void SceneGame::Update(double dt)
 		mousePos.x = x / Application::getWindow_Width() * Application::getWindow_Width() + 0;
 		mousePos.y = (Application::getWindow_Height() - y) / Application::getWindow_Height() * Application::getWindow_Height() + 0;
 
-		for (std::vector<CText*>::iterator it = textList.begin(); it != textList.end(); ++it)
+		textUpdate();
+
+		if (menuChoice != "")
 		{
-			CText* text = static_cast<CText*>(*it);
-
-			Vector3 offset = Vector3(0, 0, 0);
-
-			Vector3 topLeft = text->getPos() + Vector3(text->getText().length() * text->getScale().x - text->getScale().x, text->getScale().y, 0) + offset;
-			Vector3 bottomRight = text->getPos() + Vector3(-text->getScale().x * 0.5f, -(text->getScale().y * 0.4f), 0) + offset;
-
-			if (SSDLC::intersect2D(topLeft, bottomRight, mousePos))
+			if (menuChoice == "Return To Menu")
 			{
-				text->setColorToOnClick();
-				
-				if (Application::IsMousePressed(0))
-				{
-					if (text->getText() == "Return To Menu")
-					{
-						Application::b_BacktoMenu = true;
-					}
-					else if (text->getText() == "Exit")
-					{
-						Application::quitGame();
-					}
-				}
+				Application::b_BacktoMenu = true;
 			}
-			else
+			else if (menuChoice == "Exit")
 			{
-				text->setColorToNotOnClick();
+				Application::quitGame();
 			}
 		}
 	}
@@ -851,7 +873,7 @@ void SceneGame::RenderMobileObjects()
 
 	//Render Text
 
-	if (b_pauseGame)
+	if (b_pauseGame) 
 	{
 		for (std::vector<CText *>::iterator it = textList.begin(); it != textList.end(); ++it)
 		{
@@ -875,90 +897,7 @@ void SceneGame::RenderMobileObjects()
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
 	modelStack.Rotate(rotateAngle, 0, 1, 0);
-	//modelStack.Scale(10, 10, 10);
 	m_cAvatar->avatarInfo->Draw(this);
-
-	////Head
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 3, 0);
-	//RenderMesh(m_cAvatar->head, false);
-	//modelStack.PopMatrix();
-
-	////Torso
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 1.61, 0);
-	//RenderMesh(m_cAvatar->torso, false);
-	//modelStack.PopMatrix();
-
-	//static float Leg_offset = 0.33;
-	//static float Arm_offset = 0.98;
-
-	////Left Arm
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Arm_offset, 1.61, 0);
-	//modelStack.Translate(0, 0.5, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_LeftArm, 1, 0, 0);
-	//modelStack.Translate(0, -0.5, 0);
-
-	////Shield
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.4, 0, 0);
-	//RenderMesh(m_cAvatar->shield, false);
-	//modelStack.PopMatrix();
-
-	//RenderMesh(m_cAvatar->leftArm, false);
-	//modelStack.PopMatrix();
-
-	////Right Arm
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-Arm_offset, 1.61, 0);
-	//modelStack.Translate(0, 0.5, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_RightArm, 1, 0, 0);
-	//modelStack.Translate(0, -0.5, 0);
-	//
-	////Weapon
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.2, -1.5, 0.4);
-	//modelStack.Rotate(90, 1, 0, 0);
-	//RenderMesh(m_cAvatar->rifle, false);
-	//modelStack.PopMatrix();
-
-
-	//RenderMesh(m_cAvatar->rightArm, false);
-	//modelStack.PopMatrix();
-
-	////Left Leg
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Leg_offset, 0, 0);
-	//modelStack.Translate(0, 1, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
-	//modelStack.Translate(0, -1, 0);
-	//RenderMesh(m_cAvatar->leftLeg, false);
-	//modelStack.PopMatrix();
-
-	////Right Leg
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-Leg_offset, 0, 0);
-	//modelStack.Translate(0, 1, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_RightLeg, 1, 0, 0);
-	//modelStack.Translate(0, -1, 0);
-	//RenderMesh(m_cAvatar->rightLeg, false);
-	//modelStack.PopMatrix();
-
-	////Mounting Weapon
-
-	////Left Beam Saber
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.3, 2.68, -0.62);
-	//RenderMesh(m_cAvatar->saber, false);
-	//modelStack.PopMatrix();
-
-	////Right Beam Saber
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-0.3, 2.68, -0.62);
-	//RenderMesh(m_cAvatar->saber, false);
-	//modelStack.PopMatrix();
-
 	modelStack.PopMatrix();
 }
 

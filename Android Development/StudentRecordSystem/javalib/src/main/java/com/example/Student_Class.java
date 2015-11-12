@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class Student_Class {
@@ -9,21 +10,15 @@ public class Student_Class {
     private String RegistrationNum;
     private int Gender;
     private float GPA;
-    FriendList_Class friendList;
+    private HashMap<String, SearchResult_Class> friendList;
 
-    public Student_Class(int studentNum, String name, String RegistrationNum, int Gender, float GPA)
+    public Student_Class(String name, String RegistrationNum, int Gender, float GPA)
     {
-        this.studentNum = studentNum;
         this.name = name;
         this.RegistrationNum = RegistrationNum;
         this.Gender = Gender;
         this.GPA = GPA;
-        friendList = new FriendList_Class();
-    }
-
-    public int getStudentNum()
-    {
-        return studentNum;
+        friendList = null;
     }
 
     public String getName()
@@ -44,6 +39,11 @@ public class Student_Class {
     public float getGPA()
     {
         return GPA;
+    }
+
+    public HashMap<String, SearchResult_Class> getFriendList()
+    {
+        return friendList;
     }
 
 }

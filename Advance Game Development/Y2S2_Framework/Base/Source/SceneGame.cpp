@@ -13,6 +13,7 @@ SceneGame::SceneGame(void)
 	, m_window_width(800)
 	, m_window_height(600)
 	, m_cSceneGraph(NULL)
+	, m_cSpatialPartition(NULL)
 {
 }
 
@@ -20,6 +21,7 @@ SceneGame::SceneGame(const int m_window_width, const int m_window_height)
 	: m_cMinimap(NULL)
 	,m_cAvatar(NULL)
 	, m_cSceneGraph(NULL)
+	, m_cSpatialPartition(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -43,6 +45,12 @@ SceneGame::~SceneGame(void)
 	{
 		delete m_cMinimap;
 		m_cMinimap = NULL;
+	}
+
+	if (m_cSpatialPartition)
+	{
+		delete m_cSpatialPartition;
+		m_cSpatialPartition = NULL;
 	}
 }
 
@@ -289,6 +297,19 @@ void SceneGame::Init()
 	menuChoice = "";
 	isMousePressed_Left = false;
 
+	m_cSpatialPartition = new CSpatialPartition();
+	m_cSpatialPartition->Init(100, 100, 3, 3);
+	for (int i = 0; i < m_cSpatialPartition->GetxNumOfGrid(); i++)
+	{
+		for (unsigned j = 0; j < m_cSpatialPartition->GetyNumOfGrid(); j++)
+		{
+			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("Gridmesh", Color(1.f / i, 1.f / j, 1.f / (i * j)), 100.f));
+		}
+	}
+	m_cSpatialPartition->PrintSelf();
+
+	m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
+
 	CText * text = new CText();
 	text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f, 0.1f));
@@ -505,7 +526,7 @@ void SceneGame::Update(double dt)
 		m_cAvatar->Update(dt, camera);
 
 		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
-
+		m_cSpatialPartition->Update();
 		for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 		{
 			Particle* particle = static_cast<Particle*>(*it);
@@ -871,7 +892,10 @@ void SceneGame::RenderMobileObjects()
 		}
 	}
 
-	//Render Text
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	m_cSceneGraph->Draw(this);
+	modelStack.PopMatrix();
 
 	if (b_pauseGame) 
 	{
@@ -887,18 +911,33 @@ void SceneGame::RenderMobileObjects()
 			modelStack.PopMatrix();
 		}
 	}
+	else
+	{
 
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	m_cSceneGraph->Draw(this);
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Translate(0, 0, -9);
+		modelStack.Rotate(-90, 0, 0, 1);
 
-	//Render Character
-	modelStack.PushMatrix();
-	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
-	modelStack.Rotate(rotateAngle, 0, 1, 0);
-	m_cAvatar->avatarInfo->Draw(this);
-	modelStack.PopMatrix();
+		for (unsigned x = 0; x < m_cSpatialPartition->GetxNumOfGrid(); ++x)
+		{
+			for (unsigned y = 0; y < m_cSpatialPartition->GetyNumOfGrid(); ++y)
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(m_cSpatialPartition->xGridSize * x, m_cSpatialPartition->yGridSize * y, 0);
+				RenderMesh(m_cSpatialPartition->GetGridMesh(x, y), false);
+				modelStack.PopMatrix();
+			}
+		}
+		modelStack.PopMatrix();
+
+		//Render Character
+		modelStack.PushMatrix();
+		modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
+		modelStack.Rotate(rotateAngle, 0, 1, 0);
+		m_cAvatar->avatarInfo->Draw(this);
+		modelStack.PopMatrix();
+	}
 }
 
 /********************************************************************************

@@ -12,6 +12,7 @@
 #include "SceneGraph\SceneNode.h"
 #include "Particle.h"
 #include "Text.h"
+#include "SpatialPartition\SpatialPartition.h"
 #include <vector>
 
 const float SKYBOXSIZE = 1000.f;
@@ -186,6 +187,9 @@ private:
 	std::vector<CText *> textList;
 	std::string menuChoice;
 	bool isMousePressed_Left;
+
+	//Spatial Partioning
+	CSpatialPartition * m_cSpatialPartition;
 };
 
 #endif

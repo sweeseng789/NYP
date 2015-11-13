@@ -34,6 +34,9 @@
     <Filter Include="SceneGraph">
       <UniqueIdentifier>{cf00591a-dcad-497e-91a1-11bc3eabc37e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SpatialPartition">
+      <UniqueIdentifier>{de6ad568-f23b-4861-80a5-bb7222517adc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -140,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="Source\SceneGraph\Transform.cpp">
       <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\Grid.cpp">
+      <Filter>SpatialPartition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
+      <Filter>SpatialPartition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +271,12 @@
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\Transform.h">
       <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\Grid.h">
+      <Filter>SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
+      <Filter>SpatialPartition</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

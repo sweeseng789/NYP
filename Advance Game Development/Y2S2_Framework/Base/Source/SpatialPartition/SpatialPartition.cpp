@@ -132,6 +132,36 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
 	}
 }
 
+void CSpatialPartition::TestingSomething(Vector3 pos)
+{
+	// Get the indices of the 2 values of each position
+	int index_topleft_x = ((int)pos.x + 20 / (xSize*xNumOfGrid));
+	int index_topleft_z = ((int)pos.z + 20 / (ySize*yNumOfGrid));
+	int index_bottomright_x = ((int)pos.x - 20 / (xSize*xNumOfGrid));
+	int index_bottomright_z = ((int)pos.z - 20 / (ySize*yNumOfGrid));
+
+	// Calculate the index of each position
+	int index_topleft = index_topleft_x*yNumOfGrid + index_topleft_z;
+	int index_bottomright = index_bottomright_x*yNumOfGrid + index_bottomright_z;
+
+	// Add them to each grid
+	if ((index_topleft>0) && (index_topleft<xNumOfGrid*yNumOfGrid))
+	{
+		std::cout << "Senpai Noticed Me!" << std::endl;
+		//theGrid[index_topleft].AddObject(theObject);
+	}
+
+	// if part of the object is in another grid, then add it in as well.
+	if ((index_bottomright>0) && (index_bottomright<xNumOfGrid*yNumOfGrid))
+	{
+		if (index_topleft != index_bottomright)
+		{
+			std::cout << "I am doing something" << std::endl;
+			//theGrid[index_bottomright].AddObject(theObject);
+		}
+	}
+}
+
 /********************************************************************************
  Calculate the squared distance from camera to a grid's centrepoint
  ********************************************************************************/

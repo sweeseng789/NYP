@@ -527,6 +527,7 @@ void SceneGame::Update(double dt)
 
 		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
 		m_cSpatialPartition->Update();
+		m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
 		for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 		{
 			Particle* particle = static_cast<Particle*>(*it);

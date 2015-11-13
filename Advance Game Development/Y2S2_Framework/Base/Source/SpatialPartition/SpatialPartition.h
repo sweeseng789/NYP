@@ -28,7 +28,7 @@ public:
 	// Add a new object
 	void AddObject(CSceneNode* theObject);
 
-	void TestingSomething(CSceneNode* theObject);
+	void TestingSomething(Vector3 pos);
 
 	// Calculate the squared distance from camera to a grid's centrepoint
 	float CalculateDistanceSquare(Vector3* theCameraPosition, const int xIndex, const int yIndex);

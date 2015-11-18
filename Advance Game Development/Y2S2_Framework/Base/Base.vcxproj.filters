@@ -144,11 +144,20 @@
     <ClCompile Include="Source\SceneGraph\Transform.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\SP_Grid.cpp">
+      <Filter>SpatialPartition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\Unit.cpp">
+      <Filter>SpatialPartition</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SpatialPartition\Grid.cpp">
       <Filter>SpatialPartition</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
       <Filter>SpatialPartition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Opponent.cpp">
+      <Filter>Game Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,11 +281,20 @@
     <ClInclude Include="Source\SceneGraph\Transform.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\SP_Grid.h">
+      <Filter>SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\Unit.h">
+      <Filter>SpatialPartition</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SpatialPartition\Grid.h">
       <Filter>SpatialPartition</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
       <Filter>SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Opponent.h">
+      <Filter>Game Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

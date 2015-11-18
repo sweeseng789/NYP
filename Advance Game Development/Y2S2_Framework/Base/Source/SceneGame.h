@@ -13,10 +13,14 @@
 #include "Particle.h"
 #include "Text.h"
 #include "SpatialPartition\SpatialPartition.h"
+#include "SpatialPartition\SP_Grid.h"
+#include "Opponent.h"
+
 #include <vector>
+#include <memory>
 
 const float SKYBOXSIZE = 1000.f;
-
+const int CELL_SIZE = 128;
 class SceneGame : public Scene
 {
 	enum UNIFORM_TYPE
@@ -134,6 +138,8 @@ public:
 	Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
 	void createParticle(const double &dt);
 
+	void collisionCheck(CSceneNode* node1, CSceneNode* node2);
+
 	//Menu
 	void textUpdate();
 
@@ -188,8 +194,14 @@ private:
 	std::string menuChoice;
 	bool isMousePressed_Left;
 
+	std::unique_ptr<Grid> m_grid;
+	void checkCollision(CSceneNode* node, std::vector<CSceneNode*>& nodesToCheck, int startingIndex);
+
 	//Spatial Partioning
 	CSpatialPartition * m_cSpatialPartition;
+
+	//Opponent
+	std::vector<COpponent*> m_cOpponentList;
 };
 
 #endif

@@ -379,10 +379,6 @@ void Application::Init()
 		}
 	}
 	setting.close();
-	for (std::vector<FILE_SETTING>::iterator it = v_fileSetting.begin(); it != v_fileSetting.end(); ++it)
-	{
-		std::cout << it->settingInfo << std::endl;
-	}
 
 	//Create a window and create its OpenGL context
 	if (FULL_SCREEN)
@@ -430,7 +426,8 @@ void Application::Init()
 
 	theGSM = new CGameStateManager();
 	theGSM->Init("DM220 With Game State Management", Application::m_window_width, Application::m_window_height);
-	theGSM->ChangeState(CIntroState::Instance());
+	theGSM->ChangeState(CPlayState::Instance());
+	activateMouse(true);
 }
 
 /********************************************************************************

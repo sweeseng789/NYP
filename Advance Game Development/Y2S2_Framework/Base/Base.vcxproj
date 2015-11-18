@@ -28,6 +28,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minimap.cpp" />
+    <ClCompile Include="Source\Opponent.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\PlayerInfo.cpp" />
     <ClCompile Include="Source\PlayInfo3PV.cpp" />
@@ -43,6 +44,8 @@
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpatialPartition\Grid.cpp" />
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp" />
+    <ClCompile Include="Source\SpatialPartition\SP_Grid.cpp" />
+    <ClCompile Include="Source\SpatialPartition\Unit.cpp" />
     <ClCompile Include="Source\Strategy.cpp" />
     <ClCompile Include="Source\Strategy_Kill.cpp" />
     <ClCompile Include="Source\Text.cpp" />
@@ -70,6 +73,7 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minimap.h" />
+    <ClInclude Include="Source\Opponent.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\PlayerInfo.h" />
     <ClInclude Include="Source\PlayInfo3PV.h" />
@@ -86,6 +90,8 @@
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SpatialPartition\Grid.h" />
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h" />
+    <ClInclude Include="Source\SpatialPartition\SP_Grid.h" />
+    <ClInclude Include="Source\SpatialPartition\Unit.h" />
     <ClInclude Include="Source\Strategy.h" />
     <ClInclude Include="Source\Strategy_Kill.h" />
     <ClInclude Include="Source\Text.h" />

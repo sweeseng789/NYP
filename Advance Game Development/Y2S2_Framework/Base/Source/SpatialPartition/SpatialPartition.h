@@ -14,17 +14,22 @@ public:
 
 	// Initialise the spatial partition
 	bool Init(const int xSize, const int ySize, const int xNumOfGrid, const int yNumOfGrid);
+
 	// Get xNumOfGrid
 	int GetxNumOfGrid(void);
+
 	// Get yNumOfGrid
 	int GetyNumOfGrid(void);
+
 	// Get a particular grid
 	CGrid GetGrid(const int xIndex, const int yIndex);
+
 	// Get a particular grid's Mesh
 	Mesh* GetGridMesh(const int xIndex, const int yIndex);
 
 	// Set a particular grid's Mesh
 	void SetGridMesh(const int xIndex, const int yIndex, Mesh* theGridMesh);
+
 	// Add a new object
 	void AddObject(CSceneNode* theObject);
 
@@ -34,7 +39,7 @@ public:
 	float CalculateDistanceSquare(Vector3* theCameraPosition, const int xIndex, const int yIndex);
 
 	// Update the spatial partition
-	void Update(void);
+	void Update(Vector3 pos);
 	// Render the spatial partition
 	void Render(Vector3* theCameraPosition = NULL);
 

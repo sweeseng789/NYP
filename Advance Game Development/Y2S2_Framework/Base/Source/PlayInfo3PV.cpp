@@ -1,7 +1,7 @@
 #include "PlayInfo3PV.h"
 #include "MeshBuilder.h"
 
-float CPlayInfo3PV::velSpeed = 30.f;
+float CPlayInfo3PV::velSpeed = 100.f;
 
 CPlayInfo3PV::CPlayInfo3PV(void)
 	: theAvatarMesh(NULL)

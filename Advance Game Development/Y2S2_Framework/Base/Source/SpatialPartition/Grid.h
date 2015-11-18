@@ -30,7 +30,7 @@ public:
 	// RenderObjects
 	void RenderObjects(const int RESOLUTION);	
 	// Update the grid
-	void Update(void);
+	void Update(Vector3 pos);
 
 	// PrintSelf
 	void PrintSelf();

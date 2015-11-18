@@ -14,6 +14,7 @@ SceneGame::SceneGame(void)
 	, m_window_height(600)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
+	, m_cOpponentList(NULL)
 {
 }
 
@@ -22,6 +23,7 @@ SceneGame::SceneGame(const int m_window_width, const int m_window_height)
 	,m_cAvatar(NULL)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
+	, m_cOpponentList(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -47,11 +49,11 @@ SceneGame::~SceneGame(void)
 		m_cMinimap = NULL;
 	}
 
-	if (m_cSpatialPartition)
+	/*if (m_cSpatialPartition)
 	{
 		delete m_cSpatialPartition;
 		m_cSpatialPartition = NULL;
-	}
+	}*/
 }
 
 void SceneGame::InitShaders()
@@ -263,25 +265,6 @@ void SceneGame::Init()
 
 	InitMesh();
 
-	//Create SceneGraph
-	m_cSceneGraph = new CSceneNode();
-	CModel* newModel = new CModel();
-	CTransform* transform = new CTransform();
-
-	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
-	transform->SetTranslate(10, 0, 0);
-	transform->SetRotate2(90, 1, 0, 0, 0, 1, 0);
-	transform->SetScale(10, 10, 10);
-	std::cout << m_cSceneGraph->SetNode(transform, newModel) << std::endl;
-
-	newModel = new CModel();
-	transform = new CTransform();
-	newModel->Init(MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
-	transform->SetTranslate(0, 2, 0);
-	transform->SetRotate(0, 1, 0, 0);
-	transform->SetScale(2, 2, 2);
-	std::cout << m_cSceneGraph->AddChild(transform, newModel) << std::endl;
-
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -306,9 +289,11 @@ void SceneGame::Init()
 			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("Gridmesh", Color(1.f / i, 1.f / j, 1.f / (i * j)), 100.f));
 		}
 	}
-	m_cSpatialPartition->PrintSelf();
 
 	m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
+
+	m_grid = std::make_unique<Grid>(1000, 1000, CELL_SIZE);
+	m_grid->addNode(Vector3(0, 0, 0), m_cAvatar->avatarInfo);
 
 	CText * text = new CText();
 	text = new CText();
@@ -322,6 +307,11 @@ void SceneGame::Init()
 	text->setScale(Vector3(35, 35, 35));
 	text->setText("Exit");
 	textList.push_back(text);
+
+	COpponent* opponent = new COpponent(Vector3(0, 0, 20));
+	m_grid->addNode(opponent->getPos(), opponent->getNode());
+	m_cOpponentList.push_back(opponent);
+
 }
 
 void SceneGame::createParticle(const double &dt)
@@ -481,11 +471,11 @@ void SceneGame::Update(double dt)
 		variable -= 360;
 	}
 
-	CSceneNode* node = m_cSceneGraph->GetNode(1);
+	/*CSceneNode* node = m_cSceneGraph->GetNode(1);
 	if (node != NULL)
 	{
 		node->getTransform()->SetRotate2(variable, 1, 0, 0, 0, 10, 0);
-	}
+	}*/
 
 	fps = (float)(1.f / dt);
 
@@ -526,8 +516,75 @@ void SceneGame::Update(double dt)
 		m_cAvatar->Update(dt, camera);
 
 		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
-		m_cSpatialPartition->Update();
-		m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
+
+		//Check if the node is in a different grid
+		Cell* newCell = m_grid->getCell(m_cAvatar->GetPosition());
+		if (newCell != m_cAvatar->avatarInfo->ownerCell)
+		{
+			m_grid->removeNodeFromCell(m_cAvatar->avatarInfo);
+			m_grid->addNode(m_cAvatar->avatarInfo, newCell);
+		}
+
+		for (std::vector<COpponent*>::iterator it = m_cOpponentList.begin(); it != m_cOpponentList.end(); it++)
+		{
+			COpponent* opponent = static_cast<COpponent*>(*it);
+
+			if (opponent->getActive())
+			{
+				Cell* newCell = m_grid->getCell(opponent->getPos());
+				if (newCell != opponent->getNode()->ownerCell)
+				{
+					m_grid->removeNodeFromCell(opponent->getNode());
+					m_grid->addNode(opponent->getNode(), newCell);
+				}
+
+				opponent->Update(dt, m_cAvatar->GetPosition());
+			}
+		}
+
+		//Grid updates
+		for (unsigned a = 0; a < m_grid->m_cells.size(); ++a)
+		{
+			int x = a % m_grid->m_numXCells;
+			int z = a / m_grid->m_numXCells;
+
+			Cell& cell = m_grid->m_cells[a];
+
+			//Loop thought everything in a cell
+			for (unsigned i = 0; i < cell.nodeList.size(); ++i)
+			{
+				CSceneNode* node = cell.nodeList[i];
+
+				checkCollision(node, cell.nodeList, i + 1);
+
+				//Update collision with neighbour cells
+				if (x > 0)
+				{
+					//Left
+					checkCollision(node, m_grid->getCell(x - 1, z)->nodeList, 0);
+					if (z > 0)
+					{
+						//Top left
+						checkCollision(node, m_grid->getCell(x - 1, z - 1)->nodeList, 0);
+					}
+
+					//Bottom left
+					if (z < m_grid->m_numZCells - 1)
+					{
+						checkCollision(node, m_grid->getCell(x - 1, z + 1)->nodeList, 0);
+					}
+				}
+				//Up cell
+				if (z > 0)
+				{
+					checkCollision(node, m_grid->getCell(x, z - 1)->nodeList, 0);
+				}
+			}
+		}
+
+		//m_cSpatialPartition->Update(m_cAvatar->GetPosition());
+		//m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
+
 		for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 		{
 			Particle* particle = static_cast<Particle*>(*it);
@@ -559,6 +616,20 @@ void SceneGame::Update(double dt)
 			}
 		}
 	}
+}
+
+void SceneGame::checkCollision(CSceneNode* node, std::vector<CSceneNode*>& nodesToCheck, int startingIndex)
+{
+	for (unsigned i = 0; i < nodesToCheck.size(); ++i)
+	{
+		if(node != nodesToCheck[i])
+			collisionCheck(node, nodesToCheck[i]);
+	}
+}
+
+void SceneGame::collisionCheck(CSceneNode* node1, CSceneNode* node2)
+{
+	std::cout << node1->ownerCell << ", " << node2->ownerCell << std::endl;
 }
 
 /********************************************************************************
@@ -893,10 +964,20 @@ void SceneGame::RenderMobileObjects()
 		}
 	}
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Scale(10, 10, 10);
 	m_cSceneGraph->Draw(this);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
+
+	for (std::vector<COpponent*>::iterator it = m_cOpponentList.begin(); it != m_cOpponentList.end(); it++)
+	{
+		COpponent* opponent = (COpponent*)(*it);
+
+		if (opponent->getActive())
+		{
+			opponent->getNode()->Draw();
+		}
+	}
 
 	if (b_pauseGame) 
 	{
@@ -1147,6 +1228,13 @@ void SceneGame::Exit()
 		CText *text = textList.back();
 		delete text;
 		textList.pop_back();
+	}
+
+	while (m_cOpponentList.size() > 0)
+	{
+		COpponent* opponent = m_cOpponentList.back();
+		delete opponent;
+		m_cOpponentList.pop_back();
 	}
 
 	glDeleteProgram(m_programID);

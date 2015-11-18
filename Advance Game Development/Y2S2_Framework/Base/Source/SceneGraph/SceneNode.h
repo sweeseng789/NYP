@@ -9,6 +9,7 @@ using namespace std;
 
 class SceneGame;
 class SceneMenu;
+struct Cell;
 
 class CSceneNode :
 	public CNode
@@ -66,4 +67,7 @@ public:
 
 	void findChildById(int ID, CSceneNode* &node);
 	CTransform* getTransform();
+
+	Cell* ownerCell = nullptr;
+	int cellVectorIndex = -1;
 };

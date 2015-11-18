@@ -143,8 +143,9 @@ void CGrid::DeleteObjects(void)
 /********************************************************************************
  Update the grid
  ********************************************************************************/
-void CGrid::Update(void)
+void CGrid::Update(Vector3 pos)
 {
+	//std::cout << this->index_x << std::endl;
 	/*if (ListOfObjects.empty() == true)
 	{
 		std::cout << "true" << std::endl;

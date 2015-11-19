@@ -1,7 +1,9 @@
 package com.sidm.android_framework;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -9,6 +11,8 @@ import android.view.WindowManager;
  * Created by 142128G on 11/19/2015.
  */
 public class Splashpage extends Activity{
+    protected boolean _active = true;
+    protected double _splashTime = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +24,55 @@ public class Splashpage extends Activity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.splashpage);
+
+        //thread for displaying the Splash Screen
+        Thread splashTread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    int waited = 0;
+                    while(_active && (waited < _splashTime)) {
+                        sleep(200);
+                        if(_active) {
+                            waited += 200;
+                        }
+                    }
+                } catch(InterruptedException e) {
+                    //do nothing
+                } finally {
+                    finish();
+
+                    // Add codes
+
+                    Intent intent = new Intent(Splashpage.this, MainMenu.class);
+                    startActivity(intent);
+                }
+            }
+        };
+        splashTread.start();
+    }
+
+    public boolean OnTouchEvent(MotionEvent event)
+    {
+        if(event.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            _active = false;
+        }
+        return  true;
+    }
+
+    protected void onPause()
+    {
+        super.onPause();
+    }
+
+    protected void onStop()
+    {
+        super.onStop();
+    }
+
+    protected void onDestroy()
+    {
+        super.onDestroy();
     }
 }

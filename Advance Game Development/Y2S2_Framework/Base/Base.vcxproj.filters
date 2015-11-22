@@ -37,6 +37,9 @@
     <Filter Include="SpatialPartition">
       <UniqueIdentifier>{de6ad568-f23b-4861-80a5-bb7222517adc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{a6b0aef5-6d53-4b6f-af74-5d6ffe648448}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -102,13 +105,7 @@
     <ClCompile Include="Source\PlayState.cpp">
       <Filter>Game State Management</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CharAnimation.cpp">
-      <Filter>Game Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Particle.cpp">
-      <Filter>Game Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PlayInfo3PV.cpp">
       <Filter>Game Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera3.cpp">
@@ -156,8 +153,20 @@
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
       <Filter>SpatialPartition</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Opponent.cpp">
+    <ClCompile Include="Source\GameCharacter\GameObject.cpp">
       <Filter>Game Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameCharacter\AI.cpp">
+      <Filter>Game Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameCharacter\Bullet.cpp">
+      <Filter>Game Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameCharacter\PlayInfo3PV.cpp">
+      <Filter>Game Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound\Sound.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,13 +245,7 @@
     <ClInclude Include="Source\PlayState.h">
       <Filter>Game State Management</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PlayInfo3PV.h">
-      <Filter>Game Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Particle.h">
-      <Filter>Game Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharAnimation.h">
       <Filter>Game Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
@@ -293,8 +296,20 @@
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
       <Filter>SpatialPartition</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Opponent.h">
+    <ClInclude Include="Source\GameCharacter\GameObject.h">
       <Filter>Game Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameCharacter\AI.h">
+      <Filter>Game Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameCharacter\Bullet.h">
+      <Filter>Game Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameCharacter\PlayInfo3PV.h">
+      <Filter>Game Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound\Sound.h">
+      <Filter>Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

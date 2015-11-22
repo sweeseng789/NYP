@@ -7,6 +7,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include <sstream>
+#include <irrKlang.h>
 
 SceneGame::SceneGame(void)
 	: m_cMinimap(NULL)
@@ -14,7 +15,6 @@ SceneGame::SceneGame(void)
 	, m_window_height(600)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
-	, m_cOpponentList(NULL)
 {
 }
 
@@ -23,7 +23,6 @@ SceneGame::SceneGame(const int m_window_width, const int m_window_height)
 	,m_cAvatar(NULL)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
-	, m_cOpponentList(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -178,7 +177,7 @@ void SceneGame::InitMesh()
 		meshList[i] = NULL;
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
+	//meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -228,35 +227,8 @@ void SceneGame::InitMesh()
 	meshList[GEO_UNICORN_RIGHT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
 	meshList[GEO_UNICORN_RIGHT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
 
-	//Initialise and load a model
-	m_cAvatar = new CPlayInfo3PV();
-	//m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f));
-	m_cAvatar->head = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Head.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->head->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Head.tga");
-
-	m_cAvatar->torso = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Torso.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->torso->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Torso.tga");
-
-	m_cAvatar->leftArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->leftArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_ArmLeft.tga");
-
-	m_cAvatar->rightArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->rightArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_ArmRight.tga");
-
-	m_cAvatar->leftLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->leftLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
-
-	m_cAvatar->rightLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->rightLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
-
-	m_cAvatar->rifle = MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj");
-	m_cAvatar->rifle->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Magnum.tga");
-
-	m_cAvatar->shield = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->shield->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Shield.tga");
-
-	m_cAvatar->saber = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Beam_Saber.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->saber->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Saber.tga");
+	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("Crosshair", Color(0, 0, 0), 1);
+	meshList[GEO_CROSSHAIR]->textureID = LoadTGA("Image//Crosshair.tga");
 }
 
 void SceneGame::Init()
@@ -279,6 +251,10 @@ void SceneGame::Init()
 	mousePos.SetZero();
 	menuChoice = "";
 	isMousePressed_Left = false;
+	m_cAvatar = new CPlayInfo3PV();
+	std::pair<CGameObject*, CSceneNode*> *nodeInfo = new std::pair<CGameObject*, CSceneNode*>();
+	nodeInfo->first = m_cAvatar;
+	nodeInfo->second = m_cAvatar->getNode();
 
 	m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(100, 100, 3, 3);
@@ -290,10 +266,10 @@ void SceneGame::Init()
 		}
 	}
 
-	m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
+	//m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
 
 	m_grid = std::make_unique<Grid>(1000, 1000, CELL_SIZE);
-	m_grid->addNode(Vector3(0, 0, 0), m_cAvatar->avatarInfo);
+	//m_grid->addNode(Vector3(0, 0, 0), m_cAvatar->getNode());
 
 	CText * text = new CText();
 	text = new CText();
@@ -308,10 +284,28 @@ void SceneGame::Init()
 	text->setText("Exit");
 	textList.push_back(text);
 
-	COpponent* opponent = new COpponent(Vector3(0, 0, 20));
-	m_grid->addNode(opponent->getPos(), opponent->getNode());
+	/*COpponent* opponent = new COpponent(Vector3(0, 0, 20));
 	m_cOpponentList.push_back(opponent);
 
+	opponent = new COpponent(Vector3(0, 0, 20));
+	m_cOpponentList.push_back(opponent);
+
+	for (std::vector<COpponent*>::iterator it = m_cOpponentList.begin(); it != m_cOpponentList.end(); ++it)
+	{
+		COpponent* opponent = (COpponent*)(*it);
+		m_grid->addNode(opponent->getPos(), opponent->getNode());
+	}*/
+
+	AI* ai = new AI(Vector3(0, 0, 20));
+	GOList.push_back(ai);
+
+	GOList.push_back(m_cAvatar);
+
+	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		CGameObject* go = static_cast<CGameObject*>(*it);
+		m_grid->addNode(go);
+	}
 }
 
 void SceneGame::createParticle(const double &dt)
@@ -320,7 +314,7 @@ void SceneGame::createParticle(const double &dt)
 	{
 		//Creating thruster effect when using exhaust
 		Vector3 right = camera.direction.Cross(camera.up);
-		Vector3 pos = m_cAvatar->GetPosition();
+		Vector3 pos = m_cAvatar->getPos();
 		static double timeLimit = 0.1;
 
 		//Top left thruster
@@ -378,6 +372,168 @@ void SceneGame::createParticle(const double &dt)
 	}
 }
 
+void SceneGame::UpdateGameplay(const double &dt)
+{
+	//rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
+	if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE) || m_cAvatar->isAttackMode())
+	{
+		rotateAngle = camera.getAngleAroundObj();
+	}
+
+	createParticle(dt);
+	m_cAvatar->Update(dt, camera);
+
+	camera.UpdatePosition(m_cAvatar->getPos(), m_cAvatar->getDirection(), dt);
+
+	//Clear the list
+	m_grid->clearList();
+	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		CGameObject* go = static_cast<CGameObject*>(*it);
+		if (go->getActive())
+		{
+			//Check if the node is in a different grid
+			//Cause crashes if i keep removing specifically one node
+			//Cell* newCell = m_grid->getCell(go->getPos());
+			//if (newCell != go->getNode()->ownerCell)
+			//{
+			//	m_grid->removeGOFromCell(go);
+			//	m_grid->addNode(go);
+			//}
+
+			//Repopulating the list
+			m_grid->addNode(go);
+
+			//Bullet Update
+			CBullet* bullet = dynamic_cast<CBullet*>(*it);
+			if (bullet != NULL)
+			{
+				bullet->Update(dt);
+			}
+		}
+	}
+
+	//Grid updates
+	for (unsigned a = 0; a < m_grid->m_cells.size(); ++a)
+	{
+		int x = a % m_grid->m_numXCells;
+		int z = a / m_grid->m_numXCells;
+
+		Cell& cell = m_grid->m_cells[a];
+
+		//Loop thought everything in a cell
+		for (unsigned i = 0; i < cell.GOList.size(); ++i)
+		{
+			CGameObject* go = cell.GOList[i];
+
+			if (go->getActive())
+			{
+				checkCollision(go, cell.GOList, i + 1);
+
+				//Update Collision with neighbout cells
+				if (x > 0)
+				{
+					//Left Cell
+					checkCollision(go, m_grid->getCell(x - 1, z)->GOList, 0);
+
+					if (z > 0)
+					{
+						//Top Left Cell
+						checkCollision(go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
+					}
+
+					//Bottom Left Cell
+					if (z < m_grid->m_numZCells - 1)
+					{
+						checkCollision(go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
+					}
+				}
+
+				//Up cell
+				if (z > 0)
+				{
+					checkCollision(go, m_grid->getCell(x, z - 1)->GOList, 0);
+				}
+			}
+		}
+	}
+
+	//m_cSpatialPartition->Update(m_cAvatar->GetPosition());
+	//m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
+
+	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		Particle* particle = static_cast<Particle*>(*it);
+
+		if (particle->getActive())
+		{
+			particle->update(dt);
+		}
+	}
+
+	static double shootTime = 0.0;
+	static double shootTimeLimit = 0.5;
+
+	if (shootTime < shootTimeLimit)
+	{
+		shootTime += dt;
+	}
+	else
+	{
+		if (Application::IsMousePressed(0))
+		{
+			Sound::playBeamMagnum();
+			static double bulletTimeLimit = 5;
+			Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
+			shootBullet(bulletOffset, camera.direction, bulletTimeLimit);
+			shootTime = 0.0;
+		}
+	}
+}
+
+void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet)
+{
+	CBullet* bullet = fetchBullet();
+
+	if (bullet == NULL)
+	{
+		bullet = new CBullet();
+		bullet->setActive(true);
+		bullet->setPos(pos);
+		bullet->setDirection(direction);
+		bullet->setTimeLimit(timeLimit);
+		bullet->setDisplayBullet(false);
+
+		if (playerBullet)
+		{
+			bullet->setType_PlayerBullet();
+		}
+		else
+		{
+			bullet->setType_EnemyBullet();
+		}
+
+		GOList.push_back(bullet);
+	}
+	else
+	{
+		bullet->setActive(true);
+		bullet->setPos(pos);
+		bullet->setDirection(direction);
+		bullet->setTimeLimit(timeLimit);
+		bullet->setDisplayBullet(false);
+
+		if (playerBullet)
+		{
+			bullet->setType_PlayerBullet();
+		}
+		else
+		{
+			bullet->setType_EnemyBullet();
+		}
+	}
+}
+
 void SceneGame::textUpdate()
 {
 	if (!isMousePressed_Left && Application::IsMousePressed(0))
@@ -411,6 +567,28 @@ void SceneGame::textUpdate()
 		else
 		{
 			text->setColorToNotOnClick();
+		}
+	}
+}
+
+void SceneGame::UpdateMenu(const double &dt)
+{
+	float x, y;
+	Application::GetMousePos(x, y);
+	mousePos.x = x / Application::getWindow_Width() * Application::getWindow_Width() + 0;
+	mousePos.y = (Application::getWindow_Height() - y) / Application::getWindow_Height() * Application::getWindow_Height() + 0;
+
+	textUpdate();
+
+	if (menuChoice != "")
+	{
+		if (menuChoice == "Return To Menu")
+		{
+			Application::b_BacktoMenu = true;
+		}
+		else if (menuChoice == "Exit")
+		{
+			Application::quitGame();
 		}
 	}
 }
@@ -471,11 +649,6 @@ void SceneGame::Update(double dt)
 		variable -= 360;
 	}
 
-	/*CSceneNode* node = m_cSceneGraph->GetNode(1);
-	if (node != NULL)
-	{
-		node->getTransform()->SetRotate2(variable, 1, 0, 0, 0, 10, 0);
-	}*/
 
 	fps = (float)(1.f / dt);
 
@@ -488,7 +661,7 @@ void SceneGame::Update(double dt)
 	}
 	else
 	{
-		if (Application::IsKeyPressed(VK_TAB))
+		if (Application::IsKeyPressed(VK_ESCAPE))
 		{
 			if (!b_pauseGame)
 			{
@@ -506,130 +679,45 @@ void SceneGame::Update(double dt)
 
 	if (!b_pauseGame)
 	{
-		rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
-		if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE))
-		{
-			rotateAngle = camera.getAngleAroundObj();
-		}
-
-		createParticle(dt);
-		m_cAvatar->Update(dt, camera);
-
-		camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), dt);
-
-		//Check if the node is in a different grid
-		Cell* newCell = m_grid->getCell(m_cAvatar->GetPosition());
-		if (newCell != m_cAvatar->avatarInfo->ownerCell)
-		{
-			m_grid->removeNodeFromCell(m_cAvatar->avatarInfo);
-			m_grid->addNode(m_cAvatar->avatarInfo, newCell);
-		}
-
-		for (std::vector<COpponent*>::iterator it = m_cOpponentList.begin(); it != m_cOpponentList.end(); it++)
-		{
-			COpponent* opponent = static_cast<COpponent*>(*it);
-
-			if (opponent->getActive())
-			{
-				Cell* newCell = m_grid->getCell(opponent->getPos());
-				if (newCell != opponent->getNode()->ownerCell)
-				{
-					m_grid->removeNodeFromCell(opponent->getNode());
-					m_grid->addNode(opponent->getNode(), newCell);
-				}
-
-				opponent->Update(dt, m_cAvatar->GetPosition());
-			}
-		}
-
-		//Grid updates
-		for (unsigned a = 0; a < m_grid->m_cells.size(); ++a)
-		{
-			int x = a % m_grid->m_numXCells;
-			int z = a / m_grid->m_numXCells;
-
-			Cell& cell = m_grid->m_cells[a];
-
-			//Loop thought everything in a cell
-			for (unsigned i = 0; i < cell.nodeList.size(); ++i)
-			{
-				CSceneNode* node = cell.nodeList[i];
-
-				checkCollision(node, cell.nodeList, i + 1);
-
-				//Update collision with neighbour cells
-				if (x > 0)
-				{
-					//Left
-					checkCollision(node, m_grid->getCell(x - 1, z)->nodeList, 0);
-					if (z > 0)
-					{
-						//Top left
-						checkCollision(node, m_grid->getCell(x - 1, z - 1)->nodeList, 0);
-					}
-
-					//Bottom left
-					if (z < m_grid->m_numZCells - 1)
-					{
-						checkCollision(node, m_grid->getCell(x - 1, z + 1)->nodeList, 0);
-					}
-				}
-				//Up cell
-				if (z > 0)
-				{
-					checkCollision(node, m_grid->getCell(x, z - 1)->nodeList, 0);
-				}
-			}
-		}
-
-		//m_cSpatialPartition->Update(m_cAvatar->GetPosition());
-		//m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
-
-		for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
-		{
-			Particle* particle = static_cast<Particle*>(*it);
-
-			if (particle->getActive())
-			{
-				particle->update(dt);
-			}
-		}
+		UpdateGameplay(dt);
 	}
 	else
 	{
-		float x, y;
-		Application::GetMousePos(x, y);
-		mousePos.x = x / Application::getWindow_Width() * Application::getWindow_Width() + 0;
-		mousePos.y = (Application::getWindow_Height() - y) / Application::getWindow_Height() * Application::getWindow_Height() + 0;
+		UpdateMenu(dt);
+	}
+}
 
-		textUpdate();
-
-		if (menuChoice != "")
+void SceneGame::checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex)
+{
+	for (unsigned a = 0; a < goToCheck.size(); ++a)
+	{
+		if (go != goToCheck[a])
 		{
-			if (menuChoice == "Return To Menu")
+			//Always ensure player is the first parameters
+			if (goToCheck[a]->isPlayer())
 			{
-				Application::b_BacktoMenu = true;
+				CGameObject* temp = goToCheck[a];
+				goToCheck[a] = go;
+				go = temp;
 			}
-			else if (menuChoice == "Exit")
-			{
-				Application::quitGame();
-			}
+
+			collisionCheck(go, goToCheck[a]);
 		}
 	}
 }
 
-void SceneGame::checkCollision(CSceneNode* node, std::vector<CSceneNode*>& nodesToCheck, int startingIndex)
+void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 {
-	for (unsigned i = 0; i < nodesToCheck.size(); ++i)
+	if (go1->isPlayer() && go2->isEnemy())
 	{
-		if(node != nodesToCheck[i])
-			collisionCheck(node, nodesToCheck[i]);
+		AI * ai = dynamic_cast<AI*>(go2);
+		Collision_PlayerToAi(ai);
 	}
 }
 
-void SceneGame::collisionCheck(CSceneNode* node1, CSceneNode* node2)
+void SceneGame::Collision_PlayerToAi(AI* ai)
 {
-	std::cout << node1->ownerCell << ", " << node2->ownerCell << std::endl;
+
 }
 
 /********************************************************************************
@@ -753,7 +841,7 @@ void SceneGame::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 		viewStack.PushMatrix();
 			viewStack.LoadIdentity();
 			modelStack.PushMatrix();
-				modelStack.LoadIdentity();
+				//modelStack.LoadIdentity();
 				modelStack.Translate(x, y, 0);
 				modelStack.Scale(size, size, size);
 				if (rotate)
@@ -918,7 +1006,10 @@ void SceneGame::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneGame::RenderGUI()
 {
 	// Render the crosshair
-	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
+	modelStack.PushMatrix();
+	modelStack.Translate(-1.5, -1.5, 0);
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
+	modelStack.PopMatrix();
 
 	// Render the crosshair
 	// Note that Ortho is set to this size -> 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
@@ -937,6 +1028,75 @@ void SceneGame::RenderGUI()
 	modelStack.Scale(30, 30, 30);
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0));
 	modelStack.PopMatrix();
+}
+
+void SceneGame::RenderMenu()
+{
+	for (std::vector<CText *>::iterator it = textList.begin(); it != textList.end(); ++it)
+	{
+		CText* text = static_cast<CText*>(*it);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, 0);
+		modelStack.Translate(text->getPos().x, text->getPos().y, text->getPos().z);
+		modelStack.Scale(text->getScale().x, text->getScale().y, text->getScale().z);
+		RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor());
+		modelStack.PopMatrix();
+	}
+}
+
+void SceneGame::RenderGameplay()
+{
+	//Render Spatial Partitioning Areas, but not using anymore
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, 0, -9);
+	modelStack.Rotate(-90, 0, 0, 1);
+
+	for (unsigned x = 0; x < m_cSpatialPartition->GetxNumOfGrid(); ++x)
+	{
+		for (unsigned y = 0; y < m_cSpatialPartition->GetyNumOfGrid(); ++y)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(m_cSpatialPartition->xGridSize * x, m_cSpatialPartition->yGridSize * y, 0);
+			RenderMesh(m_cSpatialPartition->GetGridMesh(x, y), false);
+			modelStack.PopMatrix();
+		}
+	}
+	modelStack.PopMatrix();
+
+	//Render Character
+	modelStack.PushMatrix();
+	modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y, m_cAvatar->getPos().z);
+	modelStack.Rotate(rotateAngle, 0, 1, 0);
+	m_cAvatar->getNode()->Draw(this);
+	modelStack.PopMatrix();
+
+	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		CGameObject* go = static_cast<CGameObject*>(*it);
+
+		if (go->getActive())
+		{
+			AI* ai = dynamic_cast<AI*>(*it);
+			if (ai != NULL)
+			{
+				ai->getNode()->Draw(this);
+			}
+
+			CBullet* bullet = dynamic_cast<CBullet*>(*it);
+			if (bullet != NULL)
+			{
+				if (bullet->getDisplayBullet())
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(bullet->getPos().x, bullet->getPos().y, bullet->getPos().z);
+					bullet->getNode()->Draw(this);
+					modelStack.PopMatrix();
+				}
+			}
+		}
+	}
 }
 
 /********************************************************************************
@@ -964,61 +1124,23 @@ void SceneGame::RenderMobileObjects()
 		}
 	}
 
-	/*modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	m_cSceneGraph->Draw(this);
-	modelStack.PopMatrix();*/
-
-	for (std::vector<COpponent*>::iterator it = m_cOpponentList.begin(); it != m_cOpponentList.end(); it++)
+	/*for (std::vector<COpponent*>::iterator it = m_cOpponentList.begin(); it != m_cOpponentList.end(); it++)
 	{
 		COpponent* opponent = (COpponent*)(*it);
 
 		if (opponent->getActive())
 		{
-			opponent->getNode()->Draw();
+			opponent->getNode()->Draw(this);
 		}
-	}
+	}*/
 
 	if (b_pauseGame) 
 	{
-		for (std::vector<CText *>::iterator it = textList.begin(); it != textList.end(); ++it)
-		{
-			CText* text = static_cast<CText*>(*it);
-
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 0);
-			modelStack.Translate(text->getPos().x, text->getPos().y, text->getPos().z);
-			modelStack.Scale(text->getScale().x, text->getScale().y, text->getScale().z);
-			RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor());
-			modelStack.PopMatrix();
-		}
+		RenderMenu();
 	}
 	else
 	{
-
-		modelStack.PushMatrix();
-		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(0, 0, -9);
-		modelStack.Rotate(-90, 0, 0, 1);
-
-		for (unsigned x = 0; x < m_cSpatialPartition->GetxNumOfGrid(); ++x)
-		{
-			for (unsigned y = 0; y < m_cSpatialPartition->GetyNumOfGrid(); ++y)
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(m_cSpatialPartition->xGridSize * x, m_cSpatialPartition->yGridSize * y, 0);
-				RenderMesh(m_cSpatialPartition->GetGridMesh(x, y), false);
-				modelStack.PopMatrix();
-			}
-		}
-		modelStack.PopMatrix();
-
-		//Render Character
-		modelStack.PushMatrix();
-		modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
-		modelStack.Rotate(rotateAngle, 0, 1, 0);
-		m_cAvatar->avatarInfo->Draw(this);
-		modelStack.PopMatrix();
+		RenderGameplay();
 	}
 }
 
@@ -1182,6 +1304,20 @@ Particle * SceneGame::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
 	return particle;
 }
 
+CBullet* SceneGame::fetchBullet()
+{
+	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		CGameObject* go = static_cast<CGameObject*>(*it);
+		if (go->isPlayerBullet() && !go->getActive())
+		{
+			return dynamic_cast<CBullet*>(*it);
+		}
+	}
+
+	return NULL;
+}
+
 /********************************************************************************
  Render this scene
  ********************************************************************************/
@@ -1230,12 +1366,6 @@ void SceneGame::Exit()
 		textList.pop_back();
 	}
 
-	while (m_cOpponentList.size() > 0)
-	{
-		COpponent* opponent = m_cOpponentList.back();
-		delete opponent;
-		m_cOpponentList.pop_back();
-	}
 
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);

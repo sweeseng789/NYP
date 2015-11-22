@@ -14,8 +14,11 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
-    <ClCompile Include="Source\CharAnimation.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\GameCharacter\AI.cpp" />
+    <ClCompile Include="Source\GameCharacter\Bullet.cpp" />
+    <ClCompile Include="Source\GameCharacter\GameObject.cpp" />
+    <ClCompile Include="Source\GameCharacter\PlayInfo3PV.cpp" />
     <ClCompile Include="Source\GameStateManager.cpp" />
     <ClCompile Include="Source\Goodies.cpp" />
     <ClCompile Include="Source\GoodiesFactory.cpp" />
@@ -28,10 +31,8 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minimap.cpp" />
-    <ClCompile Include="Source\Opponent.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\PlayerInfo.cpp" />
-    <ClCompile Include="Source\PlayInfo3PV.cpp" />
     <ClCompile Include="Source\PlayState.cpp" />
     <ClCompile Include="Source\SceneGame.cpp" />
     <ClCompile Include="Source\SceneGraph\Model.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Source\SceneMenu.cpp" />
     <ClCompile Include="Source\SceneSplashScreen.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Sound\Sound.cpp" />
     <ClCompile Include="Source\SpatialPartition\Grid.cpp" />
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp" />
     <ClCompile Include="Source\SpatialPartition\SP_Grid.cpp" />
@@ -56,8 +58,11 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
-    <ClInclude Include="Source\CharAnimation.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\GameCharacter\AI.h" />
+    <ClInclude Include="Source\GameCharacter\Bullet.h" />
+    <ClInclude Include="Source\GameCharacter\GameObject.h" />
+    <ClInclude Include="Source\GameCharacter\PlayInfo3PV.h" />
     <ClInclude Include="Source\GameState.h" />
     <ClInclude Include="Source\GameStateManager.h" />
     <ClInclude Include="Source\Geometry.h" />
@@ -73,10 +78,8 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minimap.h" />
-    <ClInclude Include="Source\Opponent.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\PlayerInfo.h" />
-    <ClInclude Include="Source\PlayInfo3PV.h" />
     <ClInclude Include="Source\PlayState.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneGame.h" />
@@ -88,6 +91,7 @@
     <ClInclude Include="Source\SceneMenu.h" />
     <ClInclude Include="Source\SceneSplashScreen.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Sound\Sound.h" />
     <ClInclude Include="Source\SpatialPartition\Grid.h" />
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h" />
     <ClInclude Include="Source\SpatialPartition\SP_Grid.h" />
@@ -142,12 +146,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_VARIADIC_MAX=10;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Common/Source;$(SolutionDir)/glew/include;$(SolutionDir)/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/IrrKlang/include;$(SolutionDir)/Common/Source;$(SolutionDir)/glew/include;$(SolutionDir)/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);$(SolutionDir)/glfw/lib-msvc100;$(SolutionDir)/glew/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\IrrKlang\lib;$(SolutionDir)$(Configuration);$(SolutionDir)/glfw/lib-msvc100;$(SolutionDir)/glew/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Common.lib;winmm.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

@@ -8,7 +8,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Minimap.h"
-#include "PlayInfo3PV.h"
+#include "GameCharacter\PlayInfo3PV.h"
 #include "Particle.h"
 #include "Text.h"
 #include <vector>

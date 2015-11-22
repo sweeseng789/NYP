@@ -2,8 +2,7 @@
 #include "node.h"
 #include "Model.h"
 #include "Transform.h"
-//#include <list>
-
+#include "../GameCharacter/GameObject.h"
 #include <vector>
 using namespace std;
 
@@ -70,4 +69,13 @@ public:
 
 	Cell* ownerCell = nullptr;
 	int cellVectorIndex = -1;
+
+	enum GO_TYPE
+	{
+		PLAYER,
+		ENEMY
+	};
+
+	GO_TYPE type;
+	int id;
 };

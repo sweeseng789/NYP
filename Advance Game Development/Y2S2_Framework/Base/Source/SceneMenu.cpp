@@ -195,37 +195,6 @@ void SceneMenu::InitMesh()
 
 	meshList[GEO_LOGO] = MeshBuilder::GenerateQuad("Wallpaper", Color(1, 1, 1), 1.f);
 	meshList[GEO_LOGO]->textureID = LoadTGA("Image//Wallpaper//GundamUnicorn_Logo.tga");
-
-
-	//Initialise and load a model
-	m_cAvatar = new CPlayInfo3PV();
-	//m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f));
-	m_cAvatar->head = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Head.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->head->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Head.tga");
-
-	m_cAvatar->torso = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Torso.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->torso->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Torso.tga");
-
-	m_cAvatar->leftArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->leftArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_ArmLeft.tga");
-
-	m_cAvatar->rightArm = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->rightArm->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_ArmRight.tga");
-
-	m_cAvatar->leftLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->leftLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
-
-	m_cAvatar->rightLeg = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->rightLeg->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
-
-	m_cAvatar->rifle = MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj");
-	m_cAvatar->rifle->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Magnum.tga");
-
-	m_cAvatar->shield = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->shield->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Shield.tga");
-
-	m_cAvatar->saber = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Beam_Saber.obj");//MeshBuilder::GenerateCube("cube", 1);
-	m_cAvatar->saber->textureID = LoadTGA("Image//Unicorn_Gundam//Beam_Saber.tga");
 }
 
 void SceneMenu::Init()
@@ -246,9 +215,8 @@ void SceneMenu::Init()
 
 	bLightEnabled = true;
 
-	m_cAvatar->SetPos_x(15);
-	m_cAvatar->SetPos_y(-15);
-	m_cAvatar->SetPos_z(-70);
+	m_cAvatar = new CPlayInfo3PV();
+	m_cAvatar->setPos(Vector3(15, -15, -70));
 
 	currentMenuState = E_MENU;
 	previousMenuState = currentMenuState;
@@ -728,10 +696,10 @@ void SceneMenu::RenderCharacter()
 	//Unicorn Gundam
 	//Render Character
 	modelStack.PushMatrix();
-	modelStack.Translate(m_cAvatar->GetPosition().x, m_cAvatar->GetPosition().y, m_cAvatar->GetPosition().z);
+	modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y, m_cAvatar->getPos().z);
 	modelStack.Rotate(rotateAngle, 0, 1, 0);
-	//modelStack.Scale(10, 10, 10);
-	m_cAvatar->avatarInfo->Draw(this);
+	m_cAvatar->getNode()->Draw(this);
+	modelStack.PopMatrix();
 
 	////Head
 	//modelStack.PushMatrix();
@@ -813,8 +781,6 @@ void SceneMenu::RenderCharacter()
 	//modelStack.Translate(-0.3, 2.68, -0.62);
 	//RenderMesh(m_cAvatar->saber, false);
 	//modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
 }
 
 /********************************************************************************

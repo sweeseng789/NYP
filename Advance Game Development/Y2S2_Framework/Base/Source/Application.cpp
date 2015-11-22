@@ -177,6 +177,15 @@ bool Application::GetKeyboardUpdate()
 		theGSM->HandleEvents('s', false);
 	}
 
+	if (IsKeyPressed(VK_TAB))
+	{
+		theGSM->HandleEvents(VK_TAB);
+	}
+	else
+	{
+		theGSM->HandleEvents(VK_TAB, false);
+	}
+
 	//// Jump
 	//if (IsKeyPressed(32))
 	//{

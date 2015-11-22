@@ -8,19 +8,23 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Minimap.h"
-#include "PlayInfo3PV.h"
+#include "GameCharacter\PlayInfo3PV.h"
 #include "SceneGraph\SceneNode.h"
 #include "Particle.h"
 #include "Text.h"
 #include "SpatialPartition\SpatialPartition.h"
 #include "SpatialPartition\SP_Grid.h"
-#include "Opponent.h"
+#include "GameCharacter\AI.h"
+#include "GameCharacter\Bullet.h"
+#include "Sound\Sound.h"
 
+#include <map>
+#include <unordered_map>
 #include <vector>
 #include <memory>
 
 const float SKYBOXSIZE = 1000.f;
-const int CELL_SIZE = 128;
+const int CELL_SIZE = 100;
 class SceneGame : public Scene
 {
 	enum UNIFORM_TYPE
@@ -96,6 +100,11 @@ class SceneGame : public Scene
 
 		NUM_GEOMETRY,
 	};
+	enum SOUND_TYPE
+	{
+		ST_BEAM_MAGNUM,
+		ST_TOTAL
+	};
 
 public:
 	SceneGame(void);
@@ -124,6 +133,8 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void PreRendering(CTransform* &transform, bool enableLight, Mesh* mesh);
 	void PostRendering(Mesh* mesh);
+	void UpdateGameplay(const double &dt);
+	void UpdateMenu(const double &dt);
 
 	// Render the main components of this scene
 	void RenderGUI();
@@ -132,13 +143,24 @@ public:
 	void RenderLights();
 	void RenderGround();
 	void RenderSkybox();
+	void RenderGameplay();
+	void RenderMenu();
 
 	//Particle
 	std::vector<Particle*> particleList;
 	Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
 	void createParticle(const double &dt);
 
-	void collisionCheck(CSceneNode* node1, CSceneNode* node2);
+	CGameObject* fetchGO();
+	AI* fetchAI();
+	CBullet* fetchBullet();
+
+	//Collision
+	void collisionCheck(CGameObject* node1, CGameObject* node2);
+	void checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex);
+	void Collision_PlayerToAi(AI* ai);
+	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet = true);
+
 
 	//Menu
 	void textUpdate();
@@ -195,13 +217,13 @@ private:
 	bool isMousePressed_Left;
 
 	std::unique_ptr<Grid> m_grid;
-	void checkCollision(CSceneNode* node, std::vector<CSceneNode*>& nodesToCheck, int startingIndex);
 
 	//Spatial Partioning
 	CSpatialPartition * m_cSpatialPartition;
 
-	//Opponent
-	std::vector<COpponent*> m_cOpponentList;
+	std::vector<CGameObject*> GOList;
+
+	Sound sound;
 };
 
 #endif

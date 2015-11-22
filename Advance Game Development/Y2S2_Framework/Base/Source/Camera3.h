@@ -56,6 +56,9 @@ public:
 
 
 	float getAngleAroundObj();
+	float getPitchAroundObj();
+	Vector3 getView();
+	Vector3 getRight();
 private:
 	bool myKeys[255];
 
@@ -73,6 +76,10 @@ private:
 	float distanceFromObj;
 	float Obj_pitch;
 	float Obj_yaw;
+	float LeftRightOffset;
+	bool switchSideView;
+	bool LookingRight;
+
 
 	//Mouse
 	float updateMouse;
@@ -80,6 +87,7 @@ private:
 	void thirdPersonView_YawUpdate(const double &dt);
 	void thirdPersonView_PitchUpdate(const double &dt);
 	void thirdPersonView_DistanceFromObj(const double &dt);
+	void thirdPersonView_LeftRightUpdate(const double& dt);
 
 	// Maximum movement speed and acceleration
 	float CAMERA_ACCEL;

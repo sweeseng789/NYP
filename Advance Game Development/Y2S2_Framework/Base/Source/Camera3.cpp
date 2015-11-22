@@ -64,6 +64,9 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	mouseVel.SetZero();
 	updateMouse = 0.f;
+	LeftRightOffset = 12.5;
+	switchSideView = false;
+	LookingRight = true;
 }
 
 /********************************************************************************
@@ -475,24 +478,78 @@ void Camera3::thirdPersonView_DistanceFromObj(const double &dt)
 	}
 }
 
+void Camera3::thirdPersonView_LeftRightUpdate(const double &dt)
+{
+	static const int LeftRightViewLimit = LeftRightOffset;
+	static const float vel = 50.f;
+
+	if (Application::IsKeyPressed('C') && !switchSideView)
+	{
+		switchSideView = true;
+	}
+
+	if (switchSideView)
+	{
+		if (LookingRight)
+		{
+			if (LeftRightOffset > -LeftRightViewLimit)
+			{
+				LeftRightOffset -= vel * dt;
+			}
+			else
+			{
+				switchSideView = false;
+				LookingRight = false;
+			}
+		}
+		else
+		{
+			if (LeftRightOffset < LeftRightViewLimit)
+			{
+				LeftRightOffset += vel * dt;
+			}
+			else
+			{
+				switchSideView = false;
+				LookingRight = true;
+			}
+		}
+	}
+}
+
+Vector3 Camera3::getView()
+{
+	Vector3 view = direction;
+	view.Normalize();
+
+	return view;
+}
+
+Vector3 Camera3::getRight()
+{
+	Vector3 right = getView().Cross(up);
+	right.Normalize();
+
+	return right;
+}
+
+
 /********************************************************************************
 Update the camera for third person view
 Vector3 newPosition is the new position where the camera is to be based on
 ********************************************************************************/
 void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const double &dt)
 {
-	Vector3 view = direction;
-	view.Normalize();
+	Vector3 view = getView();
 	view.y = 0;
 
-	Vector3 right = view.Cross(up);
+	Vector3 right = getRight();
 	right.y = 0;
-	right.Normalize();
 
 	//Offset the camera y position
-	newPosition.y += 30;
-	//newPosition.x += right.x * 30;
-	//newPosition.z += right.z * 30;
+	newPosition.y += 40;
+	newPosition.x += right.x * LeftRightOffset;
+	newPosition.z += right.z * LeftRightOffset;
 
 	direction = target - position;
 	direction.Normalize();
@@ -512,6 +569,9 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, const do
 
 	//Distance From Obj
 	thirdPersonView_DistanceFromObj(dt);
+
+	//Left Right View Offset
+	thirdPersonView_LeftRightUpdate(dt);
 
 	float horizontalDistance = distanceFromObj * cos(Math::DegreeToRadian(Obj_pitch));
 	float verticalDistance = distanceFromObj * sin(Math::DegreeToRadian(Obj_pitch));
@@ -555,4 +615,9 @@ void Camera3::UpdateJump(const double dt)
 float Camera3::getAngleAroundObj()
 {
 	return angleAroundObj;
+}
+
+float Camera3::getPitchAroundObj()
+{
+	return Obj_pitch;
 }

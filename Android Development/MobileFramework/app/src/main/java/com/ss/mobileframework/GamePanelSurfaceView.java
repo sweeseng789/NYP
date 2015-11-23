@@ -26,8 +26,11 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
     private short m_Background_x = 0, m_Background_y = 0;
 
     // 4a) bitmap array to stores 4 images of the spaceship
+    private Bitmap[] m_Spaceship = new Bitmap[4];
 
     // 4b) Variable as an index to keep track of the spaceship images
+    private short m_SpaceshipIndex = 0;
+
 
     // Variables for FPS
     public float FPS;
@@ -56,7 +59,10 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
         m_BackgroundScale = Bitmap.createScaledBitmap(m_Background, m_screenWidth, m_screenHeight, true); // Scaling of background
 
         // 4c) Load the images of the spaceships
-
+        m_Spaceship[0] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_1);
+        m_Spaceship[1] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_2);
+        m_Spaceship[2] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_3);
+        m_Spaceship[3] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_4);
 
         // Create the game loop thread
         myThread = new GameThread(getHolder(), this);
@@ -113,6 +119,7 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
         canvas.drawBitmap(m_BackgroundScale, m_Background_x + m_screenWidth, m_Background_y, null);
 
         // 4d) Draw the spaceships
+        canvas.drawBitmap(m_Spaceship[m_SpaceshipIndex], 100, 100, null);
 
 
         // Bonus) To print FPS on the screen
@@ -137,6 +144,8 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
 
 
                 // 4e) Update the spaceship images / shipIndex so that the animation will occur.
+                m_SpaceshipIndex++;
+                m_SpaceshipIndex %= 4;
 
             }
             break;

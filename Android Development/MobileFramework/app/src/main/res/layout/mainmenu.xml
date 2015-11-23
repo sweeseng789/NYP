@@ -27,7 +27,9 @@
         android:layout_marginEnd = "102dp"
         android:layout_alignParentTop = "true"
         android:layout_alignParentEnd = "true"
-        android:layout_marginTop = "86dp" />
+        android:layout_marginTop = "86dp"
+        android:text="Start Game"
+        android:textColor="#f87b06" />
 
     <Button
         android:id = "@+id/Help_Button"
@@ -35,6 +37,8 @@
         android:layout_height = "50dp"
         android:background = "@drawable/button"
         android:layout_alignParentBottom  = "true"
-        android:layout_alignStart = "@+id/Start_Button" />
+        android:layout_alignStart = "@+id/Start_Button"
+        android:text="Help"
+        android:textColor="#0022ff" />
 
 </RelativeLayout>

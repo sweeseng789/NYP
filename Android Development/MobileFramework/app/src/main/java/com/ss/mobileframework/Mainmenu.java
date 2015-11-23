@@ -34,7 +34,7 @@ public class Mainmenu extends Activity implements View.OnClickListener
 
         if(v == Start_Button)
         {
-            //intent.setClass(this, Gamepage.class);
+            intent.setClass(this, Gamepage.class);
         }
         else if (v == Help_Button)
         {

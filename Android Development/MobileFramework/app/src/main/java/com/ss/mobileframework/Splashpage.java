@@ -7,7 +7,8 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class Splashpage extends Activity{
+public class Splashpage extends Activity
+{
     protected boolean _active = true;
     protected double _splashTime = 10;
 
@@ -29,9 +30,9 @@ public class Splashpage extends Activity{
                 try {
                     int waited = 0;
                     while(_active && (waited < _splashTime)) {
-                        sleep(200);
+                        sleep(1000);
                         if(_active) {
-                            waited += 200;
+                            waited += 1;
                         }
                     }
                 } catch(InterruptedException e) {

@@ -30,7 +30,7 @@ public class Splashpage extends Activity
                 try {
                     int waited = 0;
                     while(_active && (waited < _splashTime)) {
-                        sleep(1000);
+                        sleep(100);
                         if(_active) {
                             waited += 1;
                         }

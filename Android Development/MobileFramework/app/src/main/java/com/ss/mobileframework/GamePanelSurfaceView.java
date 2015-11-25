@@ -17,7 +17,7 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
 
     // 1a) Variables used for background rendering
     private Bitmap m_Background, m_BackgroundScale; //Used for rendering background
-    private Bitmap m_Spaceship; //Used for rendering spaceship
+   // private Bitmap m_Spaceship; //Used for rendering spaceship
 
     // 1b) Define Screen width and Screen height as integer
     int m_screenWidth, m_screenHeight;

@@ -4,20 +4,25 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.PaintDrawable;
+import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.ss.mobileframework.Text.CText;
+
 public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 {
+
     // Implement this interface to receive information about changes to the surface.
 
     private GameThread myThread = null; // Thread to control the rendering
 
     // 1a) Variables used for background rendering
     private Bitmap m_Background, m_BackgroundScale; //Used for rendering background
-   // private Bitmap m_Spaceship; //Used for rendering spaceship
 
     // 1b) Define Screen width and Screen height as integer
     int m_screenWidth, m_screenHeight;
@@ -30,6 +35,9 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
 
     // 4b) Variable as an index to keep track of the spaceship images
     private short m_SpaceshipIndex = 0;
+
+    //Text
+    CText text = new CText();
 
 
     // Variables for FPS
@@ -63,6 +71,11 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
         m_Spaceship[1] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_2);
         m_Spaceship[2] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_3);
         m_Spaceship[3] = BitmapFactory.decodeResource(getResources(), R.drawable.ship2_4);
+
+        //Load Text Data
+        text.setScale(30.f);
+        text.setColor(255, 255, 128, 0);
+        text.getPos().setPos(0, 50);
 
         // Create the game loop thread
         myThread = new GameThread(getHolder(), this);
@@ -109,25 +122,7 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
 
     }
 
-    public void RenderGameplay(Canvas canvas) {
-        // 2) Re-draw 2nd image after the 1st image ends
-        if(canvas == null) //New Canvas
-        {
-            return;
-        }
-        canvas.drawBitmap(m_BackgroundScale, m_Background_x, m_Background_y, null);
-        canvas.drawBitmap(m_BackgroundScale, m_Background_x + m_screenWidth, m_Background_y, null);
-
-        // 4d) Draw the spaceships
-        canvas.drawBitmap(m_Spaceship[m_SpaceshipIndex], 100, 100, null);
-
-
-        // Bonus) To print FPS on the screen
-
-    }
-
-
-    //Update method to update the game play
+    //============ UPDATE ============//
     public void update(float dt, float fps)
     {
         FPS = fps;
@@ -136,17 +131,23 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
             case 0:
             {
                 // 3) Update the background to allow panning effect
-                m_Background_x -= 500 * dt; // Allow panning speed
-                if(m_Background_x < -m_screenWidth)
+                //m_Background_x -= 500 * dt; // Allow panning speed
+                //if(m_Background_x < -m_screenWidth)
                 {
-                    m_Background_x = 0;
+                    // m_Background_x = 0;
                 }
-
+                m_Background_y += 500 * dt;
+                if(m_Background_y > m_screenHeight)
+                {
+                    m_Background_y = 0;
+                }
 
                 // 4e) Update the spaceship images / shipIndex so that the animation will occur.
                 m_SpaceshipIndex++;
                 m_SpaceshipIndex %= 4;
 
+                //Text Update
+                text.setText(Float.toString(FPS));
             }
             break;
         }
@@ -161,6 +162,27 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
                 RenderGameplay(canvas);
                 break;
         }
+    }
+
+
+    //============ RENDER ============//
+    public void RenderGameplay(Canvas canvas)
+    {
+        // 2) Re-draw 2nd image after the 1st image ends
+        if(canvas == null) //New Canvas
+        {
+            return;
+        }
+        canvas.drawBitmap(m_BackgroundScale, m_Background_x, m_Background_y, null);
+        //canvas.drawBitmap(m_BackgroundScale, m_Background_x + m_screenWidth, m_Background_y, null);
+        canvas.drawBitmap(m_BackgroundScale, m_Background_x, m_Background_y - m_screenHeight, null);
+
+        // 4d) Draw the spaceships
+        canvas.drawBitmap(m_Spaceship[m_SpaceshipIndex], 100, 100, null);
+
+
+        // Bonus) To print FPS on the screen
+        canvas.drawText(text.getText(), text.getPos().x, text.getPos().y, text.getPaint()); // Align text to top left
     }
 
     @Override

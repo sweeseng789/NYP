@@ -98,6 +98,7 @@ public class GameThread extends Thread
                         }
                     }
                 }
+
                 synchronized(holder)
                 {
                     while (getPause()==true)

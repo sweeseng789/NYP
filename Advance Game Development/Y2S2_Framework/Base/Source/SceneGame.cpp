@@ -15,6 +15,7 @@ SceneGame::SceneGame(void)
 	, m_window_height(600)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
+	, m_cProjectileManager(NULL)
 {
 }
 
@@ -23,6 +24,7 @@ SceneGame::SceneGame(const int m_window_width, const int m_window_height)
 	,m_cAvatar(NULL)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
+	, m_cProjectileManager(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -46,6 +48,12 @@ SceneGame::~SceneGame(void)
 	{
 		delete m_cMinimap;
 		m_cMinimap = NULL;
+	}
+
+	if (m_cProjectileManager)
+	{
+		delete m_cProjectileManager;
+		m_cProjectileManager = NULL;
 	}
 
 	/*if (m_cSpatialPartition)
@@ -186,7 +194,7 @@ void SceneGame::InitMesh()
 	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
 	//meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 10.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36, 10.f);
 	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
@@ -252,9 +260,7 @@ void SceneGame::Init()
 	menuChoice = "";
 	isMousePressed_Left = false;
 	m_cAvatar = new CPlayInfo3PV();
-	std::pair<CGameObject*, CSceneNode*> *nodeInfo = new std::pair<CGameObject*, CSceneNode*>();
-	nodeInfo->first = m_cAvatar;
-	nodeInfo->second = m_cAvatar->getNode();
+	m_cProjectileManager = new CProjectileManager();
 
 	m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(100, 100, 3, 3);
@@ -480,15 +486,17 @@ void SceneGame::UpdateGameplay(const double &dt)
 	}
 	else
 	{
-		if (Application::IsMousePressed(0))
+		if (Application::IsMousePressed(0) && m_cAvatar->isAttackMode())
 		{
 			Sound::playBeamMagnum();
-			static double bulletTimeLimit = 5;
-			Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
-			shootBullet(bulletOffset, camera.direction, bulletTimeLimit);
-			shootTime = 0.0;
+			//static double bulletTimeLimit = 5;
+			//Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
+			//shootBullet(bulletOffset, camera.direction, bulletTimeLimit);
+			//shootTime = 0.0;
 		}
 	}
+
+	m_cProjectileManager->Update(dt);
 }
 
 void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet)
@@ -744,6 +752,7 @@ void SceneGame::UpdateWeaponStatus(const unsigned char key)
 	if (key == WA_FIRE)
 	{
 		// Add a bullet object which starts at the camera position and moves in the camera's direction
+		m_cProjectileManager->AddProjectile(camera.position, camera.direction, 50.f);
 	}
 }
 
@@ -1022,6 +1031,7 @@ void SceneGame::RenderGUI()
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
+	ss << "   " <<"Projectiles: " << m_cProjectileManager->NumOfActiveProjectile;
 
 	modelStack.PushMatrix();
 	modelStack.Translate(15, 15, 0);
@@ -1072,7 +1082,7 @@ void SceneGame::RenderGameplay()
 	m_cAvatar->getNode()->Draw(this);
 	modelStack.PopMatrix();
 
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	/*for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
 	{
 		CGameObject* go = static_cast<CGameObject*>(*it);
 
@@ -1095,6 +1105,31 @@ void SceneGame::RenderGameplay()
 					modelStack.PopMatrix();
 				}
 			}
+		}
+	}*/
+
+	/*for (unsigned i = 0; i < m_cProjectileManager->GetMaxNumberOfProjectiles(); ++i)
+	{
+		if (m_cProjectileManager->IsActive(i))
+		{
+			Vector3 ProjectilePos = m_cProjectileManager->theListOfProjectiles[i]->GetPosition();
+			modelStack.PushMatrix();
+			modelStack.Translate(ProjectilePos.x, ProjectilePos.y, ProjectilePos.z);
+			RenderMesh(meshList[GEO_SPHERE], false);
+			modelStack.PopMatrix();
+		}
+	}*/
+
+	for (std::vector<CProjectile*>::iterator it = m_cProjectileManager->ProjectileList.begin(); it != m_cProjectileManager->ProjectileList.end(); it++)
+	{
+		CProjectile* projectile = static_cast<CProjectile*>(*it);
+
+		if (projectile->GetStatus())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(projectile->GetPosition().x, projectile->GetPosition().y, projectile->GetPosition().z);
+			RenderMesh(meshList[GEO_SPHERE], false);
+			modelStack.PopMatrix();
 		}
 	}
 }

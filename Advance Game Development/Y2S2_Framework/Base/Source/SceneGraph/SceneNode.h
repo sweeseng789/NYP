@@ -70,12 +70,5 @@ public:
 	Cell* ownerCell = nullptr;
 	int cellVectorIndex = -1;
 
-	enum GO_TYPE
-	{
-		PLAYER,
-		ENEMY
-	};
-
-	GO_TYPE type;
-	int id;
+	bool CheckForCollision(Vector3 pos);
 };

@@ -34,6 +34,8 @@
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\PlayerInfo.cpp" />
     <ClCompile Include="Source\PlayState.cpp" />
+    <ClCompile Include="Source\Projectile\Projectile.cpp" />
+    <ClCompile Include="Source\Projectile\ProjectileManager.cpp" />
     <ClCompile Include="Source\SceneGame.cpp" />
     <ClCompile Include="Source\SceneGraph\Model.cpp" />
     <ClCompile Include="Source\SceneGraph\Node.cpp" />
@@ -81,6 +83,8 @@
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\PlayerInfo.h" />
     <ClInclude Include="Source\PlayState.h" />
+    <ClInclude Include="Source\Projectile\Projectile.h" />
+    <ClInclude Include="Source\Projectile\ProjectileManager.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneGame.h" />
     <ClInclude Include="Source\SceneGraph\Model.h" />

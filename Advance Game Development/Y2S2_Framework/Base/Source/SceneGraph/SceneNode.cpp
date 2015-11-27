@@ -316,3 +316,9 @@ CTransform* CSceneNode::getTransform()
 {
 	return theTransform;
 }
+
+bool CSceneNode::CheckForCollision(Vector3 pos)
+{
+	//Vector3 ObjectTopLeft = 
+	return false;
+}

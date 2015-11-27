@@ -17,6 +17,7 @@
 #include "GameCharacter\AI.h"
 #include "GameCharacter\Bullet.h"
 #include "Sound\Sound.h"
+#include "Projectile\ProjectileManager.h"
 
 #include <map>
 #include <unordered_map>
@@ -222,6 +223,9 @@ private:
 	CSpatialPartition * m_cSpatialPartition;
 
 	std::vector<CGameObject*> GOList;
+
+	//Projectile
+	CProjectileManager* m_cProjectileManager;
 
 	Sound sound;
 };

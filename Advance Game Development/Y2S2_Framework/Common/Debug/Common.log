@@ -1,4 +1,4 @@
-﻿Build started 11/27/2015 1:44:38 PM.
+﻿Build started 12/4/2015 1:28:57 PM.
      1>Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mtx44.cpp Source\SSDLC.cpp Source\timer.cpp Source\Vector2.cpp Source\Vector3.cpp
@@ -23,4 +23,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.35
+Time Elapsed 00:00:02.96

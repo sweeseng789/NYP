@@ -421,7 +421,7 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 	if (mouseVel.x != 0)
 	{
 		float Fforce = 0 - mouseVel.x;
-		mouseVel.x += Fforce * static_cast<float>(dt) * 5.f;
+		mouseVel.x += Fforce * static_cast<float>(dt) * 8.f;
 	}
 
 	angleAroundObj -= mouseVel.x;
@@ -454,7 +454,7 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 		}
 
 		float Fforce = 0 - mouseVel.y;
-		mouseVel.y += Fforce * static_cast<float>(dt) * 5.f;
+		mouseVel.y += Fforce * static_cast<float>(dt) * 8.f;
 	}
 
 	Obj_pitch -= mouseVel.y;

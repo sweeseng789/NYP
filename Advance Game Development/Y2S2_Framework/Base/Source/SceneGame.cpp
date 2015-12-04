@@ -184,6 +184,7 @@ void SceneGame::InitMesh()
 	{
 		meshList[i] = NULL;
 	}
+	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.f);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	//meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
@@ -489,10 +490,6 @@ void SceneGame::UpdateGameplay(const double &dt)
 		if (Application::IsMousePressed(0) && m_cAvatar->isAttackMode())
 		{
 			Sound::playBeamMagnum();
-			//static double bulletTimeLimit = 5;
-			//Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
-			//shootBullet(bulletOffset, camera.direction, bulletTimeLimit);
-			//shootTime = 0.0;
 		}
 	}
 
@@ -753,6 +750,10 @@ void SceneGame::UpdateWeaponStatus(const unsigned char key)
 	{
 		// Add a bullet object which starts at the camera position and moves in the camera's direction
 		m_cProjectileManager->AddProjectile(camera.position, camera.direction, 50.f);
+	}
+	else if (key == WA_FIRE_SECONDARY)
+	{
+		m_cProjectileManager->AddRayProjectile(camera.position, camera.direction, 50.f);
 	}
 }
 
@@ -1126,9 +1127,24 @@ void SceneGame::RenderGameplay()
 
 		if (projectile->GetStatus())
 		{
-			modelStack.PushMatrix();
+			/*modelStack.PushMatrix();
 			modelStack.Translate(projectile->GetPosition().x, projectile->GetPosition().y, projectile->GetPosition().z);
 			RenderMesh(meshList[GEO_SPHERE], false);
+			modelStack.PopMatrix();*/
+			modelStack.PushMatrix();
+			modelStack.Translate(projectile->GetPosition().x, projectile->GetPosition().y, projectile->GetPosition().z);
+
+			if (projectile->getType() == CProjectile::PROJ_TYPE_DISCRETE)
+			{
+				RenderMesh(meshList[GEO_SPHERE], false);
+			}
+			else if (projectile->getType() == CProjectile::PROJ_TYPE_RAY)
+			{
+				glLineWidth(5.f);
+				RenderMesh(meshList[GEO_RAY], false);
+				glLineWidth(1.f);
+			}
+
 			modelStack.PopMatrix();
 		}
 	}

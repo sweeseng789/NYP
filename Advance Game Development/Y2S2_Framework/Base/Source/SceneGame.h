@@ -69,6 +69,7 @@ class SceneGame : public Scene
 	};
 	enum GEOMETRY_TYPE
 	{
+		GEO_RAY,
 		GEO_AXES,
 		GEO_CROSSHAIR,
 		GEO_LIGHTBALL,
@@ -170,6 +171,7 @@ public:
 	{
 		WA_NIL = 0,
 		WA_FIRE,
+		WA_FIRE_SECONDARY,
 		WA_RELOAD,
 		WA_CHANGEWEAPON,
 		WA_TOTAL,

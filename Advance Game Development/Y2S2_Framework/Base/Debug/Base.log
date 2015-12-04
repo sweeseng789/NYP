@@ -1,8 +1,23 @@
-﻿Build started 11/27/2015 2:17:43 PM.
+﻿Build started 12/4/2015 2:40:29 PM.
      1>Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/IrrKlang/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/Common/Source" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glew/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glfw/include" /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Projectile\ProjectileManager.cpp
-         ProjectileManager.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/IrrKlang/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/Common/Source" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glew/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glfw/include" /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneGame.cpp
+         SceneGame.cpp
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(199): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(270): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(330): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(331): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(344): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(345): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(357): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(358): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(370): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(371): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(651): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(916): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1067): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1069): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1072): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\\IrrKlang\lib" /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug" /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glfw/lib-msvc100" /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glew/lib" Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Camera.obj
@@ -55,4 +70,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.95
+Time Elapsed 00:00:02.01

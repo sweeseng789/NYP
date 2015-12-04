@@ -109,14 +109,29 @@ bool CProjectileManager::AddProjectile(Vector3 position, Vector3 direction, cons
 	{
 		newProjectile->SetPosition(position);
 		newProjectile->SetDirection(direction);
+		newProjectile->setType(CProjectile::PROJ_TYPE_DISCRETE);
 		newProjectile->SetSpeed(speed);
+		newProjectile->resetTimer();
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
+}
 
+bool CProjectileManager::AddRayProjectile(Vector3 position, Vector3 direction, const float speed, const float length)
+{
+	CProjectile* newProjectile = fetchProjectile();
+	if (newProjectile != NULL)
+	{
+		newProjectile->SetPosition(position);
+		newProjectile->SetDirection(direction);
+		newProjectile->setType(CProjectile::PROJ_TYPE_RAY);
+		newProjectile->SetSpeed(speed);
+		newProjectile->setLength(length);
+		newProjectile->resetTimer();
+		return true;
+	}
+	
+	return false;
 }
 
 /********************************************************************************

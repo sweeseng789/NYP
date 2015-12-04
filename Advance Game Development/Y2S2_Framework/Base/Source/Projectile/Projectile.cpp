@@ -1,5 +1,7 @@
 #include "Projectile.h"
 
+double CProjectile::DEAFULT_BULLET_TIME = 5;
+
 /********************************************************************************
  Constructor
  ********************************************************************************/
@@ -8,6 +10,9 @@ CProjectile::CProjectile(void)
 , thePosition(0, 0, 0)
 , theDirection(0, 0, 0)
 , speed(0.0f)
+, length(0.f)
+, type(PROJ_TYPE_DISCRETE)
+, timing(DEAFULT_BULLET_TIME)
 {
 }
 
@@ -32,6 +37,11 @@ void CProjectile::Update(const double dt)
 						thePosition.z + theDirection.z * speed * dt);*/
 
 	thePosition += theDirection * speed * dt;
+	timing -= dt;
+	if (timing <= 0)
+	{
+		m_bActive = false;
+	}
 }
 
 /********************************************************************************
@@ -92,4 +102,41 @@ void CProjectile::SetDirection(Vector3 theNewDirection)
 void CProjectile::SetSpeed(const float speed)
 {
 	this->speed = speed;
+}
+
+/********************************************************************************
+Get length of ray projectile
+********************************************************************************/
+float CProjectile::getLength()
+{
+	return length;
+}
+
+/********************************************************************************
+set length of ray projectile
+********************************************************************************/
+void CProjectile::setLength(const float length)
+{
+	this->length = length;
+}
+
+/********************************************************************************
+Get projectile type
+********************************************************************************/
+int CProjectile::getType()
+{
+	return type;
+}
+
+/********************************************************************************
+Get the projectile type
+********************************************************************************/
+void CProjectile::setType(const int type)
+{
+	this->type = type;
+}
+
+void CProjectile::resetTimer()
+{
+	this->timing = DEAFULT_BULLET_TIME;
 }

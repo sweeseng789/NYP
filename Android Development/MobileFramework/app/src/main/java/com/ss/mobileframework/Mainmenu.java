@@ -11,6 +11,7 @@ import android.widget.Button;
 public class Mainmenu extends Activity implements View.OnClickListener
 {
     private Button Start_Button;
+    private Button Options_Button;
     private Button Help_Button;
 
     @Override
@@ -26,6 +27,9 @@ public class Mainmenu extends Activity implements View.OnClickListener
 
         Start_Button = (Button)findViewById(R.id.Start_Button);
         Start_Button.setOnClickListener(this);
+
+        Options_Button = (Button)findViewById(R.id.options_Button);
+        Options_Button.setOnClickListener(this);
     }
 
     public void onClick(View v)
@@ -35,6 +39,10 @@ public class Mainmenu extends Activity implements View.OnClickListener
         if(v == Start_Button)
         {
             intent.setClass(this, Gamepage.class);
+        }
+        else if(v == Options_Button)
+        {
+            intent.setClass(this, Optionspage.class);
         }
         else if (v == Help_Button)
         {

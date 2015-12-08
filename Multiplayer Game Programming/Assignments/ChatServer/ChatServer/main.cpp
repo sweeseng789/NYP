@@ -41,8 +41,29 @@ struct ACCOUNT
 
 std::vector<user *> socks;
 std::vector<ACCOUNT *> m_cAccount;
+std::vector<std::string> m_TruncateList;
 
+bool truncateBuffer(char buffer[])
+{
+	if (!m_TruncateList.empty())
+		m_TruncateList.clear();
 
+	char* token = strtok(buffer, " ");
+	while (token != NULL)
+	{
+		std::cout << token << std::endl;
+		m_TruncateList.push_back(token);
+		token = strtok(NULL, " ");
+	}
+
+	std::cout << m_TruncateList[0][0] << std::endl;
+	if (m_TruncateList[0][0] == '/')
+	{
+		std::cout << " Working" << std::endl;
+	}
+
+	return false;
+}
 
 void listCommand(user* User)
 {
@@ -171,18 +192,18 @@ void sendMsg(std::string buffer, user* User)
 {
 	std::string msgToSend = "";
 
-	if (User->name == "New User")
-	{
-		//Set name
-		User->name = buffer;
+	//if (User->name == "New User")
+	//{
+	//	//Set name
+	//	User->name = buffer;
 
-		//Send msg back to user
-		std::string msgToUser = "You are known as " + User->name;
-		send(User->s, msgToUser.c_str(), msgToUser.length() + 1, 0);
+	//	//Send msg back to user
+	//	std::string msgToUser = "You are known as " + User->name;
+	//	send(User->s, msgToUser.c_str(), msgToUser.length() + 1, 0);
 
-		msgToSend = "New User have join: " + User->name;
-	}
-	else
+	//	msgToSend = "New User have join: " + User->name;
+	//}
+	//else
 	{
 		msgToSend = User->name + ": " + buffer;
 		std::cout << User->name << " send: " << buffer << std::endl;
@@ -221,6 +242,20 @@ void getAccountSettings()
 	account.close();
 }
 
+std::string getUsernameByPass(std::string password)
+{
+	for (std::vector<ACCOUNT*>::iterator it = m_cAccount.begin(); it != m_cAccount.end(); ++it)
+	{
+		ACCOUNT* account = static_cast<ACCOUNT*>(*it);
+		if (account->password == password)
+		{
+			return account->username;
+		}
+	}
+
+	return "";
+}
+
 bool verifyAccount(user* User, std::string stringToCheck, bool checkUsername = true)
 {
 	for (std::vector<ACCOUNT*>::iterator it = m_cAccount.begin(); it != m_cAccount.end(); ++it)
@@ -254,6 +289,7 @@ void accountLogIn(user* User, std::string buffer)
 {
 	std::string enterName = "Please enter your username";
 	std::string enterPass = "Please enter your password";
+	std::string loginSuccess = "You have login successfully";
 
 	if (!User->usernameVerified)
 	{
@@ -278,10 +314,22 @@ void accountLogIn(user* User, std::string buffer)
 		{
 			User->passwordVerified = true;
 			User->logIn = true;
-			std::cout << "Account Verified" << std::endl;
+			User->name = getUsernameByPass(buffer);
 
-			std::string msgToSend = "Please enter your name";
-			send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+			std::cout << User->name << " have login sucessfully" << std::endl;
+
+			//Send a announcement to client
+			send(User->s, loginSuccess.c_str(), loginSuccess.length() + 1, 0);
+
+			//Send a announcement to all connected client
+			std::string msgToSend = User->name + " have joined this server";
+			for each (user* User2 in socks)
+			{
+				if (User2 != User)
+				{
+					send(User2->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+				}
+			}
 		}
 	}
 }
@@ -373,14 +421,15 @@ int main()
 						if (User->afk)
 							User->afk = false;
 
-						//If bufferCommand return false, it is a normal message
-						if (!bufferCommand(std::string(buffer), User))
-						{
-							sendMsg(std::string(buffer), User);
+						truncateBuffer(buffer);
+						////If bufferCommand return false, it is a normal message
+						//if (!bufferCommand(std::string(buffer), User))
+						//{
+						//	sendMsg(std::string(buffer), User);
 
-							std::string msgToSend = "Please enter your message";
-							send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
-						}
+						//	std::string msgToSend = "Please enter your message";
+						//	send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+						//}
 					}
 				}
 			}

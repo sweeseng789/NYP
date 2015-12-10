@@ -32,6 +32,7 @@ public:
 	void SetScale( const float sx, const float sy, const float sz  );
 //	void ApplyTransform( Matrix4x4 newMTX );
 	void GetTranslation( float& x, float& y, float& z );
+	Vector3 GetTranslation();
 	void GetScale(float& x, float& y, float& z);
 	void GetRotation(double &angle, float &x, float &y, float &z);
 	void GetRotation2(double &angle, float &x, float &y, float &z, float &offset_x, float &offset_y, float &offset_z);

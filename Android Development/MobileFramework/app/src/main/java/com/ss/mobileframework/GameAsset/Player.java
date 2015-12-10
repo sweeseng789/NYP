@@ -55,7 +55,7 @@ public class Player extends GameObject
         diff.x = newPos.x - pos.x;
         diff.y = newPos.y - pos.y;
 
-        if(diff.length() > 5)
+        if(diff.lengthSquared() > 25)
         {
             Vector3 normalizedPos = new Vector3();
             normalizedPos.x = newPos.x - pos.x;

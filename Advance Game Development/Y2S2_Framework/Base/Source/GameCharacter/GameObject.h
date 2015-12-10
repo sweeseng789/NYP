@@ -65,6 +65,8 @@ public:
 	Vector3 getDirection();
 	CSceneNode* getNode();
 	GO_TYPE getType();
+	std::unordered_map<int, std::string> getNodeList();
+	CSceneNode* getSceneGraph();
 protected:
 	//float
 	static float velSpeed;

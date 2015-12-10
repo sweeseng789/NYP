@@ -192,3 +192,13 @@ CGameObject::GO_TYPE CGameObject::getType()
 {
 	return type;
 }
+
+std::unordered_map<int, std::string> CGameObject::getNodeList()
+{
+	return nodeList;
+}
+
+CSceneNode* CGameObject::getSceneGraph()
+{
+	return m_cSceneGraph;
+}

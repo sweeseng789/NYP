@@ -4,17 +4,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.support.annotation.DimenRes;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.graphics.BitmapFactory.Options;
+import android.view.View;
+import android.widget.Button;
 
 import com.ss.mobileframework.GameAsset.Item;
 import com.ss.mobileframework.Text.CText;
 import com.ss.mobileframework.GameAsset.Player;
-import com.ss.mobileframework.Utility.Vector3;
 
 import java.util.Random;
 import java.util.Vector;
@@ -90,15 +90,16 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
 
         //Initialize Player
         player = new Player();
-        player.setSpriteAnimation(BitmapFactory.decodeResource(getResources(),R.drawable.player), 320, 64, 6, 6);
+        player.setSpriteAnimation(BitmapFactory.decodeResource(getResources(), R.drawable.player), 320, 64, 6, 6);
 
         //Initialize item list
         m_cItemList = new Vector<>();
 
         Item item = new Item();
-        item.setBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.apple));
+        item.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.apple));
         item.getPos().set(400, 500, 0);
         item.getPaint().setTextSize(10);
+
         m_cItemList.add(item);
 
         // Create the game loop thread
@@ -241,19 +242,27 @@ public class GamePanelSurfaceView extends SurfaceView implements SurfaceHolder.C
         canvas.drawText(player.getText().getText(), player.getText().getPos().x, player.getText().getPos().y, player.getText().getPaint());
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    private float mDownX;
+    private float mDownY;
+    private final float SCROLL_THRESHOLD = 10;
+    private boolean isOnClick;
 
+    @Override
+    public boolean onTouchEvent(final MotionEvent event)
+    {
         // 5) In event of touch on screen, the spaceship will relocate to the point of touch
-        short X = (short)event.getX();
+        short X = (short) event.getX();
         short Y = (short) event.getY();
 
-        if(event.getAction() == MotionEvent.ACTION_DOWN)
+        switch (event.getAction() & MotionEvent.ACTION_MASK)
         {
-            // New location where the image to land on
-            player.getNewPos().x = (short)(X - player.getSprite().getBitmap().getWidth() / 13);
-            player.getNewPos().y = (short)(Y - player.getSprite().getBitmap().getHeight() / 2);
+            case MotionEvent.ACTION_DOWN:
+            {
+                // New location where the image to land on
+                player.getNewPos().x = (short) (X - player.getSprite().getBitmap().getWidth() / 13);
+                player.getNewPos().y = (short) (Y - player.getSprite().getBitmap().getHeight() / 2);
+            }
+            break;
         }
         return super.onTouchEvent(event);
     }

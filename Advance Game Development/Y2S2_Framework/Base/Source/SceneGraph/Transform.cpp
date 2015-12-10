@@ -119,6 +119,11 @@ void CTransform::GetTranslation( float& x, float& y, float& z )
 	z = Mtx.a[ 14 ];
 }
 
+Vector3 CTransform::GetTranslation()
+{
+	return Vector3(Mtx.a[12], Mtx.a[13], Mtx.a[14]);
+}
+
 void CTransform::GetScale(float& x, float& y, float& z)
 {
 	x = Mtx.a[0];

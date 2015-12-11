@@ -1293,11 +1293,22 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 				Vector3 topLeft = go2->getPos() + node->getTransform()->GetTranslation() + Vector3(diff, diff, diff);
 				Vector3 bottomRight = go2->getPos() - node->getTransform()->GetTranslation() - Vector3(diff, diff, diff);
 
+				if (go1->getPos().y > topLeft.y)
+				{
+					std::cout << "true" << std::endl;
+					go1->setVel(Vector3(0, 0, 0));
+				}
+				else
+				{
+					std::cout << " " << std::endl;
+				}
+				/*std::cout << topLeft << ", " << bottomRight << std::endl;
 				if (SSDLC::intersect(topLeft, bottomRight, go1->getPos()))
 				{
 					go1->setActive(false);
 					std::cout << it->second << std::endl;
-				}
+				}*/
+
 			}
 		}
 	}

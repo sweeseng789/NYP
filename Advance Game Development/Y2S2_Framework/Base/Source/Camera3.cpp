@@ -4,7 +4,7 @@
 
 // The default camera speed
 static const float CAMERA_SPEED = 200.f;
-const float m_fTPVCameraOffset = 30.f;
+const float m_fTPVCameraOffset = 11.5f;
 
 /********************************************************************************
  Constructor
@@ -413,7 +413,7 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 	{
 		mouseVel.x += m_fTPVCameraOffset * static_cast<float>(dt);
 	}
-	else if (Application::camera_yaw < 0.0)
+	else if (Application::camera_yaw < -0.0)
 	{
 		mouseVel.x -= m_fTPVCameraOffset * static_cast<float>(dt);
 	}
@@ -421,7 +421,7 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 	if (mouseVel.x != 0)
 	{
 		float Fforce = 0 - mouseVel.x;
-		mouseVel.x += Fforce * static_cast<float>(dt) * 8.f;
+		mouseVel.x += Fforce * static_cast<float>(dt) * 4.f;
 	}
 
 	angleAroundObj -= mouseVel.x;
@@ -435,7 +435,7 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 	{
 		mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
 	}
-	else if (Application::camera_pitch < 0.0 && Obj_pitch >= -pitchLimit)
+	else if (Application::camera_pitch < -0.0 && Obj_pitch >= -pitchLimit)
 	{
 		mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
 	}
@@ -454,7 +454,7 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 		}
 
 		float Fforce = 0 - mouseVel.y;
-		mouseVel.y += Fforce * static_cast<float>(dt) * 8.f;
+		mouseVel.y += Fforce * static_cast<float>(dt) * 4.f;
 	}
 
 	Obj_pitch -= mouseVel.y;

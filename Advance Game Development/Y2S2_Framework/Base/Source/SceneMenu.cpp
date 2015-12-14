@@ -156,9 +156,9 @@ void SceneMenu::InitMesh()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
 	//meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
@@ -171,30 +171,11 @@ void SceneMenu::InitMesh()
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-
-	// Load the ground mesh and texture
-	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_DARKGREEN]->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
-
 	meshList[GEO_WALLPAPER] = MeshBuilder::GenerateQuad("Wallpaper", Color(1, 1, 1), 1.f);
-	meshList[GEO_WALLPAPER]->textureID = LoadTGA("Image//Wallpaper//Background.tga");
+	meshList[GEO_WALLPAPER]->textureID[0] = LoadTGA("Image//Wallpaper//Background.tga");
 
 	meshList[GEO_LOGO] = MeshBuilder::GenerateQuad("Wallpaper", Color(1, 1, 1), 1.f);
-	meshList[GEO_LOGO]->textureID = LoadTGA("Image//Wallpaper//GundamUnicorn_Logo.tga");
+	meshList[GEO_LOGO]->textureID[0] = LoadTGA("Image//Wallpaper//GundamUnicorn_Logo.tga");
 }
 
 void SceneMenu::Init()
@@ -420,7 +401,7 @@ Render text onto the screen with reference position in the middle of the image
 ********************************************************************************/
 void SceneMenu::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID[0] <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -429,7 +410,7 @@ void SceneMenu::RenderText(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
@@ -450,7 +431,7 @@ Render text onto the screen
 ********************************************************************************/
 void SceneMenu::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID[0] <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -476,7 +457,7 @@ void SceneMenu::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
@@ -519,19 +500,24 @@ void SceneMenu::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	if (mesh->textureID > 0)
+
+	for (unsigned a = 0; a < 2; ++a)
 	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	}
-	else
-	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+		if (mesh->textureID[a] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+		}
+
+		glActiveTexture(GL_TEXTURE0 + a);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 	}
 	mesh->Render();
-	if (mesh->textureID > 0)
+	//if (mesh->textureID > 0)
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -599,16 +585,20 @@ void SceneMenu::PreRendering(CTransform* &transform, bool enableLight, Mesh* mes
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
 
-	if (mesh->textureID > 0)
+	for (unsigned a = 0; a < 2; ++a)
 	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	}
-	else
-	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+		if (mesh->textureID[a] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+		}
+
+		glActiveTexture(GL_TEXTURE0 + a);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 	}
 
 	modelStack.PopMatrix();
@@ -649,17 +639,23 @@ void SceneMenu::RenderMesh(Mesh *mesh, bool enableLight)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-	if (mesh->textureID > 0)
+
+	for (unsigned a = 0; a < 2; ++a)
 	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+		if (mesh->textureID[a] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+		}
+
+		glActiveTexture(GL_TEXTURE0 + a);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 	}
-	else
-	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-	}
+
 	mesh->Render();
 	if (mesh->textureID > 0)
 	{

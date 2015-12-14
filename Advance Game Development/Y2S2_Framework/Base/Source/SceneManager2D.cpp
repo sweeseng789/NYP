@@ -123,58 +123,58 @@ void SceneGame2D::InitMesh()
 	{
 		meshList[i] = NULL;
 	}
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+	//meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	//meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	//meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 
-	// Load the ground mesh and texture
-	meshList[GEO_BACKGROUND] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1, 1, 1), 0, 0, 800, 600);
-	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//sky_background.tga");
-	meshList[GEO_TILEGROUND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEGROUND]->textureID = LoadTGA("Image//tile1_ground.tga");
-	meshList[GEO_TILEHERO] = MeshBuilder::Generate2DMesh("GEO_TILEHERO", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEHERO]->textureID = LoadTGA("Image//tile2_hero.tga");
-	meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILETREE]->textureID = LoadTGA("Image//tile3_tree.tga");
-	meshList[GEO_TILESTRUCTURE] = MeshBuilder::Generate2DMesh("GEO_TILESTRUCTURE", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILESTRUCTURE]->textureID = LoadTGA("Image//tile3_structure.tga");
-	meshList[GEO_TILEHERO_FRAME0] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME0", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEHERO_FRAME0]->textureID = LoadTGA("Image//tile2_hero_frame_0.tga");
-	meshList[GEO_TILEHERO_FRAME1] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME1", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEHERO_FRAME1]->textureID = LoadTGA("Image//tile2_hero_frame_1.tga");
-	meshList[GEO_TILEHERO_FRAME2] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME2", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEHERO_FRAME2]->textureID = LoadTGA("Image//tile2_hero_frame_2.tga");
-	meshList[GEO_TILEHERO_FRAME3] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME3", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEHERO_FRAME3]->textureID = LoadTGA("Image//tile2_hero_frame_3.tga");
+	//// Load the ground mesh and texture
+	//meshList[GEO_BACKGROUND] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1, 1, 1), 0, 0, 800, 600);
+	//meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//sky_background.tga");
+	//meshList[GEO_TILEGROUND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEGROUND]->textureID = LoadTGA("Image//tile1_ground.tga");
+	//meshList[GEO_TILEHERO] = MeshBuilder::Generate2DMesh("GEO_TILEHERO", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEHERO]->textureID = LoadTGA("Image//tile2_hero.tga");
+	//meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILETREE]->textureID = LoadTGA("Image//tile3_tree.tga");
+	//meshList[GEO_TILESTRUCTURE] = MeshBuilder::Generate2DMesh("GEO_TILESTRUCTURE", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILESTRUCTURE]->textureID = LoadTGA("Image//tile3_structure.tga");
+	//meshList[GEO_TILEHERO_FRAME0] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME0", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEHERO_FRAME0]->textureID = LoadTGA("Image//tile2_hero_frame_0.tga");
+	//meshList[GEO_TILEHERO_FRAME1] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME1", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEHERO_FRAME1]->textureID = LoadTGA("Image//tile2_hero_frame_1.tga");
+	//meshList[GEO_TILEHERO_FRAME2] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME2", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEHERO_FRAME2]->textureID = LoadTGA("Image//tile2_hero_frame_2.tga");
+	//meshList[GEO_TILEHERO_FRAME3] = MeshBuilder::Generate2DMesh("GEO_TILEHERO_FRAME3", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEHERO_FRAME3]->textureID = LoadTGA("Image//tile2_hero_frame_3.tga");
 
-	meshList[GEO_TILE_KILLZONE] = MeshBuilder::Generate2DMesh("GEO_TILE_KILLZONE", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILE_KILLZONE]->textureID = LoadTGA("Image//tile10_killzone.tga");
-	meshList[GEO_TILE_SAFEZONE] = MeshBuilder::Generate2DMesh("GEO_TILE_SAFEZONE", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILE_SAFEZONE]->textureID = LoadTGA("Image//tile11_safezone.tga");
-	meshList[GEO_TILEENEMY_FRAME0] = MeshBuilder::Generate2DMesh("GEO_TILEENEMY_FRAME0", Color(1, 1, 1), 0, 0, 25, 25);
-	meshList[GEO_TILEENEMY_FRAME0]->textureID = LoadTGA("Image//tile20_enemy.tga");
+	//meshList[GEO_TILE_KILLZONE] = MeshBuilder::Generate2DMesh("GEO_TILE_KILLZONE", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILE_KILLZONE]->textureID = LoadTGA("Image//tile10_killzone.tga");
+	//meshList[GEO_TILE_SAFEZONE] = MeshBuilder::Generate2DMesh("GEO_TILE_SAFEZONE", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILE_SAFEZONE]->textureID = LoadTGA("Image//tile11_safezone.tga");
+	//meshList[GEO_TILEENEMY_FRAME0] = MeshBuilder::Generate2DMesh("GEO_TILEENEMY_FRAME0", Color(1, 1, 1), 0, 0, 25, 25);
+	//meshList[GEO_TILEENEMY_FRAME0]->textureID = LoadTGA("Image//tile20_enemy.tga");
 
-	// Initialise and load the tile map
-	m_cMap = new CMap();
-	m_cMap->Init(600, 800, 24, 32, 600, 1600);
-	m_cMap->LoadMap("Image//MapDesign.csv");
+	//// Initialise and load the tile map
+	//m_cMap = new CMap();
+	//m_cMap->Init(600, 800, 24, 32, 600, 1600);
+	//m_cMap->LoadMap("Image//MapDesign.csv");
 
-	// Initialise and load the REAR tile map
-	m_cRearMap = new CMap();
-	m_cRearMap->Init(600, 800, 24, 32, 600, 1600);
-	m_cRearMap->LoadMap("Image//MapDesign_Rear.csv");
+	//// Initialise and load the REAR tile map
+	//m_cRearMap = new CMap();
+	//m_cRearMap->Init(600, 800, 24, 32, 600, 1600);
+	//m_cRearMap->LoadMap("Image//MapDesign_Rear.csv");
 
-	// Initialise the hero's position
-	theHero = new CPlayerInfo();
-	theHero->SetPos_x(50);
-	theHero->SetPos_y(100);
+	//// Initialise the hero's position
+	//theHero = new CPlayerInfo();
+	//theHero->SetPos_x(50);
+	//theHero->SetPos_y(100);
 
-	// Load the texture for minimap
-	m_cMinimap = new CMinimap();
-	m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("MINIMAP", Color(1, 1, 1), 1.f));
-	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
-	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
+	//// Load the texture for minimap
+	//m_cMinimap = new CMinimap();
+	//m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("MINIMAP", Color(1, 1, 1), 1.f));
+	//m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass_darkgreen.tga");
+	//m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
+	//m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
 }
 
 void SceneGame2D::Init()
@@ -290,7 +290,7 @@ void SceneGame2D::UpdateWeaponStatus(const unsigned char key)
  ********************************************************************************/
 void SceneGame2D::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if(!mesh || mesh->textureID[0] <= 0)
 		return;
 	
 	Mtx44 ortho;
@@ -308,7 +308,7 @@ void SceneGame2D::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, 
 				//	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 				glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+				glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 				glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 				for(unsigned i = 0; i < text.length(); ++i)
 				{
@@ -348,17 +348,23 @@ void SceneGame2D::Render2DMesh(Mesh *mesh, bool enableLight, int size, int x, in
 	
 				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-				if(mesh->textureID > 0)
+
+				for (unsigned a = 0; a < 2; ++a)
 				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-					glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+					if (mesh->textureID[a] > 0)
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+					}
+					else
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+					}
+
+					glActiveTexture(GL_TEXTURE0 + a);
+					glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+					glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 				}
-				else
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-				}
+
 				mesh->Render();
 				if(mesh->textureID > 0)
 				{

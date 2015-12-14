@@ -5,12 +5,12 @@ Particle::Particle()
 	active = false;
 	pos.SetZero();
 	vel.SetZero();
-	scale.Set(1, 1, 1);
+	scale.Set(0.5, 0.5, 0.5);
 	mass = 0;
 	color = e_YELLOW;
 
 	meshList[e_YELLOW] = MeshBuilder::GenerateSphere("Particle", Color(1, 1, 0), 18, 36);
-	meshList[e_BLUE] = MeshBuilder::GenerateSphere("Particle", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36);
+	meshList[e_BLUE] = MeshBuilder::GenerateSphere("Particle", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36, 2);
 }
 
 

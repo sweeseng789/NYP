@@ -52,6 +52,6 @@ void CGoodies::SetTextureID(const int TextureID)
 {
 	if ((this->theMesh != NULL) && (TextureID != 0))
 	{
-		this->theMesh->textureID = TextureID;
+		this->theMesh->textureID[0] = TextureID;
 	}
 }

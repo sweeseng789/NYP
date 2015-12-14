@@ -111,8 +111,10 @@ void SceneGame::InitShaders()
 	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
 	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
 	// Get a handle for our "colorTexture" uniform
-	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
-	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
+	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled[0]");
+	m_parameters[U_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_programID, "colorTextureEnabled[1]");
+	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture[0]");
+	m_parameters[U_COLOR_TEXTURE1] = glGetUniformLocation(m_programID, "colorTexture[1]");
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
@@ -180,9 +182,9 @@ void SceneGame::InitMesh()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	//meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
 	//meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
@@ -196,35 +198,40 @@ void SceneGame::InitMesh()
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	meshList[GEO_LEFT]->textureID[0] = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
+	meshList[GEO_RIGHT]->textureID[0] = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
+	meshList[GEO_TOP]->textureID[0] = LoadTGA("Image//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID[0] = LoadTGA("Image//bottom.tga");
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+	meshList[GEO_FRONT]->textureID[0] = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+	meshList[GEO_BACK]->textureID[0] = LoadTGA("Image//back.tga");
 
 	// Load the ground mesh and texture
 	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_DARKGREEN]->textureID = LoadTGA("Image//grass_darkgreen.tga");
+	meshList[GEO_GRASS_DARKGREEN]->textureID[0] = LoadTGA("Image//grass_darkgreen.tga");
 	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
+	meshList[GEO_GRASS_LIGHTGREEN]->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 	// Load the texture for minimap
 	m_cMinimap = new CMinimap();
 	m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("MINIMAP", Color(1, 1, 1), 1.f));
-	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass_darkgreen.tga");
+	m_cMinimap->GetBackground()->textureID[0] = LoadTGA("Image//grass_darkgreen.tga");
 	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
 	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
 
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("Crosshair", Color(0, 0, 0), 1);
-	meshList[GEO_CROSSHAIR]->textureID = LoadTGA("Image//Crosshair.tga");
+	meshList[GEO_CROSSHAIR]->textureID[0] = LoadTGA("Image//Crosshair.tga");
 
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//terrain.raw", m_heightMap);
+	//meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//terrain.tga");
+	//meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain2.tga");
+
+	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//bottom.tga");
+	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain.tga");
 }
 
 void SceneGame::Init()
@@ -250,6 +257,7 @@ void SceneGame::Init()
 	menuChoice = "";
 	isMousePressed_Left = false;
 	m_cAvatar = new CPlayInfo3PV();
+	m_cAvatar->setPos(Vector3(heightMapScale.x * 0.5, 2000, heightMapScale.z * 0.5));
 
 	m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(100, 100, 3, 3);
@@ -385,7 +393,7 @@ void SceneGame::Update(double dt)
  ********************************************************************************/
 void SceneGame::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if(!mesh || mesh->textureID[0] <= 0)
 		return;
 	
 	glDisable(GL_DEPTH_TEST);
@@ -394,7 +402,7 @@ void SceneGame::RenderText(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for(unsigned i = 0; i < text.length(); ++i)
 	{
@@ -415,7 +423,7 @@ void SceneGame::RenderText(Mesh* mesh, std::string text, Color color)
  ********************************************************************************/
 void SceneGame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID[0] <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -441,7 +449,7 @@ void SceneGame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
@@ -484,19 +492,25 @@ void SceneGame::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 	
 				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-				if(mesh->textureID > 0)
+
+				for (unsigned a = 0; a < 2; ++a)
 				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-					glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+					if (mesh->textureID[a] > 0)
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+					}
+					else
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+					}
+
+					glActiveTexture(GL_TEXTURE0 + a);
+					glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+					glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 				}
-				else
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-				}
+
 				mesh->Render();
-				if(mesh->textureID > 0)
+			//	if(mesh->textureID > 0)
 				{
 					glBindTexture(GL_TEXTURE_2D, 0);
 				}
@@ -563,16 +577,20 @@ void SceneGame::PreRendering(CTransform* &transform, bool enableLight, Mesh* mes
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
 
-	if (mesh->textureID > 0)
+	for (unsigned a = 0; a < 2; ++a)
 	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	}
-	else
-	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+		if (mesh->textureID[a] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+		}
+
+		glActiveTexture(GL_TEXTURE0 + a);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);
 	}
 
 	modelStack.PopMatrix();
@@ -580,7 +598,7 @@ void SceneGame::PreRendering(CTransform* &transform, bool enableLight, Mesh* mes
 
 void SceneGame::PostRendering(Mesh * mesh)
 {
-	if (mesh->textureID > 0)
+	//if (mesh->textureID > 0)
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -615,21 +633,30 @@ void SceneGame::RenderMesh(Mesh *mesh, bool enableLight)
 	{	
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-	if(mesh->textureID > 0)
+
+	for (unsigned a = 0; a < 2; ++a)
 	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+		if (mesh->textureID[a] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+			glActiveTexture(GL_TEXTURE0 + a);
+			glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+			glUniform1i(m_parameters[U_COLOR_TEXTURE + 1], a);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+		}
+
+		/*glActiveTexture(GL_TEXTURE0 + a);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID[a]);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE + a], a);*/
 	}
-	else
-	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-	}
+
 	mesh->Render();
-	if(mesh->textureID > 0)
+	//if(mesh->textureID > 0)
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		//glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
@@ -1144,7 +1171,7 @@ void SceneGame::RenderGUI()
 {
 	// Render the crosshair
 	modelStack.PushMatrix();
-	//modelStack.Translate(-1.5, -1.5, 0);
+	modelStack.Translate(-1.5, -1.5, 0);
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 	modelStack.PopMatrix();
 
@@ -1451,7 +1478,7 @@ void SceneGame::GridUpdate(const double& dt)
 
 				if (bullet->getPos().y <= tempY)
 				{
-					for (unsigned a = 0; a < 5; ++a)
+					for (unsigned a = 0; a < 3; ++a)
 					{
 						Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
 						Vector3 direction = -bullet->getDirection();

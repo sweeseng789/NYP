@@ -149,9 +149,9 @@ void SceneSplashScreen::InitMesh()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
 	//meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
@@ -164,27 +164,8 @@ void SceneSplashScreen::InitMesh()
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-
-	// Load the ground mesh and texture
-	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_DARKGREEN]->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
-
 	meshList[GEO_SPLASHSCREEN] = MeshBuilder::GenerateQuad("Wallpaper", Color(1, 1, 1), 1.f);
-	meshList[GEO_SPLASHSCREEN]->textureID = LoadTGA("Image//Wallpaper//SplashScreen//Splashscreen.tga");
+	meshList[GEO_SPLASHSCREEN]->textureID[0] = LoadTGA("Image//Wallpaper//SplashScreen//Splashscreen.tga");
 }
 
 void SceneSplashScreen::Init()
@@ -290,7 +271,7 @@ Render text onto the screen with reference position in the middle of the image
 ********************************************************************************/
 void SceneSplashScreen::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID[0] <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -299,7 +280,7 @@ void SceneSplashScreen::RenderText(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
@@ -320,7 +301,7 @@ Render text onto the screen
 ********************************************************************************/
 void SceneSplashScreen::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0)
+	if (!mesh || mesh->textureID[0] <= 0)
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -346,7 +327,7 @@ void SceneSplashScreen::RenderTextOnScreen(Mesh* mesh, std::string text, Color c
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
@@ -389,7 +370,8 @@ void SceneSplashScreen::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size,
 
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	if (mesh->textureID > 0)
+
+	/*if (mesh->textureID > 0)
 	{
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 		glActiveTexture(GL_TEXTURE0);
@@ -399,9 +381,21 @@ void SceneSplashScreen::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size,
 	else
 	{
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}*/
+	for (unsigned a = 0; a < 2; ++a)
+	{
+		if (mesh->textureID[a] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 1);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + a], 0);
+		}
 	}
+
 	mesh->Render();
-	if (mesh->textureID > 0)
+	//if (mesh->textureID > 0)
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -439,7 +433,8 @@ void SceneSplashScreen::RenderMesh(Mesh *mesh, bool enableLight)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-	if (mesh->textureID > 0)
+
+	/*if (mesh->textureID > 0)
 	{
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 		glActiveTexture(GL_TEXTURE0);
@@ -449,12 +444,25 @@ void SceneSplashScreen::RenderMesh(Mesh *mesh, bool enableLight)
 	else
 	{
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}*/
+	for (int i = 0; i < 2; ++i)
+	{
+		if (mesh->textureID[i] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
+			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
+		}
+		else
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
 	}
+
 	mesh->Render();
-	if (mesh->textureID > 0)
+	/*if (mesh->textureID > 0)
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	}*/
 }
 
 /********************************************************************************

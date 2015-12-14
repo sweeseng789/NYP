@@ -32,7 +32,7 @@ void CModel::Init(Mesh* m_cModelMesh, const char *texturePath)
 {
 	this->m_cModelMesh = m_cModelMesh;
 	if(texturePath != NULL)
-		this->m_cModelMesh->textureID = LoadTGA(texturePath);
+		this->m_cModelMesh->textureID[0] = LoadTGA(texturePath);
 }
 
 void CModel::Draw(bool m_bLight)

@@ -85,7 +85,7 @@ int main()
 
 		if (select(0, &fset, 0, 0, &tval) > 0)
 		{
-			char buffer[80]; // buffer that is 80 characters big
+			char buffer[160]; // buffer that is 80 characters big
 			int length = recv(sock, buffer, sizeof(buffer), 0);
 			if (length == SOCKET_ERROR)
 			{

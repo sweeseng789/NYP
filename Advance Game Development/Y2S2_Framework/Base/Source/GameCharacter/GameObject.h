@@ -26,6 +26,7 @@ public:
 		float vel_RightLeg;
 
 		void Update(const double &dt, float vel);
+		void setZero();
 	};
 
 	enum GO_TYPE
@@ -43,6 +44,9 @@ public:
 
 	//Setter
 	void setPos(Vector3 pos);
+	void setPos_x(float pos_x);
+	void setPos_y(float pos_y);
+	void setPos_z(float pos_z);
 	void setVel(Vector3 vel);
 	void setScale(Vector3 scale);
 	void setDirection(Vector3 direction);

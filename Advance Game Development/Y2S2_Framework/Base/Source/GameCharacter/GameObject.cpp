@@ -76,9 +76,30 @@ void CGameObject::CharAnimation::Update(const double &dt, float vel)
 	vel_RightArm = vel_LeftLeg;
 }
 
+void CGameObject::CharAnimation::setZero()
+{
+	invertWalkingDirection = false;
+	vel_LeftArm = vel_LeftLeg = vel_RightArm = vel_RightLeg = 0.f;
+}
+
 void CGameObject::setPos(Vector3 pos)
 {
 	this->pos = pos;
+}
+
+void CGameObject::setPos_x(float pos_x)
+{
+	pos.x = pos_x;
+}
+
+void CGameObject::setPos_y(float pos_y)
+{
+	pos.y = pos_y;
+}
+
+void CGameObject::setPos_z(float pos_z)
+{
+	pos.z = pos_z;
 }
 
 void CGameObject::setVel(Vector3 vel)

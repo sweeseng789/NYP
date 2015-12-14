@@ -95,10 +95,7 @@ class SceneGame : public Scene
 		GEO_GRASS_LIGHTGREEN,
 		GEO_OBJECT,
 		GEO_TEXT,
-
-		GEO_UNICORN_LEFT_LEG,
-		GEO_UNICORN_RIGHT_LEG,
-
+		GEO_TERRAIN,
 		NUM_GEOMETRY,
 	};
 	enum SOUND_TYPE
@@ -136,6 +133,9 @@ public:
 	void PostRendering(Mesh* mesh);
 	void UpdateGameplay(const double &dt);
 	void UpdateMenu(const double &dt);
+	void PlayerUpdate(const double& dt);
+	void GridUpdate(const double& dt);
+	void ParticleUpdate(const double& dt);
 
 	// Render the main components of this scene
 	void RenderGUI();
@@ -146,15 +146,16 @@ public:
 	void RenderSkybox();
 	void RenderGameplay();
 	void RenderMenu();
+	void RenderTerrain();
 
 	//Particle
 	std::vector<Particle*> particleList;
-	Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
-	void createParticle(const double &dt);
+	//Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
+	void generateParticle(const double &dt, Vector3 pos, Vector3 direction, double timeLimit, Particle::COLORS color);
 
-	CGameObject* fetchGO();
 	AI* fetchAI();
 	CBullet* fetchBullet();
+	Particle* fetchParticle();
 
 	//Collision
 	void collisionCheck(CGameObject* node1, CGameObject* node2);
@@ -226,6 +227,11 @@ private:
 	std::vector<CGameObject*> GOList;
 
 	Sound sound;
+
+	//Terrain
+	std::vector<unsigned char> m_heightMap;
+	Vector3 heightMapScale;
+
 };
 
 #endif

@@ -28,6 +28,7 @@ void CPlayInfo3PV::Init()
 	active = true;
 	mode = STANDBY;
 	stage = FAWithBooster;
+	isFlying = false;
 
 	// Initialise the Avatar's movement flags
 	for (int i = 0; i < 255; i++) 
@@ -105,16 +106,16 @@ void CPlayInfo3PV::Init()
 
 	//===============WEAPONS & SHIELD===============//
 
-	////Left Arm Shield
-	//newModel = new CModel();
-	//transform = new CTransform();
-	//nodeInfo = new std::pair<int, std::string>();
-	//newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
-	//transform->SetTranslate(13, 16.5, 0);
-	//transform->SetScale(scale.x, scale.y, scale.z);
-	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	//nodeInfo->second = "LeftShield";
-	//nodeList.insert(*nodeInfo);
+	//Left Arm Shield
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
+	transform->SetTranslate(13, 16.5, 0);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	nodeInfo->second = "LeftShield";
+	nodeList.insert(*nodeInfo);
 
 	//Right Arm Shield
 	newModel = new CModel();
@@ -275,93 +276,18 @@ void CPlayInfo3PV::Exit()
 	nodeList.clear();
 }
 
-void CPlayInfo3PV::Update(const double &dt, Camera3 &camera)
+void CPlayInfo3PV::Update(const double &dt, Camera3 &camera, const float& terrainY)
 {
-	animation->Update(dt, vel.LengthSquared() * 15);
+	//Control Update
+	controlUpdate(dt, camera, terrainY);
 
-	for (std::unordered_map<int, std::string>::iterator it = nodeList.begin(); it != nodeList.end(); ++it)
-	{
-		CSceneNode* node = m_cSceneGraph->GetNode(it->first);
-		if (node != NULL)
-		{
-			if (it->second == "LeftLeg" || it->second == "LeftMiniRocketBottom")
-			{
-				node->getTransform()->SetRotate2(animation->vel_LeftLeg, 1, 0, 0, 0, 9, 0);
-			}
-			else if (it->second == "RightLeg" || it->second == "RightMiniRocketBottom")
-			{
-				node->getTransform()->SetRotate2(animation->vel_RightLeg, 1, 0, 0, 0, 9, 0);
-			}
-			else if (it->second == "LeftArm" || it->second == "LeftShield")
-			{
-				node->getTransform()->SetRotate2(animation->vel_LeftArm, 1, 0, 0, 0, 1, 0);
-			}
-			else if (it->second == "RightArm" || it->second == "RightBeamMagnum")
-			{
-				if (isStandByMode())
-				{
-					node->getTransform()->SetRotate2(animation->vel_RightArm, 1, 0, 0, 0, 1, 0);
-				}
-				else
-				{
-					node->getTransform()->SetRotate2((camera.getPitchAroundObj()) - 90, 1, 0, 0, 0, 5, 0);
-				}
-			}
-			else if (it->second == "RightShield")
-			{
-				if (isStandByMode())
-				{
-					node->getTransform()->SetRotate2(animation->vel_LeftArm, 1, 0, 0, 0, 1, 0);
-				}
-				else
-				{
-					node->getTransform()->SetRotate2(-(camera.getPitchAroundObj() - 90), 1, 0, 0, 0, 5, 0);
-				}
-			}
-		}
-	}
+	//Model Animation Update
+	modelAnimationUpdate(camera);
 
-	Vector3 view = camera.getView();
-	view.y = 0;
+	//Animation Update
+	if (!isFlying)
+		animation->Update(dt, Vector3(vel.x, 0, vel.z).LengthSquared() * 15);
 
-	Vector3 right = camera.getRight();
-	right.y = 0;
-
-	if (myKeys['w'])
-	{
-		vel += view * velSpeed * dt;
-	}
-
-	if (myKeys['s'])
-	{
-		vel -= view * velSpeed * dt;
-	}
-
-	if (myKeys['a'])
-	{
-		vel -= right * velSpeed * dt;
-	}
-
-	if (myKeys['d'])
-	{
-		vel += right * velSpeed * dt;
-	}
-
-	static double timeLimit_Mode = 0;
-	static double timeLimit = 0.5;
-
-	if (timeLimit_Mode < timeLimit)
-	{
-		timeLimit_Mode += dt;
-	}
-	else
-	{
-		if (myKeys[VK_TAB])
-		{
-			switchMode();
-			timeLimit_Mode = 0.0;
-		}
-	}
 
 	//Friction
 	if (vel.x != 0)
@@ -386,7 +312,15 @@ void CPlayInfo3PV::Update(const double &dt, Camera3 &camera)
 		}
 	}
 
+	//Position Update
 	pos += vel;
+
+	//Character to Terrain
+	if (!isFlying)
+	{
+		float diff = terrainY - pos.y;
+		pos.y += diff * static_cast<float>(dt) * 10;
+	}
 }
 
 ///********************************************************************************
@@ -395,6 +329,145 @@ void CPlayInfo3PV::Update(const double &dt, Camera3 &camera)
 void CPlayInfo3PV::UpdateMovement(const unsigned char key, const bool status)
 {
 	myKeys[key] = status;
+}
+
+void CPlayInfo3PV::modelAnimationUpdate(Camera3 &camera)
+{
+	for (std::unordered_map<int, std::string>::iterator it = nodeList.begin(); it != nodeList.end(); ++it)
+	{
+		CSceneNode* node = m_cSceneGraph->GetNode(it->first);
+		if (node != NULL)
+		{
+			if (it->second == "LeftLeg" || it->second == "LeftMiniRocketBottom")
+			{
+				node->getTransform()->SetRotate2(animation->vel_LeftLeg, 1, 0, 0, 0, 9, 0);
+			}
+			else if (it->second == "RightLeg" || it->second == "RightMiniRocketBottom")
+			{
+
+				node->getTransform()->SetRotate2(animation->vel_RightLeg, 1, 0, 0, 0, 9, 0);
+			}
+			else if (it->second == "LeftArm" || it->second == "LeftShield")
+			{
+				if (isStandByMode() || camera.isLookingRight())
+				{
+					node->getTransform()->SetRotate2(animation->vel_LeftArm, 1, 0, 0, 0, 1, 0);
+				}
+				else
+				{
+					if (!camera.isLookingRight())
+					{
+						node->getTransform()->SetRotate2((camera.getPitchAroundObj()) - 90, 1, 0, 0, 0, 5, 0);
+					}
+				}
+			}
+			else if (it->second == "RightArm" || it->second == "RightBeamMagnum")
+			{
+				if (isStandByMode() || !camera.isLookingRight())
+				{
+
+					node->getTransform()->SetRotate2(animation->vel_RightArm, 1, 0, 0, 0, 1, 0);
+				}
+				else
+				{
+					if (camera.isLookingRight())
+					{
+						node->getTransform()->SetRotate2((camera.getPitchAroundObj()) - 90, 1, 0, 0, 0, 5, 0);
+					}
+				}
+			}
+			else if (it->second == "RightShield")
+			{
+				if (isStandByMode() || !camera.isLookingRight())
+				{
+					node->getTransform()->SetRotate2(animation->vel_LeftArm, 1, 0, 0, 0, 1, 0);
+				}
+				else
+				{
+					if (camera.isLookingRight())
+					{
+						node->getTransform()->SetRotate2(-(camera.getPitchAroundObj() - 90), 1, 0, 0, 0, 5, 0);
+					}
+				}
+			}
+		}
+	}
+}
+
+void CPlayInfo3PV::controlUpdate(const double& dt, Camera3 &camera, const float& terrainY)
+{
+	Vector3 view = camera.getView();
+	view.y = 0;
+
+	Vector3 right = camera.getRight();
+	right.y = 0;
+
+	if (!isFlying)
+		velSpeed = 30.f;
+	else
+		velSpeed = 15.f;
+
+	if (myKeys['w'])
+	{
+		vel += view * velSpeed * dt;
+	}
+
+	if (myKeys['s'])
+	{
+		vel -= view * velSpeed * dt;
+	}
+
+	if (myKeys['a'])
+	{
+		vel -= right * velSpeed * dt;
+	}
+
+	if (myKeys['d'])
+	{
+		vel += right * velSpeed * dt;
+	}
+
+
+	if (myKeys[VK_SPACE])
+	{
+		animation->setZero();
+		isFlying = true;
+		pos.y += 9.82 * 20 * dt;
+
+		if (vel.y < 0.f)
+		{
+			vel.y += 9.82 * 20 * dt;
+		}
+	}
+	else
+	{
+		if (isFlying)
+		{
+			vel.y -= 9.82 * 5 * dt;
+
+			if (pos.y < terrainY)
+			{
+				isFlying = false;
+				vel.y = 0.f;
+			}
+		}
+	}
+
+	static double timeLimit_Mode = 0;
+	static double timeLimit = 0.5;
+
+	if (timeLimit_Mode < timeLimit)
+	{
+		timeLimit_Mode += dt;
+	}
+	else
+	{
+		if (myKeys[VK_TAB])
+		{
+			switchMode();
+			timeLimit_Mode = 0.0;
+		}
+	}
 }
 
 void CPlayInfo3PV::switchMode()

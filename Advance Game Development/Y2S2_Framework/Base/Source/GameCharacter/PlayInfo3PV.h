@@ -22,8 +22,10 @@ public:
 
 	void Init();
 	void Exit();
-	void Update(const double &dt, Camera3 &camera);
+	void Update(const double &dt, Camera3 &camera, const float& terrainY);
 	void UpdateMovement(const unsigned char key, const bool status = true);
+	void modelAnimationUpdate(Camera3 &camera);
+	void controlUpdate(const double& dt, Camera3 &camera, const float& terrainY);
 
 	void switchMode();
 	float getAngle();
@@ -32,6 +34,7 @@ public:
 private:
 	//bool
 	bool myKeys[255];
+	bool isFlying;
 
 	//float
 	float angle;

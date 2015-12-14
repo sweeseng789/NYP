@@ -221,15 +221,10 @@ void SceneGame::InitMesh()
 	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
 	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
 
-	//Unicorn Gundam
-	meshList[GEO_UNICORN_LEFT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Shield.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_UNICORN_LEFT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Shield.tga");
-
-	meshList[GEO_UNICORN_RIGHT_LEG] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Leg.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_UNICORN_RIGHT_LEG]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_LegRight.tga");
-
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("Crosshair", Color(0, 0, 0), 1);
 	meshList[GEO_CROSSHAIR]->textureID = LoadTGA("Image//Crosshair.tga");
+
+	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//terrain.raw", m_heightMap);
 }
 
 void SceneGame::Init()
@@ -244,6 +239,8 @@ void SceneGame::Init()
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 	
+	heightMapScale.Set(2000.f, 350.f, 2000.f);
+
 	rotateAngle = 0;
 
 	bLightEnabled = true;
@@ -647,7 +644,7 @@ void SceneGame::RenderMobileObjects()
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	/*for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
 		Particle* particle = static_cast<Particle*>(*it);
 
@@ -659,7 +656,7 @@ void SceneGame::RenderMobileObjects()
 			RenderMesh(meshList[GEO_SPHERE], false);
 			modelStack.PopMatrix();
 		}
-	}
+	}*/
 
 
 	if (b_pauseGame) 
@@ -860,160 +857,76 @@ void SceneGame::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 }
 
-void SceneGame::createParticle(const double &dt)
-{
-	if (Application::IsKeyPressed(VK_SPACE))
-	{
-		//Creating thruster effect when using exhaust
-		Vector3 right = camera.direction.Cross(camera.up);
-		Vector3 pos = m_cAvatar->getPos();
-		static double timeLimit = 0.1;
+//void SceneGame::generateParticle(const double &dt)
+//{
+	//if (Application::IsKeyPressed(VK_SPACE))
+	//{
+	//	//Creating thruster effect when using exhaust
+	//	Vector3 right = camera.direction.Cross(camera.up);
+	//	Vector3 pos = m_cAvatar->getPos();
+	//	static double timeLimit = 0.1;
 
-		//Top left thruster
-		Vector3 topLeft_pos = pos;
-		topLeft_pos.y += 20;
-		topLeft_pos.x -= camera.direction.x * 5 + right.x * 4.2;
-		topLeft_pos.z -= camera.direction.z * 5 + right.z * 4.2;
+	//	//Top left thruster
+	//	Vector3 topLeft_pos = pos;
+	//	topLeft_pos.y += 20;
+	//	topLeft_pos.x -= camera.direction.x * 5 + right.x * 4.2;
+	//	topLeft_pos.z -= camera.direction.z * 5 + right.z * 4.2;
 
-		Vector3 topLeft_vel;
-		topLeft_vel.x = Math::RandFloatMinMax(-right.x * 2, -right.x * 10);
-		topLeft_vel.z = Math::RandFloatMinMax(-right.z * 2, -right.z * 10);
-		topLeft_vel.y = Math::RandFloatMinMax(-2, -5);
+	//	Vector3 topLeft_vel;
+	//	topLeft_vel.x = Math::RandFloatMinMax(-right.x * 2, -right.x * 10);
+	//	topLeft_vel.z = Math::RandFloatMinMax(-right.z * 2, -right.z * 10);
+	//	topLeft_vel.y = Math::RandFloatMinMax(-2, -5);
 
-		Particle* topLeft = fetchParticle(topLeft_pos, topLeft_vel, timeLimit);
+	//	Particle* topLeft = fetchParticle(topLeft_pos, topLeft_vel, timeLimit);
 
 
-		//Top right thruster
-		Vector3 topRight_pos = pos;
-		topRight_pos.y += 20;
-		topRight_pos.x -= camera.direction.x * 5 - right.x * 4.2;
-		topRight_pos.z -= camera.direction.z * 5 - right.z * 4.2;
+	//	//Top right thruster
+	//	Vector3 topRight_pos = pos;
+	//	topRight_pos.y += 20;
+	//	topRight_pos.x -= camera.direction.x * 5 - right.x * 4.2;
+	//	topRight_pos.z -= camera.direction.z * 5 - right.z * 4.2;
 
-		Vector3 topRight_vel;
-		topRight_vel.x = Math::RandFloatMinMax(right.x * 2, right.x * 10);
-		topRight_vel.z = Math::RandFloatMinMax(right.z * 2, right.z * 10);
-		topRight_vel.y = Math::RandFloatMinMax(-2, -5);
+	//	Vector3 topRight_vel;
+	//	topRight_vel.x = Math::RandFloatMinMax(right.x * 2, right.x * 10);
+	//	topRight_vel.z = Math::RandFloatMinMax(right.z * 2, right.z * 10);
+	//	topRight_vel.y = Math::RandFloatMinMax(-2, -5);
 
-		Particle* topRight = fetchParticle(topRight_pos, topRight_vel, timeLimit);
+	//	Particle* topRight = fetchParticle(topRight_pos, topRight_vel, timeLimit);
 
-		//Bottom left thruster
-		Vector3 bottomLeft_pos = pos;
-		bottomLeft_pos.y += 10;
-		bottomLeft_pos.x -= camera.direction.x * 3 + right.x * 4.2;
-		bottomLeft_pos.z -= camera.direction.z * 3 + right.z * 4.2;
+	//	//Bottom left thruster
+	//	Vector3 bottomLeft_pos = pos;
+	//	bottomLeft_pos.y += 10;
+	//	bottomLeft_pos.x -= camera.direction.x * 3 + right.x * 4.2;
+	//	bottomLeft_pos.z -= camera.direction.z * 3 + right.z * 4.2;
 
-		Vector3 bottomLeft_vel;
-		bottomLeft_vel.x = Math::RandFloatMinMax(-camera.direction.x * 5, -camera.direction.x * 10);
-		bottomLeft_vel.z = Math::RandFloatMinMax(-camera.direction.z * 5, -camera.direction.z * 10);
-		bottomLeft_vel.y = Math::RandFloatMinMax(-2, -5);
+	//	Vector3 bottomLeft_vel;
+	//	bottomLeft_vel.x = Math::RandFloatMinMax(-camera.direction.x * 5, -camera.direction.x * 10);
+	//	bottomLeft_vel.z = Math::RandFloatMinMax(-camera.direction.z * 5, -camera.direction.z * 10);
+	//	bottomLeft_vel.y = Math::RandFloatMinMax(-2, -5);
 
-		Particle* bottomLeft = fetchParticle(bottomLeft_pos, bottomLeft_vel, timeLimit);
+	//	Particle* bottomLeft = fetchParticle(bottomLeft_pos, bottomLeft_vel, timeLimit);
 
-		//Bottom right thruster
-		Vector3 bottomRight_pos = pos;
-		bottomRight_pos.y += 10;
-		bottomRight_pos.x -= camera.direction.x * 3 - right.x * 4.2;
-		bottomRight_pos.z -= camera.direction.z * 3 - right.z * 4.2;
+	//	//Bottom right thruster
+	//	Vector3 bottomRight_pos = pos;
+	//	bottomRight_pos.y += 10;
+	//	bottomRight_pos.x -= camera.direction.x * 3 - right.x * 4.2;
+	//	bottomRight_pos.z -= camera.direction.z * 3 - right.z * 4.2;
 
-		Vector3 bottomRight_vel;
-		bottomRight_vel.x = Math::RandFloatMinMax(-camera.direction.x * 10, -camera.direction.x * 15);
-		bottomRight_vel.z = Math::RandFloatMinMax(-camera.direction.z * 10, -camera.direction.z * 15);
-		bottomRight_vel.y = Math::RandFloatMinMax(-2, -5);
+	//	Vector3 bottomRight_vel;
+	//	bottomRight_vel.x = Math::RandFloatMinMax(-camera.direction.x * 10, -camera.direction.x * 15);
+	//	bottomRight_vel.z = Math::RandFloatMinMax(-camera.direction.z * 10, -camera.direction.z * 15);
+	//	bottomRight_vel.y = Math::RandFloatMinMax(-2, -5);
 
-		Particle* bottomRight = fetchParticle(bottomRight_pos, bottomRight_vel, timeLimit);
-	}
-}
+	//	Particle* bottomRight = fetchParticle(bottomRight_pos, bottomRight_vel, timeLimit);
+	//}
+//}
 
 void SceneGame::UpdateGameplay(const double &dt)
 {
-	//rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
-	if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE) || m_cAvatar->isAttackMode())
-	{
-		rotateAngle = camera.getAngleAroundObj();
-	}
-
-	createParticle(dt);
-	m_cAvatar->Update(dt, camera);
-
-	camera.UpdatePosition(m_cAvatar->getPos(), m_cAvatar->getDirection(), dt);
-
-	//Clear the list
-	m_grid->clearList();
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
-	{
-		CGameObject* go = static_cast<CGameObject*>(*it);
-		if (go->getActive())
-		{
-			//Check if the node is in a different grid
-			//Cause crashes if i keep removing specifically one node
-			//Cell* newCell = m_grid->getCell(go->getPos());
-			//if (newCell != go->getNode()->ownerCell)
-			//{
-			//	m_grid->removeGOFromCell(go);
-			//	m_grid->addNode(go);
-			//}
-
-			//Repopulating the list
-			m_grid->addNode(go);
-
-			//Bullet Update
-			CBullet* bullet = dynamic_cast<CBullet*>(*it);
-			if (bullet != NULL)
-			{
-				bullet->Update(dt);
-			}
-		}
-	}
-
-	//Grid updates
-	for (unsigned a = 0; a < m_grid->m_cells.size(); ++a)
-	{
-		int x = a % m_grid->m_numXCells;
-		int z = a / m_grid->m_numXCells;
-
-		Cell& cell = m_grid->m_cells[a];
-
-		//Loop thought everything in a cell
-		for (unsigned i = 0; i < cell.GOList.size(); ++i)
-		{
-			CGameObject* go = cell.GOList[i];
-
-			if (go->getActive())
-			{
-				checkCollision(go, cell.GOList, i + 1);
-
-				//Update Collision with neighbout cells
-				if (x > 0)
-				{
-					//Left Cell
-					checkCollision(go, m_grid->getCell(x - 1, z)->GOList, 0);
-
-					if (z > 0)
-					{
-						//Top Left Cell
-						checkCollision(go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
-					}
-
-					//Bottom Left Cell
-					if (z < m_grid->m_numZCells - 1)
-					{
-						checkCollision(go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
-					}
-				}
-
-				//Up cell
-				if (z > 0)
-				{
-					checkCollision(go, m_grid->getCell(x, z - 1)->GOList, 0);
-				}
-			}
-		}
-	}
-
 	//m_cSpatialPartition->Update(m_cAvatar->GetPosition());
 	//m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
 
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	/*for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
 		Particle* particle = static_cast<Particle*>(*it);
 
@@ -1021,69 +934,69 @@ void SceneGame::UpdateGameplay(const double &dt)
 		{
 			particle->update(dt);
 		}
-	}
+	}*/
 
-	static double shootTime = 0.0;
-	static double shootTimeLimit = 0.5;
+	static double shootTime_Right = 0.0, shootTime_Left = 0.0;
+	static double shootTimeLimit_Right = 0.5, shootTimeLimit_Left = 0.15;
 
-	if (shootTime < shootTimeLimit)
+	if (shootTime_Right < shootTimeLimit_Right)
+		shootTime_Right += dt;
+
+	if (shootTime_Left < shootTimeLimit_Left)
+		shootTime_Left += dt;
+
+	if (m_cAvatar->isAttackMode())
 	{
-		shootTime += dt;
-	}
-	else
-	{
-		if (Application::IsMousePressed(0) && m_cAvatar->isAttackMode())
+		if (Application::IsMousePressed(0))
 		{
-			Sound::playBeamMagnum();
-			static double bulletTimeLimit = 5;
-			Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
-			shootBullet(bulletOffset, camera.direction, bulletTimeLimit);
-			shootTime = 0.0;
+			if (camera.isLookingRight())
+			{
+				if (shootTime_Right >= shootTimeLimit_Right)
+				{
+					Sound::playBeamMagnum();
+					Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
+					shootBullet(bulletOffset, camera.direction , 5);
+					shootTime_Right = 0.0;
+				}
+			}
+			else
+			{
+				if (shootTime_Left >= shootTimeLimit_Left)
+				{
+					Vector3 bulletOffset_Top = m_cAvatar->getPos() + (-camera.getRight() * 10) + Vector3(0, 25, 0);
+					Vector3 DirOffset_Top = camera.direction;
+					DirOffset_Top.x += Math::RandFloatMinMax(-camera.getRight().x * 0.05, camera.getRight().x * 0.05);
+					DirOffset_Top.y += Math::RandFloatMinMax(-camera.getRight().y * 0.05, camera.getRight().y * 0.05);
+					DirOffset_Top.z += Math::RandFloatMinMax(-camera.getRight().z * 0.05, camera.getRight().z * 0.05);
+					shootBullet(bulletOffset_Top, DirOffset_Top, 5);
+
+					Vector3 bulletOffset_Bottom = m_cAvatar->getPos() + (-camera.getRight() * 10) + Vector3(0, 15, 0);
+					Vector3 DirOffset_Bottom = camera.direction;
+					DirOffset_Bottom.x += Math::RandFloatMinMax(-camera.getRight().x * 0.05, camera.getRight().x * 0.05);
+					DirOffset_Bottom.y += Math::RandFloatMinMax(-camera.getRight().y * 0.05, camera.getRight().y * 0.05);
+					DirOffset_Bottom.z += Math::RandFloatMinMax(-camera.getRight().z * 0.05, camera.getRight().z * 0.05);
+					shootBullet(bulletOffset_Bottom, DirOffset_Bottom, 5);
+					shootTime_Left = 0.0;
+				}
+			}
 		}
 	}
 
+	PlayerUpdate(dt);
+	GridUpdate(dt);
+	ParticleUpdate(dt);
 }
 
 void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet)
 {
 	CBullet* bullet = fetchBullet();
-
-	if (bullet == NULL)
-	{
-		bullet = new CBullet();
-		bullet->setActive(true);
-		bullet->setPos(pos);
-		bullet->setDirection(direction);
-		bullet->setTimeLimit(timeLimit);
-		bullet->setDisplayBullet(false);
-
-		if (playerBullet)
-		{
-			bullet->setType_PlayerBullet();
-		}
-		else
-		{
-			bullet->setType_EnemyBullet();
-		}
-
-		GOList.push_back(bullet);
-	}
-	else
+	if (bullet != NULL)
 	{
 		bullet->setActive(true);
 		bullet->setPos(pos);
 		bullet->setDirection(direction);
 		bullet->setTimeLimit(timeLimit);
 		bullet->setDisplayBullet(false);
-
-		if (playerBullet)
-		{
-			bullet->setType_PlayerBullet();
-		}
-		else
-		{
-			bullet->setType_EnemyBullet();
-		}
 	}
 }
 
@@ -1148,27 +1061,68 @@ void SceneGame::UpdateMenu(const double &dt)
 
 CBullet* SceneGame::fetchBullet()
 {
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	for (CGameObject* go : GOList)
 	{
-		CGameObject* go = static_cast<CGameObject*>(*it);
-		if (go->isPlayerBullet() && !go->getActive())
+		CBullet* bullet = dynamic_cast<CBullet*>(go);
+		if (bullet != NULL)
 		{
-			return dynamic_cast<CBullet*>(*it);
+			if (!bullet->getActive())
+			{
+				return bullet;
+			}
 		}
+	}
+
+	for (unsigned a = 0; a < 10; ++a)
+	{
+		CBullet* newBullet = new CBullet();
+		GOList.push_back(newBullet);
+	}
+
+	CBullet* bullet = dynamic_cast<CBullet*>(GOList.back());
+	if (bullet != NULL)
+	{
+		return bullet;
 	}
 
 	return NULL;
 }
 
-Particle * SceneGame::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
+AI* SceneGame::fetchAI()
 {
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); it++)
+	for (CGameObject* go : GOList)
 	{
-		Particle* particle = static_cast<Particle*>(*it);
+		AI* ai = dynamic_cast<AI*>(go);
+		if (ai != NULL)
+		{
+			if (!ai->getActive())
+			{
+				return ai;
+			}
+		}
+	}
 
+	for (unsigned a = 0; a < 10; ++a)
+	{
+		AI* ai = new AI();
+		GOList.push_back(ai);
+	}
+
+	AI* ai = dynamic_cast<AI*>(GOList.back());
+	if (ai != NULL)
+	{
+		return ai;
+	}
+
+	return NULL;
+}
+
+Particle* SceneGame::fetchParticle()
+{
+	for (Particle* particle : particleList)
+	{
 		if (!particle->getActive())
 		{
-			particle->restartParticles(pos, vel, timeLimit);
 			return particle;
 		}
 	}
@@ -1179,10 +1133,7 @@ Particle * SceneGame::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
 		particleList.push_back(particle);
 	}
 
-	Particle* particle = particleList.back();
-	particle->restartParticles(pos, vel, timeLimit);
-
-	return particle;
+	return particleList.back();
 }
 
 
@@ -1193,7 +1144,7 @@ void SceneGame::RenderGUI()
 {
 	// Render the crosshair
 	modelStack.PushMatrix();
-	modelStack.Translate(-1.5, -1.5, 0);
+	//modelStack.Translate(-1.5, -1.5, 0);
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 	modelStack.PopMatrix();
 
@@ -1233,6 +1184,9 @@ void SceneGame::RenderMenu()
 
 void SceneGame::RenderGameplay()
 {
+	//Render Terrain
+	RenderTerrain();
+
 	//Render Character
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y, m_cAvatar->getPos().z);
@@ -1240,6 +1194,7 @@ void SceneGame::RenderGameplay()
 	m_cAvatar->getNode()->Draw(this);
 	modelStack.PopMatrix();
 
+	//Render GameObject
 	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
 	{
 		CGameObject* go = static_cast<CGameObject*>(*it);
@@ -1249,6 +1204,19 @@ void SceneGame::RenderGameplay()
 			modelStack.PushMatrix();
 			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
 			go->getNode()->Draw(this);
+			modelStack.PopMatrix();
+		}
+	}
+
+	//Render Particle
+	for (Particle* particle : particleList)
+	{
+		if (particle->getActive())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(particle->getPos().x, particle->getPos().y, particle->getPos().z);
+			modelStack.Scale(particle->getScale().x, particle->getScale().y, particle->getScale().z);
+			RenderMesh(particle->getParticle(), false);
 			modelStack.PopMatrix();
 		}
 	}
@@ -1289,26 +1257,45 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 			CSceneNode* node = go2->getSceneGraph()->GetNode(it->first);
 			if (node != NULL)
 			{
-				int diff = 5;
-				Vector3 topLeft = go2->getPos() + node->getTransform()->GetTranslation() + Vector3(diff, diff, diff);
-				Vector3 bottomRight = go2->getPos() - node->getTransform()->GetTranslation() - Vector3(diff, diff, diff);
+				Vector3 topLeft(0, 0, 0), bottomRight(0, 0, 0), Position(0, 0, 0);
+				Position = go2->getPos() + node->getTransform()->GetTranslation();
 
-				if (go1->getPos().y > topLeft.y)
+				if (it->second == "Head")
 				{
-					std::cout << "true" << std::endl;
-					go1->setVel(Vector3(0, 0, 0));
+					topLeft = Position + Vector3(8, 7, 8);
+					bottomRight = Position - Vector3(8, 7, 8);
 				}
-				else
+				else if (it->second == "Torso")
 				{
-					std::cout << " " << std::endl;
+					topLeft = Position + Vector3(7, 6, 7);
+					bottomRight = Position - Vector3(7, 10, 7);
 				}
-				/*std::cout << topLeft << ", " << bottomRight << std::endl;
-				if (SSDLC::intersect(topLeft, bottomRight, go1->getPos()))
-				{
-					go1->setActive(false);
-					std::cout << it->second << std::endl;
-				}*/
 
+				else if (it->second == "LeftArm" || it->second == "RightArm")
+				{
+					topLeft = Position + Vector3(6, 6, 6);
+					bottomRight = Position - Vector3(6, 10, 6);
+				}
+				else if (it->second == "LeftLeg" || it->second == "RightLeg")
+				{
+					topLeft = Position + Vector3(6, 8, 6);
+					bottomRight = Position - Vector3(6, 8, 6);
+					bottomRight.y = 0;
+				}
+
+				if (!Position.IsZero() && !bottomRight.IsZero() && !topLeft.IsZero())
+				{
+					/*if (SSDLC::intersect(topLeft, bottomRight, go1->getPos()))
+					{
+						go1->setActive(false);
+						cout << it->second << std::endl;
+					}*/
+					if (SSDLC::intersect_LineAABB(go1->getPos(), go1->getDirection(), topLeft, bottomRight))
+					{
+						go1->setActive(false);
+						cout << it->second << std::endl;
+					}
+				}
 			}
 		}
 	}
@@ -1348,5 +1335,204 @@ void SceneGame::UpdateWeaponStatus(const unsigned char key)
 	else if (key == WA_FIRE_SECONDARY)
 	{
 		//m_cProjectileManager->AddRayProjectile(camera.position, camera.direction, 50.f);
+	}
+}
+
+void SceneGame::RenderTerrain()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(heightMapScale.x * 0.5, 0, heightMapScale.z * 0.5);
+	modelStack.Scale(heightMapScale.x, heightMapScale.y, heightMapScale.z);
+	RenderMesh(meshList[GEO_TERRAIN], false);
+	modelStack.PopMatrix();
+}
+
+void SceneGame::PlayerUpdate(const double& dt)
+{
+	if (!m_cAvatar->getVel().IsZero() || Application::IsKeyPressed(VK_SPACE) || m_cAvatar->isAttackMode())
+	{
+		rotateAngle = camera.getAngleAroundObj();
+	}
+
+	//Creating Thruster Particles
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		Vector3 right = camera.getRight();
+
+		//Top left thruster
+		Vector3 topLeft_pos = m_cAvatar->getPos();
+		topLeft_pos.y += 20;
+		topLeft_pos.x -= camera.direction.x * 5 + right.x * 4.2;
+		topLeft_pos.z -= camera.direction.z * 5 + right.z * 4.2;
+		Vector3 topLeft_vel;
+		topLeft_vel.x = Math::RandFloatMinMax(-right.x * 20, -right.x * 100);
+		topLeft_vel.z = Math::RandFloatMinMax(-right.z * 20, -right.z * 100);
+		topLeft_vel.y = Math::RandFloatMinMax(-2, -5);
+		generateParticle(dt, topLeft_pos, topLeft_vel, 0.15, Particle::e_BLUE);
+
+
+		//Top right thruster
+		Vector3 topRight_pos = m_cAvatar->getPos();
+		topRight_pos.y += 20;
+		topRight_pos.x -= camera.direction.x * 5 - right.x * 4.2;
+		topRight_pos.z -= camera.direction.z * 5 - right.z * 4.2;
+		Vector3 topRight_vel;
+		topRight_vel.x = Math::RandFloatMinMax(right.x * 20, right.x * 100);
+		topRight_vel.z = Math::RandFloatMinMax(right.z * 20, right.z * 100);
+		topRight_vel.y = Math::RandFloatMinMax(-2, -5);
+		generateParticle(dt, topRight_pos, topRight_vel, 0.15, Particle::e_BLUE);
+
+		//Bottom left thruster
+		Vector3 bottomLeft_pos = m_cAvatar->getPos();
+		bottomLeft_pos.y += 10;
+		bottomLeft_pos.x -= camera.direction.x * 3 + right.x * 4.2;
+		bottomLeft_pos.z -= camera.direction.z * 3 + right.z * 4.2;
+		Vector3 bottomLeft_vel;
+		bottomLeft_vel.x = Math::RandFloatMinMax(-camera.direction.x * 50, -camera.direction.x * 100);
+		bottomLeft_vel.z = Math::RandFloatMinMax(-camera.direction.z * 50, -camera.direction.z * 100);
+		bottomLeft_vel.y = Math::RandFloatMinMax(-2, -5);
+		generateParticle(dt, bottomLeft_pos, bottomLeft_vel, 0.15, Particle::e_BLUE);
+
+		//Bottom right thruster
+		Vector3 bottomRight_pos = m_cAvatar->getPos();
+		bottomRight_pos.y += 10;
+		bottomRight_pos.x -= camera.direction.x * 3 - right.x * 4.2;
+		bottomRight_pos.z -= camera.direction.z * 3 - right.z * 4.2;
+		Vector3 bottomRight_vel;
+		bottomRight_vel.x = Math::RandFloatMinMax(-camera.direction.x * 50, -camera.direction.x * 100);
+		bottomRight_vel.z = Math::RandFloatMinMax(-camera.direction.z * 50, -camera.direction.z * 100);
+		bottomRight_vel.y = Math::RandFloatMinMax(-2, -5);
+		generateParticle(dt, bottomRight_pos, bottomRight_vel, 0.15, Particle::e_BLUE);
+	}
+
+	//Player Update
+	Vector3 temp = m_cAvatar->getPos();
+	temp.x -= heightMapScale.x * 0.5;
+	temp.z -= heightMapScale.z * 0.5;
+	float tempY = heightMapScale.y * ReadHeightMap(m_heightMap, temp.x / heightMapScale.x, temp.z / heightMapScale.z) + 20.f;
+	m_cAvatar->Update(dt, camera, tempY);
+
+	//Camera Update
+	camera.UpdatePosition(m_cAvatar->getPos(), m_cAvatar->getDirection(), dt);
+}
+
+void SceneGame::GridUpdate(const double& dt)
+{
+	//Clear the list
+	m_grid->clearList();
+	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		CGameObject* go = static_cast<CGameObject*>(*it);
+		if (go->getActive())
+		{
+			//Check if the node is in a different grid
+			//Cause crashes if i keep removing specifically one node
+			//Cell* newCell = m_grid->getCell(go->getPos());
+			//if (newCell != go->getNode()->ownerCell)
+			//{
+			//	m_grid->removeGOFromCell(go);
+			//	m_grid->addNode(go);
+			//}
+
+			//Repopulating the list
+			m_grid->addNode(go);
+
+			//Terrain Update
+			Vector3 temp = go->getPos();
+			temp.x -= heightMapScale.x * 0.5;
+			temp.z -= heightMapScale.z * 0.5;
+			float tempY = heightMapScale.y * ReadHeightMap(m_heightMap, temp.x / heightMapScale.x, temp.z / heightMapScale.z);
+
+			//Bullet Update
+			CBullet* bullet = dynamic_cast<CBullet*>(*it);
+			if (bullet != NULL)
+			{
+				bullet->Update(dt);
+
+				if (bullet->getPos().y <= tempY)
+				{
+					for (unsigned a = 0; a < 5; ++a)
+					{
+						Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
+						Vector3 direction = -bullet->getDirection();
+						direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
+						direction.y += Math::RandFloatMinMax(20, 100);
+						direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
+
+						generateParticle(dt, pos, direction, 2, Particle::e_YELLOW);
+					}
+					bullet->setActive(false);
+				}
+			}
+
+			//Ai Update
+			AI* ai = dynamic_cast<AI*>(*it);
+			if (ai != NULL)
+			{
+				ai->Update(dt, m_cAvatar->getPos(), tempY + 14);
+			}
+		}
+	}
+
+	//Grid updates
+	for (unsigned a = 0; a < m_grid->m_cells.size(); ++a)
+	{
+		int x = a % m_grid->m_numXCells;
+		int z = a / m_grid->m_numXCells;
+
+		Cell& cell = m_grid->m_cells[a];
+
+		//Loop thought everything in a cell
+		for (unsigned i = 0; i < cell.GOList.size(); ++i)
+		{
+			CGameObject* go = cell.GOList[i];
+
+			if (go->getActive())
+			{
+				checkCollision(go, cell.GOList, i + 1);
+
+				//Update Collision with neighbout cells
+				if (x > 0)
+				{
+					//Left Cell
+					checkCollision(go, m_grid->getCell(x - 1, z)->GOList, 0);
+
+					if (z > 0)
+					{
+						//Top Left Cell
+						checkCollision(go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
+					}
+
+					//Bottom Left Cell
+					if (z < m_grid->m_numZCells - 1)
+					{
+						checkCollision(go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
+					}
+				}
+
+				//Up cell
+				if (z > 0)
+				{
+					checkCollision(go, m_grid->getCell(x, z - 1)->GOList, 0);
+				}
+			}
+		}
+	}
+}
+
+void SceneGame::generateParticle(const double &dt, Vector3 pos, Vector3 direction, double timeLimit, Particle::COLORS color)
+{
+	Particle* particle = fetchParticle();
+	particle->restartParticles(pos, direction, timeLimit, color);
+}
+
+void SceneGame::ParticleUpdate(const double& dt)
+{
+	for (Particle* particle : particleList)
+	{
+		if (particle->getActive())
+		{
+			particle->update(dt);
+		}
 	}
 }

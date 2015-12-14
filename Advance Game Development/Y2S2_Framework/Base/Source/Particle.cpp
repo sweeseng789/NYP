@@ -1,14 +1,16 @@
 #include "Particle.h"
 
-
-
 Particle::Particle()
 {
-	active = true;
+	active = false;
 	pos.SetZero();
 	vel.SetZero();
-	scale = 0;
+	scale.Set(1, 1, 1);
 	mass = 0;
+	color = e_YELLOW;
+
+	meshList[e_YELLOW] = MeshBuilder::GenerateSphere("Particle", Color(1, 1, 0), 18, 36);
+	meshList[e_BLUE] = MeshBuilder::GenerateSphere("Particle", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36);
 }
 
 
@@ -16,48 +18,34 @@ Particle::~Particle()
 {
 }
 
-void Particle::restartParticles(Vector3 pos, Vector3 vel, double timeLimit)
+void Particle::restartParticles(Vector3 pos, Vector3 vel, double timeLimit, COLORS color)
 {
 	active = true;
 	this->pos = pos;
 	this->vel = vel;
 	this->timeLimit = timeLimit;
-
-	scale = Math::RandFloatMinMax(0.1, 0.2);
-	mass = scale * scale * scale;
+	this->color = color;
 }
 
-bool Particle::getActive()
+Mesh* Particle::getParticle()
 {
-	return active;
-}
-
-Vector3 Particle::getPos()
-{
-	return pos;
-}
-
-Vector3 Particle::getVel()
-{
-	return vel;
-}
-
-float Particle::getScale()
-{
-	return scale;
+	return meshList[color];
 }
 
 void Particle::update(const double & dt)
 {
-	if (active)
+	timeLimit -= dt;
+
+	vel += Vector3(0, -9.82 * 25, 0) * dt;
+	pos += vel * dt;
+
+	if (timeLimit <= 0.0)
 	{
-		timeLimit -= dt;
-
-		pos += vel * (0.15 / mass) * dt;
-
-		if (timeLimit <= 0.0)
-		{
-			active = false;
-		}
+		active = false;
 	}
+}
+
+void Particle::setTimeLimit(double timeLimit)
+{
+	this->timeLimit = timeLimit;
 }

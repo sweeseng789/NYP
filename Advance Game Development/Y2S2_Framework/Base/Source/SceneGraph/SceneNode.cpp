@@ -78,7 +78,7 @@ void CSceneNode::Draw(SceneGame* theSceneManager)
 	if (theTransform)
 	{
 		theTransform->PreRendering();
-		
+
 		theSceneManager->PreRendering(theTransform, false, theModel->getMesh());
 		if (theModel)
 			theModel->Draw();
@@ -138,7 +138,6 @@ int CSceneNode::SetNode(CTransform* aNewTransform, CModel* aNewModel)
 {
 	this->theModel = aNewModel;
 	this->theTransform = aNewTransform;
-
 	// Set sceneNodeID to 1 as this is the root node
 	sceneNodeID = 1;
 	return sceneNodeID;
@@ -218,8 +217,8 @@ Vector3 CSceneNode::GetTopLeft(void)
 {
 	if (theTransform == NULL)
 		return Vector3( theModel->GetTopLeft().x, 
-						 theModel->GetTopLeft().y, 
-						 theModel->GetTopLeft().z);
+theModel->GetTopLeft().y,
+theModel->GetTopLeft().z);
 	else
 	{
 		return (theTransform->GetTransform() * theModel->GetTopLeft());
@@ -230,9 +229,9 @@ Vector3 CSceneNode::GetTopLeft(void)
 Vector3 CSceneNode::GetBottomRight(void)
 {
 	if (theTransform == NULL)
-		return Vector3( theModel->GetBottomRight().x, 
-						 theModel->GetBottomRight().y, 
-						 theModel->GetBottomRight().z);
+		return Vector3(theModel->GetBottomRight().x,
+			theModel->GetBottomRight().y,
+			theModel->GetBottomRight().z);
 	else
 		return (theTransform->GetTransform() * theModel->GetBottomRight());
 }
@@ -251,9 +250,9 @@ int CSceneNode::GetNumOfChild(void)
 // Get top left corner of a child
 bool CSceneNode::GetTopLeft(const int m_iChildIndex, Vector3& Vector3_TopLeft)
 {
-	Vector3_TopLeft = Vector3( -999, -999, -999 );
+	Vector3_TopLeft = Vector3(-999, -999, -999);
 	CSceneNode* aChild = NULL;
-	for (unsigned i=0; i<theChildren.size(); i++)
+	for (unsigned i = 0; i < theChildren.size(); i++)
 	{
 		aChild = (CSceneNode*)theChildren[i];
 
@@ -269,9 +268,9 @@ bool CSceneNode::GetTopLeft(const int m_iChildIndex, Vector3& Vector3_TopLeft)
 // Get bottom right corner of a child
 bool CSceneNode::GetBottomRight(const int m_iChildIndex, Vector3& Vector3_BottomRight)
 {
-	Vector3_BottomRight = Vector3( -999, -999, -999 );
+	Vector3_BottomRight = Vector3(-999, -999, -999);
 	CSceneNode* aChild = NULL;
-	for (unsigned i=0; i<theChildren.size(); i++)
+	for (unsigned i = 0; i < theChildren.size(); i++)
 	{
 		aChild = (CSceneNode*)theChildren[i];
 
@@ -287,7 +286,7 @@ bool CSceneNode::GetBottomRight(const int m_iChildIndex, Vector3& Vector3_Bottom
 void CSceneNode::SetColorForChild(const int m_iChildIndex, const float red, const float green, const float blue)
 {
 	CSceneNode* aChild = NULL;
-	for (unsigned i=0; i<theChildren.size(); i++)
+	for (unsigned i = 0; i < theChildren.size(); i++)
 	{
 		aChild = (CSceneNode*)theChildren[i];
 
@@ -315,10 +314,4 @@ void CSceneNode::findChildById(int ID, CSceneNode* &node)
 CTransform* CSceneNode::getTransform()
 {
 	return theTransform;
-}
-
-bool CSceneNode::CheckForCollision(Vector3 pos)
-{
-	//Vector3 ObjectTopLeft = 
-	return false;
 }

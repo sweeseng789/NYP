@@ -8,6 +8,6 @@ public:
 	AI(Vector3 pos);
 	~AI();
 
-	void Update(double dt, Vector3 playerPos);
+	void Update(double dt, Vector3 playerPos, const float& terrainY);
 };
 

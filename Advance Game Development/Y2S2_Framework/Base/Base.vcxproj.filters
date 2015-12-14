@@ -13,32 +13,38 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="2D">
-      <UniqueIdentifier>{78a69225-fe6f-4174-b4c6-ada9c7bd7b5a}</UniqueIdentifier>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{51ee902d-20d5-42fd-9b17-3ffec7fdda5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game State Management">
-      <UniqueIdentifier>{63b26346-f440-4362-a4b0-199ce45cd85a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game Character">
-      <UniqueIdentifier>{db4ff357-55d4-475c-bebf-e60c61791a40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{3a267cca-072f-4bea-a54a-5563aa842aa3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Camera">
-      <UniqueIdentifier>{31ce256a-49c4-40cc-9b54-313d990b70ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{52dbf48c-7dcd-4414-ae8f-bc43d6896358}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SceneGraph">
-      <UniqueIdentifier>{cf00591a-dcad-497e-91a1-11bc3eabc37e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SpatialPartition">
+    <Filter Include="Asset\SpatialPartition">
       <UniqueIdentifier>{de6ad568-f23b-4861-80a5-bb7222517adc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sound">
+    <Filter Include="Asset\Sound">
       <UniqueIdentifier>{a6b0aef5-6d53-4b6f-af74-5d6ffe648448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\GUI">
+      <UniqueIdentifier>{52dbf48c-7dcd-4414-ae8f-bc43d6896358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Game State Management">
+      <UniqueIdentifier>{63b26346-f440-4362-a4b0-199ce45cd85a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Game Character">
+      <UniqueIdentifier>{db4ff357-55d4-475c-bebf-e60c61791a40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Camera">
+      <UniqueIdentifier>{31ce256a-49c4-40cc-9b54-313d990b70ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Camera\2D">
+      <UniqueIdentifier>{78a69225-fe6f-4174-b4c6-ada9c7bd7b5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\SceneGraph">
+      <UniqueIdentifier>{cf00591a-dcad-497e-91a1-11bc3eabc37e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Scene">
+      <UniqueIdentifier>{3a267cca-072f-4bea-a54a-5563aa842aa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Terrain">
+      <UniqueIdentifier>{6848b592-4183-4634-b470-cbe5d2772ecc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,97 +82,100 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\TreasureChest.cpp">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Goodies.cpp">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\GoodiesFactory.cpp">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Minimap.cpp">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerInfo.cpp">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameStateManager.cpp">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClCompile>
     <ClCompile Include="Source\IntroState.cpp">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClCompile>
     <ClCompile Include="Source\MenuState.cpp">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayState.cpp">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClCompile>
     <ClCompile Include="Source\Particle.cpp">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera3.cpp">
-      <Filter>Camera</Filter>
+      <Filter>Asset\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
-      <Filter>Camera</Filter>
+      <Filter>Asset\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\Text.cpp">
-      <Filter>GUI</Filter>
+      <Filter>Asset\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGame.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneManager2D.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneMenu.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneSplashScreen.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGraph\Model.cpp">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGraph\Node.cpp">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGraph\SceneNode.cpp">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGraph\Transform.cpp">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpatialPartition\SP_Grid.cpp">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpatialPartition\Unit.cpp">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpatialPartition\Grid.cpp">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClCompile>
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameCharacter\GameObject.cpp">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameCharacter\AI.cpp">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameCharacter\Bullet.cpp">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameCharacter\PlayInfo3PV.cpp">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\Sound\Sound.cpp">
-      <Filter>Sound</Filter>
+      <Filter>Asset\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Terrain\LoadHmap.cpp">
+      <Filter>Asset\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,103 +222,106 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Goodies.h">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\GoodiesFactory.h">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\TreasureChest.h">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Minimap.h">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerInfo.h">
-      <Filter>2D</Filter>
+      <Filter>Asset\Camera\2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameState.h">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameStateManager.h">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClInclude>
     <ClInclude Include="Source\IntroState.h">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClInclude>
     <ClInclude Include="Source\MenuState.h">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayState.h">
-      <Filter>Game State Management</Filter>
+      <Filter>Asset\Game State Management</Filter>
     </ClInclude>
     <ClInclude Include="Source\Particle.h">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
-      <Filter>Camera</Filter>
+      <Filter>Asset\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera3.h">
-      <Filter>Camera</Filter>
+      <Filter>Asset\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\Text.h">
-      <Filter>GUI</Filter>
+      <Filter>Asset\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene.h">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneGame.h">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneManager2D.h">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneMenu.h">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneSplashScreen.h">
-      <Filter>Scene</Filter>
+      <Filter>Asset\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\Model.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\Node.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\SceneNode.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\Transform.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Asset\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\SP_Grid.h">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\Unit.h">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\Grid.h">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
-      <Filter>SpatialPartition</Filter>
+      <Filter>Asset\SpatialPartition</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameCharacter\GameObject.h">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameCharacter\AI.h">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameCharacter\Bullet.h">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameCharacter\PlayInfo3PV.h">
-      <Filter>Game Character</Filter>
+      <Filter>Asset\Game Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Sound\Sound.h">
-      <Filter>Sound</Filter>
+      <Filter>Asset\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Terrain\LoadHmap.h">
+      <Filter>Asset\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

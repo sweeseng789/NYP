@@ -59,6 +59,7 @@ public:
 	float getPitchAroundObj();
 	Vector3 getView();
 	Vector3 getRight();
+	bool isLookingRight();
 private:
 	bool myKeys[255];
 

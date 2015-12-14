@@ -4,7 +4,7 @@
 
 // The default camera speed
 static const float CAMERA_SPEED = 200.f;
-const float m_fTPVCameraOffset = 11.5f;
+const float m_fTPVCameraOffset = 5.f;
 
 /********************************************************************************
  Constructor
@@ -468,11 +468,11 @@ void Camera3::thirdPersonView_DistanceFromObj(const double &dt)
 		{
 			if (Application::d_mouseScroll < 0.0 && Application::scrollCount < Application::scrollCount_max)
 			{
-				distanceFromObj += m_fTPVCameraOffset * static_cast<float>(dt);
+				distanceFromObj += 30.f * static_cast<float>(dt);
 			}
 			else if (Application::d_mouseScroll > 0.0 && Application::scrollCount > Application::scrollCount_min)
 			{
-				distanceFromObj -= m_fTPVCameraOffset * static_cast<float>(dt);
+				distanceFromObj -= 30.f * static_cast<float>(dt);
 			}
 		}
 	}
@@ -481,7 +481,7 @@ void Camera3::thirdPersonView_DistanceFromObj(const double &dt)
 void Camera3::thirdPersonView_LeftRightUpdate(const double &dt)
 {
 	static const int LeftRightViewLimit = LeftRightOffset;
-	static const float vel = 50.f;
+	static const float vel = 100.f;
 
 	if (Application::IsKeyPressed('C') && !switchSideView)
 	{
@@ -531,6 +531,11 @@ Vector3 Camera3::getRight()
 	right.Normalize();
 
 	return right;
+}
+
+bool Camera3::isLookingRight()
+{
+	return LookingRight;
 }
 
 

@@ -50,6 +50,7 @@
     <ClCompile Include="Source\SpatialPartition\Unit.cpp" />
     <ClCompile Include="Source\Strategy.cpp" />
     <ClCompile Include="Source\Strategy_Kill.cpp" />
+    <ClCompile Include="Source\Terrain\LoadHmap.cpp" />
     <ClCompile Include="Source\Text.cpp" />
     <ClCompile Include="Source\TreasureChest.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Source\SpatialPartition\Unit.h" />
     <ClInclude Include="Source\Strategy.h" />
     <ClInclude Include="Source\Strategy_Kill.h" />
+    <ClInclude Include="Source\Terrain\LoadHmap.h" />
     <ClInclude Include="Source\Text.h" />
     <ClInclude Include="Source\TreasureChest.h" />
     <ClInclude Include="Source\Utility.h" />

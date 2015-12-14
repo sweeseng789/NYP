@@ -272,6 +272,87 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float 
 	return mesh;
 }
 
+Mesh* MeshBuilder::GenerateCubeWireFrame(const std::string &meshName, Color color, float length)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+
+	v.pos.Set(-0.5f * length, -0.5f * length, -0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * length, -0.5f * length, -0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * length, 0.5f * length, -0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * length, 0.5f * length, -0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * length, -0.5f * length, 0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * length, -0.5f * length, 0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f * length, 0.5f * length, 0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f * length, 0.5f * length, 0.5f * length);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+
+	std::vector<GLuint> index_buffer_data;
+	index_buffer_data.push_back(7);
+	index_buffer_data.push_back(4);
+	index_buffer_data.push_back(6);
+	index_buffer_data.push_back(5);
+	index_buffer_data.push_back(6);
+	index_buffer_data.push_back(4);
+	index_buffer_data.push_back(6);
+	index_buffer_data.push_back(5);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(5);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(7);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(6);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(7);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(7);
+	index_buffer_data.push_back(4);
+	index_buffer_data.push_back(7);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(5);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(4);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(5);
+
+	Mesh *mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = 36;
+	mesh->mode = Mesh::DRAW_LINES;
+
+	return mesh;
+}
+
 Mesh* MeshBuilder::GenerateRing(const std::string &meshName, Color color, unsigned numSlice, float outerR, float innerR)
 {
 	std::vector<Vertex> vertex_buffer_data;
@@ -767,5 +848,112 @@ Mesh* MeshBuilder::GenerateRay(const std::string &meshName, const float length)
 	mesh->indexSize = index_buffer_data.size();
 	mesh->mode = Mesh::DRAW_LINES;
 
+	return mesh;
+}
+
+Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> &heightMap)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	const float SCALE_FACTOR = 256.0f;
+	if (!LoadHeightMap(file_path.c_str(), heightMap))
+		return NULL;
+
+	unsigned terrainSize = (unsigned)sqrt((double)heightMap.size());
+
+	for (unsigned z = 0; z < terrainSize; ++z)
+	{
+		for (unsigned x = 0; x < terrainSize; ++x)
+		{
+			float scaledHeight = (float)heightMap[z * terrainSize + x] / SCALE_FACTOR;
+
+			v.pos.Set(static_cast<float>(x) / terrainSize - 0.5f, scaledHeight, static_cast<float>(z) / terrainSize - 0.5f);
+
+			//For rendering height map without texture
+			v.color.Set(scaledHeight, scaledHeight, scaledHeight);
+
+			v.texCoord.Set((float)x / terrainSize * 8, 1.f - (float)z / terrainSize * 8);
+			vertex_buffer_data.push_back(v);
+		}
+	}
+
+	for (unsigned z = 0; z < terrainSize - 1; ++z)
+	{
+		for (unsigned x = 0; x < terrainSize - 1; ++x)
+		{
+			index_buffer_data.push_back(terrainSize * z + x + 0);//Triangle 1
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 0);
+			index_buffer_data.push_back(terrainSize * z + x + 1);
+
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 1);//Triangle 2
+			index_buffer_data.push_back(terrainSize * z + x + 1);
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 0);
+		}
+	}
+
+	Vector3 firstPos, secondPos, thirdPos, normal;
+	int firstPoint = 0, secondPoint = 0, thirdPoint = 0;
+	for (unsigned z = 0; z < terrainSize - 1; ++z)
+	{
+		for (unsigned x = 1; x < terrainSize; ++x)
+		{
+			firstPoint = x + z * terrainSize;
+			secondPoint = (x - 1) + (z * terrainSize);
+			thirdPoint = x + (z + 1) * terrainSize;
+
+			//First Point
+			firstPos.x = vertex_buffer_data[firstPoint].pos.x;
+			firstPos.y = vertex_buffer_data[firstPoint].pos.y;
+			firstPos.z = vertex_buffer_data[firstPoint].pos.z;
+
+			//Second Point
+			secondPos.x = vertex_buffer_data[secondPoint].pos.x - firstPos.x;
+			secondPos.y = vertex_buffer_data[secondPoint].pos.y - firstPos.y;
+			secondPos.z = vertex_buffer_data[secondPoint].pos.z - firstPos.z;
+
+			//Third Point
+			thirdPos.x = vertex_buffer_data[thirdPoint].pos.x - firstPos.x;
+			thirdPos.y = vertex_buffer_data[thirdPoint].pos.y - firstPos.y;
+			thirdPos.z = vertex_buffer_data[thirdPoint].pos.z - firstPos.z;
+
+			//Finding normal
+			normal = secondPos.Cross(thirdPos);
+			normal.Normalize();
+			vertex_buffer_data[firstPoint].normal = normal;
+		}
+	}
+
+	Vector3 aNormal; // Average Normal
+	Vector3 firstNormal, secondNormal, thirdNormal;
+	for (unsigned i = 0; i < index_buffer_data.size(); i += 3)
+	{
+		firstNormal = vertex_buffer_data[index_buffer_data[i]].normal;
+		secondNormal = vertex_buffer_data[index_buffer_data[i + 1]].normal;
+		thirdNormal = vertex_buffer_data[index_buffer_data[i + 2]].normal;
+
+		//Getting all three normal together
+		aNormal = firstNormal + secondNormal + thirdNormal;
+
+		//Finding the average value
+		aNormal.x /= 3;
+		aNormal.y /= 3;
+		aNormal.z /= 3;
+
+		//Putting the values back
+		vertex_buffer_data[index_buffer_data[i]].normal = aNormal;
+		vertex_buffer_data[index_buffer_data[i + 1]].normal = aNormal;
+		vertex_buffer_data[index_buffer_data[i + 2]].normal = aNormal;
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex),
+		&vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
+		&index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
 	return mesh;
 }

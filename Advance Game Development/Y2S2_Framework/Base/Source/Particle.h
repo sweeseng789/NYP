@@ -1,26 +1,31 @@
 #pragma once
-#include "Vector3.h"
+#include "GameCharacter\GameObject.h"
 
-class Particle
+class Particle : public CGameObject
 {
 public:
+	enum COLORS
+	{
+		e_YELLOW,
+		e_BLUE,
+		TOTAL
+	};
+
 	Particle();
 	~Particle();
 
-	void restartParticles(Vector3 pos, Vector3 vel, double timeLimit);
-	void update(const double &dt);
+	void restartParticles(Vector3 pos, Vector3 vel, double timeLimit, COLORS color);
+	//Getter
+	Mesh* getParticle();
 
-	bool getActive();
-	Vector3 getPos();
-	Vector3 getVel();
-	float getScale();
+	//Setter
+	void update(const double &dt);
+	void setTimeLimit(double timeLimit);
 
 private:
-	bool active;
 	double timeLimit;
-	Vector3 pos;
-	Vector3 vel;
-	float scale;
 	float mass;
+	COLORS color;
+	Mesh* meshList[TOTAL];
 };
 

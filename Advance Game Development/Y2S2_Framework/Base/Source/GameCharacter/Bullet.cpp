@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-const float CBullet::bulletSpeed = 1000.f;
+const float CBullet::bulletSpeed = 1500.f;
 const double CBullet::displaybulletLimit = 0.03;
 
 CBullet::CBullet()
@@ -9,6 +9,7 @@ CBullet::CBullet()
 	scale = Vector3(1, 1, 1);
 	displayBulletTimeLimit = 0;
 	displayBullet = false;
+	active = false;
 
 	m_cSceneGraph = new CSceneNode();
 	CModel* newModel = new CModel();

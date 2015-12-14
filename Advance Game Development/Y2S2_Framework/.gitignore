@@ -1,8 +1,4 @@
 *.sdf
 *.suo
-*.obj
 *.lastbuildstate
 *.log
-*.obj
-*.log
-*.pdb

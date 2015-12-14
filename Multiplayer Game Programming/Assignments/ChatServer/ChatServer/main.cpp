@@ -34,6 +34,12 @@ struct ACCOUNT
 	{
 	}
 
+	ACCOUNT()
+	{
+		username = password = "";
+		used = false;
+	}
+
 	std::string username;
 	std::string password;
 	bool used;
@@ -42,33 +48,11 @@ struct ACCOUNT
 std::vector<user *> socks;
 std::vector<ACCOUNT *> m_cAccount;
 std::vector<std::string> m_TruncateList;
-
-bool truncateBuffer(char buffer[])
-{
-	if (!m_TruncateList.empty())
-		m_TruncateList.clear();
-
-	char* token = strtok(buffer, " ");
-	while (token != NULL)
-	{
-		std::cout << token << std::endl;
-		m_TruncateList.push_back(token);
-		token = strtok(NULL, " ");
-	}
-
-	std::cout << m_TruncateList[0][0] << std::endl;
-	if (m_TruncateList[0][0] == '/')
-	{
-		std::cout << " Working" << std::endl;
-	}
-
-	return false;
-}
+bool creatingAccount;
 
 void listCommand(user* User)
 {
 	std::string msgToSend = "";
-
 	for (std::vector<user*>::iterator itr2 = socks.begin(); itr2 != socks.end(); ++itr2)
 	{
 		user* User2 = static_cast<user*>(*itr2);
@@ -90,82 +74,99 @@ void listCommand(user* User)
 	send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
 }
 
-void msgCommand(user* User, std::string buffer, int lastPos)
+void msgCommand(user* User, int lastPos)
 {
-	std::string userToSendTo = "";
-	std::string msgToSendToUser = "(Whisper)" + User->name + ": ";
+	std::string username = "";
+	std::string msgToSend = "";
 
 	//Getting name to send to
-	for (unsigned a = lastPos + 1; a < buffer.length(); ++a)
+	for (unsigned a = 0; a < m_TruncateList[2].size(); ++a)
 	{
-		if (buffer[a] != '-')
-		{
-			userToSendTo += buffer[a];
-		}
-		else
-		{
-			lastPos = a;
-			break;
-		}
+		username += m_TruncateList[2][a];
 	}
+
+	msgToSend += User->name + " PM you: ";
 
 	//Getting msg to send
-	for (unsigned a = lastPos + 1; a < buffer.length(); ++a)
+	for (unsigned a = 3; a < m_TruncateList.size(); ++a)
 	{
-		msgToSendToUser += buffer[a];
+		msgToSend += m_TruncateList[a] + " ";
 	}
 
-	//Verify and send msg to user
-	for (std::vector<user*>::iterator it = socks.begin(); it != socks.end(); ++it)
+	//Verifying User
+	for (user* User2 : socks)
 	{
-		user* User2 = static_cast<user*>(*it);
-		if (User == User2)
-			continue;
-
-		if (User2->name == userToSendTo)
+		if (User2 != User)
 		{
-			send(User2->s, msgToSendToUser.c_str(), msgToSendToUser.length() + 1, 0);
-			break;
+			if (User2->name == username)
+			{
+				send(User2->s, msgToSend.c_str(), msgToSend.size() + 1, 0);
+				break;
+			}
 		}
 	}
 }
 
-bool bufferCommand(std::string buffer, user* User)
+void helpCommand(user* User)
 {
-	if (buffer == "AFK")
+	std::string msgCommand = "Enter [/msg - <username> <msg>] to whisper a msg to that user";
+	std::string listCommand = "Enter [/list] to get current user";
+
+	std::ostringstream msgToSend;
+	msgToSend << msgCommand << std::endl;
+	msgToSend << listCommand << std::endl;
+	send(User->s, msgToSend.str().c_str(), msgToSend.str().length() + 1, 0);
+}
+
+bool truncateBuffer(char buffer[], user* User)
+{
+	if (std::string(buffer) == "AFK")
 	{
 		User->afk = true;
 		return true;
 	}
-	else
+
+	//Clear List
+	if (!m_TruncateList.empty())
+		m_TruncateList.clear();
+
+	char* token = strtok(buffer, " ");
+	while (token != NULL)
 	{
-		if (buffer[0] == '/')
+		m_TruncateList.push_back(token);
+		token = strtok(NULL, " ");
+	}
+
+	std::string command = "";
+	int vecLastLoc = 0;
+	if (m_TruncateList[0][0] == '/')
+	{
+		for (unsigned a = 1; a < m_TruncateList[0].size(); ++a)
 		{
-			std::string command = "";
-			int lastPos = 0;
-
-			for (unsigned a = 1; a < buffer.length(); a++)
+			if (m_TruncateList[0][a] != ' ')
 			{
-				if (buffer[a] != ' ')
-				{
-					command += buffer[a];
-				}
-				else
-				{
-					lastPos = a;
-					break;
-				}
+				command += m_TruncateList[0][a];
 			}
-
-			if (command == "list")
+			else
 			{
-				listCommand(User);
+				vecLastLoc = a;
+				break;
 			}
-			else if (command == "msg")
-			{
-				msgCommand(User, buffer, lastPos);
-			}
+		}
 
+		if (command == "list")
+		{
+			listCommand(User);
+			return true;
+		}
+		else if (command == "msg")
+		{
+			msgCommand(User, vecLastLoc);
+			return true;
+		}
+		else if (command == "help")
+		{
+			helpCommand(User);
 			return true;
 		}
 	}
@@ -183,31 +184,30 @@ void newConnection(SOCKET s, u_long somelong)
 	std::cout << "New Connection Made" << std::endl;
 
 	std::string enterName = "Please enter your username";
-	//std::string sendbuff = "Enter your name";
+	std::string suggestToSignUp = "Enter sign-up' to sign-up for a account";
 
-	send(tmpsocket, enterName.c_str(), enterName.length() + 1, 0);
+	std::ostringstream msgToSend;
+	msgToSend << suggestToSignUp << std::endl;
+	msgToSend << enterName << std::endl;
+	send(tmpsocket, msgToSend.str().c_str(), msgToSend.str().length() + 1, 0);
 }
 
 void sendMsg(std::string buffer, user* User)
 {
 	std::string msgToSend = "";
+	msgToSend = User->name + " send: " + buffer;
+	std::cout << msgToSend << std::endl;
 
-	//if (User->name == "New User")
-	//{
-	//	//Set name
-	//	User->name = buffer;
-
-	//	//Send msg back to user
-	//	std::string msgToUser = "You are known as " + User->name;
-	//	send(User->s, msgToUser.c_str(), msgToUser.length() + 1, 0);
-
-	//	msgToSend = "New User have join: " + User->name;
-	//}
-	//else
+	for (user* User2 : socks)
 	{
-		msgToSend = User->name + ": " + buffer;
-		std::cout << User->name << " send: " << buffer << std::endl;
+		if (User != User2)
+		{
+			send(User2->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+		}
 	}
+
+	/*msgToSend = User->name + ": " + buffer;
+	std::cout << User->name << " send: " << buffer << std::endl;
 
 	for (std::vector<user*>::iterator itr2 = socks.begin(); itr2 != socks.end(); ++itr2)
 	{
@@ -215,7 +215,7 @@ void sendMsg(std::string buffer, user* User)
 		if (User->s == User2->s) continue;
 
 		send(User2->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
-	}
+	}*/
 }
 
 void getAccountSettings()
@@ -256,28 +256,45 @@ std::string getUsernameByPass(std::string password)
 	return "";
 }
 
+ACCOUNT* getAccountByName(std::string name)
+{
+	for (ACCOUNT* account : m_cAccount)
+	{
+		if (account->username == name)
+		{
+			return account;
+		}
+	}
+
+	return NULL;
+}
+
 bool verifyAccount(user* User, std::string stringToCheck, bool checkUsername = true)
 {
 	for (std::vector<ACCOUNT*>::iterator it = m_cAccount.begin(); it != m_cAccount.end(); ++it)
 	{
 		ACCOUNT* account = static_cast<ACCOUNT*>(*it);
 
-		//Check against username
-		if (checkUsername)
+		if (account->used != true)
 		{
-			if (stringToCheck == account->username)
+			//Check against username
+			if (checkUsername)
 			{
-				User->usernameVerified = true;
-				return true;
+				if (stringToCheck == account->username)
+				{
+					User->usernameVerified = true;
+					return true;
+				}
 			}
-		}
-		//Check against password
-		else
-		{
-			if (stringToCheck == account->password)
+			//Check against password
+			else
 			{
-				User->passwordVerified = true;
-				return true;
+				if (stringToCheck == account->password)
+				{
+					User->passwordVerified = true;
+					account->used = true;
+					return true;
+				}
 			}
 		}
 	}
@@ -290,12 +307,17 @@ void accountLogIn(user* User, std::string buffer)
 	std::string enterName = "Please enter your username";
 	std::string enterPass = "Please enter your password";
 	std::string loginSuccess = "You have login successfully";
+	std::string suggestToSignUp = "Enter 'sign-up' to sign-up for a account";
 
+	//send(User->s, suggestToSignUp.c_str(), suggestToSignUp.length() + 1, 0);
 	if (!User->usernameVerified)
 	{
 		if (!verifyAccount(User, buffer))
 		{
-			send(User->s, enterName.c_str(), enterName.length() + 1, 0);
+			std::ostringstream msgToSend;
+			msgToSend << suggestToSignUp << std::endl;
+			msgToSend << enterName << std::endl;
+			send(User->s, msgToSend.str().c_str(), msgToSend.str().length() + 1, 0);
 		}
 		else
 		{
@@ -332,6 +354,61 @@ void accountLogIn(user* User, std::string buffer)
 			}
 		}
 	}
+}
+
+void createAccount(user* User, std::string buffer)
+{
+	std::string username = "Please enter your desired username";
+	std::string password = "Please enter your desired password";
+	static bool enteringUsername = true;
+	static ACCOUNT* newAccount = NULL;
+
+	if (enteringUsername)
+	{
+		if (newAccount == NULL)
+		{
+			newAccount = new ACCOUNT();
+			send(User->s, username.c_str(), username.length() + 1, 0);
+		}
+		else
+		{
+			newAccount->username = buffer;
+			enteringUsername = false;
+			send(User->s, password.c_str(), password.length() + 1, 0);
+		}
+	}
+	else
+	{
+		if (newAccount->password == "")
+		{
+			newAccount->password = buffer;
+			m_cAccount.push_back(newAccount);
+			newAccount = NULL;
+			enteringUsername = true;
+			creatingAccount = false;
+
+			//Write to file
+			std::ofstream accountInfo;
+			accountInfo.open("Text/Accounts.txt");
+			for (ACCOUNT* account : m_cAccount)
+			{
+				std::string username = account->username;
+				std::string password = account->password;
+
+				accountInfo << username << ", " << password << std::endl;
+			}
+			accountInfo.close();
+
+			std::string enterName = "Please enter your username";
+			std::string suggestToSignUp = "Enter 'sign-up' to sign-up for a account";
+
+			std::ostringstream msgToSend;
+			msgToSend << suggestToSignUp << std::endl;
+			msgToSend << enterName << std::endl;
+			send(User->s, msgToSend.str().c_str(), msgToSend.str().length() + 1, 0);
+		}
+	}
+
 }
 
 int main()
@@ -401,6 +478,7 @@ int main()
 				if (FD_ISSET(User->s, &fset))
 				{
 					char buffer[80]; // buffer that is 80 characters big
+					char tempBuffer[80];
 					int length = recv(User->s, buffer, sizeof(buffer), 0);
 					if (length == SOCKET_ERROR)
 					{
@@ -410,26 +488,40 @@ int main()
 						break;
 					}
 
-					//User have not sign in
-					if (!User->logIn)
+					if (std::string(buffer) == "sign-up")
 					{
-						accountLogIn(User, buffer);
+						creatingAccount = true;
+					}
+
+					if (creatingAccount)
+					{
+						createAccount(User, std::string(buffer));
 					}
 					else
 					{
-						//Check if user is AFK, set to false
-						if (User->afk)
-							User->afk = false;
+						//User have not sign in
+						if (!User->logIn)
+						{
+							accountLogIn(User, buffer);
+						}
+						else
+						{
+							for (unsigned a = 0; a < 80; ++a)
+							{
+								tempBuffer[a] = buffer[a];
+							}
 
-						truncateBuffer(buffer);
-						////If bufferCommand return false, it is a normal message
-						//if (!bufferCommand(std::string(buffer), User))
-						//{
-						//	sendMsg(std::string(buffer), User);
+							//Check if user is AFK, set to false
+							if (User->afk)
+								User->afk = false;
+							if (!truncateBuffer(tempBuffer, User))
+							{
+								sendMsg(std::string(buffer), User);
 
-						//	std::string msgToSend = "Please enter your message";
-						//	send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
-						//}
+								std::string msgToSend = "Please enter your message";
+								send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+							}
+						}
 					}
 				}
 			}
@@ -438,5 +530,6 @@ int main()
 
 	//Cleanup
 	WSACleanup();
+
 	return 0;
 }

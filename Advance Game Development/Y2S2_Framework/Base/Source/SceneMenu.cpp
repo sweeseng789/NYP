@@ -795,7 +795,7 @@ void SceneMenu::RenderMobileObjects()
 	modelStack.PopMatrix();
 
 	//Particle
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	/*for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
 		Particle* particle = static_cast<Particle*>(*it);
 
@@ -807,7 +807,7 @@ void SceneMenu::RenderMobileObjects()
 			RenderMesh(meshList[GEO_SPHERE], false);
 			modelStack.PopMatrix();
 		}
-	}
+	}*/
 
 	//Text
 	for (std::vector<CText*>::iterator it = textList.begin(); it != textList.end(); ++it)
@@ -953,30 +953,30 @@ void SceneMenu::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
-Particle * SceneMenu::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
-{
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); it++)
-	{
-		Particle* particle = static_cast<Particle*>(*it);
-
-		if (!particle->getActive())
-		{
-			particle->restartParticles(pos, vel, timeLimit);
-			return particle;
-		}
-	}
-
-	for (unsigned a = 0; a < 10; ++a)
-	{
-		Particle* particle = new Particle();
-		particleList.push_back(particle);
-	}
-
-	Particle* particle = particleList.back();
-	particle->restartParticles(pos, vel, timeLimit);
-
-	return particle;
-}
+//Particle * SceneMenu::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
+//{
+//	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); it++)
+//	{
+//		Particle* particle = static_cast<Particle*>(*it);
+//
+//		if (!particle->getActive())
+//		{
+//			particle->restartParticles(pos, vel, timeLimit);
+//			return particle;
+//		}
+//	}
+//
+//	for (unsigned a = 0; a < 10; ++a)
+//	{
+//		Particle* particle = new Particle();
+//		particleList.push_back(particle);
+//	}
+//
+//	Particle* particle = particleList.back();
+//	particle->restartParticles(pos, vel, timeLimit);
+//
+//	return particle;
+//}
 
 
 /********************************************************************************

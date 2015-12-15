@@ -227,11 +227,10 @@ void SceneGame::InitMesh()
 	meshList[GEO_CROSSHAIR]->textureID[0] = LoadTGA("Image//Crosshair.tga");
 
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//terrain.raw", m_heightMap);
-	//meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//terrain.tga");
-	//meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain2.tga");
+	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//terrain2.tga");
+	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain3.tga");
 
-	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//bottom.tga");
-	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain.tga");
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
 }
 
 void SceneGame::Init()
@@ -246,7 +245,7 @@ void SceneGame::Init()
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 	
-	heightMapScale.Set(2000.f, 350.f, 2000.f);
+	heightMapScale.Set(500.f, 350.f, 500.f);
 
 	rotateAngle = 0;
 
@@ -1257,6 +1256,7 @@ void SceneGame::checkCollision(CGameObject* go, std::vector<CGameObject*>& goToC
 		{
 			//Always ensure player is the first parameters
 			if (goToCheck[a]->isPlayer() || goToCheck[a]->isPlayerBullet())
+			//if (dynamic_cast<CPlayInfo3PV*>(go) != NULL || dynamic_cast<CBullet*>(go))
 			{
 				CGameObject* temp = goToCheck[a];
 				goToCheck[a] = go;
@@ -1277,60 +1277,68 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 	}
 	else if (go1->isPlayerBullet() && go2->isEnemy())
 	{
-		std::unordered_map<int, std::string> nodeList = go2->getNodeList();
-
-		for (std::unordered_map<int, std::string>::iterator it = nodeList.begin(); it != nodeList.end(); ++it)
-		{
-			CSceneNode* node = go2->getSceneGraph()->GetNode(it->first);
-			if (node != NULL)
-			{
-				Vector3 topLeft(0, 0, 0), bottomRight(0, 0, 0), Position(0, 0, 0);
-				Position = go2->getPos() + node->getTransform()->GetTranslation();
-
-				if (it->second == "Head")
-				{
-					topLeft = Position + Vector3(8, 7, 8);
-					bottomRight = Position - Vector3(8, 7, 8);
-				}
-				else if (it->second == "Torso")
-				{
-					topLeft = Position + Vector3(7, 6, 7);
-					bottomRight = Position - Vector3(7, 10, 7);
-				}
-
-				else if (it->second == "LeftArm" || it->second == "RightArm")
-				{
-					topLeft = Position + Vector3(6, 6, 6);
-					bottomRight = Position - Vector3(6, 10, 6);
-				}
-				else if (it->second == "LeftLeg" || it->second == "RightLeg")
-				{
-					topLeft = Position + Vector3(6, 8, 6);
-					bottomRight = Position - Vector3(6, 8, 6);
-					bottomRight.y = 0;
-				}
-
-				if (!Position.IsZero() && !bottomRight.IsZero() && !topLeft.IsZero())
-				{
-					/*if (SSDLC::intersect(topLeft, bottomRight, go1->getPos()))
-					{
-						go1->setActive(false);
-						cout << it->second << std::endl;
-					}*/
-					if (SSDLC::intersect_LineAABB(go1->getPos(), go1->getDirection(), topLeft, bottomRight))
-					{
-						go1->setActive(false);
-						cout << it->second << std::endl;
-					}
-				}
-			}
-		}
+		std::cout << "Working bois" << std::endl;
+		CBullet* bullet = dynamic_cast<CBullet*>(go1);
+		AI* ai = dynamic_cast<AI*>(go2);
+		Collision_BulletToAi(bullet, ai);
 	}
 }
 
 void SceneGame::Collision_PlayerToAi(AI* ai)
 {
 
+}
+
+void SceneGame::Collision_BulletToAi(CBullet* bullet, AI* ai)
+{
+	std::unordered_map<int, std::string> nodeList = ai->getNodeList();
+
+	for (std::unordered_map<int, std::string>::iterator it = nodeList.begin(); it != nodeList.end(); ++it)
+	{
+		CSceneNode* node = ai->getSceneGraph()->GetNode(it->first);
+		if (node != NULL)
+		{
+			Vector3 topLeft(0, 0, 0), bottomRight(0, 0, 0), Position(0, 0, 0);
+			Position = ai->getPos() + node->getTransform()->GetTranslation();
+
+			if (it->second == "Head")
+			{
+				topLeft = Position + Vector3(9, 7, 9);
+				bottomRight = Position - Vector3(9, 7, 9);
+			}
+			else if (it->second == "Torso")
+			{
+				topLeft = Position + Vector3(7, 6, 7);
+				bottomRight = Position - Vector3(7, 10, 7);
+			}
+
+			else if (it->second == "LeftArm" || it->second == "RightArm")
+			{
+				topLeft = Position + Vector3(6, 6, 6);
+				bottomRight = Position - Vector3(6, 10, 6);
+			}
+			else if (it->second == "LeftLeg" || it->second == "RightLeg")
+			{
+				topLeft = Position + Vector3(6, 8, 6);
+				bottomRight = Position - Vector3(6, 8, 6);
+				bottomRight.y = 0;
+			}
+
+			if (!bottomRight.IsZero() && !topLeft.IsZero())
+			{
+				/*if (SSDLC::intersect(topLeft, bottomRight, go1->getPos()))
+				{
+				go1->setActive(false);
+				cout << it->second << std::endl;
+				}*/
+				if (SSDLC::intersect_LineAABB(bullet->getPos(), bullet->getDirection(), topLeft, bottomRight))
+				{
+					bullet->setActive(false);
+					cout << it->second << std::endl;
+				}
+			}
+		}
+	}
 }
 
 /********************************************************************************
@@ -1496,7 +1504,7 @@ void SceneGame::GridUpdate(const double& dt)
 			AI* ai = dynamic_cast<AI*>(*it);
 			if (ai != NULL)
 			{
-				ai->Update(dt, m_cAvatar->getPos(), tempY + 14);
+				ai->Update(dt, m_cAvatar->getPos(), tempY + 10);
 			}
 		}
 	}
@@ -1562,4 +1570,11 @@ void SceneGame::ParticleUpdate(const double& dt)
 			particle->update(dt);
 		}
 	}
+}
+
+void SceneGame::RenderSkyplane()
+{
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_SKYPLANE], false);
+	modelStack.PopMatrix();
 }

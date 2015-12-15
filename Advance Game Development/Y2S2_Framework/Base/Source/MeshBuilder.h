@@ -30,6 +30,7 @@ public:
 	static Mesh* Generate2DMesh(const std::string &meshName, Color color, int pos_x, int pos_y, int width, int height);
 	static Mesh* GenerateRay(const std::string &meshName, const float length = 1.f);
 	static Mesh* GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> & heightMap);
+	static Mesh* GenerateSkyPlane(const std::string &meshName, Color color, int slices, float PlanetRadius, float AtmosphereRadius, float hTile, float vTile);
 };
 
 #endif

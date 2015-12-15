@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-const float CBullet::bulletSpeed = 1000.f;
+const float CBullet::bulletSpeed = 2000.f;
 const double CBullet::displaybulletLimit = 0.03;
 
 CBullet::CBullet()

@@ -98,6 +98,7 @@ class SceneGame : public Scene
 		GEO_OBJECT,
 		GEO_TEXT,
 		GEO_TERRAIN,
+		GEO_SKYPLANE,
 		NUM_GEOMETRY,
 	};
 	enum SOUND_TYPE
@@ -149,6 +150,7 @@ public:
 	void RenderGameplay();
 	void RenderMenu();
 	void RenderTerrain();
+	void RenderSkyplane();
 
 	//Particle
 	std::vector<Particle*> particleList;
@@ -163,6 +165,7 @@ public:
 	void collisionCheck(CGameObject* node1, CGameObject* node2);
 	void checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex);
 	void Collision_PlayerToAi(AI* ai);
+	void Collision_BulletToAi(CBullet* bullet, AI*ai);
 	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet = true);
 
 

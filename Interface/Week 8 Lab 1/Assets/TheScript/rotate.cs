@@ -9,6 +9,7 @@ public class rotate : MonoBehaviour
 	void Start () 
     {
         testing = false;
+        Debug.Log("Hello World");
 	}
 	
     

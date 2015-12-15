@@ -230,7 +230,8 @@ void SceneGame::InitMesh()
 	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//terrain2.tga");
 	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain3.tga");
 
-	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 200.0f, 2000.0f, 1.0f, 1.0f);
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 5.0f, 50.f, 1.0f, 1.0f);
+	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//Skyplane//skyplane.tga");
 }
 
 void SceneGame::Init()
@@ -245,7 +246,7 @@ void SceneGame::Init()
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 	
-	heightMapScale.Set(500.f, 350.f, 500.f);
+	heightMapScale.Set(3000.f, 350.f, 3000.f);
 
 	rotateAngle = 0;
 
@@ -1213,6 +1214,9 @@ void SceneGame::RenderGameplay()
 	//Render Terrain
 	RenderTerrain();
 
+	//Render Skyplane
+	RenderSkyplane();
+
 	//Render Character
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y, m_cAvatar->getPos().z);
@@ -1277,7 +1281,6 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 	}
 	else if (go1->isPlayerBullet() && go2->isEnemy())
 	{
-		std::cout << "Working bois" << std::endl;
 		CBullet* bullet = dynamic_cast<CBullet*>(go1);
 		AI* ai = dynamic_cast<AI*>(go2);
 		Collision_BulletToAi(bullet, ai);
@@ -1575,6 +1578,8 @@ void SceneGame::ParticleUpdate(const double& dt)
 void SceneGame::RenderSkyplane()
 {
 	modelStack.PushMatrix();
+	modelStack.Translate(heightMapScale.x * 0.5, heightMapScale.y, heightMapScale.z * 0.5);
+	modelStack.Scale(heightMapScale.x, heightMapScale.y, heightMapScale.z);
 	RenderMesh(meshList[GEO_SKYPLANE], false);
 	modelStack.PopMatrix();
 }

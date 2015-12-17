@@ -181,8 +181,9 @@ void SceneGame::InitMesh()
 	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.f);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	//meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
+	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 0, 0), 1.f);
+	meshList[GEO_QUAD2] = MeshBuilder::GenerateQuad("quad", Color(0, 1, 0), 1.f);
+	//meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
@@ -198,17 +199,17 @@ void SceneGame::InitMesh()
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID[0] = LoadTGA("Image//left.tga");
+	meshList[GEO_LEFT]->textureID[0] = LoadTGA("Image//left2.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID[0] = LoadTGA("Image//right.tga");
+	meshList[GEO_RIGHT]->textureID[0] = LoadTGA("Image//right2.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID[0] = LoadTGA("Image//top.tga");
+	meshList[GEO_TOP]->textureID[0] = LoadTGA("Image//top2.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID[0] = LoadTGA("Image//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID[0] = LoadTGA("Image//bottom2.tga");
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID[0] = LoadTGA("Image//front.tga");
+	meshList[GEO_FRONT]->textureID[0] = LoadTGA("Image//back2.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID[0] = LoadTGA("Image//back.tga");
+	meshList[GEO_BACK]->textureID[0] = LoadTGA("Image//front2.tga");
 
 	// Load the ground mesh and texture
 	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
@@ -230,8 +231,15 @@ void SceneGame::InitMesh()
 	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//Terrain//terrain2.tga");
 	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//Terrain//terrain3.tga");
 
-	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 5.0f, 50.f, 1.0f, 1.0f);
-	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//Skyplane//skyplane.tga");
+	//meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 0.f, 200.f, 1.0f, 1.0f);
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateOBJ("Skydome", "OBJ//Skybox.obj");
+	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//Skyplane//Skybox.tga");
+
+	meshList[GEO_REDCUBE] = MeshBuilder::GenerateOBJ_WireFrame("Red Box", "OBJ//SP_Box.obj");
+	meshList[GEO_REDCUBE]->textureID[0] = LoadTGA("Image//red.tga");
+
+	meshList[GEO_GREENCUBE] = MeshBuilder::GenerateOBJ_WireFrame("Green Box", "OBJ//SP_Box.obj");
+	meshList[GEO_GREENCUBE]->textureID[0] = LoadTGA("Image//green.tga");
 }
 
 void SceneGame::Init()
@@ -245,8 +253,37 @@ void SceneGame::Init()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
+
+
+	std::cout << "Loading Map" << std::endl;
+	std::string fileLoc = "Maps//";
+	fileLoc += "1";
+	fileLoc += ".csv";
+	std::cout << fileLoc << std::endl;
+
+	if (mapLoader.loadMap(fileLoc))
+	{
+		std::cout << mapLoader.map_width << ", " << mapLoader.map_height << std::endl;
+		std::cout << mapLoader.worldSize << ", " << mapLoader.worldHeight << std::endl;
+		WORLDSIZE = mapLoader.worldSize;
+
+		for (unsigned y = mapLoader.map_height - 1; y > 0; --y)
+		{
+			for (unsigned x = 0; x < mapLoader.map_width; ++x)
+			{
+				if (mapLoader.map_data[y][x] == "P")
+				{
+					m_cAvatar = new CPlayInfo3PV();
+					//m_cAvatar->setPos(Vector3(heightMapScale.x * 0.5, 2000, heightMapScale.z * 0.5));
+					m_cAvatar->setPos(Vector3(x * mapLoader.map_width * 0.5, 2000.f, y * mapLoader.map_height * 0.5));
+					std::cout << x * mapLoader.map_width << ", " << y * mapLoader.map_height << std::endl;
+					GOList.push_back(m_cAvatar);
+				}
+			}
+		}
+	}
 	
-	heightMapScale.Set(3000.f, 350.f, 3000.f);
+	heightMapScale.Set(WORLDSIZE, 350.f, WORLDSIZE);
 
 	rotateAngle = 0;
 
@@ -256,11 +293,10 @@ void SceneGame::Init()
 	mousePos.SetZero();
 	menuChoice = "";
 	isMousePressed_Left = false;
-	m_cAvatar = new CPlayInfo3PV();
-	m_cAvatar->setPos(Vector3(heightMapScale.x * 0.5, 2000, heightMapScale.z * 0.5));
+	b_Debug = false;
 
 	m_cSpatialPartition = new CSpatialPartition();
-	m_cSpatialPartition->Init(100, 100, 3, 3);
+	m_cSpatialPartition->Init(1000, 1000, 3, 3);
 	for (int i = 0; i < m_cSpatialPartition->GetxNumOfGrid(); i++)
 	{
 		for (unsigned j = 0; j < m_cSpatialPartition->GetyNumOfGrid(); j++)
@@ -271,27 +307,43 @@ void SceneGame::Init()
 
 	//m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
 
-	m_grid = std::make_unique<Grid>(1000, 1000, CELL_SIZE);
+	m_grid = std::make_unique<Grid>(WORLDSIZE, WORLDSIZE, CELL_SIZE);
 	//m_grid->addNode(Vector3(0, 0, 0), m_cAvatar->getNode());
 
 	CText * text = new CText();
-	text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f, 0.1f));
 	text->setScale(Vector3(35, 35, 35));
-	text->setText("Return To Menu");
+	text->setText("Resume");
 	textList.push_back(text);
 
 	text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 60, 0.1f));
 	text->setScale(Vector3(35, 35, 35));
+	text->setText("Return To Menu");
+	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 120, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Debugging Mode");
+	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 180, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
 	text->setText("Exit");
 	textList.push_back(text);
 
-	AI* ai = new AI(Vector3(0, 0, 200));
+	/*AI* ai = new AI(Vector3(0, 0, 200));
 	GOList.push_back(ai);
 
 	ai = new AI(Vector3(200, 0, 200));
-	GOList.push_back(ai);
+	GOList.push_back(ai);*/
+
+	/*mapLoader.mapWidth = WORLDSIZE;
+	mapLoader.mapWidth = WORLDSIZE;
+	mapLoader.WORLD_SIZE = WORLDSIZE;*/
+
 }
 
 void SceneGame::Update(double dt)
@@ -305,7 +357,12 @@ void SceneGame::Update(double dt)
 	if(Application::IsKeyPressed('4'))
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
-	if(Application::IsKeyPressed('5'))
+	if (Application::IsKeyPressed('5'))
+		b_Debug = true;
+	if (Application::IsKeyPressed('6'))
+		b_Debug = false;
+
+	/*if(Application::IsKeyPressed('5'))
 	{
 		lights[0].type = Light::LIGHT_POINT;
 		glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
@@ -327,7 +384,7 @@ void SceneGame::Update(double dt)
 	else if(Application::IsKeyPressed('9'))
 	{
 		bLightEnabled = false;
-	}
+	}*/
 
 	if(Application::IsKeyPressed('I'))
 		lights[0].position.z -= (float)(10.f * dt);
@@ -353,7 +410,7 @@ void SceneGame::Update(double dt)
 
 	fps = (float)(1.f / dt);
 
-	static double d_buttonTimeLimit = 0.5;
+	/*static double d_buttonTimeLimit = 0.5;
 	static double d_buttonCurrentTime = 0;
 
 	if (d_buttonCurrentTime < d_buttonTimeLimit)
@@ -376,11 +433,17 @@ void SceneGame::Update(double dt)
 			b_pauseGame = !b_pauseGame;
 			d_buttonCurrentTime = 0;
 		}
-	}
+	}*/
 
 	if (!b_pauseGame)
 	{
 		UpdateGameplay(dt);
+
+		if (Application::IsKeyPressed(VK_ESCAPE))
+		{
+			Application::activateMouse(false);
+			b_pauseGame = true;
+		}
 	}
 	else
 	{
@@ -476,7 +539,8 @@ void SceneGame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color)
 void SceneGame::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, float y, bool rotate)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	//ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	ortho.SetToOrtho(0, Application::getWindow_Width(), 0, Application::getWindow_Height(), -10, 10);
 	projectionStack.PushMatrix();
 		projectionStack.LoadMatrix(ortho);
 		viewStack.PushMatrix();
@@ -666,10 +730,10 @@ void SceneGame::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneGame::RenderMobileObjects()
 {
 	// Render LightBall
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	/*for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
@@ -701,7 +765,10 @@ void SceneGame::RenderMobileObjects()
  ********************************************************************************/
 void SceneGame::RenderFixedObjects()
 {
+	modelStack.PushMatrix();
+	modelStack.Translate(heightMapScale.x * 0.5, heightMapScale.y, heightMapScale.z * 0.5);
 	RenderMesh(meshList[GEO_AXES], false);
+	modelStack.PopMatrix();
 
 
 	modelStack.PushMatrix();
@@ -786,47 +853,133 @@ void SceneGame::RenderGround()
  ********************************************************************************/
 void SceneGame::RenderSkybox()
 {
+	/*
 	//left
 	modelStack.PushMatrix();
+	modelStack.Translate(0 , 0, heightMapScale.z * 0.5 + 2.f);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	modelStack.Scale(heightMapScale.x, heightMapScale.x, heightMapScale.z);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
-	
+
+
+	//Right
 	modelStack.PushMatrix();
+	modelStack.Translate(heightMapScale.x, 0, heightMapScale.z * 0.5 + 2.f);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	modelStack.Scale(heightMapScale.x, heightMapScale.x, heightMapScale.z);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
-	
+
+	//Front
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	modelStack.Translate(heightMapScale.x * 0.5, 0, 1.f);
+	modelStack.Scale(heightMapScale.x, heightMapScale.x, heightMapScale.z);
 	RenderMesh(meshList[GEO_FRONT], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
+
+
+	////left
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0 , 0, heightMapScale.z / 2 - offset);
+	//modelStack.Rotate(90, 0, 1, 0);
+	//modelStack.Scale(heightMapScale.x, heightMapScale.x, heightMapScale.z);
+	//RenderMesh(meshList[GEO_LEFT], false);
+	//modelStack.PopMatrix();
+
+	////Front
+	//modelStack.PushMatrix();
+	//modelStack.Translate(heightMapScale.x / 2 - offset, 0, 0);
+	//modelStack.Scale(heightMapScale.x, heightMapScale.x, heightMapScale.z);
+	//RenderMesh(meshList[GEO_FRONT], false);
+	//modelStack.PopMatrix();
+	static float offset = 2.5;
+
+	//modelStack.PushMatrix();
+	//modelStack.Rotate(90, 0, 1, 0);
+	//modelStack.Translate(-WORLDSIZE / 2.f, 0, offset);
+	//modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	//RenderMesh(meshList[GEO_LEFT], false);
+	//modelStack.PopMatrix();
+	//
+	///*modelStack.PushMatrix();
+	//modelStack.Rotate(-90, 0, 1, 0);
+	//modelStack.Translate(WORLDSIZE / 2.f, 0, -WORLDSIZE + offset);
+	//modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	//RenderMesh(meshList[GEO_RIGHT], false);
+	//modelStack.PopMatrix();*/
+	//
+	//modelStack.PushMatrix();
+	//modelStack.Translate(WORLDSIZE / 2.f, 0, offset);
+	//modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	//RenderMesh(meshList[GEO_FRONT], false);
+	//modelStack.PopMatrix();
 	
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	modelStack.Translate(-WORLDSIZE / 2.f, 0, -WORLDSIZE + 0);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
 	
 	modelStack.PushMatrix();
 	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
+	modelStack.Translate(WORLDSIZE / 2.f, WORLDSIZE / 2.f, -WORLDSIZE / 2.f + 0);
 	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	RenderMesh(meshList[GEO_TOP], false);
+	modelStack.PopMatrix();*/
+	
+	/*modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + test);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();*/
+
+	//left
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + offset);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	RenderMesh(meshList[GEO_LEFT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + offset);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	RenderMesh(meshList[GEO_RIGHT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + offset);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	RenderMesh(meshList[GEO_FRONT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + offset);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
+	RenderMesh(meshList[GEO_BACK], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(90, 1, 0, 0);
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + offset);
+	modelStack.Rotate(90, 0, 0, 1);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
+	modelStack.Translate(0, 0, -WORLDSIZE / 2 + offset);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	modelStack.Scale(WORLDSIZE, WORLDSIZE, WORLDSIZE);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
 }
@@ -853,9 +1006,11 @@ void SceneGame::Render()
 
 	RenderLights();
 	RenderGround();
-	RenderSkybox();
 	RenderFixedObjects();
 	RenderMobileObjects();
+
+	if (b_Debug)
+		RenderDebugging();
 
 	RenderGUI();
 }
@@ -1075,14 +1230,29 @@ void SceneGame::UpdateMenu(const double &dt)
 
 	if (menuChoice != "")
 	{
-		if (menuChoice == "Return To Menu")
+		if (menuChoice == "Resume")
+		{
+			Application::activateMouse(true);
+			b_pauseGame = false;
+		}
+		else if (menuChoice == "Return To Menu")
 		{
 			Application::b_BacktoMenu = true;
+		}
+		else if (menuChoice == "Debugging Mode")
+		{
+			if (b_Debug)
+				std::cout << "Debugging Mode Disadbled" << std::endl;
+			else
+				std::cout << "Debugging Mode enabled" << std::endl;
+			b_Debug = !b_Debug;
 		}
 		else if (menuChoice == "Exit")
 		{
 			Application::quitGame();
 		}
+
+		menuChoice = "";
 	}
 }
 
@@ -1171,7 +1341,8 @@ void SceneGame::RenderGUI()
 {
 	// Render the crosshair
 	modelStack.PushMatrix();
-	modelStack.Translate(-1.5, -1.5, 0);
+	modelStack.Translate(Application::getWindow_Width() * 0.5 -1.5, Application::getWindow_Height() * 0.5 -1.5, 0);
+	modelStack.Scale(Application::getWindow_Width() / 120, Application::getWindow_Width() / 120, 0);
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 	modelStack.PopMatrix();
 
@@ -1465,12 +1636,13 @@ void SceneGame::GridUpdate(const double& dt)
 		{
 			//Check if the node is in a different grid
 			//Cause crashes if i keep removing specifically one node
-			//Cell* newCell = m_grid->getCell(go->getPos());
-			//if (newCell != go->getNode()->ownerCell)
-			//{
-			//	m_grid->removeGOFromCell(go);
-			//	m_grid->addNode(go);
-			//}
+			/*Cell* newCell = m_grid->getCell(go->getPos());
+			if (newCell != go->getNode()->ownerCell)
+			{
+				m_grid->removeGOFromCell(go);
+				m_grid->addNode(go);
+				std::cout << "Swapped" << std::endl;
+			}*/
 
 			//Repopulating the list
 			m_grid->addNode(go);
@@ -1520,40 +1692,48 @@ void SceneGame::GridUpdate(const double& dt)
 
 		Cell& cell = m_grid->m_cells[a];
 
-		//Loop thought everything in a cell
-		for (unsigned i = 0; i < cell.GOList.size(); ++i)
+		if (cell.GOList.size() > 0)
 		{
-			CGameObject* go = cell.GOList[i];
-
-			if (go->getActive())
+			cell.isPlayerInit = true;
+			//Loop thought everything in a cell
+			for (unsigned i = 0; i < cell.GOList.size(); ++i)
 			{
-				checkCollision(go, cell.GOList, i + 1);
+				CGameObject* go = cell.GOList[i];
 
-				//Update Collision with neighbout cells
-				if (x > 0)
+				if (go->getActive())
 				{
-					//Left Cell
-					checkCollision(go, m_grid->getCell(x - 1, z)->GOList, 0);
+					checkCollision(go, cell.GOList, i + 1);
 
+					//Update Collision with neighbout cells
+					if (x > 0)
+					{
+						//Left Cell
+						checkCollision(go, m_grid->getCell(x - 1, z)->GOList, 0);
+
+						if (z > 0)
+						{
+							//Top Left Cell
+							checkCollision(go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
+						}
+
+						//Bottom Left Cell
+						if (z < m_grid->m_numZCells - 1)
+						{
+							checkCollision(go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
+						}
+					}
+
+					//Up cell
 					if (z > 0)
 					{
-						//Top Left Cell
-						checkCollision(go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
+						checkCollision(go, m_grid->getCell(x, z - 1)->GOList, 0);
 					}
-
-					//Bottom Left Cell
-					if (z < m_grid->m_numZCells - 1)
-					{
-						checkCollision(go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
-					}
-				}
-
-				//Up cell
-				if (z > 0)
-				{
-					checkCollision(go, m_grid->getCell(x, z - 1)->GOList, 0);
 				}
 			}
+		}
+		else
+		{
+			cell.isPlayerInit = false;
 		}
 	}
 }
@@ -1578,8 +1758,38 @@ void SceneGame::ParticleUpdate(const double& dt)
 void SceneGame::RenderSkyplane()
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(heightMapScale.x * 0.5, heightMapScale.y, heightMapScale.z * 0.5);
-	modelStack.Scale(heightMapScale.x, heightMapScale.y, heightMapScale.z);
+	modelStack.Translate(heightMapScale.x * 0.5, heightMapScale.y * 0.5, heightMapScale.z * 0.5);
+	modelStack.Scale(heightMapScale.x, heightMapScale.z,  heightMapScale.z);
 	RenderMesh(meshList[GEO_SKYPLANE], false);
 	modelStack.PopMatrix();
+}
+
+void SceneGame::RenderDebugging()
+{
+	static float size = CELL_SIZE / 30;
+	for (unsigned a = 0; a < m_grid->m_cells.size(); ++a)
+	{
+		int x = a % m_grid->m_numXCells;
+		int z = a / m_grid->m_numXCells;
+
+		Cell& cell = m_grid->m_cells[a];
+
+		modelStack.PushMatrix();
+		modelStack.Translate(Application::getWindow_Width() - 100, Application::getWindow_Height() - 200, 0);
+		modelStack.Rotate(180, 0, 0, 1);
+		if (!cell.isPlayerInit)
+			RenderMeshIn2D(meshList[GEO_QUAD], false, size, x * size, z * -size);
+		else
+			RenderMeshIn2D(meshList[GEO_QUAD2], false, size, x * size, z * -size);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(CELL_SIZE * 0.5 + x * CELL_SIZE, CELL_SIZE * 0.5, CELL_SIZE * 0.5 + z * CELL_SIZE);
+		modelStack.Scale(CELL_SIZE - 0.5, CELL_SIZE - 0.5, CELL_SIZE - 0.5);
+		if (!cell.isPlayerInit)
+			RenderMesh(meshList[GEO_REDCUBE], false);
+		else
+			RenderMesh(meshList[GEO_GREENCUBE], false);
+		modelStack.PopMatrix();
+	}
 }

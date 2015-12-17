@@ -17,14 +17,14 @@
 #include "GameCharacter\AI.h"
 #include "GameCharacter\Bullet.h"
 #include "Sound\Sound.h"
+#include "MapLoader\MapLoader.h"
 
 #include <map>
 #include <unordered_map>
 #include <vector>
 #include <memory>
 
-const float SKYBOXSIZE = 1000.f;
-const int CELL_SIZE = 100;
+const int CELL_SIZE = 600;
 class SceneGame : public Scene
 {
 	enum UNIFORM_TYPE
@@ -84,6 +84,7 @@ class SceneGame : public Scene
 		GEO_SPHERE8,
 		GEO_SPHERE9,
 		GEO_QUAD,
+		GEO_QUAD2,
 		GEO_CUBE,
 		GEO_RING,
 		GEO_CONE,
@@ -99,6 +100,8 @@ class SceneGame : public Scene
 		GEO_TEXT,
 		GEO_TERRAIN,
 		GEO_SKYPLANE,
+		GEO_REDCUBE,
+		GEO_GREENCUBE,
 		NUM_GEOMETRY,
 	};
 	enum SOUND_TYPE
@@ -151,6 +154,7 @@ public:
 	void RenderMenu();
 	void RenderTerrain();
 	void RenderSkyplane();
+	void RenderDebugging();
 
 	//Particle
 	std::vector<Particle*> particleList;
@@ -237,6 +241,11 @@ private:
 	std::vector<unsigned char> m_heightMap;
 	Vector3 heightMapScale;
 
+	bool b_Debug;
+	MapLoader mapLoader;
+
+
+	float WORLDSIZE;
 };
 
 #endif

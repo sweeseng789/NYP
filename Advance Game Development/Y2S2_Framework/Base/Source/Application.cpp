@@ -293,7 +293,7 @@ void Application::updateMouseScrolling()
 
 void Application::activateMouse(bool status)
 {
-	if (updateMouse == true)
+	if (updateMouse)
 	{
 		//Show cursor
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

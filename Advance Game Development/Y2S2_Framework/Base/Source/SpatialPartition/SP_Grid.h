@@ -8,6 +8,8 @@ struct Cell
 {
 	//std::vector<CSceneNode*> nodeList;
 	std::vector<CGameObject*> GOList;
+	int id;
+	bool isPlayerInit;
 };
 
 class Grid

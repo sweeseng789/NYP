@@ -17,6 +17,12 @@ Grid::Grid(int width, int height, int cellSize):
 
 	//Allocate all the cells
 	m_cells.resize(m_numZCells * m_numXCells);
+
+	for (unsigned a = 0; a < m_cells.size(); ++a)
+	{
+		m_cells[a].id = a;
+		m_cells[a].isPlayerInit = false;
+	}
 }
 
 Grid::~Grid()

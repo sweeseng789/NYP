@@ -907,7 +907,7 @@ Render the skybox in this scene
 void SceneMenu::RenderSkybox()
 {
 	//left
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
@@ -948,7 +948,7 @@ void SceneMenu::RenderSkybox()
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 }
 
 //Particle * SceneMenu::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)

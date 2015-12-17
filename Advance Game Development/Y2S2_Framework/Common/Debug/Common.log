@@ -1,9 +1,9 @@
-﻿  Vector3.cpp
-  Vector2.cpp
-  timer.cpp
-  SSDLC.cpp
-  Mtx44.cpp
-  MatrixStack.cpp
-  MathUtility.cpp
-  Generating Code...
-  Common.vcxproj -> C:\Users\Ong\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Common.lib
+﻿Build started 12/17/2015 10:44:38 AM.
+     1>Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         Common.vcxproj -> C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Common.lib
+     1>Done Building Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Common\Common.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.03

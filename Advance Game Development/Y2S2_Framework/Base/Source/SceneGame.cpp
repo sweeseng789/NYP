@@ -295,7 +295,7 @@ void SceneGame::Init()
 	isMousePressed_Left = false;
 	b_Debug = false;
 
-	m_cSpatialPartition = new CSpatialPartition();
+	/*m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(1000, 1000, 3, 3);
 	for (int i = 0; i < m_cSpatialPartition->GetxNumOfGrid(); i++)
 	{
@@ -303,7 +303,7 @@ void SceneGame::Init()
 		{
 			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("Gridmesh", Color(1.f / i, 1.f / j, 1.f / (i * j)), 100.f));
 		}
-	}
+	}*/
 
 	//m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
 
@@ -1784,8 +1784,8 @@ void SceneGame::RenderDebugging()
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
-		modelStack.Translate(CELL_SIZE * 0.5 + x * CELL_SIZE, CELL_SIZE * 0.5, CELL_SIZE * 0.5 + z * CELL_SIZE);
-		modelStack.Scale(CELL_SIZE - 0.5, CELL_SIZE - 0.5, CELL_SIZE - 0.5);
+		modelStack.Translate(CELL_SIZE * 0.5 + x * CELL_SIZE, 0, CELL_SIZE * 0.5 + z * CELL_SIZE);
+		modelStack.Scale(CELL_SIZE - 0.5, WORLDSIZE * 0.5, CELL_SIZE - 0.5);
 		if (!cell.isPlayerInit)
 			RenderMesh(meshList[GEO_REDCUBE], false);
 		else

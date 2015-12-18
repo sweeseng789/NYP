@@ -17,10 +17,12 @@ public:
 	MapLoader();
 	~MapLoader();
 
-	unsigned int map_height;
-	unsigned int map_width;
+	unsigned int map_height; // Y Axis
+	unsigned int map_width; // X and Z Axis
+
 	float worldSize;
 	float worldHeight;
+	float cellSize;
 
 	bool fileExists(std::string file);
 	bool loadMap(std::string file);

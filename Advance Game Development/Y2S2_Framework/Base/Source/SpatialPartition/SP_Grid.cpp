@@ -41,8 +41,8 @@ void Grid::addNode(CGameObject* go)
 {
 	Cell* cell = getCell(go->getPos());
 	cell->GOList.push_back(go);
-	go->getNode()->ownerCell = cell;
-	go->getNode()->cellVectorIndex = cell->GOList.size() - 1;
+	//go->getNode()->ownerCell = cell;
+	//go->getNode()->cellVectorIndex = cell->GOList.size() - 1;
 }
 
 //void Grid::addNode(CSceneNode* node, Cell* cell)
@@ -55,8 +55,8 @@ void Grid::addNode(CGameObject* go)
 void Grid::addNode(CGameObject* go, Cell* cell)
 {
 	cell->GOList.push_back(go);
-	go->getNode()->ownerCell = cell;
-	go->getNode()->cellVectorIndex = cell->GOList.size() - 1;
+	/*go->getNode()->ownerCell = cell;
+	go->getNode()->cellVectorIndex = cell->GOList.size() - 1;*/
 }
 
 Cell* Grid::getCell(int x, int z)
@@ -120,21 +120,21 @@ Cell* Grid::getCell(CGameObject* go)
 //}
 void Grid::removeGOFromCell(CGameObject* go)
 {
-	std::vector<CGameObject*>& GOList = go->getNode()->ownerCell->GOList;
+	//std::vector<CGameObject*>& GOList = go->getNode()->ownerCell->GOList;
 
-	//Vector swap
-	GOList[go->getNode()->cellVectorIndex] = GOList.back();
-	GOList.pop_back();
+	////Vector swap
+	//GOList[go->getNode()->cellVectorIndex] = GOList.back();
+	//GOList.pop_back();
 
-	//Update Vector index
-	if (go->getNode()->cellVectorIndex < GOList.size())
-	{
-		GOList[go->getNode()->cellVectorIndex]->getNode()->cellVectorIndex = go->getNode()->cellVectorIndex;
-	}
+	////Update Vector index
+	//if (go->getNode()->cellVectorIndex < GOList.size())
+	//{
+	//	GOList[go->getNode()->cellVectorIndex]->getNode()->cellVectorIndex = go->getNode()->cellVectorIndex;
+	//}
 
-	//Set index to -1;
-	go->getNode()->cellVectorIndex = -1;
-	go->getNode()->ownerCell = nullptr;
+	////Set index to -1;
+	//go->getNode()->cellVectorIndex = -1;
+	//go->getNode()->ownerCell = nullptr;
 }
 
 void Grid::clearList()

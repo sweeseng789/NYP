@@ -67,13 +67,8 @@ public:
 	void findChildById(int ID, CSceneNode* &node);
 	CTransform* getTransform();
 
-	Cell* ownerCell = nullptr;
-	int cellVectorIndex = -1;
+	/*Cell* ownerCell = nullptr;
+	int cellVectorIndex = -1;*/
 
 	bool CheckForCollision(Vector3 pos);
-
-	Mesh* getMesh()
-	{
-		return theModel->getMesh();
-	}
 };

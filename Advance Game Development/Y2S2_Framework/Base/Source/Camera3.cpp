@@ -626,3 +626,40 @@ float Camera3::getPitchAroundObj()
 {
 	return Obj_pitch;
 }
+
+void Camera3::reset()
+{
+	Vector3 view = (target - position).Normalized();
+	Vector3 right = view.Cross(up);
+	right.y = 0;
+	right.Normalize();
+
+	// Initialise the camera movement flags
+	for (int i = 0; i<255; i++) {
+		myKeys[i] = false;
+	}
+
+	// Initialise the camera type
+	sCameraType = LAND_CAM;
+
+	// For Jump use
+	m_bJumping = false;
+	JumpVel = 0.0f;
+	JUMPMAXSPEED = 10.0f;
+	JUMPACCEL = 10.0f;
+	GRAVITY = -30.0f;
+
+	// Maximum movement speed
+	CAMERA_ACCEL = 10.0f;
+
+	distanceFromObj = 100;
+	angleAroundObj = 0;
+	Obj_pitch = 10;
+	Obj_yaw = 0;
+
+	mouseVel.SetZero();
+	updateMouse = 0.f;
+	LeftRightOffset = 12.5;
+	switchSideView = false;
+	LookingRight = true;
+}

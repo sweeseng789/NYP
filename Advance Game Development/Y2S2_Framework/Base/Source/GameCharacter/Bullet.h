@@ -8,7 +8,7 @@ public:
 	CBullet();
 	~CBullet();
 
-	void Update(const double& dt);
+	void Update(const double& dt,const float &WORLDSIZE);
 
 	//Setter
 	void setTimeLimit(double timeLimit);
@@ -16,6 +16,8 @@ public:
 
 	//Getter
 	bool getDisplayBullet();
+
+	float damage;
 private:
 	static const float bulletSpeed;
 	static const double displaybulletLimit;

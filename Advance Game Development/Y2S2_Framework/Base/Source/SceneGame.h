@@ -18,13 +18,13 @@
 #include "GameCharacter\Bullet.h"
 #include "Sound\Sound.h"
 #include "MapLoader\MapLoader.h"
+#include "GameCharacter\WorldOBJ.h"
 
 #include <map>
 #include <unordered_map>
 #include <vector>
 #include <memory>
 
-const int CELL_SIZE = 600;
 class SceneGame : public Scene
 {
 	enum UNIFORM_TYPE
@@ -102,6 +102,7 @@ class SceneGame : public Scene
 		GEO_SKYPLANE,
 		GEO_REDCUBE,
 		GEO_GREENCUBE,
+		GEO_CHURCH,
 		NUM_GEOMETRY,
 	};
 	enum SOUND_TYPE
@@ -110,12 +111,19 @@ class SceneGame : public Scene
 		ST_TOTAL
 	};
 
+	enum MENU_STATE
+	{
+		MAIN,
+		LEVEL_SELECTION
+	};
+
 public:
 	SceneGame(void);
 	SceneGame(const int m_window_width, const int m_window_height);
 	~SceneGame(void);
 
 	virtual void Init();
+	void InitVariables();
 	virtual void InitShaders();
 	virtual void InitMesh();
 	virtual void Update(double dt);
@@ -170,11 +178,19 @@ public:
 	void checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex);
 	void Collision_PlayerToAi(AI* ai);
 	void Collision_BulletToAi(CBullet* bullet, AI*ai);
-	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet = true);
+	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, float bulletDamage, bool playerBullet = true);
 
 
 	//Menu
 	void textUpdate();
+	void clearText();
+
+	//Level Loading
+	void searchFolder();
+	std::string checkLevel(int level);
+	void loadLevel(int level);
+
+	void clearMemory();
 
 	enum WEAPON_ACTION
 	{
@@ -229,6 +245,7 @@ private:
 	bool isMousePressed_Left;
 
 	std::unique_ptr<Grid> m_grid;
+	//Grid* m_grid;
 
 	//Spatial Partioning
 	CSpatialPartition * m_cSpatialPartition;
@@ -246,6 +263,11 @@ private:
 
 
 	float WORLDSIZE;
+	int CELL_SIZE;
+	std::unordered_map<int, std::string> levelList;
+	MENU_STATE currentState;
+	int currentLevel;
+	double currentTime;
 };
 
 #endif

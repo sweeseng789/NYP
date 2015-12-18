@@ -60,6 +60,7 @@ public:
 	Vector3 getView();
 	Vector3 getRight();
 	bool isLookingRight();
+	void reset();
 private:
 	bool myKeys[255];
 

@@ -36,11 +36,11 @@ SceneGame::~SceneGame(void)
 		m_cSceneGraph = NULL;
 	}
 
-	if (m_cAvatar)
+	/*if (m_cAvatar)
 	{
 		delete m_cAvatar;
 		m_cAvatar = NULL;
-	}
+	}*/
 
 	if (m_cMinimap)
 	{
@@ -168,8 +168,6 @@ void SceneGame::InitShaders()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], lights[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
-
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 }
 
 void SceneGame::InitMesh()
@@ -233,13 +231,17 @@ void SceneGame::InitMesh()
 
 	//meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("GEO_SKYPLANE", Color(1, 1, 1), 128, 0.f, 200.f, 1.0f, 1.0f);
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateOBJ("Skydome", "OBJ//Skybox.obj");
-	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//Skyplane//Skybox.tga");
+	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//Skyplane//space2.tga");
+
 
 	meshList[GEO_REDCUBE] = MeshBuilder::GenerateOBJ_WireFrame("Red Box", "OBJ//SP_Box.obj");
 	meshList[GEO_REDCUBE]->textureID[0] = LoadTGA("Image//red.tga");
 
 	meshList[GEO_GREENCUBE] = MeshBuilder::GenerateOBJ_WireFrame("Green Box", "OBJ//SP_Box.obj");
 	meshList[GEO_GREENCUBE]->textureID[0] = LoadTGA("Image//green.tga");
+
+	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Church", "OBJ//church.obj");
+	meshList[GEO_CHURCH]->textureID[0] = LoadTGA("Image//church.tga");
 }
 
 void SceneGame::Init()
@@ -253,36 +255,11 @@ void SceneGame::Init()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
+	Application::activateMouse(true);
+	searchFolder();
+	loadLevel(1);
 
-
-	std::cout << "Loading Map" << std::endl;
-	std::string fileLoc = "Maps//";
-	fileLoc += "1";
-	fileLoc += ".csv";
-	std::cout << fileLoc << std::endl;
-
-	if (mapLoader.loadMap(fileLoc))
-	{
-		std::cout << mapLoader.map_width << ", " << mapLoader.map_height << std::endl;
-		std::cout << mapLoader.worldSize << ", " << mapLoader.worldHeight << std::endl;
-		WORLDSIZE = mapLoader.worldSize;
-
-		for (unsigned y = mapLoader.map_height - 1; y > 0; --y)
-		{
-			for (unsigned x = 0; x < mapLoader.map_width; ++x)
-			{
-				if (mapLoader.map_data[y][x] == "P")
-				{
-					m_cAvatar = new CPlayInfo3PV();
-					//m_cAvatar->setPos(Vector3(heightMapScale.x * 0.5, 2000, heightMapScale.z * 0.5));
-					m_cAvatar->setPos(Vector3(x * mapLoader.map_width * 0.5, 2000.f, y * mapLoader.map_height * 0.5));
-					std::cout << x * mapLoader.map_width << ", " << y * mapLoader.map_height << std::endl;
-					GOList.push_back(m_cAvatar);
-				}
-			}
-		}
-	}
-	
+	currentTime = 0.0;
 	heightMapScale.Set(WORLDSIZE, 350.f, WORLDSIZE);
 
 	rotateAngle = 0;
@@ -294,56 +271,68 @@ void SceneGame::Init()
 	menuChoice = "";
 	isMousePressed_Left = false;
 	b_Debug = false;
-
-	/*m_cSpatialPartition = new CSpatialPartition();
-	m_cSpatialPartition->Init(1000, 1000, 3, 3);
-	for (int i = 0; i < m_cSpatialPartition->GetxNumOfGrid(); i++)
-	{
-		for (unsigned j = 0; j < m_cSpatialPartition->GetyNumOfGrid(); j++)
-		{
-			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("Gridmesh", Color(1.f / i, 1.f / j, 1.f / (i * j)), 100.f));
-		}
-	}*/
-
-	//m_cSpatialPartition->AddObject(m_cAvatar->avatarInfo);
+	currentState = MAIN;
 
 	m_grid = std::make_unique<Grid>(WORLDSIZE, WORLDSIZE, CELL_SIZE);
-	//m_grid->addNode(Vector3(0, 0, 0), m_cAvatar->getNode());
+	camera.Init(m_cAvatar->getPos(), m_cAvatar->getPos() + Vector3(0, 0, 1), Vector3(0, 1, 0));
 
 	CText * text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f, 0.1f));
 	text->setScale(Vector3(35, 35, 35));
 	text->setText("Resume");
+	text->setGamestate(MAIN);
 	textList.push_back(text);
 
 	text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 60, 0.1f));
 	text->setScale(Vector3(35, 35, 35));
-	text->setText("Return To Menu");
+	text->setText("Level Selection");
+	text->setGamestate(MAIN);
 	textList.push_back(text);
 
 	text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 120, 0.1f));
 	text->setScale(Vector3(35, 35, 35));
-	text->setText("Debugging Mode");
+	text->setText("Return To Menu");
+	text->setGamestate(MAIN);
 	textList.push_back(text);
 
 	text = new CText();
 	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 180, 0.1f));
 	text->setScale(Vector3(35, 35, 35));
-	text->setText("Exit");
+	text->setText("Debugging Mode");
+	text->setGamestate(MAIN);
 	textList.push_back(text);
 
-	/*AI* ai = new AI(Vector3(0, 0, 200));
-	GOList.push_back(ai);
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 240, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Exit");
+	text->setGamestate(MAIN);
+	textList.push_back(text);
 
-	ai = new AI(Vector3(200, 0, 200));
-	GOList.push_back(ai);*/
+	static float offset = 60;
+	int a = 0;
+	for (std::pair<int, std::string> levelInfo : levelList)
+	{
+		if (levelInfo.first != currentLevel)
+		{
+			++a;
 
-	/*mapLoader.mapWidth = WORLDSIZE;
-	mapLoader.mapWidth = WORLDSIZE;
-	mapLoader.WORLD_SIZE = WORLDSIZE;*/
-
+			CText * text = new CText();
+			text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - a * offset, 0.1f));
+			text->setScale(Vector3(35, 35, 35));
+			text->setText("Level " + std::to_string(levelInfo.first));
+			text->setGamestate(LEVEL_SELECTION);
+			textList.push_back(text);
+		}
+	}
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - a * offset - offset, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Back");
+	text->setGamestate(LEVEL_SELECTION);
+	textList.push_back(text);
 }
 
 void SceneGame::Update(double dt)
@@ -435,19 +424,27 @@ void SceneGame::Update(double dt)
 		}
 	}*/
 
-	if (!b_pauseGame)
+	std::cout << currentTime << std::endl;
+	if (currentTime < 0.00001)
 	{
-		UpdateGameplay(dt);
-
-		if (Application::IsKeyPressed(VK_ESCAPE))
-		{
-			Application::activateMouse(false);
-			b_pauseGame = true;
-		}
+		currentTime += dt;
 	}
 	else
 	{
-		UpdateMenu(dt);
+		if (!b_pauseGame)
+		{
+			UpdateGameplay(dt);
+
+			if (Application::IsKeyPressed(VK_ESCAPE))
+			{
+				Application::activateMouse(false);
+				b_pauseGame = true;
+			}
+		}
+		else
+		{
+			UpdateMenu(dt);
+		}
 	}
 }
 
@@ -750,14 +747,9 @@ void SceneGame::RenderMobileObjects()
 	}*/
 
 
-	if (b_pauseGame) 
-	{
-		RenderMenu();
-	}
-	else
-	{
+	
+	
 		RenderGameplay();
-	}
 }
 
 /********************************************************************************
@@ -1012,7 +1004,12 @@ void SceneGame::Render()
 	if (b_Debug)
 		RenderDebugging();
 
-	RenderGUI();
+	if (b_pauseGame)
+	{
+		RenderMenu();
+	}
+	else
+		RenderGUI();
 }
 
 /********************************************************************************
@@ -1021,105 +1018,25 @@ void SceneGame::Render()
 void SceneGame::Exit()
 {
 	// Cleanup VBO
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
-		if(meshList[i])
+		if (meshList[i])
 			delete meshList[i];
 	}
 
-	while(textList.size() > 0)
-	{
-		CText *text = textList.back();
-		delete text;
-		textList.pop_back();
-	}
+	clearText();
+
+	clearMemory();
 
 
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 }
 
-//void SceneGame::generateParticle(const double &dt)
-//{
-	//if (Application::IsKeyPressed(VK_SPACE))
-	//{
-	//	//Creating thruster effect when using exhaust
-	//	Vector3 right = camera.direction.Cross(camera.up);
-	//	Vector3 pos = m_cAvatar->getPos();
-	//	static double timeLimit = 0.1;
-
-	//	//Top left thruster
-	//	Vector3 topLeft_pos = pos;
-	//	topLeft_pos.y += 20;
-	//	topLeft_pos.x -= camera.direction.x * 5 + right.x * 4.2;
-	//	topLeft_pos.z -= camera.direction.z * 5 + right.z * 4.2;
-
-	//	Vector3 topLeft_vel;
-	//	topLeft_vel.x = Math::RandFloatMinMax(-right.x * 2, -right.x * 10);
-	//	topLeft_vel.z = Math::RandFloatMinMax(-right.z * 2, -right.z * 10);
-	//	topLeft_vel.y = Math::RandFloatMinMax(-2, -5);
-
-	//	Particle* topLeft = fetchParticle(topLeft_pos, topLeft_vel, timeLimit);
-
-
-	//	//Top right thruster
-	//	Vector3 topRight_pos = pos;
-	//	topRight_pos.y += 20;
-	//	topRight_pos.x -= camera.direction.x * 5 - right.x * 4.2;
-	//	topRight_pos.z -= camera.direction.z * 5 - right.z * 4.2;
-
-	//	Vector3 topRight_vel;
-	//	topRight_vel.x = Math::RandFloatMinMax(right.x * 2, right.x * 10);
-	//	topRight_vel.z = Math::RandFloatMinMax(right.z * 2, right.z * 10);
-	//	topRight_vel.y = Math::RandFloatMinMax(-2, -5);
-
-	//	Particle* topRight = fetchParticle(topRight_pos, topRight_vel, timeLimit);
-
-	//	//Bottom left thruster
-	//	Vector3 bottomLeft_pos = pos;
-	//	bottomLeft_pos.y += 10;
-	//	bottomLeft_pos.x -= camera.direction.x * 3 + right.x * 4.2;
-	//	bottomLeft_pos.z -= camera.direction.z * 3 + right.z * 4.2;
-
-	//	Vector3 bottomLeft_vel;
-	//	bottomLeft_vel.x = Math::RandFloatMinMax(-camera.direction.x * 5, -camera.direction.x * 10);
-	//	bottomLeft_vel.z = Math::RandFloatMinMax(-camera.direction.z * 5, -camera.direction.z * 10);
-	//	bottomLeft_vel.y = Math::RandFloatMinMax(-2, -5);
-
-	//	Particle* bottomLeft = fetchParticle(bottomLeft_pos, bottomLeft_vel, timeLimit);
-
-	//	//Bottom right thruster
-	//	Vector3 bottomRight_pos = pos;
-	//	bottomRight_pos.y += 10;
-	//	bottomRight_pos.x -= camera.direction.x * 3 - right.x * 4.2;
-	//	bottomRight_pos.z -= camera.direction.z * 3 - right.z * 4.2;
-
-	//	Vector3 bottomRight_vel;
-	//	bottomRight_vel.x = Math::RandFloatMinMax(-camera.direction.x * 10, -camera.direction.x * 15);
-	//	bottomRight_vel.z = Math::RandFloatMinMax(-camera.direction.z * 10, -camera.direction.z * 15);
-	//	bottomRight_vel.y = Math::RandFloatMinMax(-2, -5);
-
-	//	Particle* bottomRight = fetchParticle(bottomRight_pos, bottomRight_vel, timeLimit);
-	//}
-//}
-
 void SceneGame::UpdateGameplay(const double &dt)
 {
-	//m_cSpatialPartition->Update(m_cAvatar->GetPosition());
-	//m_cSpatialPartition->TestingSomething(m_cAvatar->GetPosition());
-
-	/*for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
-	{
-		Particle* particle = static_cast<Particle*>(*it);
-
-		if (particle->getActive())
-		{
-			particle->update(dt);
-		}
-	}*/
-
 	static double shootTime_Right = 0.0, shootTime_Left = 0.0;
-	static double shootTimeLimit_Right = 0.5, shootTimeLimit_Left = 0.15;
+	static double shootTimeLimit_Right = 0.5, shootTimeLimit_Left = 0.1;
 
 	if (shootTime_Right < shootTimeLimit_Right)
 		shootTime_Right += dt;
@@ -1132,12 +1049,13 @@ void SceneGame::UpdateGameplay(const double &dt)
 		if (Application::IsMousePressed(0))
 		{
 			if (camera.isLookingRight())
-			{
+		
+	{
 				if (shootTime_Right >= shootTimeLimit_Right)
 				{
 					Sound::playBeamMagnum();
 					Vector3 bulletOffset = m_cAvatar->getPos() + (camera.getRight() * 7) + Vector3(0, 25, 0);
-					shootBullet(bulletOffset, camera.direction , 5);
+					shootBullet(bulletOffset, camera.direction , 5, 50);
 					shootTime_Right = 0.0;
 				}
 			}
@@ -1145,19 +1063,20 @@ void SceneGame::UpdateGameplay(const double &dt)
 			{
 				if (shootTime_Left >= shootTimeLimit_Left)
 				{
+
 					Vector3 bulletOffset_Top = m_cAvatar->getPos() + (-camera.getRight() * 10) + Vector3(0, 25, 0);
 					Vector3 DirOffset_Top = camera.direction;
 					DirOffset_Top.x += Math::RandFloatMinMax(-camera.getRight().x * 0.05, camera.getRight().x * 0.05);
 					DirOffset_Top.y += Math::RandFloatMinMax(-camera.getRight().y * 0.05, camera.getRight().y * 0.05);
 					DirOffset_Top.z += Math::RandFloatMinMax(-camera.getRight().z * 0.05, camera.getRight().z * 0.05);
-					shootBullet(bulletOffset_Top, DirOffset_Top, 5);
+					shootBullet(bulletOffset_Top, DirOffset_Top, 5, 1);
 
 					Vector3 bulletOffset_Bottom = m_cAvatar->getPos() + (-camera.getRight() * 10) + Vector3(0, 15, 0);
 					Vector3 DirOffset_Bottom = camera.direction;
 					DirOffset_Bottom.x += Math::RandFloatMinMax(-camera.getRight().x * 0.05, camera.getRight().x * 0.05);
 					DirOffset_Bottom.y += Math::RandFloatMinMax(-camera.getRight().y * 0.05, camera.getRight().y * 0.05);
 					DirOffset_Bottom.z += Math::RandFloatMinMax(-camera.getRight().z * 0.05, camera.getRight().z * 0.05);
-					shootBullet(bulletOffset_Bottom, DirOffset_Bottom, 5);
+					shootBullet(bulletOffset_Bottom, DirOffset_Bottom, 5, 1);
 					shootTime_Left = 0.0;
 				}
 			}
@@ -1169,13 +1088,14 @@ void SceneGame::UpdateGameplay(const double &dt)
 	ParticleUpdate(dt);
 }
 
-void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, bool playerBullet)
+void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, float bulletDamage,bool playerBullet)
 {
 	CBullet* bullet = fetchBullet();
 	if (bullet != NULL)
 	{
 		bullet->setActive(true);
 		bullet->setPos(pos);
+		bullet->damage = bulletDamage;
 		bullet->setDirection(direction);
 		bullet->setTimeLimit(timeLimit);
 		bullet->setDisplayBullet(false);
@@ -1198,23 +1118,26 @@ void SceneGame::textUpdate()
 		Vector3 topLeft = text->getPos() + Vector3(text->getText().length() * text->getScale().x - text->getScale().x, text->getScale().y, 0) + offset;
 		Vector3 bottomRight = text->getPos() + Vector3(-text->getScale().x * 0.5f, -(text->getScale().y * 0.4f), 0) + offset;
 
-		if (SSDLC::intersect2D(topLeft, bottomRight, mousePos))
+		if (text->getGameState() == currentState)
 		{
-			text->setColorToOnClick();
-
-			if (isMousePressed_Left && !Application::IsMousePressed(0))
+			if (SSDLC::intersect2D(topLeft, bottomRight, mousePos))
 			{
-				menuChoice = text->getText();
-				isMousePressed_Left = false;
+				text->setColorToOnClick();
+
+				if (isMousePressed_Left && !Application::IsMousePressed(0))
+				{
+					menuChoice = text->getText();
+					isMousePressed_Left = false;
+				}
+				else
+				{
+					menuChoice = "";
+				}
 			}
 			else
 			{
-				menuChoice = "";
+				text->setColorToNotOnClick();
 			}
-		}
-		else
-		{
-			text->setColorToNotOnClick();
 		}
 	}
 }
@@ -1235,21 +1158,34 @@ void SceneGame::UpdateMenu(const double &dt)
 			Application::activateMouse(true);
 			b_pauseGame = false;
 		}
+		else if (menuChoice == "Level Selection")
+		{
+			currentState = LEVEL_SELECTION;
+		}
 		else if (menuChoice == "Return To Menu")
 		{
 			Application::b_BacktoMenu = true;
 		}
 		else if (menuChoice == "Debugging Mode")
 		{
-			if (b_Debug)
-				std::cout << "Debugging Mode Disadbled" << std::endl;
-			else
-				std::cout << "Debugging Mode enabled" << std::endl;
 			b_Debug = !b_Debug;
 		}
 		else if (menuChoice == "Exit")
 		{
 			Application::quitGame();
+		}
+		else if (menuChoice == "Back")
+		{
+			currentState = MAIN;
+		}
+		else if (menuChoice[0] == 'L')
+		{
+			std::string stringLvl = "";
+			stringLvl += menuChoice.back();
+			loadLevel(std::stoi(stringLvl));
+			Application::activateMouse(true);
+			camera.reset();
+			InitVariables();
 		}
 
 		menuChoice = "";
@@ -1258,9 +1194,21 @@ void SceneGame::UpdateMenu(const double &dt)
 
 CBullet* SceneGame::fetchBullet()
 {
-	for (CGameObject* go : GOList)
+	/*for (CGameObject* go : GOList)
 	{
 		CBullet* bullet = dynamic_cast<CBullet*>(go);
+		if (bullet != NULL)
+		{
+			if (!bullet->getActive())
+			{
+				return bullet;
+			}
+		}
+	}*/
+
+	for(std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		CBullet* bullet = dynamic_cast<CBullet*>(*it);
 		if (bullet != NULL)
 		{
 			if (!bullet->getActive())
@@ -1287,7 +1235,7 @@ CBullet* SceneGame::fetchBullet()
 
 AI* SceneGame::fetchAI()
 {
-	for (CGameObject* go : GOList)
+	/*for (CGameObject* go : GOList)
 	{
 		AI* ai = dynamic_cast<AI*>(go);
 		if (ai != NULL)
@@ -1298,7 +1246,18 @@ AI* SceneGame::fetchAI()
 			}
 		}
 	}
-
+*/
+	for(std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+		AI* ai = dynamic_cast<AI*>(*it);
+		if (ai != NULL)
+		{
+			if (!ai->getActive())
+			{
+				return ai;
+			}
+		}
+	}
 	for (unsigned a = 0; a < 10; ++a)
 	{
 		AI* ai = new AI();
@@ -1316,9 +1275,17 @@ AI* SceneGame::fetchAI()
 
 Particle* SceneGame::fetchParticle()
 {
-	for (Particle* particle : particleList)
+	/*for (Particle* particle : particleList)
 	{
 		if (!particle->getActive())
+		{
+			return particle;
+		}
+	}*/
+	for(std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		Particle* particle = static_cast<Particle*>(*it);
+		if(!particle->getActive())
 		{
 			return particle;
 		}
@@ -1371,12 +1338,15 @@ void SceneGame::RenderMenu()
 	{
 		CText* text = static_cast<CText*>(*it);
 
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 0);
-		modelStack.Translate(text->getPos().x, text->getPos().y, text->getPos().z);
-		modelStack.Scale(text->getScale().x, text->getScale().y, text->getScale().z);
-		RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor());
-		modelStack.PopMatrix();
+		if (text->getGameState() == currentState)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(0, 0, 0);
+			modelStack.Translate(text->getPos().x, text->getPos().y, text->getPos().z);
+			modelStack.Scale(text->getScale().x, text->getScale().y, text->getScale().z);
+			RenderTextOnScreen(meshList[GEO_TEXT], text->getText(), text->getColor());
+			modelStack.PopMatrix();
+		}
 	}
 }
 
@@ -1410,8 +1380,9 @@ void SceneGame::RenderGameplay()
 	}
 
 	//Render Particle
-	for (Particle* particle : particleList)
+	for(std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
+		Particle* particle = static_cast<Particle*>(*it);
 		if (particle->getActive())
 		{
 			modelStack.PushMatrix();
@@ -1455,6 +1426,43 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 		CBullet* bullet = dynamic_cast<CBullet*>(go1);
 		AI* ai = dynamic_cast<AI*>(go2);
 		Collision_BulletToAi(bullet, ai);
+	}
+	else if (go1->isPlayer() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
+	{
+		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
+
+		Vector3 topleft = go2->getPos() + go2->getScale();
+		Vector3 bottoRight = go2->getPos() - go2->getScale();
+
+		if (SSDLC::intersect(topleft, bottoRight, m_cAvatar->getPos()))
+		{
+			worldObj->newHealth = 0;
+		}
+	}
+	else if (go1->isPlayerBullet() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
+	{
+		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
+		CBullet* bullet = dynamic_cast<CBullet*>(go1);
+
+		Vector3 topleft = go2->getPos() + go2->getScale();
+		Vector3 bottoRight = go2->getPos() - go2->getScale();
+
+		if (SSDLC::intersect(topleft, bottoRight, bullet->getPos()))
+		{
+			for (unsigned a = 0; a < 3; ++a)
+			{
+				Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
+				Vector3 direction = -bullet->getDirection();
+				direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
+				direction.y += Math::RandFloatMinMax(20, 100);
+				direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
+
+				generateParticle(0, pos, direction, 0.2, Particle::e_YELLOW);
+			}
+
+			worldObj->newHealth -= bullet->damage;
+			bullet->setActive(false);
+		}
 	}
 }
 
@@ -1634,6 +1642,10 @@ void SceneGame::GridUpdate(const double& dt)
 		CGameObject* go = static_cast<CGameObject*>(*it);
 		if (go->getActive())
 		{
+
+			//Repopulating the list
+			m_grid->addNode(go);
+
 			//Check if the node is in a different grid
 			//Cause crashes if i keep removing specifically one node
 			/*Cell* newCell = m_grid->getCell(go->getPos());
@@ -1644,8 +1656,6 @@ void SceneGame::GridUpdate(const double& dt)
 				std::cout << "Swapped" << std::endl;
 			}*/
 
-			//Repopulating the list
-			m_grid->addNode(go);
 
 			//Terrain Update
 			Vector3 temp = go->getPos();
@@ -1657,7 +1667,7 @@ void SceneGame::GridUpdate(const double& dt)
 			CBullet* bullet = dynamic_cast<CBullet*>(*it);
 			if (bullet != NULL)
 			{
-				bullet->Update(dt);
+				bullet->Update(dt, WORLDSIZE);
 
 				if (bullet->getPos().y <= tempY)
 				{
@@ -1669,7 +1679,7 @@ void SceneGame::GridUpdate(const double& dt)
 						direction.y += Math::RandFloatMinMax(20, 100);
 						direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
 
-						generateParticle(dt, pos, direction, 2, Particle::e_YELLOW);
+						generateParticle(dt, pos, direction, 0.2, Particle::e_YELLOW);
 					}
 					bullet->setActive(false);
 				}
@@ -1680,6 +1690,15 @@ void SceneGame::GridUpdate(const double& dt)
 			if (ai != NULL)
 			{
 				ai->Update(dt, m_cAvatar->getPos(), tempY + 10);
+			}
+
+			//WorldObj
+			CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(*it);
+			if (worldObj != NULL)
+			{
+				std::cout << worldObj->health << std::endl;
+				tempY -= 30;
+				worldObj->update(dt, tempY);
 			}
 		}
 	}
@@ -1746,8 +1765,9 @@ void SceneGame::generateParticle(const double &dt, Vector3 pos, Vector3 directio
 
 void SceneGame::ParticleUpdate(const double& dt)
 {
-	for (Particle* particle : particleList)
+	for(std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
+		Particle* particle = static_cast<Particle*>(*it);
 		if (particle->getActive())
 		{
 			particle->update(dt);
@@ -1775,7 +1795,7 @@ void SceneGame::RenderDebugging()
 		Cell& cell = m_grid->m_cells[a];
 
 		modelStack.PushMatrix();
-		modelStack.Translate(Application::getWindow_Width() - 100, Application::getWindow_Height() - 200, 0);
+		modelStack.Translate(Application::getWindow_Width() * 0.9, Application::getWindow_Height() * 0.5, 0);
 		modelStack.Rotate(180, 0, 0, 1);
 		if (!cell.isPlayerInit)
 			RenderMeshIn2D(meshList[GEO_QUAD], false, size, x * size, z * -size);
@@ -1785,11 +1805,243 @@ void SceneGame::RenderDebugging()
 
 		modelStack.PushMatrix();
 		modelStack.Translate(CELL_SIZE * 0.5 + x * CELL_SIZE, 0, CELL_SIZE * 0.5 + z * CELL_SIZE);
-		modelStack.Scale(CELL_SIZE - 0.5, WORLDSIZE * 0.5, CELL_SIZE - 0.5);
+		modelStack.Scale(CELL_SIZE - 0.5, WORLDSIZE, CELL_SIZE - 0.5);
 		if (!cell.isPlayerInit)
 			RenderMesh(meshList[GEO_REDCUBE], false);
 		else
 			RenderMesh(meshList[GEO_GREENCUBE], false);
 		modelStack.PopMatrix();
 	}
+}
+
+void SceneGame::loadLevel(int level)
+{
+	////std::cout << "Loading Map" << std::endl;
+	//std::string fileLoc = "Maps//";
+	//fileLoc += std::to_string(level);
+	//fileLoc += ".csv";
+	////std::cout << fileLoc << std::endl;
+
+	//clearMemory();
+
+	//if (mapLoader.loadMap(fileLoc))
+	//{
+	//	//std::cout << mapLoader.map_width << ", " << mapLoader.map_height << std::endl;
+	//	//std::cout << mapLoader.worldSize << ", " << mapLoader.worldHeight << std::endl;
+	//	WORLDSIZE = mapLoader.worldSize;
+	//	CELL_SIZE = mapLoader.cellSize;
+
+	//	for (unsigned y = mapLoader.map_height - 1; y > 0; --y)
+	//	{
+	//		for (unsigned x = 0; x < mapLoader.map_width; ++x)
+	//		{
+	//			if (mapLoader.map_data[y][x] == "P")
+	//			{
+	//				m_cAvatar = new CPlayInfo3PV();
+	//				//m_cAvatar->setPos(Vector3(heightMapScale.x * 0.5, 2000, heightMapScale.z * 0.5));
+	//				m_cAvatar->setPos(Vector3(x* (WORLDSIZE / mapLoader.map_width), 2000.f, y * (WORLDSIZE / mapLoader.map_height)));
+	//				GOList.push_back(m_cAvatar);
+	//			}
+	//		}
+	//	}
+	//}
+	std::string fileLoc = "Maps//";
+	std::string fileName = checkLevel(level);
+	if (fileName != "NULL")
+	{
+		//clearMemory();
+		//clearText();
+		while (GOList.size() > 0)
+		{
+			CGameObject* go = GOList.back();
+			delete go;
+			GOList.pop_back();
+		}
+
+		while (textList.size() > 0)
+		{
+			CText* text = textList.back();
+			delete text;
+			textList.pop_back();
+		}
+
+		while (particleList.size() > 0)
+		{
+			Particle* particle = particleList.back();
+			delete particle;
+			particleList.pop_back();
+		}
+
+
+		fileLoc += fileName;
+
+		if (mapLoader.loadMap(fileLoc))
+		{
+			currentLevel = level;
+			WORLDSIZE = mapLoader.worldSize;
+			CELL_SIZE = mapLoader.cellSize;
+
+			for (unsigned y = mapLoader.map_height - 1; y > 0; --y)
+			{
+				for (unsigned x = 0; x < mapLoader.map_width; ++x)
+				{
+					if (mapLoader.map_data[y][x] == "P")
+					{
+						m_cAvatar = new CPlayInfo3PV();
+						m_cAvatar->setPos(Vector3(x* (WORLDSIZE / mapLoader.map_width), 2000.f, y * (WORLDSIZE / mapLoader.map_height)));
+						GOList.push_back(m_cAvatar);
+					}
+					else if (mapLoader.map_data[y][x] == "B")
+					{
+						Vector3 pos;
+						float scale = Math::RandFloatMinMax(100, 200);
+
+						pos.x = x * (WORLDSIZE / mapLoader.map_width);
+						pos.z = y * (WORLDSIZE / mapLoader.map_height);
+						pos.x += heightMapScale.x * 0.5;
+						pos.z += heightMapScale.z * 0.5;
+						pos.y = 1000.f;
+
+						CWorldOBJ* newOBJ = new CWorldOBJ(pos, scale);
+						GOList.push_back(newOBJ);
+					}
+				}
+			}
+		}
+	}
+}
+
+void SceneGame::clearMemory()
+{
+	while (GOList.size() > 0)
+	{
+		CGameObject* go = GOList.back();
+		delete go;
+		GOList.pop_back();
+	}
+}
+
+void SceneGame::searchFolder()
+{
+	int level = 0;
+	WIN32_FIND_DATA data;
+	HANDLE h = FindFirstFile(L"Maps\\*.csv", &data);
+	if (h != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			std::string newLevel = "";
+			for (unsigned a = 0; a < lstrlen(data.cFileName); ++a)
+			{
+				newLevel += char(data.cFileName[a]);
+			}
+			++level;
+			std::pair<int, std::string> newInfo;
+			newInfo.first = level;
+			newInfo.second = newLevel;
+			levelList.insert(newInfo);
+
+		} while (FindNextFile(h, &data));
+	}
+	FindClose(h);
+}
+
+std::string SceneGame::checkLevel(int level)
+{
+	for (std::pair<int, std::string> levelInfo : levelList)
+	{
+		if (levelInfo.first == level)
+		{
+			return levelInfo.second;
+		}
+	}
+
+	return "NULL";
+}
+
+void SceneGame::clearText()
+{
+	while (textList.size() > 0)
+	{
+		CText *text = textList.back();
+		delete text;
+		textList.pop_back();
+	}
+}
+
+void SceneGame::InitVariables()
+{
+	currentTime = 0.0;
+	heightMapScale.Set(WORLDSIZE, 350.f, WORLDSIZE);
+
+	rotateAngle = 0;
+
+	bLightEnabled = true;
+
+	b_pauseGame = false;
+	mousePos.SetZero();
+	menuChoice = "";
+	isMousePressed_Left = false;
+	b_Debug = false;
+	currentState = MAIN;
+
+	m_grid = std::make_unique<Grid>(WORLDSIZE, WORLDSIZE, CELL_SIZE);
+
+	CText * text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Resume");
+	text->setGamestate(MAIN);
+	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 60, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Level Selection");
+	text->setGamestate(MAIN);
+	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 120, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Return To Menu");
+	text->setGamestate(MAIN);
+	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 180, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Debugging Mode");
+	text->setGamestate(MAIN);
+	textList.push_back(text);
+
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - 240, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Exit");
+	text->setGamestate(MAIN);
+	textList.push_back(text);
+
+	static float offset = 60;
+	int a = 0;
+	for (std::pair<int, std::string> levelInfo : levelList)
+	{
+		if (levelInfo.first != currentLevel)
+		{
+			++a;
+
+			CText * text = new CText();
+			text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - a * offset, 0.1f));
+			text->setScale(Vector3(35, 35, 35));
+			text->setText("Level " + std::to_string(levelInfo.first));
+			text->setGamestate(LEVEL_SELECTION);
+			textList.push_back(text);
+		}
+	}
+	text = new CText();
+	text->setPos(Vector3(Application::getWindow_Width() * 0.22f, Application::getWindow_Height() * 0.5f - a * offset - offset, 0.1f));
+	text->setScale(Vector3(35, 35, 35));
+	text->setText("Back");
+	text->setGamestate(LEVEL_SELECTION);
+	textList.push_back(text);
 }

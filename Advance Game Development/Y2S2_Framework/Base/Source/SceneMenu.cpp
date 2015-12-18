@@ -157,22 +157,14 @@ void SceneMenu::InitMesh()
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
 	//meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36, 10.f);
 	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
-	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
-
 	meshList[GEO_WALLPAPER] = MeshBuilder::GenerateQuad("Wallpaper", Color(1, 1, 1), 1.f);
 	meshList[GEO_WALLPAPER]->textureID[0] = LoadTGA("Image//Wallpaper//Background.tga");
 
@@ -247,6 +239,8 @@ void SceneMenu::Init()
 	text->setText("Back");
 	text->setGamestate(E_OPTION);
 	textList.push_back(text);
+
+	Application::activateMouse(false);
 }
 
 void SceneMenu::Update(double dt)
@@ -304,18 +298,6 @@ void SceneMenu::Update(double dt)
 	if (rotateAngle > 360)
 	{
 		rotateAngle -= 360;
-	}
-
-	//camera.Update(dt);
-
-	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
-	{
-		Particle* particle = static_cast<Particle*>(*it);
-
-		if (particle->getActive())
-		{
-			particle->update(dt);
-		}
 	}
 
 	float x, y;
@@ -670,14 +652,7 @@ Render mobile objects
 ********************************************************************************/
 void SceneMenu::RenderGUI()
 {
-	// Render the crosshair
-	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
-
-	// Render the crosshair
-	// Note that Ortho is set to this size -> 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
-
 	//On screen text
-
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
@@ -698,87 +673,6 @@ void SceneMenu::RenderCharacter()
 	modelStack.Rotate(rotateAngle, 0, 1, 0);
 	m_cAvatar->getNode()->Draw(this);
 	modelStack.PopMatrix();
-
-	////Head
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 3, 0);
-	//RenderMesh(m_cAvatar->head, false);
-	//modelStack.PopMatrix();
-
-	////Torso
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, 1.61, 0);
-	//RenderMesh(m_cAvatar->torso, false);
-	//modelStack.PopMatrix();
-
-	//static float Leg_offset = 0.33;
-	//static float Arm_offset = 0.98;
-
-	////Left Arm
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Arm_offset, 1.61, 0);
-	//modelStack.Translate(0, 0.5, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_LeftArm, 1, 0, 0);
-	//modelStack.Translate(0, -0.5, 0);
-
-	////Shield
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.4, 0, 0);
-	//RenderMesh(m_cAvatar->shield, false);
-	//modelStack.PopMatrix();
-
-	//RenderMesh(m_cAvatar->leftArm, false);
-	//modelStack.PopMatrix();
-
-	////Right Arm
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-Arm_offset, 1.61, 0);
-	//modelStack.Translate(0, 0.5, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_RightArm, 1, 0, 0);
-	//modelStack.Translate(0, -0.5, 0);
-
-	////Weapon
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.2, -1.5, 0.4);
-	//modelStack.Rotate(90, 1, 0, 0);
-	//RenderMesh(m_cAvatar->rifle, false);
-	//modelStack.PopMatrix();
-
-
-	//RenderMesh(m_cAvatar->rightArm, false);
-	//modelStack.PopMatrix();
-
-	////Left Leg
-	//modelStack.PushMatrix();
-	//modelStack.Translate(Leg_offset, 0, 0);
-	//modelStack.Translate(0, 1, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_LeftLeg, 1, 0, 0);
-	//modelStack.Translate(0, -1, 0);
-	//RenderMesh(m_cAvatar->leftLeg, false);
-	//modelStack.PopMatrix();
-
-	////Right Leg
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-Leg_offset, 0, 0);
-	//modelStack.Translate(0, 1, 0);
-	//modelStack.Rotate(m_cAvatar->animation.vel_RightLeg, 1, 0, 0);
-	//modelStack.Translate(0, -1, 0);
-	//RenderMesh(m_cAvatar->rightLeg, false);
-	//modelStack.PopMatrix();
-
-	////Mounting Weapon
-
-	////Left Beam Saber
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0.3, 2.68, -0.62);
-	//RenderMesh(m_cAvatar->saber, false);
-	//modelStack.PopMatrix();
-
-	////Right Beam Saber
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-0.3, 2.68, -0.62);
-	//RenderMesh(m_cAvatar->saber, false);
-	//modelStack.PopMatrix();
 }
 
 /********************************************************************************
@@ -786,27 +680,6 @@ Render mobile objects
 ********************************************************************************/
 void SceneMenu::RenderMobileObjects()
 {
-	// Render LightBall
-	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-
-	//Particle
-	/*for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
-	{
-		Particle* particle = static_cast<Particle*>(*it);
-
-		if (particle->getActive())
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(particle->getPos().x, particle->getPos().y, particle->getPos().z);
-			modelStack.Scale(particle->getScale(), particle->getScale(), particle->getScale());
-			RenderMesh(meshList[GEO_SPHERE], false);
-			modelStack.PopMatrix();
-		}
-	}*/
-
 	//Text
 	for (std::vector<CText*>::iterator it = textList.begin(); it != textList.end(); ++it)
 	{
@@ -873,108 +746,6 @@ void SceneMenu::RenderLights()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 }
-
-/********************************************************************************
-Render the ground in this scene
-********************************************************************************/
-void SceneMenu::RenderGround()
-{
-	/*modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -10);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(100.0f, 100.0f, 100.0f);
-
-	for (int x = 0; x<10; x++)
-	{
-		for (int z = 0; z<10; z++)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(x - 5.0f, z - 5.0f, 0.0f);
-			if (((x * 9 + z) % 2) == 0)
-				RenderMesh(meshList[GEO_GRASS_DARKGREEN], false);
-			else
-				RenderMesh(meshList[GEO_GRASS_LIGHTGREEN], false);
-			modelStack.PopMatrix();
-		}
-	}
-	modelStack.PopMatrix();*/
-}
-
-/********************************************************************************
-Render the skybox in this scene
-********************************************************************************/
-void SceneMenu::RenderSkybox()
-{
-	//left
-	/*modelStack.PushMatrix();
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_LEFT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_RIGHT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_FRONT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_BACK], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Rotate(90, 0, 0, 1);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_TOP], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();*/
-}
-
-//Particle * SceneMenu::fetchParticle(Vector3 pos, Vector3 vel, double timeLimit)
-//{
-//	for (std::vector<Particle*>::iterator it = particleList.begin(); it != particleList.end(); it++)
-//	{
-//		Particle* particle = static_cast<Particle*>(*it);
-//
-//		if (!particle->getActive())
-//		{
-//			particle->restartParticles(pos, vel, timeLimit);
-//			return particle;
-//		}
-//	}
-//
-//	for (unsigned a = 0; a < 10; ++a)
-//	{
-//		Particle* particle = new Particle();
-//		particleList.push_back(particle);
-//	}
-//
-//	Particle* particle = particleList.back();
-//	particle->restartParticles(pos, vel, timeLimit);
-//
-//	return particle;
-//}
 
 
 /********************************************************************************

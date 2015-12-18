@@ -12,8 +12,16 @@ class CTransform :
 public:
 	struct ORIENTATION
 	{
-		float angle = 0;
-		Vector3 rotateDir = Vector3(0, 0, 0);
+		/*float angle = 0;
+		Vector3 rotateDir = Vector3(0, 0, 0);*/
+		float angle;
+		Vector3 rotateDir;
+
+		ORIENTATION()
+		{
+			angle = 0;
+			rotateDir.SetZero();
+		}
 	};
 
 	CTransform(void);

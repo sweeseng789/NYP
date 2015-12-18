@@ -24,6 +24,8 @@ public:
 	//Add a game object to the specific cell
 	void addNode(CGameObject* go, Cell* cell);
 
+	void CleanUp();
+
 
 	Cell* getCell(int x, int z);
 	Cell* getCell(Vector3 pos);

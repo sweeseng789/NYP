@@ -1,0 +1,30 @@
+﻿Build started 12/17/2015 2:18:25 PM.
+     1>Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Common\Common.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Common.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mtx44.cpp Source\SSDLC.cpp Source\timer.cpp Source\Vector2.cpp Source\Vector3.cpp
+         MathUtility.cpp
+         MatrixStack.cpp
+         Mtx44.cpp
+         SSDLC.cpp
+         timer.cpp
+         Vector2.cpp
+         Vector3.cpp
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Common.lib" /NOLOGO /LTCG Release\MathUtility.obj
+         Release\MatrixStack.obj
+         Release\Mtx44.obj
+         Release\SSDLC.obj
+         Release\timer.obj
+         Release\Vector2.obj
+         Release\Vector3.obj
+         Common.vcxproj -> C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Common.lib
+       FinalizeBuildStatus:
+         Deleting file "Release\Common.unsuccessfulbuild".
+         Touching "Release\Common.lastbuildstate".
+     1>Done Building Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Common\Common.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.54

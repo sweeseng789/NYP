@@ -293,7 +293,9 @@ void Application::updateMouseScrolling()
 
 void Application::activateMouse(bool status)
 {
-	if (updateMouse)
+	updateMouse = status;
+
+	if (!updateMouse)
 	{
 		//Show cursor
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -304,8 +306,6 @@ void Application::activateMouse(bool status)
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		glfwSetCursorPos(m_window, m_window_width / 2, m_window_height / 2);
 	}
-	
-	updateMouse = status;
 }
 
 int Application::getWindow_Height()
@@ -444,8 +444,8 @@ void Application::Init()
 
 	theGSM = new CGameStateManager();
 	theGSM->Init("DM220 With Game State Management", Application::m_window_width, Application::m_window_height);
-	theGSM->ChangeState(CPlayState::Instance());
-	activateMouse(true);
+	theGSM->ChangeState(CIntroState::Instance());
+	//activateMouse(true);
 }
 
 /********************************************************************************
@@ -530,7 +530,7 @@ void Application::Run()
 		if (b_startGame)
 		{
 			theGSM->ChangeState(CPlayState::Instance());
-			activateMouse(true);
+			//activateMouse(false);
 			b_startGame = false;
 		}
 

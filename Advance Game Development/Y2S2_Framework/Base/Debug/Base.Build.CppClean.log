@@ -20,10 +20,10 @@ c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\load
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\text.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\treasurechest.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\utility.obj
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\ai.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\bullet.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\gameobject.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\playinfo3pv.obj
+c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\worldobj.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\gamestatemanager.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\goodies.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\goodiesfactory.obj
@@ -44,8 +44,9 @@ c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\appl
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\camera.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\camera3.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\enemy.obj
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\debug\base.pdb
+c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\ai.obj
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\debug\base.exe
+c:\users\ong\desktop\nyp\advance game development\y2s2_framework\debug\base.pdb
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\base.tlog\cl.command.1.tlog
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\base.tlog\cl.read.1.tlog
 c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\debug\base.tlog\cl.write.1.tlog

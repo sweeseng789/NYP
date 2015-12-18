@@ -183,6 +183,9 @@
     <ClCompile Include="Source\MapLoader\MapLoader.cpp">
       <Filter>Asset\Level Loading</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameCharacter\WorldOBJ.cpp">
+      <Filter>Asset\Game Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="Source\MapLoader\MapLoader.h">
       <Filter>Asset\Level Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameCharacter\WorldOBJ.h">
+      <Filter>Asset\Game Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

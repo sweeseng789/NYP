@@ -10,6 +10,7 @@ CBullet::CBullet()
 	displayBulletTimeLimit = 0;
 	displayBullet = false;
 	active = false;
+	damage = 0;
 
 	m_cSceneGraph = new CSceneNode();
 	CModel* newModel = new CModel();
@@ -25,7 +26,7 @@ CBullet::~CBullet()
 {
 }
 
-void CBullet::Update(const double &dt)
+void CBullet::Update(const double &dt,const float &WORLDSIZE)
 {
 	timeLimit -= dt;
 	pos += bulletSpeed * direction * dt;
@@ -39,7 +40,9 @@ void CBullet::Update(const double &dt)
 		displayBullet = true;
 	}
 
-	if (timeLimit < 0)
+	if (timeLimit < 0 ||
+		pos.x > WORLDSIZE || pos.x < 0 ||
+		pos.z > WORLDSIZE || pos.z < 0)
 	{
 		active = false;
 	}

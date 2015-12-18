@@ -27,6 +27,17 @@ CGameObject::CharAnimation::CharAnimation():
 
 CGameObject::~CGameObject()
 {
+	if (m_cSceneGraph)
+	{
+		delete m_cSceneGraph;
+		m_cSceneGraph = NULL;
+	}
+
+	if (animation)
+	{
+		delete animation;
+		animation = NULL;
+	}
 }
 
 CGameObject::CharAnimation::~CharAnimation()

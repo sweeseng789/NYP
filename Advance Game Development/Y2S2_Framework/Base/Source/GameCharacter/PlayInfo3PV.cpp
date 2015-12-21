@@ -278,6 +278,16 @@ void CPlayInfo3PV::Exit()
 
 void CPlayInfo3PV::Update(const double &dt, Camera3 &camera, const float& terrainY)
 {
+	//Position Update
+	pos += vel;
+
+	//Character to Terrain
+	if (!isFlying && !isOnObj)
+	{
+		float diff = terrainY - pos.y;
+		pos.y += diff * static_cast<float>(dt) * 10;
+	}
+
 	//Control Update
 	controlUpdate(dt, camera, terrainY);
 
@@ -285,9 +295,8 @@ void CPlayInfo3PV::Update(const double &dt, Camera3 &camera, const float& terrai
 	modelAnimationUpdate(camera);
 
 	//Animation Update
-	if (!isFlying)
+	if (isOnObj || !isFlying)
 		animation->Update(dt, Vector3(vel.x, 0, vel.z).LengthSquared() * 15);
-
 
 	//Friction
 	if (vel.x != 0)
@@ -310,16 +319,6 @@ void CPlayInfo3PV::Update(const double &dt, Camera3 &camera, const float& terrai
 		{
 			vel.z = 0;
 		}
-	}
-
-	//Position Update
-	pos += vel;
-
-	//Character to Terrain
-	if (!isFlying)
-	{
-		float diff = terrainY - pos.y;
-		pos.y += diff * static_cast<float>(dt) * 10;
 	}
 }
 
@@ -499,4 +498,9 @@ bool CPlayInfo3PV::isStandByMode()
 	if (mode == STANDBY)
 		return true;
 	return false;
+}
+
+void CPlayInfo3PV::setIsOnOBj(bool isOnObj)
+{
+	this->isOnObj = isOnObj;
 }

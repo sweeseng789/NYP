@@ -3,7 +3,7 @@
 
 #include "Scene.h"
 #include "Mtx44.h"
-#include "Camera3.h"
+//#include "Camera3.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
@@ -12,13 +12,13 @@
 #include "SceneGraph\SceneNode.h"
 #include "Particle.h"
 #include "Text.h"
-#include "SpatialPartition\SpatialPartition.h"
 #include "SpatialPartition\SP_Grid.h"
 #include "GameCharacter\AI.h"
 #include "GameCharacter\Bullet.h"
 #include "Sound\Sound.h"
 #include "MapLoader\MapLoader.h"
 #include "GameCharacter\WorldOBJ.h"
+#include "CameraSS.h"
 
 #include <map>
 #include <unordered_map>
@@ -85,6 +85,7 @@ class SceneGame : public Scene
 		GEO_SPHERE9,
 		GEO_QUAD,
 		GEO_QUAD2,
+		GEO_QUAD3,
 		GEO_CUBE,
 		GEO_RING,
 		GEO_CONE,
@@ -178,6 +179,7 @@ public:
 	void checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex);
 	void Collision_PlayerToAi(AI* ai);
 	void Collision_BulletToAi(CBullet* bullet, AI*ai);
+	void Collision_PlayerToWorldObj(CWorldOBJ* worldObj);
 	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, float bulletDamage, bool playerBullet = true);
 
 
@@ -247,10 +249,8 @@ private:
 	std::unique_ptr<Grid> m_grid;
 	//Grid* m_grid;
 
-	//Spatial Partioning
-	CSpatialPartition * m_cSpatialPartition;
-
 	std::vector<CGameObject*> GOList;
+	std::vector<CWorldOBJ*> worldList;
 
 	Sound sound;
 
@@ -268,6 +268,8 @@ private:
 	MENU_STATE currentState;
 	int currentLevel;
 	double currentTime;
+
+	CameraSS camera2;
 };
 
 #endif

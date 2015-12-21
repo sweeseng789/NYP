@@ -14,6 +14,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\CameraSS.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\GameCharacter\AI.cpp" />
     <ClCompile Include="Source\GameCharacter\Bullet.cpp" />
@@ -46,8 +47,6 @@
     <ClCompile Include="Source\SceneSplashScreen.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Sound\Sound.cpp" />
-    <ClCompile Include="Source\SpatialPartition\Grid.cpp" />
-    <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp" />
     <ClCompile Include="Source\SpatialPartition\SP_Grid.cpp" />
     <ClCompile Include="Source\SpatialPartition\Unit.cpp" />
     <ClCompile Include="Source\Strategy.cpp" />
@@ -61,6 +60,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\CameraSS.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameCharacter\AI.h" />
     <ClInclude Include="Source\GameCharacter\Bullet.h" />
@@ -97,8 +97,6 @@
     <ClInclude Include="Source\SceneSplashScreen.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Sound\Sound.h" />
-    <ClInclude Include="Source\SpatialPartition\Grid.h" />
-    <ClInclude Include="Source\SpatialPartition\SpatialPartition.h" />
     <ClInclude Include="Source\SpatialPartition\SP_Grid.h" />
     <ClInclude Include="Source\SpatialPartition\Unit.h" />
     <ClInclude Include="Source\Strategy.h" />

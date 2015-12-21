@@ -33,18 +33,11 @@ int main()
 	addr.sin_family = AF_INET; // Address family Internet
 	addr.sin_port = htons(23456); // Assign port 23456 to this socket
 	addr.sin_addr.s_addr = inet_addr(ipAddress.c_str()); // To local host
-
 	u_long somelong;
 	ioctlsocket(sock, FIONBIO, &somelong);
 
 	// do not check == SOCKET_ERROR here because Async mode will always return SOCKET_ERROR
 	connect(sock, (sockaddr*)&addr, sizeof(addr));
-
-	ipAddress = "";
-	ipAddress += std::to_string(addr.sin_addr.S_un.S_un_b.s_b1) + '.';
-	ipAddress += std::to_string(addr.sin_addr.S_un.S_un_b.s_b2) + '.';
-	ipAddress += std::to_string(addr.sin_addr.S_un.S_un_b.s_b3) + '.';
-	ipAddress += std::to_string(addr.sin_addr.S_un.S_un_b.s_b4);
 
 	//Loop
 	while (true)
@@ -62,15 +55,16 @@ int main()
 		{
 			if (durationBeforeAfk < 10)
 			{
-				durationBeforeAfk += 0.005;
+				durationBeforeAfk += 0.01;
 			}
 			else
 			{
 				if (!afkMsgSent)
 				{
 					std::string afk = "AFK";
-					send(sock, afk.c_str(), (int)afk.length() + 1, 0);
+					send(sock, afk.c_str(), afk.length() + 1, 0);
 					afkMsgSent = true;
+					std::cout << "Sent afk" << std::endl;
 				}
 			}
 		}
@@ -85,7 +79,7 @@ int main()
 
 		if (select(0, &fset, 0, 0, &tval) > 0)
 		{
-			char buffer[160]; // buffer that is 80 characters big
+			char buffer[80]; // buffer that is 80 characters big
 			int length = recv(sock, buffer, sizeof(buffer), 0);
 			if (length == SOCKET_ERROR)
 			{

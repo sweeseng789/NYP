@@ -63,7 +63,7 @@ public:
 	bool isEnemyBullet();
 	bool getActive();
 	Vector3 getPos();
-	Vector3 getVel();
+	Vector3 &getVel();
 	Vector3 getScale();
 	Vector3 getTarget();
 	Vector3 getDirection();

@@ -153,15 +153,6 @@
     <ClCompile Include="Source\SpatialPartition\SP_Grid.cpp">
       <Filter>Asset\SpatialPartition</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SpatialPartition\Unit.cpp">
-      <Filter>Asset\SpatialPartition</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SpatialPartition\Grid.cpp">
-      <Filter>Asset\SpatialPartition</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp">
-      <Filter>Asset\SpatialPartition</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameCharacter\GameObject.cpp">
       <Filter>Asset\Game Character</Filter>
     </ClCompile>
@@ -185,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="Source\GameCharacter\WorldOBJ.cpp">
       <Filter>Asset\Game Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CameraSS.cpp">
+      <Filter>Asset\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\Unit.cpp">
+      <Filter>Asset\SpatialPartition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,15 +302,6 @@
     <ClInclude Include="Source\SpatialPartition\SP_Grid.h">
       <Filter>Asset\SpatialPartition</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SpatialPartition\Unit.h">
-      <Filter>Asset\SpatialPartition</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SpatialPartition\Grid.h">
-      <Filter>Asset\SpatialPartition</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SpatialPartition\SpatialPartition.h">
-      <Filter>Asset\SpatialPartition</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameCharacter\GameObject.h">
       <Filter>Asset\Game Character</Filter>
     </ClInclude>
@@ -337,6 +325,12 @@
     </ClInclude>
     <ClInclude Include="Source\GameCharacter\WorldOBJ.h">
       <Filter>Asset\Game Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraSS.h">
+      <Filter>Asset\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpatialPartition\Unit.h">
+      <Filter>Asset\SpatialPartition</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

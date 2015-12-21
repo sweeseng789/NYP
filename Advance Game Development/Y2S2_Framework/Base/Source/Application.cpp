@@ -318,7 +318,7 @@ int Application::getWindow_Width()
 	return m_window_width;
 }
 
-void Application::GetMousePos(float & mousePos_x, float & mousePos_Y)
+void Application::GetMousePos(double & mousePos_x, double & mousePos_Y)
 {
 	double *xpos = new double;
 	double *ypos = new double;
@@ -589,4 +589,9 @@ void Application::Exit()
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW
 	glfwTerminate();
+}
+
+void Application::setMousePos(double& mousePos_X, double& mousePos_Y)
+{
+	glfwSetCursorPos(m_window, mousePos_X, mousePos_Y);
 }

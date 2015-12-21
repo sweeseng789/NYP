@@ -3,9 +3,13 @@
 
 #include "Vector3.h"
 
+struct CELL
+{
+
+};
+
 class Unit
 {
-	friend class Grid;
 
 public:
 	Unit();

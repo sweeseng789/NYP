@@ -409,7 +409,7 @@ void Camera3::Jump(const double dt)
 
 void Camera3::thirdPersonView_YawUpdate(const double &dt)
 {
-	if (Application::camera_yaw > 0.0)
+	/*if (Application::camera_yaw > 0.0)
 	{
 		mouseVel.x += m_fTPVCameraOffset * static_cast<float>(dt);
 	}
@@ -424,6 +424,28 @@ void Camera3::thirdPersonView_YawUpdate(const double &dt)
 		mouseVel.x += Fforce * static_cast<float>(dt) * 4.f;
 	}
 
+	angleAroundObj -= mouseVel.x;*/
+
+	if (Application::camera_yaw > 0.0)
+	{
+		mouseVel.x += m_fTPVCameraOffset * 0.97 * static_cast<float>(dt);
+	}
+	else if (Application::camera_yaw < -0.0)
+	{
+		mouseVel.x -= m_fTPVCameraOffset * 0.97 * static_cast<float>(dt);
+	}
+
+	if (mouseVel.x != 0)
+	{
+		float Fforce = 0 - mouseVel.x;
+		mouseVel.x += Fforce * 5 * dt;
+
+		if (mouseVel.x < 0.2 && mouseVel.x > -0.2)
+		{
+			mouseVel.x = 0;
+		}
+	}
+
 	angleAroundObj -= mouseVel.x;
 }
 
@@ -433,11 +455,11 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 
 	if (Application::camera_pitch > 0.0 && Obj_pitch <= pitchLimit)
 	{
-		mouseVel.y -= m_fTPVCameraOffset * static_cast<float>(dt);
+		mouseVel.y -= m_fTPVCameraOffset * 0.97 * static_cast<float>(dt);
 	}
 	else if (Application::camera_pitch < -0.0 && Obj_pitch >= -pitchLimit)
 	{
-		mouseVel.y += m_fTPVCameraOffset * static_cast<float>(dt);
+		mouseVel.y += m_fTPVCameraOffset * 0.97 * static_cast<float>(dt);
 	}
 
 	if (mouseVel.y != 0)
@@ -454,7 +476,12 @@ void Camera3::thirdPersonView_PitchUpdate(const double &dt)
 		}
 
 		float Fforce = 0 - mouseVel.y;
-		mouseVel.y += Fforce * static_cast<float>(dt) * 4.f;
+		mouseVel.y += Fforce * 5 * static_cast<float>(dt);
+
+		if (mouseVel.y > -0.2 && mouseVel.y < 0.2)
+		{
+			mouseVel.y = 0;
+		}
 	}
 
 	Obj_pitch -= mouseVel.y;

@@ -13,5 +13,6 @@ public:
 
 	float health;
 	float newHealth;
+	Mesh* mesh;
 };
 

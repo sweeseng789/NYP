@@ -10,6 +10,7 @@ struct Cell
 	std::vector<CGameObject*> GOList;
 	int id;
 	bool isPlayerInit;
+	bool playerUpdate;
 };
 
 class Grid

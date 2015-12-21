@@ -14,7 +14,6 @@ SceneGame::SceneGame(void)
 	, m_window_width(800)
 	, m_window_height(600)
 	, m_cSceneGraph(NULL)
-	, m_cSpatialPartition(NULL)
 {
 }
 
@@ -22,7 +21,6 @@ SceneGame::SceneGame(const int m_window_width, const int m_window_height)
 	: m_cMinimap(NULL)
 	,m_cAvatar(NULL)
 	, m_cSceneGraph(NULL)
-	, m_cSpatialPartition(NULL)
 {
 	this->m_window_width = m_window_width;
 	this->m_window_height = m_window_height;
@@ -181,6 +179,7 @@ void SceneGame::InitMesh()
 	//meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 0, 0), 1.f);
 	meshList[GEO_QUAD2] = MeshBuilder::GenerateQuad("quad", Color(0, 1, 0), 1.f);
+	meshList[GEO_QUAD3] = MeshBuilder::GenerateQuad("quad", Color(0, 0, 1), 1.f);
 	//meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
@@ -424,7 +423,7 @@ void SceneGame::Update(double dt)
 		}
 	}*/
 
-	std::cout << currentTime << std::endl;
+
 	if (currentTime < 0.00001)
 	{
 		currentTime += dt;
@@ -1024,9 +1023,33 @@ void SceneGame::Exit()
 			delete meshList[i];
 	}
 
-	clearText();
+	while (GOList.size() > 0)
+	{
+		CGameObject* go = GOList.back();
+		delete go;
+		GOList.pop_back();
+	}
 
-	clearMemory();
+	while (textList.size() > 0)
+	{
+		CText* text = textList.back();
+		delete text;
+		textList.pop_back();
+	}
+
+	while (particleList.size() > 0)
+	{
+		Particle* particle = particleList.back();
+		delete particle;
+		particleList.pop_back();
+	}
+
+	while (worldList.size() > 0)
+	{
+		CWorldOBJ* worldObj = worldList.back();
+		delete worldObj;
+		worldList.pop_back();
+	}
 
 
 	glDeleteProgram(m_programID);
@@ -1099,6 +1122,7 @@ void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const 
 		bullet->setDirection(direction);
 		bullet->setTimeLimit(timeLimit);
 		bullet->setDisplayBullet(false);
+		bullet->startPos = pos;
 	}
 }
 
@@ -1144,7 +1168,7 @@ void SceneGame::textUpdate()
 
 void SceneGame::UpdateMenu(const double &dt)
 {
-	float x, y;
+	double x, y;
 	Application::GetMousePos(x, y);
 	mousePos.x = x / Application::getWindow_Width() * Application::getWindow_Width() + 0;
 	mousePos.y = (Application::getWindow_Height() - y) / Application::getWindow_Height() * Application::getWindow_Height() + 0;
@@ -1430,45 +1454,67 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 	else if (go1->isPlayer() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
 	{
 		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
-
-		Vector3 topleft = go2->getPos() + go2->getScale();
-		Vector3 bottoRight = go2->getPos() - go2->getScale();
-
-		if (SSDLC::intersect(topleft, bottoRight, m_cAvatar->getPos()))
-		{
-			worldObj->newHealth = 0;
-		}
+		Collision_PlayerToWorldObj(worldObj);
 	}
-	else if (go1->isPlayerBullet() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
-	{
-		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
-		CBullet* bullet = dynamic_cast<CBullet*>(go1);
+	//else if (go1->isPlayerBullet() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
+	//{
+	//	CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
+	//	CBullet* bullet = dynamic_cast<CBullet*>(go1);
 
-		Vector3 topleft = go2->getPos() + go2->getScale();
-		Vector3 bottoRight = go2->getPos() - go2->getScale();
+	//	Vector3 topleft = go2->getPos() + go2->getScale() * 1.5;
+	//	Vector3 bottomRight = go2->getPos() - go2->getScale() * 0.5;
+	//	bottomRight.y = go2->getPos().y;
 
-		if (SSDLC::intersect(topleft, bottoRight, bullet->getPos()))
-		{
-			for (unsigned a = 0; a < 3; ++a)
-			{
-				Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
-				Vector3 direction = -bullet->getDirection();
-				direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
-				direction.y += Math::RandFloatMinMax(20, 100);
-				direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
+	//	if (SSDLC::intersect_LineAABB(bullet->startPos, bullet->getDirection(), topleft, bottomRight))
+	//	{
+	//		for (unsigned a = 0; a < 3; ++a)
+	//		{
+	//			Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
+	//			Vector3 direction = -bullet->getDirection();
+	//			direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
+	//			direction.y += Math::RandFloatMinMax(20, 100);
+	//			direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
 
-				generateParticle(0, pos, direction, 0.2, Particle::e_YELLOW);
-			}
+	//			generateParticle(0, go2->getPos(), direction, 0.2, Particle::e_YELLOW);
+	//		}
 
-			worldObj->newHealth -= bullet->damage;
-			bullet->setActive(false);
-		}
-	}
+	//		//worldObj->newHealth -= bullet->damage;
+	//		bullet->setActive(false);
+	//	}
+	//}
 }
 
 void SceneGame::Collision_PlayerToAi(AI* ai)
 {
+}
 
+void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
+{
+	Vector3 topLeft = worldObj->getPos() + worldObj->getScale() * 0.5;
+	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale() * 0.5;
+
+	if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 50, 10)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(10, 50, 0)))
+	{
+		m_cAvatar->setIsOnOBj(true);
+		m_cAvatar->getVel().y = 0;
+	}
+	else
+	{
+		m_cAvatar->setIsOnOBj(false);
+
+		static float offset = 15.f;
+		//X Axis
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, 0)))
+		{
+			m_cAvatar->getVel().x = -m_cAvatar->getVel().x;
+		}
+
+		//Z Axis
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, 0, offset)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 0, offset)))
+		{
+			m_cAvatar->getVel().z = -m_cAvatar->getVel().z;
+		}
+	}
 }
 
 void SceneGame::Collision_BulletToAi(CBullet* bullet, AI* ai)
@@ -1516,7 +1562,6 @@ void SceneGame::Collision_BulletToAi(CBullet* bullet, AI* ai)
 				if (SSDLC::intersect_LineAABB(bullet->getPos(), bullet->getDirection(), topLeft, bottomRight))
 				{
 					bullet->setActive(false);
-					cout << it->second << std::endl;
 				}
 			}
 		}
@@ -1669,11 +1714,11 @@ void SceneGame::GridUpdate(const double& dt)
 			{
 				bullet->Update(dt, WORLDSIZE);
 
-				if (bullet->getPos().y <= tempY)
+				/*if (bullet->getPos().y <= tempY)
 				{
 					for (unsigned a = 0; a < 3; ++a)
 					{
-						Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
+						Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 10);
 						Vector3 direction = -bullet->getDirection();
 						direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
 						direction.y += Math::RandFloatMinMax(20, 100);
@@ -1682,7 +1727,7 @@ void SceneGame::GridUpdate(const double& dt)
 						generateParticle(dt, pos, direction, 0.2, Particle::e_YELLOW);
 					}
 					bullet->setActive(false);
-				}
+				}*/
 			}
 
 			//Ai Update
@@ -1696,8 +1741,8 @@ void SceneGame::GridUpdate(const double& dt)
 			CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(*it);
 			if (worldObj != NULL)
 			{
-				std::cout << worldObj->health << std::endl;
-				tempY -= 30;
+				//tempY -= 30;
+				tempY += 10;
 				worldObj->update(dt, tempY);
 			}
 		}
@@ -1805,7 +1850,7 @@ void SceneGame::RenderDebugging()
 
 		modelStack.PushMatrix();
 		modelStack.Translate(CELL_SIZE * 0.5 + x * CELL_SIZE, 0, CELL_SIZE * 0.5 + z * CELL_SIZE);
-		modelStack.Scale(CELL_SIZE - 0.5, WORLDSIZE, CELL_SIZE - 0.5);
+		modelStack.Scale(CELL_SIZE - 0.5, CELL_SIZE, CELL_SIZE - 0.5);
 		if (!cell.isPlayerInit)
 			RenderMesh(meshList[GEO_REDCUBE], false);
 		else
@@ -1872,6 +1917,13 @@ void SceneGame::loadLevel(int level)
 			particleList.pop_back();
 		}
 
+		while (worldList.size() > 0)
+		{
+			CWorldOBJ* worldObj = worldList.back();
+			delete worldObj;
+			worldList.pop_back();
+		}
+
 
 		fileLoc += fileName;
 
@@ -1894,15 +1946,14 @@ void SceneGame::loadLevel(int level)
 					else if (mapLoader.map_data[y][x] == "B")
 					{
 						Vector3 pos;
-						float scale = Math::RandFloatMinMax(100, 200);
+						pos.y = 100;
+						pos.x = x * CELL_SIZE;
+						pos.z = y * CELL_SIZE;
+						
+						pos.x -= CELL_SIZE * 0.5;
+						pos.z -= CELL_SIZE * 0.5;
 
-						pos.x = x * (WORLDSIZE / mapLoader.map_width);
-						pos.z = y * (WORLDSIZE / mapLoader.map_height);
-						pos.x += heightMapScale.x * 0.5;
-						pos.z += heightMapScale.z * 0.5;
-						pos.y = 1000.f;
-
-						CWorldOBJ* newOBJ = new CWorldOBJ(pos, scale);
+						CWorldOBJ* newOBJ = new CWorldOBJ(pos, CELL_SIZE);
 						GOList.push_back(newOBJ);
 					}
 				}

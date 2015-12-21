@@ -1,6 +1,1 @@
-﻿  main.cpp
-c:\users\ong\desktop\nyp\multiplayer game programming\assignments\chatserver\chatserver\main.cpp(133): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-          d:\vs 2013\vc\include\string.h(204) : see declaration of 'strtok'
-c:\users\ong\desktop\nyp\multiplayer game programming\assignments\chatserver\chatserver\main.cpp(137): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-          d:\vs 2013\vc\include\string.h(204) : see declaration of 'strtok'
-  ChatServer.vcxproj -> C:\Users\Ong\Desktop\NYP\Multiplayer Game Programming\Assignments\ChatServer\Debug\ChatServer.exe
+﻿

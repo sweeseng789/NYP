@@ -18,6 +18,7 @@ public:
 	bool getDisplayBullet();
 
 	float damage;
+	Vector3 startPos;
 private:
 	static const float bulletSpeed;
 	static const double displaybulletLimit;

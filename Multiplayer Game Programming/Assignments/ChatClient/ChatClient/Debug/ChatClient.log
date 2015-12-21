@@ -1,4 +1,1 @@
-﻿  main.cpp
-c:\users\ong\desktop\nyp\multiplayer game programming\assignments\chatclient\chatclient\main.cpp(35): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-          c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850) : see declaration of 'inet_addr'
-  ChatClient.vcxproj -> C:\Users\Ong\Desktop\NYP\Multiplayer Game Programming\Assignments\ChatClient\Debug\ChatClient.exe
+﻿

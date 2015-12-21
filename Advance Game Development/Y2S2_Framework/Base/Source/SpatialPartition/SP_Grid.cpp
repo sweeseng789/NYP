@@ -64,7 +64,7 @@ Cell* Grid::getCell(int x, int z)
 	if (x < 0)
 	{
 		x = 0;
-		std::cout << "X is less than 0" << std::endl;
+		//std::cout << "X is less than 0" << std::endl;
 	}
 
 	if (x >= m_numXCells)
@@ -75,7 +75,7 @@ Cell* Grid::getCell(int x, int z)
 	if (z < 0)
 	{
 		z = 0;
-		std::cout << "z is less than 0" << std::endl;
+		//std::cout << "z is less than 0" << std::endl;
 	}
 
 	if (z >= m_numZCells)

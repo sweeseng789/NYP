@@ -44,8 +44,9 @@ public:
 	static int scrollCount_min, scrollCount_max;
 	static int button_Left, button_Middle, button_Right;
 	static bool updateMouse;
-	static void GetMousePos(float & mousePos_x, float & mousePos_Y);
+	static void GetMousePos(double & mousePos_x, double & mousePos_Y);
 	static void activateMouse(bool status);
+	static void setMousePos(double& mousePos_x, double & mousePos_Y);
 
 	static int getWindow_Width();
 	static int getWindow_Height();

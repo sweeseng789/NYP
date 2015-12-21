@@ -195,7 +195,7 @@ Vector3 CGameObject::getPos()
 	return pos;
 }
 
-Vector3 CGameObject::getVel()
+Vector3& CGameObject::getVel()
 {
 	return vel;
 }

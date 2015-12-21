@@ -31,10 +31,12 @@ public:
 	float getAngle();
 	bool isAttackMode();
 	bool isStandByMode();
+	void setIsOnOBj(bool isOnObj);
 private:
 	//bool
 	bool myKeys[255];
 	bool isFlying;
+	bool isOnObj;
 
 	//float
 	float angle;

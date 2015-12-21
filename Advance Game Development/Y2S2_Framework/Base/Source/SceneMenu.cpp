@@ -300,7 +300,7 @@ void SceneMenu::Update(double dt)
 		rotateAngle -= 360;
 	}
 
-	float x, y;
+	double x, y;
 	Application::GetMousePos(x, y);
 	mousePos.x = x / Application::getWindow_Width() * Application::getWindow_Width() + v3_MenuCam.x;
 	mousePos.y = (Application::getWindow_Height() - y) / Application::getWindow_Height() * Application::getWindow_Height() + v3_MenuCam.y;

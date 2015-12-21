@@ -23,6 +23,7 @@ struct user
 	bool logIn = false;
 	bool usernameVerified;
 	bool passwordVerified;
+	double timeBeforeAfk = 0;
 };
 
 struct ACCOUNT
@@ -64,6 +65,11 @@ void listCommand(user* User)
 		else
 		{
 			msgToSend += User2->name;
+
+			if (User->afk)
+			{
+				msgToSend += "<AFK>";
+			}
 		}
 
 		if (itr2 + 1 != socks.end())
@@ -205,17 +211,6 @@ void sendMsg(std::string buffer, user* User)
 			send(User2->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
 		}
 	}
-
-	/*msgToSend = User->name + ": " + buffer;
-	std::cout << User->name << " send: " << buffer << std::endl;
-
-	for (std::vector<user*>::iterator itr2 = socks.begin(); itr2 != socks.end(); ++itr2)
-	{
-		user* User2 = static_cast<user*>(*itr2);
-		if (User->s == User2->s) continue;
-
-		send(User2->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
-	}*/
 }
 
 void getAccountSettings()
@@ -269,27 +264,24 @@ ACCOUNT* getAccountByName(std::string name)
 	return NULL;
 }
 
-bool verifyAccount(user* User, std::string stringToCheck, bool checkUsername = true)
+bool verifyAccount(user* User, std::string userName, std::string passward = "")
 {
-	for (std::vector<ACCOUNT*>::iterator it = m_cAccount.begin(); it != m_cAccount.end(); ++it)
+	for (ACCOUNT* account : m_cAccount)
 	{
-		ACCOUNT* account = static_cast<ACCOUNT*>(*it);
-
-		if (account->used != true)
+		if (!account->used)
 		{
-			//Check against username
-			if (checkUsername)
+			//Check against Username
+			if (passward == "")
 			{
-				if (stringToCheck == account->username)
+				if (userName == account->username)
 				{
 					User->usernameVerified = true;
 					return true;
 				}
 			}
-			//Check against password
 			else
 			{
-				if (stringToCheck == account->password)
+				if (userName == account->username && passward == account->password)
 				{
 					User->passwordVerified = true;
 					account->used = true;
@@ -304,30 +296,31 @@ bool verifyAccount(user* User, std::string stringToCheck, bool checkUsername = t
 
 void accountLogIn(user* User, std::string buffer)
 {
-	std::string enterName = "Please enter your username";
+	std::string enterName = "Please enter your username or Enter 'sign-up' to sign-up for a account";
 	std::string enterPass = "Please enter your password";
 	std::string loginSuccess = "You have login successfully";
-	std::string suggestToSignUp = "Enter 'sign-up' to sign-up for a account";
+	static std::string tempUser = "";
+	static std::string tempPass = "";
 
-	//send(User->s, suggestToSignUp.c_str(), suggestToSignUp.length() + 1, 0);
-	if (!User->usernameVerified)
+	//Checking Username
+	if (tempUser == "")
 	{
+		//Verify Username fail
 		if (!verifyAccount(User, buffer))
 		{
-			std::ostringstream msgToSend;
-			msgToSend << suggestToSignUp << std::endl;
-			msgToSend << enterName << std::endl;
-			send(User->s, msgToSend.str().c_str(), msgToSend.str().length() + 1, 0);
+			send(User->s, enterName.c_str(), enterName.length() + 1, 0);
 		}
 		else
 		{
+			tempUser = buffer;
 			User->usernameVerified = true;
 			send(User->s, enterPass.c_str(), enterPass.length() + 1, 0);
 		}
 	}
 	else
 	{
-		if (!verifyAccount(User, buffer, false))
+		tempPass = buffer;
+		if (!verifyAccount(User, tempUser, tempPass))
 		{
 			send(User->s, enterName.c_str(), enterName.length() + 1, 0);
 			User->usernameVerified = false;
@@ -353,6 +346,9 @@ void accountLogIn(user* User, std::string buffer)
 				}
 			}
 		}
+
+		tempUser = "";
+		tempPass = "";
 	}
 }
 
@@ -395,7 +391,11 @@ void createAccount(user* User, std::string buffer)
 				std::string username = account->username;
 				std::string password = account->password;
 
-				accountInfo << username << ", " << password << std::endl;
+				accountInfo << username << ", " << password;
+				if (account != m_cAccount.back())
+				{
+					accountInfo << std::endl;
+				}
 			}
 			accountInfo.close();
 
@@ -477,12 +477,26 @@ int main()
 
 				if (FD_ISSET(User->s, &fset))
 				{
-					char buffer[80]; // buffer that is 80 characters big
-					char tempBuffer[80];
+					char buffer[160]; // buffer that is 80 characters big
+					char tempBuffer[160];
 					int length = recv(User->s, buffer, sizeof(buffer), 0);
+	
 					if (length == SOCKET_ERROR)
 					{
-						std::cout << "Client (" << User->s << ") Disconnected" << std::endl;
+						ACCOUNT* account = getAccountByName(User->name);
+						if(account != NULL)
+							account->used = false;
+
+						std::string disconnected = "User " + User->name + " have disconnected";
+						std::cout << disconnected << std::endl;
+
+						for (user* User2 : socks)
+						{
+							if (User2 != User)
+							{
+								send(User2->s, disconnected.c_str(), disconnected.length() + 1, 0);
+							}
+						}
 						socks.erase(itr);
 
 						break;
@@ -506,20 +520,29 @@ int main()
 						}
 						else
 						{
-							for (unsigned a = 0; a < 80; ++a)
+							for (unsigned a = 0; a < 160; ++a)
 							{
 								tempBuffer[a] = buffer[a];
 							}
 
-							//Check if user is AFK, set to false
-							if (User->afk)
-								User->afk = false;
-							if (!truncateBuffer(tempBuffer, User))
+							if (User->afk == true)
 							{
-								sendMsg(std::string(buffer), User);
+								User->afk = false;
+							}
 
-								std::string msgToSend = "Please enter your message";
-								send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+							if ((std::string)buffer != "AFK")
+							{
+								if (!truncateBuffer(tempBuffer, User))
+								{
+									sendMsg(std::string(buffer), User);
+
+									std::string msgToSend = "Please enter your message";
+									send(User->s, msgToSend.c_str(), msgToSend.length() + 1, 0);
+								}
+							}
+							else
+							{
+								User->afk = true;
 							}
 						}
 					}

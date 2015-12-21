@@ -29,6 +29,7 @@ void CPlayInfo3PV::Init()
 	mode = STANDBY;
 	stage = FAWithBooster;
 	isFlying = false;
+	isOnObj = false;
 
 	// Initialise the Avatar's movement flags
 	for (int i = 0; i < 255; i++) 
@@ -503,4 +504,9 @@ bool CPlayInfo3PV::isStandByMode()
 void CPlayInfo3PV::setIsOnOBj(bool isOnObj)
 {
 	this->isOnObj = isOnObj;
+}
+
+void CPlayInfo3PV::setIsFlying(bool isFlying)
+{
+	this->isFlying = isFlying;
 }

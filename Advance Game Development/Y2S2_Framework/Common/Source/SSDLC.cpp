@@ -1,6 +1,7 @@
 #include "SSDLC.h"
-
-
+#include <algorithm>
+using std::max;
+using std::min;
 
 SSDLC::SSDLC()
 {
@@ -114,7 +115,7 @@ bool SSDLC::intersect_LineAABB(Vector3 &projectilePos, Vector3 &projectileDir, V
 	//	return true;
 	//return false;
 
-	float tmin = (bottomRight.x - projectilePos.x) / projectileDir.x;
+	/*float tmin = (bottomRight.x - projectilePos.x) / projectileDir.x;
 	float tmax = (topLeft.x - projectilePos.x) / projectileDir.x;
 
 	if (tmin > tmax)
@@ -149,6 +150,35 @@ bool SSDLC::intersect_LineAABB(Vector3 &projectilePos, Vector3 &projectileDir, V
 
 	if (tzmax < tmax)
 		tmax = tzmax;
+
+	return true;*/
+
+	Vector3 dirFraction;
+	dirFraction.x = 1.f / projectileDir.x;
+	dirFraction.y = 1.f / projectileDir.y;
+	dirFraction.z = 1.f / projectileDir.z;
+
+	float t1 = (topLeft.x - projectilePos.x) * dirFraction.x;
+	float t2 = (bottomRight.x - projectilePos.x) * dirFraction.x;
+
+	float t3 = (topLeft.y - projectilePos.y) * dirFraction.y;
+	float t4 = (bottomRight.y - projectilePos.y) * dirFraction.y;
+
+	float t5 = (topLeft.z - projectilePos.z) * dirFraction.z;
+	float t6 = (bottomRight.z - projectilePos.z) * dirFraction.z;
+
+	float tmin = std::max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
+	float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
+
+	if (tmax < 0)
+	{
+		return false;
+	}
+
+	if (tmin > tmax)
+	{
+		return false;
+	}
 
 	return true;
 }

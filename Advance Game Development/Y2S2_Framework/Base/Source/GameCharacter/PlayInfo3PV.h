@@ -32,6 +32,7 @@ public:
 	bool isAttackMode();
 	bool isStandByMode();
 	void setIsOnOBj(bool isOnObj);
+	void setIsFlying(bool isFlying);
 private:
 	//bool
 	bool myKeys[255];

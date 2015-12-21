@@ -242,7 +242,7 @@ void SceneGame::InitMesh()
 	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Church", "OBJ//church.obj");
 	meshList[GEO_CHURCH]->textureID[0] = LoadTGA("Image//church.tga");
 
-	//meshList[GEO_LINE] = MeshBuilder::GenerateLine
+	meshList[GEO_LINE] = MeshBuilder::GenerateLine("line", 1.f);
 }
 
 void SceneGame::Init()
@@ -1004,16 +1004,22 @@ void SceneGame::Render()
 
 	if (b_Debug)
 		RenderDebugging();
+
 	for (CGameObject* go : GOList)
 	{
 		CBullet* bullet = dynamic_cast<CBullet*>(go);
 		if (bullet != NULL)
 		{
-			modelStack.PushMatrix();
-			modelStack.Translate(bullet->getPos().x - m_cAvatar->getPos().x, bullet->getPos().y - m_cAvatar->getPos().y, bullet->getPos().z - m_cAvatar->getPos().z);
-			modelStack.Scale(bullet->getPos().x - m_cAvatar->getPos().x, bullet->getPos().y - m_cAvatar->getPos().y, bullet->getPos().z - m_cAvatar->getPos().z);
-			RenderMesh(meshList[GEO_AXES], false);
-			modelStack.PopMatrix();
+			if (bullet->getActive())
+			{
+				Vector3 diff = bullet->getPos() - m_cAvatar->getPos();
+				modelStack.PushMatrix();
+				modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y + 30, m_cAvatar->getPos().z);
+				modelStack.Rotate(Math::RadianToDegree(atan2(diff.x, diff.z)), 0, 1, 0);
+				modelStack.Scale(0, 0, diff.Length());
+				RenderMesh(meshList[GEO_LINE], false);
+				modelStack.PopMatrix();
+			}
 		}
 	}
 
@@ -1478,7 +1484,7 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 		Vector3 topleft = go2->getPos() + go2->getScale() * 0.5;
 		Vector3 bottomRight = go2->getPos() - go2->getScale()  * 0.5;
 
-		if (SSDLC::intersect_LineAABB(bullet->startPos, bullet->getDirection(), topleft, bottomRight))
+		if (SSDLC::intersect_LineAABB(bullet->getPos(), bullet->getDirection(), topleft, bottomRight))
 		{
 			for (unsigned a = 0; a < 3; ++a)
 			{
@@ -1506,39 +1512,15 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 	Vector3 topLeft = worldObj->getPos() + worldObj->getScale() * 0.5;
 	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale() * 0.5;
 
-	//if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 50, 10)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(10, 50, 0)))
-	//{
-	//	m_cAvatar->setIsOnOBj(true);
-	//	m_cAvatar->getVel().y = 0;
-	//}
-	//else
-	//{
-	//	m_cAvatar->setIsOnOBj(false);
+	static float offset = 15.f;
 
-	//	static float offset = 15.f;
-	//	//X Axis
-	//	if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, 0)))
-	//	{
-	//		m_cAvatar->getVel().x = -m_cAvatar->getVel().x;
-	//	}
-
-	//	//Z Axis
-	//	if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, 0, offset)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 0, offset)))
-	//	{
-	//		m_cAvatar->getVel().z = -m_cAvatar->getVel().z;
-	//	}
-	//}
-
-	static float offset = 20.f;
-
-	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, offset)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, offset)))
+	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, -10, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset, -10, 0)) ||
+		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, offset)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, -offset)))
 	{
-		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, -50, 0)) ||
-			SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset, -50, 0)) ||
-			SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -50, offset)) ||
-			SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -50, -offset)))
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -45, 0)))
 		{
 			m_cAvatar->setIsOnOBj(true);
+
 			if (m_cAvatar->getVel().y < 0)
 				m_cAvatar->getVel().y = 0;
 		}
@@ -1546,19 +1528,19 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 	else
 	{
 		m_cAvatar->setIsOnOBj(false);
-
 		//X Axis
-		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, 0)))
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, -10, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset, -10, 0)))
 		{
 			m_cAvatar->getVel().x = -m_cAvatar->getVel().x;
 		}
 
 		//Z Axis
-		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, 0, offset)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 0, offset)))
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, offset)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, -offset)))
 		{
 			m_cAvatar->getVel().z = -m_cAvatar->getVel().z;
 		}
 	}
+
 }
 
 

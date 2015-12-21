@@ -61,12 +61,16 @@ Mesh* MeshBuilder::GenerateAxes(const std::string &meshName, float lengthX, floa
 
 	return mesh;
 }
-Mesh* MeshBuilder::GenerateLine(const std::string &meshName, float lengthZ = 0.0f)
+Mesh* MeshBuilder::GenerateLine(const std::string &meshName, float lengthZ)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	v.pos.Set(0, 0, 1);
-	v.color.Set(0, 0, 1);
+	v.color.Set(1, 0.64705882352, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0, 0, 0);
+	v.color.Set(1, 0.64705882352, 0);
 	vertex_buffer_data.push_back(v);
 
 	std::vector<GLuint> index_buffer_data;
@@ -88,7 +92,6 @@ Mesh* MeshBuilder::GenerateLine(const std::string &meshName, float lengthZ = 0.0
 	mesh->mode = Mesh::DRAW_LINES;
 
 	return mesh;
-}
 }
 
 /******************************************************************************/

@@ -1,2 +1,2 @@
-Fullscreen: True
+Fullscreen: False
 Testing: False

@@ -241,6 +241,8 @@ void SceneGame::InitMesh()
 
 	meshList[GEO_CHURCH] = MeshBuilder::GenerateOBJ("Church", "OBJ//church.obj");
 	meshList[GEO_CHURCH]->textureID[0] = LoadTGA("Image//church.tga");
+
+	//meshList[GEO_LINE] = MeshBuilder::GenerateLine
 }
 
 void SceneGame::Init()
@@ -1002,6 +1004,18 @@ void SceneGame::Render()
 
 	if (b_Debug)
 		RenderDebugging();
+	for (CGameObject* go : GOList)
+	{
+		CBullet* bullet = dynamic_cast<CBullet*>(go);
+		if (bullet != NULL)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(bullet->getPos().x - m_cAvatar->getPos().x, bullet->getPos().y - m_cAvatar->getPos().y, bullet->getPos().z - m_cAvatar->getPos().z);
+			modelStack.Scale(bullet->getPos().x - m_cAvatar->getPos().x, bullet->getPos().y - m_cAvatar->getPos().y, bullet->getPos().z - m_cAvatar->getPos().z);
+			RenderMesh(meshList[GEO_AXES], false);
+			modelStack.PopMatrix();
+		}
+	}
 
 	if (b_pauseGame)
 	{
@@ -1461,8 +1475,8 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
 		CBullet* bullet = dynamic_cast<CBullet*>(go1);
 
-		Vector3 topleft = go2->getPos() + go2->getScale() ;
-		Vector3 bottomRight = go2->getPos() - go2->getScale() ;
+		Vector3 topleft = go2->getPos() + go2->getScale() * 0.5;
+		Vector3 bottomRight = go2->getPos() - go2->getScale()  * 0.5;
 
 		if (SSDLC::intersect_LineAABB(bullet->startPos, bullet->getDirection(), topleft, bottomRight))
 		{

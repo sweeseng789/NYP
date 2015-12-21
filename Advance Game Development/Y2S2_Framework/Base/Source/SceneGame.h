@@ -24,7 +24,7 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
-
+ 
 class SceneGame : public Scene
 {
 	enum UNIFORM_TYPE
@@ -72,6 +72,7 @@ class SceneGame : public Scene
 	{
 		GEO_RAY,
 		GEO_AXES,
+		GEO_LINE,
 		GEO_CROSSHAIR,
 		GEO_LIGHTBALL,
 		GEO_SPHERE,

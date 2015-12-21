@@ -1456,32 +1456,31 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
 		Collision_PlayerToWorldObj(worldObj);
 	}
-	//else if (go1->isPlayerBullet() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
-	//{
-	//	CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
-	//	CBullet* bullet = dynamic_cast<CBullet*>(go1);
+	else if (go1->isPlayerBullet() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
+	{
+		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
+		CBullet* bullet = dynamic_cast<CBullet*>(go1);
 
-	//	Vector3 topleft = go2->getPos() + go2->getScale() * 1.5;
-	//	Vector3 bottomRight = go2->getPos() - go2->getScale() * 0.5;
-	//	bottomRight.y = go2->getPos().y;
+		Vector3 topleft = go2->getPos() + go2->getScale() ;
+		Vector3 bottomRight = go2->getPos() - go2->getScale() ;
 
-	//	if (SSDLC::intersect_LineAABB(bullet->startPos, bullet->getDirection(), topleft, bottomRight))
-	//	{
-	//		for (unsigned a = 0; a < 3; ++a)
-	//		{
-	//			Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
-	//			Vector3 direction = -bullet->getDirection();
-	//			direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
-	//			direction.y += Math::RandFloatMinMax(20, 100);
-	//			direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
+		if (SSDLC::intersect_LineAABB(bullet->startPos, bullet->getDirection(), topleft, bottomRight))
+		{
+			for (unsigned a = 0; a < 3; ++a)
+			{
+				Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
+				Vector3 direction = -bullet->getDirection();
+				direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
+				direction.y += Math::RandFloatMinMax(20, 100);
+				direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
 
-	//			generateParticle(0, go2->getPos(), direction, 0.2, Particle::e_YELLOW);
-	//		}
+				generateParticle(0, go2->getPos(), direction, 0.2, Particle::e_YELLOW);
+			}
 
-	//		//worldObj->newHealth -= bullet->damage;
-	//		bullet->setActive(false);
-	//	}
-	//}
+			//worldObj->newHealth -= bullet->damage;
+			bullet->setActive(false);
+		}
+	}
 }
 
 void SceneGame::Collision_PlayerToAi(AI* ai)
@@ -1493,16 +1492,47 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 	Vector3 topLeft = worldObj->getPos() + worldObj->getScale() * 0.5;
 	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale() * 0.5;
 
-	if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 50, 10)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(10, 50, 0)))
+	//if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 50, 10)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(10, 50, 0)))
+	//{
+	//	m_cAvatar->setIsOnOBj(true);
+	//	m_cAvatar->getVel().y = 0;
+	//}
+	//else
+	//{
+	//	m_cAvatar->setIsOnOBj(false);
+
+	//	static float offset = 15.f;
+	//	//X Axis
+	//	if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, 0)))
+	//	{
+	//		m_cAvatar->getVel().x = -m_cAvatar->getVel().x;
+	//	}
+
+	//	//Z Axis
+	//	if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, 0, offset)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(0, 0, offset)))
+	//	{
+	//		m_cAvatar->getVel().z = -m_cAvatar->getVel().z;
+	//	}
+	//}
+
+	static float offset = 20.f;
+
+	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, offset)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, offset)))
 	{
-		m_cAvatar->setIsOnOBj(true);
-		m_cAvatar->getVel().y = 0;
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, -50, 0)) ||
+			SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset, -50, 0)) ||
+			SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -50, offset)) ||
+			SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -50, -offset)))
+		{
+			m_cAvatar->setIsOnOBj(true);
+			if (m_cAvatar->getVel().y < 0)
+				m_cAvatar->getVel().y = 0;
+		}
 	}
 	else
 	{
 		m_cAvatar->setIsOnOBj(false);
 
-		static float offset = 15.f;
 		//X Axis
 		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, 0, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() - Vector3(offset, 0, 0)))
 		{
@@ -1516,6 +1546,7 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 		}
 	}
 }
+
 
 void SceneGame::Collision_BulletToAi(CBullet* bullet, AI* ai)
 {

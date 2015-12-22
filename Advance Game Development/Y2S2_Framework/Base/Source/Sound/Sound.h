@@ -8,5 +8,6 @@ public:
 
 	static void playCollidingSound();
 	static void playBeamMagnum();
+	static void playBackground();
 };
 

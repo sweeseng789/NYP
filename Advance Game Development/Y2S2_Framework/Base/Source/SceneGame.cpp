@@ -334,6 +334,8 @@ void SceneGame::Init()
 	text->setText("Back");
 	text->setGamestate(LEVEL_SELECTION);
 	textList.push_back(text);
+
+	Sound::playBackground();
 }
 
 void SceneGame::Update(double dt)
@@ -1005,24 +1007,6 @@ void SceneGame::Render()
 	if (b_Debug)
 		RenderDebugging();
 
-	for (CGameObject* go : GOList)
-	{
-		CBullet* bullet = dynamic_cast<CBullet*>(go);
-		if (bullet != NULL)
-		{
-			if (bullet->getActive())
-			{
-				Vector3 diff = bullet->getPos() - m_cAvatar->getPos();
-				modelStack.PushMatrix();
-				modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y + 30, m_cAvatar->getPos().z);
-				modelStack.Rotate(Math::RadianToDegree(atan2(diff.x, diff.z)), 0, 1, 0);
-				modelStack.Scale(0, 0, diff.Length());
-				RenderMesh(meshList[GEO_LINE], false);
-				modelStack.PopMatrix();
-			}
-		}
-	}
-
 	if (b_pauseGame)
 	{
 		RenderMenu();
@@ -1488,13 +1472,52 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 		{
 			for (unsigned a = 0; a < 3; ++a)
 			{
-				Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
+				/*Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
 				Vector3 direction = -bullet->getDirection();
 				direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
 				direction.y += Math::RandFloatMinMax(20, 100);
 				direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
 
-				generateParticle(0, go2->getPos(), direction, 0.2, Particle::e_YELLOW);
+				generateParticle(0, go2->getPos(), direction, 0.2, Particle::e_YELLOW);*/
+				Vector3 pos = worldObj->getPos();
+				//pos.x += -bullet->getDirection().x * 100;
+				//pos.x += /*bullet->getDirection().x*/  (worldObj->getScale().x * 0.5);
+
+				//pos.y += -bullet->getDirection().y * 100;
+				//pos.y += -bullet->getDirection().y * (worldObj->getScale().y * 0.5);
+
+				//pos.z += -bullet->getDirection().z * 100;
+				//pos.z +=/* bullet->getDirection().z **/ (worldObj->getScale().z * 0.5);
+
+				if (bullet->getDirection().x > 0)
+				{
+					//pos.x -= bullet->getDirection().x * 100;
+					pos.x -= worldObj->getScale().x * 0.5;
+				}
+				else if (bullet->getDirection().x < 0)
+				{
+					//pos.x += bullet->getDirection().x * 100;
+					pos.x += worldObj->getScale().x * 0.5;
+				}
+
+				if (bullet->getDirection().z > 0)
+				{
+					pos.z -= worldObj->getScale().z * 0.5;
+				}
+				else if (bullet->getDirection().z < 0)
+				{
+					pos.z += worldObj->getScale().z * 0.5;
+				}
+
+				std::cout << bullet->getDirection() << std::endl;
+
+				
+				Vector3 direction = -bullet->getDirection();
+				direction.x += Math::RandFloatMinMax(direction.x * 200, direction.x * 400);
+				direction.y += Math::RandFloatMinMax(20, 100);
+				direction.z += Math::RandFloatMinMax(direction.z * 200, direction.z * 400);
+
+				generateParticle(0, pos, direction, 0.2, Particle::e_YELLOW);
 			}
 
 			//worldObj->newHealth -= bullet->damage;
@@ -1514,13 +1537,13 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 
 	static float offset = 15.f;
 
-	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, -10, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset, -10, 0)) ||
-		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, offset)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, -offset)))
+	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset * 2, -10, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset * 2, -10, 0)) ||
+		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, offset * 2)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, -offset * 2)))
 	{
 		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -45, 0)))
 		{
 			m_cAvatar->setIsOnOBj(true);
-
+			
 			if (m_cAvatar->getVel().y < 0)
 				m_cAvatar->getVel().y = 0;
 		}
@@ -1883,6 +1906,24 @@ void SceneGame::RenderDebugging()
 		else
 			RenderMesh(meshList[GEO_GREENCUBE], false);
 		modelStack.PopMatrix();
+	}
+
+	for (CGameObject* go : GOList)
+	{
+		CBullet* bullet = dynamic_cast<CBullet*>(go);
+		if (bullet != NULL)
+		{
+			if (bullet->getActive())
+			{
+				Vector3 diff = bullet->getPos() - m_cAvatar->getPos();
+				modelStack.PushMatrix();
+				modelStack.Translate(m_cAvatar->getPos().x, m_cAvatar->getPos().y + 30, m_cAvatar->getPos().z);
+				modelStack.Rotate(Math::RadianToDegree(atan2(diff.x, diff.z)), 0, 1, 0);
+				modelStack.Scale(0, 0, diff.Length());
+				RenderMesh(meshList[GEO_LINE], false);
+				modelStack.PopMatrix();
+			}
+		}
 	}
 }
 

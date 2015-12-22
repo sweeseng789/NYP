@@ -709,14 +709,14 @@ void SceneAI::Exit()
 void SceneAI::RenderText()
 {
 	//Elapsed Time
-	RenderTextOnScreen(meshList[GEO_TEXT], "Elapsed Time: " + std::to_string(elapsedTime), Color(0.5, 0.5, 0.5), 50, 30, 0);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Elapsed Time: " + std::to_string(elapsedTime), Color(0.5, 0.5, 0.5), 50, 30, 0);
 
 	//Table Number
 	for (unsigned a = 0; a < 6; ++a)
 	{
 		if (table[a] != NULL)
 		{
-			RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(table[a]->id), Color(1, 1, 0), 50, table[a]->pos.x + 20, table[a]->pos.y - 20);
+			//RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(table[a]->id), Color(1, 1, 0), 50, table[a]->pos.x + 20, table[a]->pos.y - 20);
 		}
 	}
 	for (std::vector<CGameObject*>::iterator it = m_cGOList.begin(); it != m_cGOList.end(); ++it)

@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\TheScript\Response.cs" />
      <Compile Include="Assets\TheScript\ScriptA.cs" />
      <Compile Include="Assets\TheScript\ScriptB.cs" />
      <Compile Include="Assets\TheScript\move.cs" />

@@ -1509,8 +1509,6 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 					pos.z += worldObj->getScale().z * 0.5;
 				}
 
-				std::cout << bullet->getDirection() << std::endl;
-
 				
 				Vector3 direction = -bullet->getDirection();
 				direction.x += Math::RandFloatMinMax(direction.x * 200, direction.x * 400);

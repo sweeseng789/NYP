@@ -1,18 +1,24 @@
-﻿Build started 12/17/2015 2:20:15 PM.
-     1>Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Base\Base.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
-         Touching "Release\Base.unsuccessfulbuild".
-       ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/IrrKlang/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/Common/Source" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glew/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glfw/include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\Camera.cpp Source\Camera3.cpp Source\Enemy.cpp Source\GameCharacter\AI.cpp Source\GameCharacter\Bullet.cpp Source\GameCharacter\GameObject.cpp Source\GameCharacter\PlayInfo3PV.cpp Source\GameStateManager.cpp Source\Goodies.cpp Source\GoodiesFactory.cpp Source\IntroState.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\main.cpp Source\Map.cpp Source\MapLoader\MapLoader.cpp Source\MenuState.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\Minimap.cpp Source\Particle.cpp Source\PlayerInfo.cpp Source\PlayState.cpp Source\SceneGame.cpp Source\SceneGraph\Model.cpp Source\SceneGraph\Node.cpp Source\SceneGraph\SceneNode.cpp Source\SceneGraph\Transform.cpp Source\SceneManager2D.cpp Source\SceneMenu.cpp Source\SceneSplashScreen.cpp Source\shader.cpp Source\Sound\Sound.cpp Source\SpatialPartition\Grid.cpp Source\SpatialPartition\SpatialPartition.cpp Source\SpatialPartition\SP_Grid.cpp Source\SpatialPartition\Unit.cpp Source\Strategy.cpp Source\Strategy_Kill.cpp Source\Terrain\LoadHmap.cpp Source\Text.cpp Source\TreasureChest.cpp Source\Utility.cpp
+﻿Build started 1/15/2016 12:22:38 PM.
+     1>Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/IrrKlang/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/Common/Source" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glew/include" /I"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glfw/include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\Camera.cpp Source\Camera3.cpp Source\CameraSS.cpp Source\Enemy.cpp Source\GameCharacter\AI.cpp Source\GameCharacter\Bullet.cpp Source\GameCharacter\GameObject.cpp Source\GameCharacter\PlayInfo3PV.cpp Source\GameCharacter\WorldOBJ.cpp Source\GameStateManager.cpp Source\Goodies.cpp Source\GoodiesFactory.cpp Source\IntroState.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\main.cpp Source\Map.cpp Source\MapLoader\MapLoader.cpp Source\MenuState.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\Minimap.cpp Source\Particle.cpp Source\PlayerInfo.cpp Source\PlayState.cpp Source\SceneGame.cpp Source\SceneGraph\Model.cpp Source\SceneGraph\Node.cpp Source\SceneGraph\SceneNode.cpp Source\SceneGraph\Transform.cpp Source\SceneManager2D.cpp Source\SceneMenu.cpp Source\SceneSplashScreen.cpp Source\shader.cpp Source\Sound\Sound.cpp Source\SpatialPartition\SP_Grid.cpp Source\SpatialPartition\Unit.cpp Source\Strategy.cpp Source\Strategy_Kill.cpp Source\Terrain\LoadHmap.cpp Source\Text.cpp Source\TreasureChest.cpp Source\Utility.cpp
          Application.cpp
          Camera.cpp
          Camera3.cpp
-     1>Source\Camera3.cpp(448): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\Camera3.cpp(453): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\Camera3.cpp(483): warning C4244: 'initializing' : conversion from 'float' to 'const int', possible loss of data
-     1>Source\Camera3.cpp(497): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\Camera3.cpp(509): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\Camera3.cpp(564): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(431): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(435): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(441): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(458): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(462): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(470): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(475): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(510): warning C4244: 'initializing' : conversion from 'float' to 'const int', possible loss of data
+     1>Source\Camera3.cpp(524): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(536): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Camera3.cpp(591): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+         CameraSS.cpp
+     1>Source\CameraSS.cpp(47): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\CameraSS.cpp(81): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
          Enemy.cpp
      1>Source\Enemy.cpp(28): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
      1>Source\Enemy.cpp(34): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
@@ -27,19 +33,25 @@
      1>Source\GameCharacter\AI.cpp(84): warning C4305: 'argument' : truncation from 'double' to 'const float'
      1>Source\GameCharacter\AI.cpp(95): warning C4305: 'argument' : truncation from 'double' to 'const float'
          Bullet.cpp
-     1>Source\GameCharacter\Bullet.cpp(31): warning C4244: 'argument' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\Bullet.cpp(32): warning C4244: 'argument' : conversion from 'const double' to 'float', possible loss of data
          GameObject.cpp
-     1>Source\GameCharacter\GameObject.cpp(42): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\GameCharacter\GameObject.cpp(46): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\GameCharacter\GameObject.cpp(56): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\GameCharacter\GameObject.cpp(60): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\GameCharacter\GameObject.cpp(70): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\GameObject.cpp(53): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\GameObject.cpp(57): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\GameObject.cpp(67): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\GameObject.cpp(71): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\GameObject.cpp(81): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
          PlayInfo3PV.cpp
-     1>Source\GameCharacter\PlayInfo3PV.cpp(46): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>Source\GameCharacter\PlayInfo3PV.cpp(90): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>Source\GameCharacter\PlayInfo3PV.cpp(101): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>Source\GameCharacter\PlayInfo3PV.cpp(296): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
-     1>Source\GameCharacter\PlayInfo3PV.cpp(307): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\PlayInfo3PV.cpp(47): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(91): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(102): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(162): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(184): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(195): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(228): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>Source\GameCharacter\PlayInfo3PV.cpp(306): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\GameCharacter\PlayInfo3PV.cpp(317): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
      1>Source\GameCharacter\PlayInfo3PV.cpp(412): warning C4244: 'argument' : conversion from 'const double' to 'float', possible loss of data
      1>Source\GameCharacter\PlayInfo3PV.cpp(417): warning C4244: 'argument' : conversion from 'const double' to 'float', possible loss of data
      1>Source\GameCharacter\PlayInfo3PV.cpp(422): warning C4244: 'argument' : conversion from 'const double' to 'float', possible loss of data
@@ -47,6 +59,8 @@
      1>Source\GameCharacter\PlayInfo3PV.cpp(435): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
      1>Source\GameCharacter\PlayInfo3PV.cpp(439): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
      1>Source\GameCharacter\PlayInfo3PV.cpp(446): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+         WorldOBJ.cpp
+     1>Source\GameCharacter\WorldOBJ.cpp(34): warning C4305: 'argument' : truncation from 'double' to 'const float'
          GameStateManager.cpp
          Goodies.cpp
          GoodiesFactory.cpp
@@ -59,13 +73,15 @@
          Map.cpp
          MapLoader.cpp
          MenuState.cpp
+         Compiling...
          Mesh.cpp
          MeshBuilder.cpp
-     1>Source\MeshBuilder.cpp(814): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>Source\MeshBuilder.cpp(820): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>Source\MeshBuilder.cpp(820): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>Source\MeshBuilder.cpp(826): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-         Compiling...
+     1>Source\MeshBuilder.cpp(69): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>Source\MeshBuilder.cpp(73): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>Source\MeshBuilder.cpp(846): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\MeshBuilder.cpp(852): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\MeshBuilder.cpp(852): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\MeshBuilder.cpp(858): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
          Minimap.cpp
          Particle.cpp
      1>Source\Particle.cpp(13): warning C4305: 'argument' : truncation from 'double' to 'float'
@@ -87,75 +103,110 @@
          PlayState.cpp
      1>Source\PlayState.cpp(147): warning C4805: '==' : unsafe mix of type 'const int' and type 'bool' in operation
          SceneGame.cpp
-     1>Source\SceneGame.cpp(194): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>Source\SceneGame.cpp(194): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>Source\SceneGame.cpp(194): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>Source\SceneGame.cpp(311): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>Source\SceneGame.cpp(311): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>Source\SceneGame.cpp(405): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(618): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(770): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(770): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1151): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1151): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1152): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1152): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1153): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1153): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1158): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1158): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1159): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1159): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1160): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1160): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1376): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1376): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1377): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1377): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1586): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1586): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1607): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1608): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1619): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1620): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1630): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1631): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1641): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1642): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1652): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1653): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1685): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1686): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1795): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1795): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1795): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1812): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1812): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1821): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1821): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneGame.cpp(1822): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(191): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>Source\SceneGame.cpp(191): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>Source\SceneGame.cpp(191): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>Source\SceneGame.cpp(277): error C2039: 'make_unique' : is not a member of 'std'
+     1>Source\SceneGame.cpp(277): error C2065: 'make_unique' : undeclared identifier
+     1>Source\SceneGame.cpp(277): error C2275: 'Grid' : illegal use of this type as an expression
+                 c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\SpatialPartition\SP_Grid.h(17) : see declaration of 'Grid'
+     1>Source\SceneGame.cpp(317): error C2143: syntax error : missing ',' before ':'
+     1>Source\SceneGame.cpp(318): error C2143: syntax error : missing ';' before '{'
+     1>Source\SceneGame.cpp(326): error C2668: 'std::to_string' : ambiguous call to overloaded function
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string(688): could be 'std::string std::to_string(long double)'
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string(680): or       'std::string std::to_string(_ULonglong)'
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string(672): or       'std::string std::to_string(_Longlong)'
+                 while trying to match the argument list '(int)'
+     1>Source\SceneGame.cpp(396): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(617): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(764): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(764): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1096): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1096): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1097): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1097): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1098): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1098): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1104): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1104): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1105): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1105): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1177): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1178): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1339): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1339): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1340): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1340): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1495): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1500): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1505): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1509): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1656): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1656): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1677): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1678): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1689): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1690): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1700): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1701): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1711): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1712): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1722): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1723): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1757): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1758): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1876): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1876): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1876): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1884): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1893): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1893): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1902): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1902): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1903): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1903): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1903): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(1911): error C2143: syntax error : missing ',' before ':'
+     1>Source\SceneGame.cpp(1912): error C2143: syntax error : missing ';' before '{'
+     1>Source\SceneGame.cpp(2002): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneGame.cpp(2018): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(2019): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(2021): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(2022): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(2024): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneGame.cpp(2053): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\SceneGame.cpp(2070): error C2143: syntax error : missing ',' before ':'
+     1>Source\SceneGame.cpp(2071): error C2143: syntax error : missing ';' before '{'
+     1>Source\SceneGame.cpp(2107): error C2039: 'make_unique' : is not a member of 'std'
+     1>Source\SceneGame.cpp(2107): error C2065: 'make_unique' : undeclared identifier
+     1>Source\SceneGame.cpp(2107): error C2275: 'Grid' : illegal use of this type as an expression
+                 c:\users\142128g\desktop\nyp\advance game development\y2s2_framework\base\source\SpatialPartition\SP_Grid.h(17) : see declaration of 'Grid'
+     1>Source\SceneGame.cpp(2146): error C2143: syntax error : missing ',' before ':'
+     1>Source\SceneGame.cpp(2147): error C2143: syntax error : missing ';' before '{'
+     1>Source\SceneGame.cpp(2155): error C2668: 'std::to_string' : ambiguous call to overloaded function
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string(688): could be 'std::string std::to_string(long double)'
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string(680): or       'std::string std::to_string(_ULonglong)'
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string(672): or       'std::string std::to_string(_Longlong)'
+                 while trying to match the argument list '(int)'
          Model.cpp
          Node.cpp
          SceneNode.cpp
          Transform.cpp
          SceneManager2D.cpp
          SceneMenu.cpp
-     1>Source\SceneMenu.cpp(169): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>Source\SceneMenu.cpp(169): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>Source\SceneMenu.cpp(169): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>Source\SceneMenu.cpp(302): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>Source\SceneMenu.cpp(563): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneMenu.cpp(296): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneMenu.cpp(305): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneMenu.cpp(306): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneMenu.cpp(545): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
          SceneSplashScreen.cpp
      1>Source\SceneSplashScreen.cpp(160): warning C4305: 'argument' : truncation from 'double' to 'float'
      1>Source\SceneSplashScreen.cpp(160): warning C4305: 'argument' : truncation from 'double' to 'float'
      1>Source\SceneSplashScreen.cpp(160): warning C4305: 'argument' : truncation from 'double' to 'float'
          shader.cpp
          Sound.cpp
-         Grid.cpp
-     1>Source\SpatialPartition\Grid.cpp(134): warning C4018: '<' : signed/unsigned mismatch
-         SpatialPartition.cpp
-     1>Source\SpatialPartition\SpatialPartition.cpp(163): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>Source\SpatialPartition\SpatialPartition.cpp(164): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Sound\Sound.cpp(40): warning C4305: 'argument' : truncation from 'double' to 'irrklang::ik_f32'
          SP_Grid.cpp
      1>Source\SpatialPartition\SP_Grid.cpp(15): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
      1>Source\SpatialPartition\SP_Grid.cpp(16): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
@@ -170,61 +221,8 @@
      1>Source\Text.cpp(4): warning C4305: 'argument' : truncation from 'double' to 'float'
          TreasureChest.cpp
          Utility.cpp
-       Link:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\\IrrKlang\lib" /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release" /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glfw/lib-msvc100" /LIBPATH:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\/glew/lib" Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\Base.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Base.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Base.lib" /MACHINE:X86 Release\Application.obj
-         Release\Camera.obj
-         Release\Camera3.obj
-         Release\Enemy.obj
-         Release\AI.obj
-         Release\Bullet.obj
-         Release\GameObject.obj
-         Release\PlayInfo3PV.obj
-         Release\GameStateManager.obj
-         Release\Goodies.obj
-         Release\GoodiesFactory.obj
-         Release\IntroState.obj
-         Release\LoadOBJ.obj
-         Release\LoadTGA.obj
-         Release\main.obj
-         Release\Map.obj
-         Release\MapLoader.obj
-         Release\MenuState.obj
-         Release\Mesh.obj
-         Release\MeshBuilder.obj
-         Release\Minimap.obj
-         Release\Particle.obj
-         Release\PlayerInfo.obj
-         Release\PlayState.obj
-         Release\SceneGame.obj
-         Release\Model.obj
-         Release\Node.obj
-         Release\SceneNode.obj
-         Release\Transform.obj
-         Release\SceneManager2D.obj
-         Release\SceneMenu.obj
-         Release\SceneSplashScreen.obj
-         Release\shader.obj
-         Release\Sound.obj
-         Release\Grid.obj
-         Release\SpatialPartition.obj
-         Release\SP_Grid.obj
-         Release\Unit.obj
-         Release\Strategy.obj
-         Release\Strategy_Kill.obj
-         Release\LoadHmap.obj
-         Release\Text.obj
-         Release\TreasureChest.obj
-         Release\Utility.obj
-         Generating code
-         Finished generating code
-         Base.vcxproj -> C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Base.exe
-       Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Release\Base.exe;#1" /manifest Release\Base.exe.intermediate.manifest
-       FinalizeBuildStatus:
-         Deleting file "Release\Base.unsuccessfulbuild".
-         Touching "Release\Base.lastbuildstate".
-     1>Done Building Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Base\Base.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\142128G\Desktop\NYP\Advance Game Development\Y2S2_Framework\Base\Base.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:20.31
+Time Elapsed 00:00:19.18

@@ -14,7 +14,8 @@
 
 
 // Lab 13 Task 9a : Uncomment the macro NETWORKMISSILE
-#define NETWORKMISSLE
+#define NETWORKMISSLE
+
 
 
 float GetAbsoluteMag( float num )
@@ -171,7 +172,8 @@ bool Application::Update()
 			delete mymissile;
 			mymissile = 0;
 		}
-	}
+	}
+
 
 	// Lab 13 Task 13 : Update network missiles
 
@@ -375,7 +377,8 @@ bool Application::Update()
 		// Lab 13 Task 10 : new cases to handle missile on application side
 		caseID_NEWMISSILE:
 			{
-				float x, y, w;				int id;
+				float x, y, w;
+				int id;
 				bs.Read(id);
 				bs.Read(x);
 				bs.Read(y);
@@ -471,7 +474,8 @@ bool Application::Update()
 			bs3.Write(mymissile->GetVelocityY());
 			rakpeer_->Send(&bs3, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0,
 				UNASSIGNED_SYSTEM_ADDRESS, true);
-		}
+		}
+
 
 	}
 
@@ -716,7 +720,8 @@ void Application::CreateMissile(float x, float y, float w, int id)
 	bs.Write(y);
 	bs.Write(w);
 	rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE_ORDERED, 0,
-		UNASSIGNED_SYSTEM_ADDRESS, true);
+		UNASSIGNED_SYSTEM_ADDRESS, true);
+
 
 #else
 	// Lab 13 Task 3 : Implement local version missile creation
@@ -727,6 +732,7 @@ void Application::CreateMissile(float x, float y, float w, int id)
 		mymissile = 0;
 	}
 	//addanewmissilebasedonthefollowingparametercoordinates
-	mymissile = new Missile("missile.png", x, y, w, id);
+	mymissile = new Missile("missile.png", x, y, w, id);
+
 #endif
 }

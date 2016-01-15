@@ -97,7 +97,8 @@ void ServerApp::Loop()
 				rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0,
 					packet->systemAddress, true);
 			}
-			break;
+			break;
+
 
 		default:
 			std::cout << "Unhandled Message Identifier: " << (int)msgid << std::endl;

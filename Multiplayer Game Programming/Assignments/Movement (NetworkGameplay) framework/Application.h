@@ -23,19 +23,21 @@ static const float DEFAULT_ACCELERATION = 50.0f;
 class Application
 {
 	HGE* hge_; //!< Instance of the internal graphics engine
-	typedef std::vector<Ship*> ShipList;  //!< A list of ships
-	ShipList ships_; //!< List of all the ships in the universe
+	std::vector<Ship*> shipList;  //!< A list of ships
+	//!< List of all the ships in the universe
 	RakPeerInterface* rakpeer_;
 	unsigned int timer_;
 	
 	// Lab 13 Task 1 : add variables for local missle
 	Missile* mymissile;
 	bool have_missile;
-	bool keydown_enter;
+	bool keydown_enter;
+
 
 	// Lab 13 Task 8 : add variables to handle networked missiles
 	typedef std::vector<Missile*>MissileList;
-	MissileList missiles_;
+	MissileList missiles_;
+
 
 	bool Init();
 	static bool Loop();

@@ -5,6 +5,7 @@
 #include <hgerect.h>
 #include <memory>
 #include <string>
+#include "Vector3.h"
 
 class hgeSprite;
 class hgeFont;
@@ -26,24 +27,34 @@ class Ship
 	hgeRect collidebox;
 
 	std::string mytext_;
-	float x_; //!< The x-ordinate of the ship
-	float y_; //!< The y-ordinate of the ship
-	float w_; //!< The angular position of the ship
-	float velocity_x_; //!< The resolved velocity of the ship along the x-axis
-	float velocity_y_; //!< The resolved velocity of the ship along the y-axis
+	//float x_; //!< The x-ordinate of the ship
+	//float y_; //!< The y-ordinate of the ship
+	//float w_; //!< The angular position of the ship
+	//float velocity_x_; //!< The resolved velocity of the ship along the x-axis
+	//float velocity_y_; //!< The resolved velocity of the ship along the y-axis
 
-	float oldx, oldy;	// for reset back to previous location if collision detected
+	//float oldx, oldy;	// for reset back to previous location if collision detected
+
+	Vector3 pos;
+	//x & y - ordinate of the ship
+	//w = angular position of the ship
+	Vector3 velocity;
+
+	Vector3 oldPos;
 
 	// Lab Task 2 : add for interpolation
 #ifdef INTERPOLATEMOVEMENT
-	float server_x_;
+	/*float server_x_;
 	float server_y_;
 	float server_w_;
 	float client_x_;
 	float client_y_;
 	float client_w_;
 	float server_velx_;
-	float server_vely_;
+	float server_vely_;*/
+	Vector3 serverPos;
+	Vector3 clientPos;
+	Vector3 serverVel;
 	float ratio_;
 #endif
 
@@ -56,7 +67,9 @@ public:
 
 	Ship(int type, float locx_, float locy_);
 	~Ship();
-	void Update(float timedelta);
+
+	void Update(float dt);
+	/*void Update(float timedelta);
 	void Render();
 	void Accelerate(float acceleration, float timedelta);
 	void SetName(const char * text);
@@ -110,21 +123,36 @@ public:
 		}
 
 		return false;
-	}
+	}*/
 
 	// Lab Task 2 : add new member functions here
 #ifdef INTERPOLATEMOVEMENT
-	void SetServerLocation( float x, float y, float w ) { 
+	/*void SetServerLocation( float x, float y, float w ) 
+	{ 
 		server_x_ = x; 
 		server_y_ = y;
 		server_w_ = w;
 	}
 
-	void SetServerVelocityX( float velocity ) { server_velx_ = velocity; }
-	void SetServerVelocityY( float velocity ) { server_vely_ = velocity; }
+	void SetServerVelocityX( float velocity ) 
+	{ 
+		server_velx_ = velocity; 
+	}
 
-	float GetServerVelocityX() { return server_velx_; }
-	float GetServerVelocityY() { return server_vely_; }
+	void SetServerVelocityY( float velocity ) 
+	{ 
+		server_vely_ = velocity; 
+	}
+
+	float GetServerVelocityX() 
+	{ 
+		return server_velx_; 
+	}
+
+	float GetServerVelocityY() 
+	{ 
+		return server_vely_; 
+	}
 
 	float GetServerX() { return server_x_; }
 	float GetServerY() { return server_y_; }
@@ -138,7 +166,7 @@ public:
 		velocity_x_ = server_velx_;
 		velocity_y_ = server_vely_;
 		ratio_ = 0;
-	}
+	}*/
 #endif
 
 };

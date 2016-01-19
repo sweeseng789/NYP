@@ -1,22 +1,131 @@
-HGE Started..
+﻿Build started 1/19/2016 10:25:51 AM.
+     1>Project "C:\Users\142128G\Desktop\NYP\Multiplayer Game Programming\Assignments\Movement (NetworkGameplay) framework\Movement.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Ihge16\include /IRakNet\Source /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cpp Vector3.cpp ship.cpp
+         ship.cpp
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(112): error C2065: 'server_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(114): error C2065: 'server_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(115): error C2065: 'server_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(117): error C2065: 'server_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(118): error C2065: 'server_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(120): error C2065: 'client_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(122): error C2065: 'client_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(123): error C2065: 'client_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(125): error C2065: 'client_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(126): error C2065: 'client_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(128): error C2065: 'server_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(128): error C2065: 'client_w_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(158): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(158): error C2065: 'server_velx_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(159): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(159): error C2065: 'server_vely_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(161): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(162): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(163): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(164): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(166): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(167): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(168): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(169): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(172): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(173): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(175): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(176): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(177): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(178): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(180): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(181): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(182): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(183): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(185): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(185): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(186): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(186): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(188): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(192): error C2065: 'server_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(192): error C2065: 'client_x_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(195): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(195): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(196): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(196): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(198): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(202): error C2065: 'server_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(202): error C2065: 'client_y_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(255): error C2065: 'server_velx_' : undeclared identifier
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.cpp(256): error C2065: 'server_vely_' : undeclared identifier
+         Vector3.cpp
+         Application.cpp
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(74): warning C4244: 'argument' : conversion from 'RakNetTime' to 'unsigned int', possible loss of data
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(87): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(248): warning C4996: '_itoa': This function or variable may be unsafe. Consider using _itoa_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdlib.h(481) : see declaration of '_itoa'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(281): warning C4996: '_itoa': This function or variable may be unsafe. Consider using _itoa_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdlib.h(481) : see declaration of '_itoa'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(356): error C2039: 'SetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(359): error C2039: 'SetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(364): error C2039: 'DoInterpolateUpdate' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(406): error C2039: 'SetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(407): error C2039: 'SetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(470): warning C4244: '=' : conversion from 'RakNetTime' to 'unsigned int', possible loss of data
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(477): error C2039: 'GetServerX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(478): error C2039: 'GetServerY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(479): error C2039: 'GetServerW' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(480): error C2039: 'GetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(481): error C2039: 'GetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(623): warning C4244: 'argument' : conversion from 'RakNetTime' to 'unsigned int', possible loss of data
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(634): error C2039: 'SetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(634): error C2039: 'GetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(635): error C2039: 'SetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(635): error C2039: 'GetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(642): error C2039: 'SetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(642): error C2039: 'GetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(643): error C2039: 'SetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(643): error C2039: 'GetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(652): error C2039: 'SetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(652): error C2039: 'GetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(653): error C2039: 'SetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(653): error C2039: 'GetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(661): error C2039: 'SetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(661): error C2039: 'GetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(662): error C2039: 'SetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(662): error C2039: 'GetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(721): error C2039: 'GetServerVelocityX' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+     1>c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\application.cpp(722): error C2039: 'GetServerVelocityY' : is not a member of 'Ship'
+                 c:\users\142128g\desktop\nyp\multiplayer game programming\assignments\movement (networkgameplay) framework\ship.h(23) : see declaration of 'Ship'
+         Generating Code...
+     1>Done Building Project "C:\Users\142128G\Desktop\NYP\Multiplayer Game Programming\Assignments\Movement (NetworkGameplay) framework\Movement.vcxproj" (Build target(s)) -- FAILED.
 
-HGE version: 1.60
-Date: 12.01.2016, 11:33:26
+Build FAILED.
 
-Application: Movement
-OS: Windows 6.1.7601
-Memory: 4194303K total, 4194303K free
-
-D3D Driver: nvd3dum.dll
-Description: NVIDIA Quadro K2000
-Version: 10.18.13.5585
-Mode: 800 x 600 x X8R8G8B8
-
-Init done.
-
-
-Finishing..
-The End.
-
-Finishing..
-The End.
+Time Elapsed 00:00:01.84

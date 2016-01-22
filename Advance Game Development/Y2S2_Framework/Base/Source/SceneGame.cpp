@@ -1472,22 +1472,7 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 		{
 			for (unsigned a = 0; a < 3; ++a)
 			{
-				/*Vector3 pos = bullet->getPos() + -(bullet->getDirection() * 50);
-				Vector3 direction = -bullet->getDirection();
-				direction.x += Math::RandFloatMinMax(-direction.x * 200, direction.x * 200);
-				direction.y += Math::RandFloatMinMax(20, 100);
-				direction.z += Math::RandFloatMinMax(-direction.z * 200, direction.z * 200);
-
-				generateParticle(0, go2->getPos(), direction, 0.2, Particle::e_YELLOW);*/
 				Vector3 pos = worldObj->getPos();
-				//pos.x += -bullet->getDirection().x * 100;
-				//pos.x += /*bullet->getDirection().x*/  (worldObj->getScale().x * 0.5);
-
-				//pos.y += -bullet->getDirection().y * 100;
-				//pos.y += -bullet->getDirection().y * (worldObj->getScale().y * 0.5);
-
-				//pos.z += -bullet->getDirection().z * 100;
-				//pos.z +=/* bullet->getDirection().z **/ (worldObj->getScale().z * 0.5);
 
 				if (bullet->getDirection().x > 0)
 				{
@@ -1526,6 +1511,7 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 
 void SceneGame::Collision_PlayerToAi(AI* ai)
 {
+
 }
 
 void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)

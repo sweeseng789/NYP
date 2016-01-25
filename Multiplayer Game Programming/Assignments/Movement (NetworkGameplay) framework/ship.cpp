@@ -196,6 +196,7 @@ void Ship::Update(float dt)
 		clientPos.y -= spriteheight + spriteheight;
 	}
 
+	//Server Pos
 	if (serverPos.x < -screenwidth / 2 && clientPos.x > screenwidth + screenwidth / 2 ||
 		serverPos.x > screenwidth + screenwidth / 2 && clientPos.x < -screenwidth / 2)
 	{
@@ -206,37 +207,43 @@ void Ship::Update(float dt)
 		pos.x = ratio_ * serverPos.x + (1 - ratio_) * clientPos.x;
 	}
 
+	if (serverPos.y < -spriteheight / 2 && clientPos.y > screenheight + spriteheight / 2 ||
+		serverPos.y > screenheight + spriteheight / 2 && clientPos.y < -spriteheight / 2)
+	{
+		pos.y = serverPos.y;
+	}
+	else
+	{
+		pos.y = ratio_ * serverPos.y + (1 - ratio_ * clientPos.y);
+	}
 
-	//	if ( (server_x_ < -spritewidth/2 && client_x_ > screenwidth + spritewidth/2) ||
-	//		(server_x_ > screenwidth + spritewidth/2 && client_x_ < -spritewidth/2 ) )
-	//	{
-	//		x_ = server_x_;
-	//	}
-	//	else
-	//	{
-	//		x_ = ratio_ * server_x_ + (1 - ratio_) * client_x_;
-	//	}
-	//
-	//	if ( (server_y_ < -spriteheight/2 && client_y_ > screenheight + spriteheight/2) ||
-	//		(server_y_ > screenheight + spriteheight/2 && client_y_ < -spriteheight/2 ) )
-	//	{
-	//		y_ = server_y_;
-	//	}
-	//	else
-	//	{
-	//		y_ = ratio_ * server_y_ + (1 - ratio_) * client_y_;
-	//	}
-	//
-	//	if (ratio_ < 1)
-	//	{
-	//		// interpolating ratio step
-	//		ratio_ += timedelta *4;
-	//		if (ratio_ > 1)
-	//			ratio_ = 1;
-	//	}
+	if (ratio_ < 1)
+	{
+		//Interpolate ratio step
+		ratio_ += dt * 4;
+		if (ratio_ > 1)
+			ratio_ = 1;
+	}
 
 #endif
 
+	if (pos.x < -spritewidth / 2)
+	{
+		pos.x += screenwidth + spritewidth;
+	}
+	else if (pos.x > screenwidth + spritewidth / 2)
+	{
+		pos.x -= screenwidth + spritewidth;
+	}
+
+	if (pos.y < -spriteheight / 2)
+	{
+		pos.y += screenheight + spriteheight;
+	}
+	else if (pos.y > screenheight + spriteheight / 2)
+	{
+		pos.y -= screenheight + spriteheight;
+	}
 }
 
 //void Ship::Update(float timedelta)
@@ -376,6 +383,12 @@ void Ship::Update(float dt)
 //              mytext_.c_str());
 //}
 //
+
+void Ship::Render()
+{
+	sprite_->RenderEx(pos.x, pos.y, pos.w);
+	font_->printf(pos.x + 5, pos.y + 5, HGETEXT_LEFT, "%s", mytext_.c_str());
+}
 ///**
 //* Accelerates a ship by the given acceleration (i.e. increases
 //* the ships velocity in the direction it is pointing in)
@@ -395,6 +408,72 @@ void Ship::Update(float dt)
 //	velocity_y_ += acceleration * sinf(w_) * timedelta;
 //#endif
 //}
+void Ship::Acclerate(float accleration, float dt)
+{
+#ifdef INTERPOLATEMOVEMENT
+	serverVel.x += accleration * cosf(pos.w) * dt;
+	serverVel.y += accleration * sinf(pos.w) * dt;
+#else
+	velocity.x += accleration * cosf(pos.w) * dt;
+	velocity.y += accleration * sinf(pos.w) * dt;
+#endif
+}
+
+void Ship::setName(std::string mytext_)
+{
+	this->mytext_ = mytext_;
+}
+
+hgeRect* Ship::getBoundingBox()
+{
+	sprite_->GetBoundingBox(pos.x, pos.y, &collidebox);
+	return &collidebox;
+}
+
+bool Ship::hasCollided(Ship* ship)
+{
+	return getBoundingBox()->Intersect(ship->getBoundingBox());
+}
+
+Vector3& Ship::getPos()
+{
+	return pos;
+}
+
+Vector3& Ship::getvel()
+{
+	return velocity;
+}
+
+Vector3& Ship::getPrevPos()
+{
+	return oldPos;
+}
+
+unsigned Ship::getID()
+{
+	return id;
+}
+
+void Ship::setLocation(Vector3 pos)
+{
+	this->pos = pos;
+}
+
+int Ship::getType()
+{
+	return type_;
+}
+
+bool Ship::canCollide(unsigned timer)
+{
+	if (timer - collidetimer > 2000)
+	{
+		collidetimer = timer;
+		return true;
+	}
+	return false;
+}
 //
 //void Ship::SetName(const char * text)
 //{
@@ -416,3 +495,32 @@ void Ship::Update(float dt)
 //
 //	return collidebox.Intersect( ship->GetBoundingBox() );
 //}
+
+float Ship::getAngularVelocity()
+{
+	return angular_velocity;
+}
+
+void Ship::setAngularVelocity(float angular_velocity)
+{
+	this->angular_velocity = angular_velocity;
+}
+
+#ifdef INTERPOLATEMOVEMENT
+void Ship::setServerPos(Vector3 serverPos)
+{
+	this->serverPos = serverPos;
+}
+
+Vector3 Ship::getServerPos()
+{
+	return serverPos;
+}
+
+void Ship::DoInterpolateUpdate()
+{
+	clientPos = pos;
+	velocity = serverVel;
+	ratio_ = 0;
+}
+#endif

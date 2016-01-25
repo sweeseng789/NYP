@@ -69,19 +69,26 @@ public:
 	~Ship();
 
 	void Update(float dt);
-	/*void Update(float timedelta);
 	void Render();
-	void Accelerate(float acceleration, float timedelta);
-	void SetName(const char * text);
-	
-	hgeRect* GetBoundingBox();
-	bool HasCollided( Ship *ship );
+	void Acclerate(float accleration, float dt);
+	void setName(std::string mytext_);
 
-	float GetVelocityX() { return velocity_x_; }
-	float GetVelocityY() { return velocity_y_; }
+	hgeRect* getBoundingBox();
+	bool hasCollided(Ship* ship);
 
-	void SetVelocityX( float velocity ) { velocity_x_ = velocity; }
-	void SetVelocityY( float velocity ) { velocity_y_ = velocity; }
+	Vector3& getPos();
+	Vector3& getvel();
+	Vector3& getPrevPos();
+
+	unsigned getID();
+
+	void setLocation(Vector3 pos);
+
+	int getType();
+
+	float getAngularVelocity();
+	void setAngularVelocity(float angular_velocity);
+	/*
 
 	float GetAngularVelocity() { return angular_velocity; }
 
@@ -125,8 +132,13 @@ public:
 		return false;
 	}*/
 
+	bool canCollide(unsigned timer);
+
 	// Lab Task 2 : add new member functions here
 #ifdef INTERPOLATEMOVEMENT
+	void setServerPos(Vector3 serverPos);
+	Vector3 getServerPos();
+	void DoInterpolateUpdate();
 	/*void SetServerLocation( float x, float y, float w ) 
 	{ 
 		server_x_ = x; 

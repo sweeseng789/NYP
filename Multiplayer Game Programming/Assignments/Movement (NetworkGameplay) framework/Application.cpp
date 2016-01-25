@@ -114,26 +114,26 @@ bool Application::Update()
 
 	float timedelta = hge_->Timer_GetDelta();
 
-	shipList.at(0)->SetAngularVelocity(0.0f);
+	shipList.at(0)->setAngularVelocity(0.0f);
 
 	if (hge_->Input_GetKeyState(HGEK_LEFT))
 	{
-		shipList.at(0)->SetAngularVelocity(shipList.at(0)->GetAngularVelocity() - DEFAULT_ANGULAR_VELOCITY);
+		shipList.at(0)->setAngularVelocity(shipList.at(0)->getAngularVelocity() - DEFAULT_ANGULAR_VELOCITY);
 	}
 
 	if (hge_->Input_GetKeyState(HGEK_RIGHT))
 	{
-		shipList.at(0)->SetAngularVelocity(shipList.at(0)->GetAngularVelocity() + DEFAULT_ANGULAR_VELOCITY);
+		shipList.at(0)->setAngularVelocity(shipList.at(0)->getAngularVelocity() + DEFAULT_ANGULAR_VELOCITY);
 	}
 
 	if (hge_->Input_GetKeyState(HGEK_UP))
 	{
-		shipList.at(0)->Accelerate(DEFAULT_ACCELERATION, timedelta);
+		shipList.at(0)->Acclerate(DEFAULT_ACCELERATION, timedelta);
 	}
 
 	if (hge_->Input_GetKeyState(HGEK_DOWN))
 	{
-		shipList.at(0)->Accelerate(-DEFAULT_ACCELERATION, timedelta);
+		shipList.at(0)->Acclerate(-DEFAULT_ACCELERATION, timedelta);
 	}
 
 	// Lab 13 Task 4 : Add a key to shoot missiles
@@ -141,7 +141,7 @@ bool Application::Update()
 	{
 		if (!keydown_enter)
 		{
-			CreateMissile(shipList.at(0)->GetX(), shipList.at(0)->GetY(), shipList.at(0)->GetW(), shipList.at(0)->GetID());
+			CreateMissile(shipList.at(0)->getPos().x, shipList.at(0)->getPos().y, shipList.at(0)->getPos().w, shipList.at(0)->getID());
 			keydown_enter = true;
 		}
 	}
@@ -616,23 +616,29 @@ bool Application::checkCollisions(Ship* ship)
 {
 	for (std::vector<Ship*>::iterator thisship = shipList.begin(); thisship != shipList.end(); thisship++)
 	{
-		if ((*thisship) == ship) continue;	//skip if it is the same ship
+		Ship* ship2 = static_cast<Ship*>(*thisship);
 
-		if (ship->HasCollided((*thisship)))
+		if (ship2 == ship) continue;	//skip if it is the same ship
+
+		if (ship->hasCollided((*thisship)))
 		{
-			if ((*thisship)->CanCollide(RakNet::GetTime()) && ship->CanCollide(RakNet::GetTime()))
+			if (ship2->canCollide(RakNet::GetTime()) && ship->canCollide(RakNet::GetTime()))
 			{
 				std::cout << "collide!" << std::endl;
 
 #ifdef INTERPOLATEMOVEMENT
-				if (GetAbsoluteMag(ship->GetVelocityY()) > GetAbsoluteMag((*thisship)->GetVelocityY()))
+				if (GetAbsoluteMag(ship->getvel().y) > GetAbsoluteMag((*thisship)->getvel().y))
 				{
 					// this transfers vel to thisship
-					(*thisship)->SetVelocityY((*thisship)->GetVelocityY() + ship->GetVelocityY() / 3);
+					ship2->getvel().y = ship2->getvel().y + ship->getvel().y / 3;
+					ship->getvel().y *= -ship->getvel().y;
+
+
+					/*(*thisship)->SetVelocityY((*thisship)->GetVelocityY() + ship->GetVelocityY() / 3);
 					ship->SetVelocityY(-ship->GetVelocityY());
 
 					(*thisship)->SetServerVelocityY((*thisship)->GetServerVelocityY() + ship->GetServerVelocityY() / 3);
-					ship->SetServerVelocityY(-ship->GetServerVelocityY());
+					ship->SetServerVelocityY(-ship->GetServerVelocityY());*/
 				}
 				else
 				{

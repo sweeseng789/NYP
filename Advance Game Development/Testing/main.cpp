@@ -43,18 +43,23 @@ int main(int argc, char* argv[])
 		printf("error: %s", lua_tostring(L, -1));
 		return -1;
 	}
+	//lua_getglobal(L, "SCREENWIDTH");
+	///*if (!lua_isnumber(L, -1)) {
+	//	printf("`SCREENWIDTH' should be a number\n");
+	//	return -1;
+	//}*/
+	//int SCREENWIDTH = (int)lua_tonumber(L, -1);
+
+	//std::cout << SCREENWIDTH << std::endl;
+	//std::cout << (int)lua_tonumber(L, -2);
 	lua_getglobal(L, "SCREENWIDTH");
-	/*if (!lua_isnumber(L, -1)) {
-		printf("`SCREENWIDTH' should be a number\n");
-		return -1;
-	}*/
-	int SCREENWIDTH = (int)lua_tonumber(L, -1);
+	std::cout << (int)lua_tonumber(L, 1) << std::endl;
 
 	lua_getglobal(L, "SCREENHEIGHT");
-	int SCREENHEIGHT = (int)lua_tonumber(L, 1);
+	std::cout << (int)lua_tonumber(L, 2) << std::endl;
 
-	std::cout << SCREENWIDTH << std::endl;
-	std::cout << SCREENHEIGHT << std::endl;
+	lua_getglobal(L, "COLORDEPTH");
+	std::cout << (int)lua_tonumber(L, 3) << std::endl;
 
 	//Run Lua Script
 	/*luaL_dofile(L, "my.Lua");

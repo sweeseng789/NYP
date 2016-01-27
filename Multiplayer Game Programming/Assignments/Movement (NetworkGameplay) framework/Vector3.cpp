@@ -389,3 +389,16 @@ Vector3 operator*( float scalar, const Vector3& rhs )
 {
 	return rhs * scalar;
 }
+
+float Vector3::GetAngle( const Vector3 rhs ) const
+{
+	Vector3 lhs = Normalized();
+	float a = lhs.Dot(rhs.Normalized());
+	Vector3 n = lhs.Cross(rhs.Normalized());
+
+	//std::cout << n << '\n';
+
+	if(n.y < 0)
+		return 360 - (acos(a) * 180/Math::PI);
+	return (acos(a) * 180/Math::PI);
+}

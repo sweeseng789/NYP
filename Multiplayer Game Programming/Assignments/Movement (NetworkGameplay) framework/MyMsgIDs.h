@@ -12,8 +12,6 @@ enum MyMsgIDs
 	ID_MOVEMENT,
 	ID_COLLIDE,
 	// Lab 13 Task 7 : Add new messages
-	ID_NEWMISSILE,
-	ID_UPDATEMISSILE,
 };
 
 #endif

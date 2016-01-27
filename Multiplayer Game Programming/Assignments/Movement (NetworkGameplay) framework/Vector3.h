@@ -56,7 +56,7 @@ struct Vector3
 	
 	float Dot( const Vector3& rhs ) const; //Dot product
 	Vector3 Cross( const Vector3& rhs ) const; //Cross product
-	
+
 	//Return a copy of this vector, normalized
 	//Throw a divide by zero exception if normalizing a zero vector
 	Vector3 Normalized( void ) const throw( DivideByZero );
@@ -68,6 +68,8 @@ struct Vector3
 	friend std::ostream& operator<<( std::ostream& os, Vector3& rhs); //print to ostream
 
 	friend Vector3 operator*( float scalar, const Vector3& rhs ); //what is this for?
+
+	float GetAngle( const Vector3 rhs ) const;
 };
 
 #endif //VECTOR3_H

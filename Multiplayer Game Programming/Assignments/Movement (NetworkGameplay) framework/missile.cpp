@@ -1,5 +1,5 @@
 #include "missile.h"
-#include "ship.h"
+#include "GameObject.h"
 #include <hge.h>
 #include <hgeSprite.h>
 #include <math.h>
@@ -87,7 +87,7 @@ void Missile::Render()
 
 bool Missile::HasCollided( Ship &ship )
 {
-	sprite_->GetBoundingBox( x_, y_, &collidebox);
-
-	return collidebox.Intersect( ship.GetBoundingBox() );
+	/*sprite_->GetBoundingBox( x_, y_, &collidebox);
+	return collidebox.Intersect( ship->GetBoundingBox() );*/
+	return NULL;
 }

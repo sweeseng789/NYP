@@ -1,8 +1,10 @@
 #ifndef _APPLICATION_H_
 #define _APPLICATION_H_
 
-#include "ship.h"
+#include "GameObject.h"
+#include "Ship.h"
 #include "missile.h"
+#include"BitStream.h"
 #include <vector>
 
 class HGE;
@@ -13,52 +15,56 @@ static const float DEFAULT_ANGULAR_VELOCITY = 3.0f;
 //! The default acceleration of the ship when powered
 static const float DEFAULT_ACCELERATION = 50.0f;
 
-/**
-* The application class is the main body of the program. It will
-* create an instance of the graphics engine and execute the
-* Update/Render cycle.
-*
-*/
-
 class Application
 {
-	HGE* hge_; //!< Instance of the internal graphics engine
-	std::vector<Ship*> shipList;  //!< A list of ships
-	//!< List of all the ships in the universe
-	RakPeerInterface* rakpeer_;
-	unsigned int timer_;
-	
-	// Lab 13 Task 1 : add variables for local missle
-	Missile* mymissile;
-	bool have_missile;
-	bool keydown_enter;
-
-
-	// Lab 13 Task 8 : add variables to handle networked missiles
-	typedef std::vector<Missile*>MissileList;
-	MissileList missiles_;
-
-
-	bool Init();
-	static bool Loop();
-	void Shutdown();
-	bool checkCollisions(Ship* ship);
-	void ProcessWelcomePackage();
-	bool SendInitialPosition();
-
-	// Lab 13
-	void CreateMissile( float x, float y, float w, int id );
-	bool RemoveMissile( float x, float y, float w, int id );
-
-	void SendCollision( Ship* ship );
-
 public:
+	//===== CONSTRUCTOR & DESTRUCTOR =====//
 	Application();
 	~Application() throw();
 
+	//===== SETTER =====//
 	void Start();
+	bool Init();
+	static bool Loop();
 	bool Update();
+	void Shutdown();
+	void SendCollision(CGameObject* go);
+	void ProcessWelcomePackage();
+	bool SendInitialPosition();
+
+	//===== GETTER  =====//
 	void Render();
+	bool checkCollisions(CGameObject* go1);
+	void playerControl(const float dt);
+
+	void welcome(RakNet::BitStream &bs);
+	void newPlayer(RakNet::BitStream &bs);
+	void removePlayer(RakNet::BitStream &bs);
+	void movementUpdate(RakNet::BitStream &bs);
+	void collisionUpdate(RakNet::BitStream &bs);
+
+	void sendData();
+
+	void Ship_ShipCollision(Ship* ship1, Ship* ship2);
+
+private:
+	// Lab 13 Task 1 : add variables for local missle
+
+
+	// Lab 13 Task 8 : add variables to handle networked missiles
+
+
+	// Lab 13
+	void CreateMissile(float x, float y, float w, int id);
+	bool RemoveMissile(float x, float y, float w, int id);
+
+	//Int
+	unsigned timer;
+
+	//Class Variables Or Vector
+	HGE* hge; //!< Instance of the internal graphics engine
+	RakPeerInterface* rakpeer;
+	std::vector<CGameObject*> GOList; //!< List of all the ships in the universe
 };
 
 #endif

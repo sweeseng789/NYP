@@ -84,20 +84,6 @@ void ServerApp::Loop()
 			break;
 
 		// Lab 13 Task 14 : new cases on server side to handle missiles
-		case ID_NEWMISSILE:
-			{
-				bs.ResetReadPointer();
-				rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0,
-					packet->systemAddress, true);
-			}
-			break;
-		case ID_UPDATEMISSILE:
-			{
-				bs.ResetReadPointer();
-				rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0,
-					packet->systemAddress, true);
-			}
-			break;
 
 
 		default:

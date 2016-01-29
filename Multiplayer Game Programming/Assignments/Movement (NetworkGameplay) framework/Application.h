@@ -1,10 +1,10 @@
 #ifndef _APPLICATION_H_
 #define _APPLICATION_H_
 
-#include "GameObject.h"
-#include "Ship.h"
+#include "ship.h"
+#include "Projectile.h"
 #include "missile.h"
-#include"BitStream.h"
+#include "Bitstream.h"
 #include <vector>
 
 class HGE;
@@ -15,8 +15,15 @@ static const float DEFAULT_ANGULAR_VELOCITY = 3.0f;
 //! The default acceleration of the ship when powered
 static const float DEFAULT_ACCELERATION = 50.0f;
 
+/**
+* The application class is the main body of the program. It will
+* create an instance of the graphics engine and execute the
+* Update/Render cycle.
+*
+*/
+
 class Application
-{
+{	
 public:
 	//===== CONSTRUCTOR & DESTRUCTOR =====//
 	Application();
@@ -28,13 +35,13 @@ public:
 	static bool Loop();
 	bool Update();
 	void Shutdown();
-	void SendCollision(Ship* ship1);
+	void SendCollision(Ship* ship);
 	void ProcessWelcomePackage();
 	bool SendInitialPosition();
 
-	//===== GETTER  =====//
+	//===== GETTER =====//
 	void Render();
-	bool checkCollisions(Ship* ship1);
+	bool checkCollisions(Ship* ship);
 	void playerControl(const float dt);
 
 	void welcome(RakNet::BitStream &bs);
@@ -45,9 +52,8 @@ public:
 
 	void sendData();
 
-	void Ship_ShipCollision(Ship* ship1, Ship* ship2);
+	Missile* fetchMissile();
 
-private:
 	// Lab 13 Task 1 : add variables for local missle
 
 
@@ -57,14 +63,18 @@ private:
 	// Lab 13
 	void CreateMissile(float x, float y, float w, int id);
 	bool RemoveMissile(float x, float y, float w, int id);
-
+private:
 	//Int
-	unsigned timer;
+	unsigned timer_;
 
 	//Class Variables Or Vector
-	HGE* hge; //!< Instance of the internal graphics engine
-	RakPeerInterface* rakpeer;
-	std::vector<Ship*> shipList; //!< List of all the ships in the universe
+	HGE* hge_; //!< Instance of the internal graphics engine
+	std::vector<Ship*> ShipList; //!< List of all the ships in the universe
+	//std::vector<Missile*> missileList;
+	std::vector<CProjectile*> projectileList;
+	//Missile* mymissile;
+	//bool have_Missile;
+	RakPeerInterface* rakpeer_;
 };
 
 #endif

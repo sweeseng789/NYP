@@ -5,28 +5,31 @@
 #include <hgerect.h>
 #include <memory>
 #include <vector>
+#include "Projectile.h"
 
 class hgeSprite;
 class hgeRect;
 class Ship;
 
-class Missile
+class Missile : public CProjectile
 {
-	HTEXTURE tex_; //!< Handle to the sprite's texture
-	std::auto_ptr<hgeSprite> sprite_; //!< The sprite used to display the ship
-	float x_; //!< The x-ordinate of the ship
-	float y_; //!< The y-ordinate of the ship
-	float w_; //!< The angular position of the ship
-	float velocity_x_; //!< The resolved velocity of the ship along the x-axis
-	float velocity_y_; //!< The resolved velocity of the ship along the y-axis
-	hgeRect collidebox;
-	int ownerid;
+	//HTEXTURE tex_; //!< Handle to the sprite's texture
+	//std::auto_ptr<hgeSprite> sprite_; //!< The sprite used to display the ship
+	//float x_; //!< The x-ordinate of the ship
+	//float y_; //!< The y-ordinate of the ship
+	//float w_; //!< The angular position of the ship
+	//float velocity_x_; //!< The resolved velocity of the ship along the x-axis
+	//float velocity_y_; //!< The resolved velocity of the ship along the y-axis
+	//hgeRect collidebox;
+	//int ownerid;
 
 public:
-	float angular_velocity;
+	//float angular_velocity;
 	Missile(char* filename, float x, float y, float w, int shipid);
 	~Missile();
-	bool Update(std::vector<Ship*> &shiplist, float timedelta);
+
+
+	/*bool Update(std::vector<Ship*> &shiplist, float timedelta);
 	void Render();
 	bool HasCollided( Ship &ship );
 
@@ -61,7 +64,7 @@ public:
 	float GetVelocityY() { return velocity_y_; }
 
 	void SetVelocityX( float velocity ) { velocity_x_ = velocity; }
-	void SetVelocityY( float velocity ) { velocity_y_ = velocity; }
+	void SetVelocityY( float velocity ) { velocity_y_ = velocity; }*/
 
 };
 

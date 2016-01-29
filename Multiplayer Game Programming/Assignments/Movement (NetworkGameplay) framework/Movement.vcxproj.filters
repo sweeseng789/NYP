@@ -10,10 +10,7 @@
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Utility">
-      <UniqueIdentifier>{ae072459-aa4a-4112-b816-a573dd3e034f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameAsset">
-      <UniqueIdentifier>{dd2b69b7-4bf5-4d3e-8e23-46fa9b85eca3}</UniqueIdentifier>
+      <UniqueIdentifier>{2b981794-1f79-42aa-a73a-f02177fc1575}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -23,16 +20,16 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Vector3.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="missile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ship.cpp">
+    <ClCompile Include="Projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,19 +43,19 @@
     <ClInclude Include="MyMsgIDs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="ship.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyMath.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="missile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ship.h">
+    <ClInclude Include="Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

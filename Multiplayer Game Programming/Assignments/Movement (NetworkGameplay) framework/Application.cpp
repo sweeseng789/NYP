@@ -68,7 +68,7 @@ bool Application::Init()
 		}*/
 		Ship* ship = new Ship(rand() % 4 + 1, rand() % 500 + 100, rand() % 400 + 100);
 		ship->SetName("My Ship");
-		GOList.push_back(ship);
+		shipList.push_back(ship);
 
 		if (rakpeer->Startup(1, 30, &SocketDescriptor(), 1))
 		{
@@ -102,7 +102,7 @@ bool Application::Update()
 
 	// Lab 13 Task 4 : Add a key to shoot missiles
 
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
 	{
 		/*Ship* ship = static_cast<Ship*>(*it);
 		ship->Update(dt);
@@ -195,7 +195,7 @@ void Application::Render()
 		Ship* ship = static_cast<Ship*>(*it);
 		ship->Render();
 	}*/
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
 	{
 		Ship* ship = static_cast<Ship*>(*it);
 		if (ship)
@@ -244,20 +244,20 @@ bool Application::SendInitialPosition()
 	RakNet::BitStream bs;
 	unsigned char msgid = ID_INITIALPOS;
 	bs.Write(msgid);
-	bs.Write(GOList.at(0)->getPos().x);
-	bs.Write(GOList.at(0)->getPos().y);
-	bs.Write(GOList.at(0)->GetType());
+	bs.Write(shipList.at(0)->getPos().x);
+	bs.Write(shipList.at(0)->getPos().y);
+	bs.Write(shipList.at(0)->GetType());
 
-	std::cout << "Sending pos" << GOList.at(0)->getPos().x << " " << GOList.at(0)->getPos().y << std::endl;
+	std::cout << "Sending pos" << shipList.at(0)->getPos().x << " " << shipList.at(0)->getPos().y << std::endl;
 
 	rakpeer->Send(&bs, HIGH_PRIORITY, RELIABLE_ORDERED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
 
 	return true;
 }
 
-bool Application::checkCollisions(CGameObject* go1)
+bool Application::checkCollisions(Ship* ship1)
 {
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	/*for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
 	{
 		CGameObject* go2 = static_cast<CGameObject*>(*it);
 		if (go1 == go2)
@@ -272,7 +272,14 @@ bool Application::checkCollisions(CGameObject* go1)
 				Ship_ShipCollision(ship1, ship2);
 			}
 		}
+	}*/
+	for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
+	{
+		Ship* ship2 = static_cast<Ship*>(*it);
+		if (ship1 == ship2)
+			continue;
 	}
+
 //	for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
 //	{
 //		Ship* ship2 = static_cast<Ship*>(*it);
@@ -368,19 +375,19 @@ bool Application::checkCollisions(CGameObject* go1)
 	return false;
 }
 
-void Application::SendCollision(CGameObject* go)
+void Application::SendCollision(Ship* ship1)
 {
 	RakNet::BitStream bs;
 	unsigned char msgid = ID_COLLIDE;
 	bs.Write(msgid);
-	bs.Write(go->GetID());
-	bs.Write(go->getPos().x);
-	bs.Write(go->getPos().y);
-	bs.Write(go->getVel().x);
-	bs.Write(go->getVel().y);
+	bs.Write(ship1->GetID());
+	bs.Write(ship1->getPos().x);
+	bs.Write(ship1->getPos().y);
+	bs.Write(ship1->getVel().x);
+	bs.Write(ship1->getVel().y);
 #ifdef INTERPOLATEMOVEMENT
-	bs.Write(go->getServerVel().x);
-	bs.Write(go->getServerVel().y);
+	bs.Write(ship1->getServerVel().x);
+	bs.Write(ship1->getServerVel().y);
 #endif
 
 	rakpeer->Send(&bs, HIGH_PRIORITY, RELIABLE_ORDERED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
@@ -400,26 +407,26 @@ void Application::CreateMissile(float x, float y, float w, int id)
 
 void Application::playerControl(const float dt)
 {
-	GOList.at(0)->SetAngularVelocity(0.0f);
+	shipList.at(0)->SetAngularVelocity(0.0f);
 
 	if (hge->Input_GetKeyState(HGEK_LEFT))
 	{
-		GOList.at(0)->SetAngularVelocity(GOList.at(0)->GetAngularVelocity() - DEFAULT_ANGULAR_VELOCITY);
+		shipList.at(0)->SetAngularVelocity(shipList.at(0)->GetAngularVelocity() - DEFAULT_ANGULAR_VELOCITY);
 	}
 
 	if (hge->Input_GetKeyState(HGEK_RIGHT))
 	{
-		GOList.at(0)->SetAngularVelocity(GOList.at(0)->GetAngularVelocity() + DEFAULT_ANGULAR_VELOCITY);
+		shipList.at(0)->SetAngularVelocity(shipList.at(0)->GetAngularVelocity() + DEFAULT_ANGULAR_VELOCITY);
 	}
 
 	if (hge->Input_GetKeyState(HGEK_UP))
 	{
-		GOList.at(0)->Accelerate(DEFAULT_ACCELERATION, dt);
+		shipList.at(0)->Accelerate(DEFAULT_ACCELERATION, dt);
 	}
 
 	if (hge->Input_GetKeyState(HGEK_DOWN))
 	{
-		GOList.at(0)->Accelerate(-DEFAULT_ACCELERATION, dt);
+		shipList.at(0)->Accelerate(-DEFAULT_ACCELERATION, dt);
 	}
 }
 
@@ -432,7 +439,7 @@ void Application::welcome(RakNet::BitStream &bs)
 	char chartemp[5];
 
 	bs.Read(id);
-	GOList.at(0)->setID(id);
+	shipList.at(0)->setID(id);
 	bs.Read(shipcount);
 
 	for (unsigned int i = 0; i < shipcount; ++i)
@@ -447,7 +454,7 @@ void Application::welcome(RakNet::BitStream &bs)
 		temp += _itoa(id, chartemp, 10);
 		ship->SetName(temp.c_str());
 		ship->setID(id);
-		GOList.push_back(ship);
+		shipList.push_back(ship);
 	}
 }
 
@@ -456,7 +463,7 @@ void Application::newPlayer(RakNet::BitStream &bs)
 	unsigned int id;
 	bs.Read(id);
 
-	if (id == GOList.at(0)->GetID())
+	if (id == shipList.at(0)->GetID())
 	{
 		// if it is me
 		return;
@@ -477,7 +484,7 @@ void Application::newPlayer(RakNet::BitStream &bs)
 		temp += _itoa(id, chartemp, 10);
 		ship->SetName(temp.c_str());
 		ship->setID(id);
-		GOList.push_back(ship);
+		shipList.push_back(ship);
 	}
 }
 
@@ -497,7 +504,7 @@ void Application::removePlayer(RakNet::BitStream &bs)
 			break;
 		}
 	}*/
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
 	{
 		/*Ship* ship = static_cast<Ship*>(*it);
 
@@ -513,7 +520,7 @@ void Application::removePlayer(RakNet::BitStream &bs)
 			if (ship->GetID() == shipid)
 			{
 				delete *it;
-				GOList.erase(it);
+				shipList.erase(it);
 				break;
 			}
 		}
@@ -527,7 +534,7 @@ void Application::movementUpdate(RakNet::BitStream &bs)
 	float x, y, w;
 	bs.Read(shipid);
 
-	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	for (std::vector<Ship*>::iterator it = shipList.begin(); it != shipList.end(); ++it)
 	{
 		Ship* ship = static_cast<Ship*>(*it);
 
@@ -580,22 +587,22 @@ void Application::collisionUpdate(RakNet::BitStream &bs)
 	float x, y;
 	bs.Read(shipid);
 
-	if (shipid == GOList.at(0)->GetID())
+	if (shipid == shipList.at(0)->GetID())
 	{
 		std::cout << "collided with someone!" << std::endl;
 		bs.Read(x);
 		bs.Read(y);
-		GOList.at(0)->setPosX(x);
-		GOList.at(0)->setPosY(y);
+		shipList.at(0)->setPosX(x);
+		shipList.at(0)->setPosY(y);
 		bs.Read(x);
 		bs.Read(y);
-		GOList.at(0)->SetVelocityX(x);
-		GOList.at(0)->SetVelocityY(y);
+		shipList.at(0)->SetVelocityX(x);
+		shipList.at(0)->SetVelocityY(y);
 #ifdef INTERPOLATEMOVEMENT
 		bs.Read(x);
 		bs.Read(y);
-		GOList.at(0)->SetServerVelocityX(x);
-		GOList.at(0)->SetServerVelocityY(y);
+		shipList.at(0)->SetServerVelocityX(x);
+		shipList.at(0)->SetServerVelocityY(y);
 #endif	
 	}
 }
@@ -610,13 +617,13 @@ void Application::sendData()
 		bs.Write(msgid);
 
 #ifdef INTERPOLATEMOVEMENT
-		bs.Write(GOList.at(0)->GetID());
-		bs.Write(GOList.at(0)->getServerPos().x);
-		bs.Write(GOList.at(0)->getServerPos().y);
-		bs.Write(GOList.at(0)->getServerPos().w);
-		bs.Write(GOList.at(0)->getServerVel().x);
-		bs.Write(GOList.at(0)->getServerVel().y);
-		bs.Write(GOList.at(0)->GetAngularVelocity());
+		bs.Write(shipList.at(0)->GetID());
+		bs.Write(shipList.at(0)->getServerPos().x);
+		bs.Write(shipList.at(0)->getServerPos().y);
+		bs.Write(shipList.at(0)->getServerPos().w);
+		bs.Write(shipList.at(0)->getServerVel().x);
+		bs.Write(shipList.at(0)->getServerVel().y);
+		bs.Write(shipList.at(0)->GetAngularVelocity());
 
 #else
 		bs2.Write(shipList.at(0)->GetID());

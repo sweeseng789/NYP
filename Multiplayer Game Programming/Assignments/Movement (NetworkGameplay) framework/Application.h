@@ -28,13 +28,13 @@ public:
 	static bool Loop();
 	bool Update();
 	void Shutdown();
-	void SendCollision(CGameObject* go);
+	void SendCollision(Ship* ship1);
 	void ProcessWelcomePackage();
 	bool SendInitialPosition();
 
 	//===== GETTER  =====//
 	void Render();
-	bool checkCollisions(CGameObject* go1);
+	bool checkCollisions(Ship* ship1);
 	void playerControl(const float dt);
 
 	void welcome(RakNet::BitStream &bs);
@@ -64,7 +64,7 @@ private:
 	//Class Variables Or Vector
 	HGE* hge; //!< Instance of the internal graphics engine
 	RakPeerInterface* rakpeer;
-	std::vector<CGameObject*> GOList; //!< List of all the ships in the universe
+	std::vector<Ship*> shipList; //!< List of all the ships in the universe
 };
 
 #endif

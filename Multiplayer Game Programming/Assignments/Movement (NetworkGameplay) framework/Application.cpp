@@ -77,12 +77,12 @@ bool Application::Init()
 	hge_->System_SetState(HGE_TITLE, "Movement");
 	hge_->System_SetState(HGE_LOGFILE, "movement.log");
 	hge_->System_SetState(HGE_DONTSUSPEND, true);
-	hge_->System_SetState(HGE_SCREENWIDTH, 1280);
-	hge_->System_SetState(HGE_SCREENHEIGHT, 720);
+	hge_->System_SetState(HGE_SCREENWIDTH, 720);
+	hge_->System_SetState(HGE_SCREENHEIGHT, 480);
 
 	if (hge_->System_Initiate())
 	{
-		ShipList.push_back(new Ship(Math::RandIntMinMax(1, 4) , rand() % 500 + 100, rand() % 400 + 100));
+		ShipList.push_back(new Ship(Math::RandIntMinMax(1, 4) , rand() % (HGE_SCREENWIDTH - 100) + 100, rand() % (HGE_SCREENHEIGHT - 100) + 100));
 		ShipList.at(0)->SetName("My Ship");
 		if (rakpeer_->Startup(1, 30, &SocketDescriptor(), 1))
 		{
@@ -128,35 +128,8 @@ bool Application::Update()
 		}
 	}
 
-	/*if (mymissile)
-	{
-		if (mymissile->Update(ShipList, timedelta))
-		{
-			delete mymissile;
-			mymissile = NULL;
-		}
-	}*/
-
-	/*for (std::vector<Missile*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
-	{
-		Missile* missile = static_cast<Missile*>(*it);
-		if (missile->Update(ShipList, timedelta))
-		{
-			delete *it;
-			missileList.erase(it);
-			break;
-		}
-	}*/
-
 	for (std::vector<CProjectile*>::iterator it = projectileList.begin(); it != projectileList.end(); ++it)
 	{
-		/*Missile* missile = static_cast<Missile*>(*it);
-		if (missile->Update(ShipList, timedelta))
-		{
-			delete *it;
-			missileList.erase(it);
-			break;
-		}*/
 		CProjectile* projectile = static_cast<CProjectile*>(*it);
 		if (projectile->getActive())
 		{
@@ -272,60 +245,31 @@ bool Application::Update()
 			bs.Read(id);
 			bs.Read(deleted);
 
-			/*for (std::vector<Missile*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
+			for (std::vector<CProjectile*>::iterator it = projectileList.begin(); it != projectileList.end(); ++it)
 			{
-				Missile* missile = static_cast<Missile*>(*it);
-				if(missile->getOwnerID() == id)
+				CProjectile* projectile = static_cast<CProjectile*>(*it);
+				if (projectile->getOwnerID() == id)
 				{
-					if (deleted == 1)
+					if (deleted == 1 || !projectile->getActive())
 					{
-						delete *it;
-						missileList.erase(it);
+						/*delete *it;
+						projectileList.erase(it);*/
+						projectile->setActive(false);
 					}
 					else
 					{
 						bs.Read(x);
 						bs.Read(y);
 						bs.Read(w);
-						missile->UpdateLoc(x, y, w);
+						projectile->UpdateLoc(x, y, w);
 
 						bs.Read(x);
-						missile->setVelocityX(x);
+						projectile->setVelocityX(x);
 
 						bs.Read(y);
-						missile->setVelocityY(y);
+						projectile->setVelocityY(y);
 					}
 					break;
-				}
-			}*/
-			for (std::vector<CProjectile*>::iterator it = projectileList.begin(); it != projectileList.end(); ++it)
-			{
-				CProjectile* projectile = static_cast<CProjectile*>(*it);
-				if (projectile->getOwnerID() == id)
-				{
-					//if (projectile->getActive())
-					{
-						if (deleted == 1 || !projectile->getActive())
-						{
-							/*delete *it;
-							projectileList.erase(it);*/
-							projectile->setActive(false);
-						}
-						else
-						{
-							bs.Read(x);
-							bs.Read(y);
-							bs.Read(w);
-							projectile->UpdateLoc(x, y, w);
-
-							bs.Read(x);
-							projectile->setVelocityX(x);
-
-							bs.Read(y);
-							projectile->setVelocityY(y);
-						}
-						break;
-					}
 				}
 			}
 		}

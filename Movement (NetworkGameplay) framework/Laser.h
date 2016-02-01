@@ -21,9 +21,11 @@ class Laser
 	float velocity_y_; //!< The resolved velocity of the ship along the y-axis
 	hgeRect collidebox;
 	int ownerid;
+	
 	bool active;
 
 public:
+	int laserId;
 	float angular_velocity;
 	Laser(char* filename, float x, float y, float w, int shipid);
 	~Laser();

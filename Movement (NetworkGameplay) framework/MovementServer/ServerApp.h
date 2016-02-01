@@ -28,6 +28,7 @@ class ServerApp
 	ClientMap clients_;
 
 	unsigned int newID;
+	int asteroidCount = 0;
 	
 	void SendWelcomePackage(SystemAddress& addr);
 	void SendDisconnectionNotification(SystemAddress& addr);

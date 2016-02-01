@@ -4,6 +4,8 @@
 #include "ship.h"
 #include "Laser.h"
 #include "Asteroid.h"
+#include "Bomb.h"
+#include "Explosion.h"
 #include <vector>
 
 class HGE;
@@ -28,6 +30,8 @@ class Application
 	std::vector<Ship*> shipsList; //!< List of all the ships in the universe
 	std::vector<Laser*> missileList;
 	std::vector<CAsteroid*> asteroidList;
+	std::vector<CBomb*> bombList;
+	std::vector<Explode*> explodeList;
 	RakPeerInterface* rakpeer_;
 	unsigned int timer_;
 
@@ -64,6 +68,8 @@ public:
 	void Start();
 	bool Update();
 	void Render();
+
+	float dt;
 };
 
 #endif

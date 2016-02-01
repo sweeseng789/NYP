@@ -46,6 +46,39 @@ void ServerApp::Loop()
 			SendWelcomePackage(packet->systemAddress);
 			break;
 
+		case ID_LOSTSHIP:
+		{
+			int id;
+			bs.Read(id);
+			//for (ClientMap::iterator itr = clients_.begin(); itr != clients_.end(); ++itr)
+			//{
+			//	//std::cout << "Ship " << itr->second.id << " pos" << itr->second.x_ << " " << itr->second.y_ << std::endl;
+			//	//bs.Write(itr->second.id);
+			//	//bs.Write(itr->second.x_);
+			//	//bs.Write(itr->second.y_);
+			//	//bs.Write(itr->second.type_);
+			//	if (itr->second.id == id)
+			//	{
+			//		delete (*itr);
+
+			//	}
+			//}
+			for (std::map<SystemAddress, GameObject>::iterator it = clients_.begin(); it != clients_.end(); ++it)
+			{
+				if (it->second.id == id)
+				{
+					newID--;
+					clients_.erase(it);
+					break;
+				}
+			}
+
+
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
 		case ID_DISCONNECTION_NOTIFICATION:
 		case ID_CONNECTION_LOST:
 			SendDisconnectionNotification(packet->systemAddress);
@@ -105,6 +138,34 @@ void ServerApp::Loop()
 		}
 		break;
 
+		case ID_SPAWNBOMB:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
+		case ID_UPDATE_BOMB:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
+		case ID_CREATE_EXPLOSION:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
+		case ID_UPDATE_EXPLOSION:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
 		case ID_UPDATEASTEROID:
 		{
 			bs.ResetReadPointer();
@@ -114,27 +175,46 @@ void ServerApp::Loop()
 
 		case ID_SPAWNASTEROID:
 		{
-			static int test = 0;
-			if (test < 10)
+			if (asteroidCount < 11)
 			{
+				asteroidCount++;
 				/*bs.ResetReadPointer();*/
 				unsigned char msgid2 = ID_SPAWNASTEROID;
 				//bs.Reset();
 				RakNet::BitStream bs2;
 				bs2.Reset();
 				bs2.Write(msgid2);
+				int id = Math::RandIntMinMax(-1000, 1000);
 				float newx = Math::RandFloatMinMax(0, 800);
 				float newy = Math::RandFloatMinMax(0, 600);
 				float neww = Math::RandFloatMinMax(0, 360);
 
+				bs2.Write(id);
 				bs2.WriteVector(newx, newy, neww);
 
 				for (std::pair<SystemAddress, GameObject> client : clients_)
 				{
-					test++;
 					rakpeer_->Send(&bs2, HIGH_PRIORITY, RELIABLE, 0, client.first, true);
 				}
 			}
+		}
+		break;
+
+		case ID_DELETEASTEOIRD:
+		{
+			bs.ResetReadPointer();
+			asteroidCount -= 2;
+			/*for (std::pair<SystemAddress, GameObject> client : clients_)
+			{
+				rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, client.first, true);
+			}*/
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
+		case ID_DEBUG:
+		{
+		
 		}
 		break;
 
@@ -179,6 +259,7 @@ void ServerApp::SendWelcomePackage(SystemAddress& addr)
 
 void ServerApp::SendDisconnectionNotification(SystemAddress& addr)
 {
+	//newID--;
 	ClientMap::iterator itr = clients_.find(addr);
 	if (itr == clients_.end())
 		return;

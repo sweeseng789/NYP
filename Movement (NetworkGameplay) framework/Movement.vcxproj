@@ -94,6 +94,8 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="ship.cpp" />
@@ -101,6 +103,8 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="MyMath.h" />

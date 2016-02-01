@@ -5,6 +5,7 @@
 #include "GetTime.h"
 #include "../MyMsgIDs.h"
 #include <iostream>
+#include "MyMath.h"
 
 ServerApp::ServerApp() : 
 	rakpeer_(RakNetworkFactory::GetRakPeerInterface()),
@@ -113,8 +114,27 @@ void ServerApp::Loop()
 
 		case ID_SPAWNASTEROID:
 		{
-			bs.ResetReadPointer();
-			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+			static int test = 0;
+			if (test < 10)
+			{
+				/*bs.ResetReadPointer();*/
+				unsigned char msgid2 = ID_SPAWNASTEROID;
+				//bs.Reset();
+				RakNet::BitStream bs2;
+				bs2.Reset();
+				bs2.Write(msgid2);
+				float newx = Math::RandFloatMinMax(0, 800);
+				float newy = Math::RandFloatMinMax(0, 600);
+				float neww = Math::RandFloatMinMax(0, 360);
+
+				bs2.WriteVector(newx, newy, neww);
+
+				for (std::pair<SystemAddress, GameObject> client : clients_)
+				{
+					test++;
+					rakpeer_->Send(&bs2, HIGH_PRIORITY, RELIABLE, 0, client.first, true);
+				}
+			}
 		}
 		break;
 

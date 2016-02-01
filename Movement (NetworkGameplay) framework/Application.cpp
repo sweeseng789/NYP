@@ -328,16 +328,6 @@ bool Application::Update()
 				float temp;
 				float x,y,w;
 				bs.Read(shipid);
-				/*if (shipid == 1)
-				{
-					if (asteroidList.size() < 5)
-					{
-						float x = Math::RandFloatMinMax(0, 800);
-						float y = Math::RandFloatMinMax(0, 600);
-						float w = Math::RandFloatMinMax(0, 360);
-						CreateAsteroid(x, y, w);
-					}
-				}*/
 
 				for (std::vector<Ship*>::iterator it = shipsList.begin(); it != shipsList.end(); ++it)
 				{
@@ -462,25 +452,25 @@ bool Application::Update()
 
 		case ID_NEWASTEROID:
 		{
-			float x, y, w;
-			unsigned char smallSize;
+			//float x, y, w;
+			//unsigned char smallSize;
 
-			bs.Read(smallSize);
-			bs.Read(x);
-			bs.Read(y);
-			bs.Read(w);
+			//bs.Read(smallSize);
+			//bs.Read(x);
+			//bs.Read(y);
+			//bs.Read(w);
 
-			//Big sized Asteroid
-			if(smallSize == 1)
-				asteroidList.push_back(new CAsteroid(x, y, w));
-			else
-				asteroidList.push_back(new CAsteroid(x, y, w, true));
+			////Big sized Asteroid
+			//if(smallSize == 1)
+			//	asteroidList.push_back(new CAsteroid(x, y, w));
+			//else
+			//	asteroidList.push_back(new CAsteroid(x, y, w, true));
 		}
 		break;
 
 		case ID_UPDATEASTEROID:
 		{
-			float x, y, w;
+			/*float x, y, w;
 
 			for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
 			{
@@ -503,13 +493,19 @@ bool Application::Update()
 					asteroid->SetVelocityY(y);
 				}
 				break;
-			}
+			}*/
 		}
 		break;
 
 		case ID_SPAWNASTEROID:
 		{
-			if (asteroidList.size() < 10)
+			std::cout << "Message Received" << std::endl;
+			float x = 0, y = 0, w = 0;
+			bs.ReadVector(x, y, w);
+			std::cout << x << ", " << y << ", " << w << std::endl;
+			CAsteroid* asteroid = new CAsteroid(x, y, w);
+			asteroidList.push_back(asteroid);
+			/*if (asteroidList.size() < 10)
 			{
 				for (int a = 0; a < 10; ++a)
 				{
@@ -518,7 +514,7 @@ bool Application::Update()
 					float w = Math::RandFloatMinMax(0, 360);
 					CreateAsteroid(x, y, w);
 				}
-			}
+			}*/
 		}
 		break;
 
@@ -907,7 +903,7 @@ void Application::sendData()
 			rakpeer_->Send(&bs2, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
 		}
 
-		/*for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
+		for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
 		{
 			CAsteroid* asteroid = static_cast<CAsteroid*>(*it);
 			RakNet::BitStream bs2;
@@ -920,8 +916,13 @@ void Application::sendData()
 			bs2.Write(asteroid->GetVelocityX());
 			bs2.Write(asteroid->GetVelocityY());
 			rakpeer_->Send(&bs2, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
-		}*/
+		}
 
+		msgid = ID_SPAWNASTEROID;
+		bs.Reset();
+		bs.Write(msgid);
+		/*bs.Write(asteroidList.size());*/
+		rakpeer_->Send(&bs, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
 		/*if (asteroidList.size() < 10 && shipsList.at(0)->GetID() == 1)
 		{
 			unsigned char msgid2 = ID_SPAWNASTEROID;

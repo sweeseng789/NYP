@@ -207,15 +207,23 @@ void Ship::Update(float timedelta)
 	}
 #endif
 
-	if (x_ < -spritewidth/2)
-		x_ += screenwidth + spritewidth;
-	else if (x_ > screenwidth + spritewidth/2)
-		x_ -= screenwidth + spritewidth;
+	if (x_ < -spritewidth / 2)
+	{
+		x_ =  screenwidth + spritewidth / 2;
+	}
+	else if (x_ > screenwidth + spritewidth / 2)
+	{
+		x_ = 0 - spritewidth / 2;
+	}
 
-	if (y_ < -spriteheight/2)
-		y_ += screenheight + spriteheight;
-	else if (y_ > screenheight + spriteheight/2)
-		y_ -= screenheight + spriteheight;
+	if (y_ < -spriteheight / 2)
+	{
+		y_ = screenheight + spriteheight / 2;
+	}
+	else if (y_ > screenheight + spriteheight / 2)
+	{
+		y_ = 0 - spriteheight / 2;
+	}
 }
 
 

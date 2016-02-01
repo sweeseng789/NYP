@@ -5,6 +5,8 @@
 #include <hgerect.h>
 #include <memory>
 #include <string>
+#include <iostream>
+#include "MyMath.h"
 
 class hgeSprite;
 class hgeFont;
@@ -53,7 +55,6 @@ class Ship
 
 	unsigned int collidetimer;
 public:
-
 	Ship(int type, float locx_, float locy_);
 	~Ship();
 	void Update(float timedelta);
@@ -110,6 +111,13 @@ public:
 		}
 
 		return false;
+	}
+
+	void Restart()
+	{
+		client_x_ = server_x_ = x_ = Math::RandFloatMinMax(0, 800);
+		client_y_ = server_y_ = y_ = Math::RandFloatMinMax(0, 600);
+		server_velx_ = server_vely_ = velocity_x_ = velocity_y_ = 0;
 	}
 
 	// Lab Task 2 : add new member functions here

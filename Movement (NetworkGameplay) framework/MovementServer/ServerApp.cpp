@@ -97,6 +97,27 @@ void ServerApp::Loop()
 			}
 			break;
 
+		case ID_NEWASTEROID:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
+		case ID_UPDATEASTEROID:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
+		case ID_SPAWNASTEROID:
+		{
+			bs.ResetReadPointer();
+			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, packet->systemAddress, true);
+		}
+		break;
+
 		default:
 			std::cout << "Unhandled Message Identifier: " << (int)msgid << std::endl;
 		}

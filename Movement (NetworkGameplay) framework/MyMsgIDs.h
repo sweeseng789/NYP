@@ -14,6 +14,9 @@ enum MyMsgIDs
 	// Lab 13 Task 7 : Add new messages
 	ID_NEWMISSILE,
 	ID_UPDATEMISSILE,
+	ID_NEWASTEROID,
+	ID_UPDATEASTEROID,
+	ID_SPAWNASTEROID,
 };
 
 #endif

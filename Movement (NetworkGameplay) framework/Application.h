@@ -2,7 +2,8 @@
 #define _APPLICATION_H_
 
 #include "ship.h"
-#include "missile.h"
+#include "Laser.h"
+#include "Asteroid.h"
 #include <vector>
 
 class HGE;
@@ -25,9 +26,12 @@ class Application
 	HGE* hge_; //!< Instance of the internal graphics engine
 	//typedef std::vector<Ship*> ShipList;  //!< A list of ships
 	std::vector<Ship*> shipsList; //!< List of all the ships in the universe
-	std::vector<Missile*> missileList;
+	std::vector<Laser*> missileList;
+	std::vector<CAsteroid*> asteroidList;
 	RakPeerInterface* rakpeer_;
 	unsigned int timer_;
+
+	std::auto_ptr<hgeSprite> backgroundSprite;
 	
 	// Lab 13 Task 1 : add variables for local missle
 
@@ -41,10 +45,13 @@ class Application
 	bool checkCollisions(Ship* ship);
 	void ProcessWelcomePackage();
 	bool SendInitialPosition();
+	void sendData();
 
 	// Lab 13
 	void CreateMissile( float x, float y, float w, int id );
 	bool RemoveMissile( float x, float y, float w, int id );
+
+	void CreateAsteroid(float x, float y, float w, bool smallAsteroid = false);
 
 	void SendCollision( Ship* ship );
 

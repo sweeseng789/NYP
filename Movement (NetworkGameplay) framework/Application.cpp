@@ -6,9 +6,11 @@
 #include "RakPeerInterface.h"
 #include "Bitstream.h"
 #include "GetTime.h"
+#include"MyMath.h"
 #include <hge.h>
 #include <string>
 #include <iostream>
+#include <hgeSprite.h>
 #include <fstream>
 
 
@@ -77,16 +79,23 @@ bool Application::Init()
 	hge_->System_SetState(HGE_LOGFILE, "movement.log");
 	hge_->System_SetState(HGE_DONTSUSPEND, true);
 
+
+
 	if(hge_->System_Initiate()) 
 	{
-		shipsList.push_back(new Ship(rand()%4+1, rand()%500+100, rand()%400+100));
+		shipsList.push_back(new Ship(rand()%4+1, rand()%500, rand()%400+100));
 		shipsList.at(0)->SetName("My Ship");
+
+		HTEXTURE test = hge_->Texture_Load("Background.png");
+		backgroundSprite.reset(new hgeSprite(test, 0, 0, 800, 600));
+
 		if (rakpeer_->Startup(1,30,&SocketDescriptor(), 1))
 		{
 			rakpeer_->SetOccasionalPing(true);
 			return rakpeer_->Connect(serverip.c_str(), 1691, 0, 0);
 		}
 	}
+
 	return false;
 }
 
@@ -111,6 +120,15 @@ bool Application::Update()
 
 	playerControl(timedelta);
 
+	/*
+		if (asteroidList.size() < 20)
+			{
+				float x = Math::RandFloatMinMax(0, 800);
+				float y = Math::RandFloatMinMax(0, 600);
+				float w = Math::RandFloatMinMax(0, 360);
+				CreateAsteroid(x, y, w);
+			}*/
+
 	for (std::vector<Ship*>::iterator it = shipsList.begin(); it != shipsList.end(); ++it)
 	{
 		Ship* ship = static_cast<Ship*>(*it);
@@ -122,18 +140,49 @@ bool Application::Update()
 		}
 	}
 
-	// Lab 13 Task 5 : Updating the missile
-
-
-	// Lab 13 Task 13 : Update network missiles
-	for (std::vector<Missile*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
+	for (std::vector<Laser*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
 	{
-		Missile* missile = static_cast<Missile*>(*it);
+		Laser* missile = static_cast<Laser*>(*it);
 
 		if (missile->Update(shipsList, timedelta))
 		{
 			delete *it;
 			missileList.erase(it);
+			break;
+		}
+	}
+
+	for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
+	{
+		CAsteroid* asteroid = static_cast<CAsteroid*>(*it);
+		//asteroid->Update(timedelta);
+
+		if (asteroid->UpdateShip(shipsList, timedelta))
+		{
+			delete *it;
+			asteroidList.erase(it);
+			break;
+		}
+		else if (asteroid->UpdateLaser(missileList))
+		{
+			if (asteroid->isSmall())
+			{
+				delete *it;
+				asteroidList.erase(it);
+			}
+			else
+			{
+				for (int a = 0; a < 2; ++a)
+				{
+					float x = Math::RandFloatMinMax(asteroid->GetX() - 20, asteroid->GetX() + 20);
+					float y = Math::RandFloatMinMax(asteroid->GetY() - 20, asteroid->GetY() + 20);
+					float w = Math::RandFloatMinMax(asteroid->GetW() - 20, asteroid->GetW() + 20);
+					CreateAsteroid(x, y, w, true);
+				}
+				delete *it;
+				asteroidList.erase(it);
+				break;
+			}
 			break;
 		}
 	}
@@ -224,6 +273,30 @@ bool Application::Update()
 					ship->SetName(temp.c_str());
 					ship->setID( id );
 					shipsList.push_back(ship);
+
+					if (shipsList.size() == 1)
+					{
+						std::cout << "Yup" << std::endl;
+					}
+					else
+					{
+						std::cout << "nah" << std::endl;
+					}
+
+					for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
+					{
+						CAsteroid* asteroid = static_cast<CAsteroid*>(*it);
+						RakNet::BitStream bs2;
+						unsigned char msgid2 = ID_UPDATEASTEROID;
+
+						bs2.Write(msgid2);
+						bs2.Write(asteroid->GetX());
+						bs2.Write(asteroid->GetY());
+						bs2.Write(asteroid->GetW());
+						bs2.Write(asteroid->GetVelocityX());
+						bs2.Write(asteroid->GetVelocityY());
+						rakpeer_->Send(&bs2, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
+					}
 				}
 
 			}
@@ -233,15 +306,6 @@ bool Application::Update()
 			{
 				unsigned int shipid;
 				bs.Read(shipid);
-				/*for (ShipList::iterator itr = ships_.begin(); itr != ships_.end(); ++itr)
-				{
-					if ((*itr)->GetID() == shipid)
-					{
-						delete *itr;
-						ships_.erase(itr);
-						break;
-					}
-				}*/
 				for (std::vector<Ship*>::iterator it = shipsList.begin(); it != shipsList.end(); ++it)
 				{
 					Ship* ship = static_cast<Ship*>(*it);
@@ -264,6 +328,17 @@ bool Application::Update()
 				float temp;
 				float x,y,w;
 				bs.Read(shipid);
+				/*if (shipid == 1)
+				{
+					if (asteroidList.size() < 5)
+					{
+						float x = Math::RandFloatMinMax(0, 800);
+						float y = Math::RandFloatMinMax(0, 600);
+						float w = Math::RandFloatMinMax(0, 360);
+						CreateAsteroid(x, y, w);
+					}
+				}*/
+
 				for (std::vector<Ship*>::iterator it = shipsList.begin(); it != shipsList.end(); ++it)
 				{
 					Ship* ship = static_cast<Ship*>(*it);
@@ -345,7 +420,7 @@ bool Application::Update()
 			bs.Read(y);
 			bs.Read(w);
 
-			missileList.push_back(new Missile("missile.png", x, y, w, id));
+			missileList.push_back(new Laser("Laser.png", x, y, w, id));
 		}
 		break;
 
@@ -358,9 +433,9 @@ bool Application::Update()
 			bs.Read(id);
 			bs.Read(deleted);
 
-			for (std::vector<Missile*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
+			for (std::vector<Laser*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
 			{
-				Missile* missile = static_cast<Missile*>(*it);
+				Laser* missile = static_cast<Laser*>(*it);
 				if (missile->GetOwnerID() == id)
 				{
 					if (deleted == 1 || !missile->getActive())
@@ -385,61 +460,77 @@ bool Application::Update()
 		}
 		break;
 
+		case ID_NEWASTEROID:
+		{
+			float x, y, w;
+			unsigned char smallSize;
+
+			bs.Read(smallSize);
+			bs.Read(x);
+			bs.Read(y);
+			bs.Read(w);
+
+			//Big sized Asteroid
+			if(smallSize == 1)
+				asteroidList.push_back(new CAsteroid(x, y, w));
+			else
+				asteroidList.push_back(new CAsteroid(x, y, w, true));
+		}
+		break;
+
+		case ID_UPDATEASTEROID:
+		{
+			float x, y, w;
+
+			for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
+			{
+				CAsteroid* asteroid = static_cast<CAsteroid*>(*it);
+
+				if (!asteroid->getActive())
+				{
+					delete *it;
+					asteroidList.erase(it);
+				}
+				else
+				{
+					bs.Read(x);
+					bs.Read(y);
+					bs.Read(w);
+					asteroid->UpdateLoc(x, y, w);
+					bs.Read(x);
+					asteroid->SetVelocityX(x);
+					bs.Read(y);
+					asteroid->SetVelocityY(y);
+				}
+				break;
+			}
+		}
+		break;
+
+		case ID_SPAWNASTEROID:
+		{
+			if (asteroidList.size() < 10)
+			{
+				for (int a = 0; a < 10; ++a)
+				{
+					float x = Math::RandFloatMinMax(0, 800);
+					float y = Math::RandFloatMinMax(0, 600);
+					float w = Math::RandFloatMinMax(0, 360);
+					CreateAsteroid(x, y, w);
+				}
+			}
+		}
+		break;
+
 		default:
-			std::cout << "Unhandled Message Identifier: " << (int)msgid << std::endl;
+			std::cout << "Unhandled Message Identifier: " << msgid << std::endl;
 
 		}
 		rakpeer_->DeallocatePacket(packet);
 	}
 
-	if (RakNet::GetTime() - timer_ > 1000)
-	{
-		timer_ = RakNet::GetTime();
-		RakNet::BitStream bs2;
-		unsigned char msgid = ID_MOVEMENT;
-		bs2.Write(msgid);
 
-#ifdef INTERPOLATEMOVEMENT
-		bs2.Write(shipsList.at(0)->GetID());
-		bs2.Write(shipsList.at(0)->GetServerX());
-		bs2.Write(shipsList.at(0)->GetServerY());
-		bs2.Write(shipsList.at(0)->GetServerW());
-		bs2.Write(shipsList.at(0)->GetServerVelocityX());
-		bs2.Write(shipsList.at(0)->GetServerVelocityY());
-		bs2.Write(shipsList.at(0)->GetAngularVelocity());
-
-#else
-		bs2.Write(ships_.at(0)->GetID());
-		bs2.Write(ships_.at(0)->GetX());
-		bs2.Write(ships_.at(0)->GetY());
-		bs2.Write(ships_.at(0)->GetW());
-		// Lab 7 Task 1 : Add Extrapolation Data velocity x, velocity y & angular velocity
-		bs2.Write(ships_.at(0)->GetVelocityX());
-		bs2.Write(ships_.at(0)->GetVelocityY());
-		bs2.Write(ships_.at(0)->GetAngularVelocity());
-#endif
-
-		rakpeer_->Send(&bs2, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
-
-
-		// Lab 13 Task 11 : send missile update 
-		for (std::vector<Missile*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
-		{
-			Missile* missile = static_cast<Missile*>(*it);
-			RakNet::BitStream bs3;
-			unsigned char msgid2 = ID_UPDATEMISSILE;
-			unsigned char deleted = 0;
-			bs3.Write(msgid2);
-			bs3.Write(missile->GetOwnerID());
-			bs3.Write(deleted);
-			bs3.Write(missile->GetX());
-			bs3.Write(missile->GetY());
-			bs3.Write(missile->GetW());
-			bs3.Write(missile->GetVelocityX());
-			bs3.Write(missile->GetVelocityY());
-			rakpeer_->Send(&bs3, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
-		}
-	}
+	sendData();
 
 	return false;
 }
@@ -455,6 +546,8 @@ void Application::Render()
 	hge_->Gfx_BeginScene();
 	hge_->Gfx_Clear(0);
 
+	backgroundSprite->RenderEx(0, 0, 0);
+
 	for (std::vector<Ship*>::iterator it = shipsList.begin(); it != shipsList.end(); ++it)
 	{
 		Ship* ship = static_cast<Ship*>(*it);
@@ -464,10 +557,16 @@ void Application::Render()
 
 
 	// Lab 13 Task 12 : Render network missiles
-	for (std::vector<Missile*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
+	for (std::vector<Laser*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
 	{
-		Missile* missile = static_cast<Missile*>(*it);
+		Laser* missile = static_cast<Laser*>(*it);
 		missile->Render();
+	}
+
+	for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
+	{
+		CAsteroid* asteroid = static_cast<CAsteroid*>(*it);
+		asteroid->Render();
 	}
 
 	hge_->Gfx_EndScene();
@@ -652,7 +751,7 @@ void Application::CreateMissile(float x, float y, float w, int id)
 	unsigned char msgid;
 	unsigned char deleted = 0;
 
-	Missile* missile = new Missile("missile.png", x, y, w, id);
+	Laser* missile = new Laser("Laser.png", x, y, w, id);
 	missileList.push_back(missile);
 
 	msgid = ID_NEWMISSILE;
@@ -667,6 +766,34 @@ void Application::CreateMissile(float x, float y, float w, int id)
 	// Lab 13 Task 3 : Implement local version missile creation
 
 #endif
+}
+
+void Application::CreateAsteroid(float x, float y, float w, bool smallAsteroid)
+{
+	RakNet::BitStream bs;
+	bs.Reset();
+	unsigned char msgid;
+	unsigned char smallSize;
+	CAsteroid* asteroid;
+
+	if (!smallAsteroid)
+		asteroid = new CAsteroid(x, y, w);
+	else
+		asteroid = new CAsteroid(x, y, w, true);
+
+	asteroidList.push_back(asteroid);
+
+	msgid = ID_NEWASTEROID;
+	if (!smallAsteroid)
+		smallSize = 1;
+	else
+		smallSize = 0;
+	bs.Write(msgid);
+	bs.Write(smallSize);
+	bs.Write(x);
+	bs.Write(y);
+	bs.Write(w);
+	rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE_ORDERED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 
@@ -709,5 +836,98 @@ void Application::playerControl(const float dt)
 			CreateMissile(shipsList.at(0)->GetX(), shipsList.at(0)->GetY(), shipsList.at(0)->GetW(), shipsList.at(0)->GetID());
 			currentTime = 0.f;
 		}
+	}
+
+	static bool keydownEnter_A = false;
+	static float currentTime_A = 0, timeLimit_A = 0.5;
+	if (currentTime_A < timeLimit_A)
+	{
+		currentTime_A += dt;
+	}
+	else
+	{
+		if (hge_->Input_GetKeyState(HGEK_A))
+		{
+			float x = Math::RandFloatMinMax(0, 800);
+			float y = Math::RandFloatMinMax(0, 600);
+			float w = Math::RandFloatMinMax(0, 360);
+			CreateAsteroid(x, y, w);
+			currentTime_A = 0.f;
+		}
+	}
+}
+
+void Application::sendData()
+{
+	if (RakNet::GetTime() - timer_ > 1000)
+	{
+		timer_ = RakNet::GetTime();
+		RakNet::BitStream bs;
+		unsigned char msgid = ID_MOVEMENT;
+		bs.Write(msgid);
+
+#ifdef INTERPOLATEMOVEMENT
+		bs.Write(shipsList.at(0)->GetID());
+		bs.Write(shipsList.at(0)->GetServerX());
+		bs.Write(shipsList.at(0)->GetServerY());
+		bs.Write(shipsList.at(0)->GetServerW());
+		bs.Write(shipsList.at(0)->GetServerVelocityX());
+		bs.Write(shipsList.at(0)->GetServerVelocityY());
+		bs.Write(shipsList.at(0)->GetAngularVelocity());
+
+#else
+		bs2.Write(ships_.at(0)->GetID());
+		bs2.Write(ships_.at(0)->GetX());
+		bs2.Write(ships_.at(0)->GetY());
+		bs2.Write(ships_.at(0)->GetW());
+		// Lab 7 Task 1 : Add Extrapolation Data velocity x, velocity y & angular velocity
+		bs2.Write(ships_.at(0)->GetVelocityX());
+		bs2.Write(ships_.at(0)->GetVelocityY());
+		bs2.Write(ships_.at(0)->GetAngularVelocity());
+#endif
+
+		rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
+
+
+		// Lab 13 Task 11 : send missile update 
+		for (std::vector<Laser*>::iterator it = missileList.begin(); it != missileList.end(); ++it)
+		{
+			Laser* missile = static_cast<Laser*>(*it);
+			RakNet::BitStream bs2;
+			unsigned char msgid2 = ID_UPDATEMISSILE;
+			unsigned char deleted = 0;
+			bs2.Write(msgid2);
+			bs2.Write(missile->GetOwnerID());
+			bs2.Write(deleted);
+			bs2.Write(missile->GetX());
+			bs2.Write(missile->GetY());
+			bs2.Write(missile->GetW());
+			bs2.Write(missile->GetVelocityX());
+			bs2.Write(missile->GetVelocityY());
+			rakpeer_->Send(&bs2, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
+		}
+
+		/*for (std::vector<CAsteroid*>::iterator it = asteroidList.begin(); it != asteroidList.end(); ++it)
+		{
+			CAsteroid* asteroid = static_cast<CAsteroid*>(*it);
+			RakNet::BitStream bs2;
+			unsigned char msgid2 = ID_UPDATEASTEROID;
+
+			bs2.Write(msgid2);
+			bs2.Write(asteroid->GetX());
+			bs2.Write(asteroid->GetY());
+			bs2.Write(asteroid->GetW());
+			bs2.Write(asteroid->GetVelocityX());
+			bs2.Write(asteroid->GetVelocityY());
+			rakpeer_->Send(&bs2, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
+		}*/
+
+		/*if (asteroidList.size() < 10 && shipsList.at(0)->GetID() == 1)
+		{
+			unsigned char msgid2 = ID_SPAWNASTEROID;
+			RakNet::BitStream bs2;
+			bs2.Write(msgid2);
+			rakpeer_->Send(&bs2, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
+		}*/
 	}
 }

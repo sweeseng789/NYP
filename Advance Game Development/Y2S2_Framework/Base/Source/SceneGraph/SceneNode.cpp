@@ -315,3 +315,27 @@ CTransform* CSceneNode::getTransform()
 {
 	return theTransform;
 }
+
+
+enum FLOCKING
+{
+	SEPARATE,
+	COHESION,
+	IGNORE,
+	NUM_FLOCKING,
+};
+//I hate this
+
+//FLOCKING flockit;
+//flockit = IGNORE;
+
+//If player is within cohesion Ring == Move towards it
+//if (distance < 50.f)
+//{
+
+//}
+//If the player is within separation ring == move away
+//else if (distance < 10)
+//{
+	//Get Rekt Bois
+//}

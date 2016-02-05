@@ -1520,9 +1520,10 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale() * 0.5;
 
 	static float offset = 15.f;
+	static float test = -20.f;
 
-	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset * 2, -10, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset * 2, -10, 0)) ||
-		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, offset * 2)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -10, -offset * 2)))
+	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset * 2, test, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset * 2, test, 0)) ||
+		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, test, offset * 2)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, test, -offset * 2)))
 	{
 		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -45, 0)))
 		{
@@ -1531,10 +1532,15 @@ void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
 			if (m_cAvatar->getVel().y < 0)
 				m_cAvatar->getVel().y = 0;
 		}
+		else
+		{
+			m_cAvatar->setIsOnOBj(false);
+		}
 	}
 	else
 	{
 		m_cAvatar->setIsOnOBj(false);
+
 		//X Axis
 		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset, -10, 0)) || SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset, -10, 0)))
 		{

@@ -108,15 +108,15 @@ void CPlayInfo3PV::Init()
 	//===============WEAPONS & SHIELD===============//
 
 	//Left Arm Shield
-	//newModel = new CModel();
-	//transform = new CTransform();
-	//nodeInfo = new std::pair<int, std::string>();
-	//newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
-	//transform->SetTranslate(13, 16.5, 0);
-	//transform->SetScale(scale.x, scale.y, scale.z);
-	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	//nodeInfo->second = "LeftShield";
-	//nodeList.insert(*nodeInfo);
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
+	transform->SetTranslate(13, 16.5, 0);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	nodeInfo->second = "LeftShield";
+	nodeList.insert(*nodeInfo);
 
 	////Right Arm Shield
 	//newModel = new CModel();
@@ -143,38 +143,38 @@ void CPlayInfo3PV::Init()
 	//nodeInfo->second = "MiddleShield";
 	//nodeList.insert(*nodeInfo);
 
-	////Right Beam Magnum
-	//newModel = new CModel();
-	//transform = new CTransform();
-	//nodeInfo = new std::pair<int, std::string>();
-	//newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
-	//transform->SetTranslate(-9.5, 16.5, 0);
-	//transform->SetScale(scale.x, scale.y, scale.z);
-	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	//nodeInfo->second = "RightBeamMagnum";
-	//nodeList.insert(*nodeInfo);
+	//Right Beam Magnum
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
+	transform->SetTranslate(-9.5, 16.5, 0);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	nodeInfo->second = "RightBeamMagnum";
+	nodeList.insert(*nodeInfo);
 
-	////Left Beam Saber
-	//newModel = new CModel();
-	//transform = new CTransform();
-	//nodeInfo = new std::pair<int, std::string>();
-	//newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
-	//transform->SetTranslate(-3, 27.3, -6);
-	//transform->SetScale(scale.x, scale.y, scale.z);
-	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	//nodeInfo->second = "LeftBeamSaber";
-	//nodeList.insert(*nodeInfo);
+	//Left Beam Saber
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
+	transform->SetTranslate(-3, 27.3, -6);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	nodeInfo->second = "LeftBeamSaber";
+	nodeList.insert(*nodeInfo);
 
-	////RightBeamSaber
-	//newModel = new CModel();
-	//transform = new CTransform();
-	//nodeInfo = new std::pair<int, std::string>();
-	//newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
-	//transform->SetTranslate(2.8, 27.3, -6);
-	//transform->SetScale(scale.x, scale.y, scale.z);
-	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	//nodeInfo->second = "RightBeamSaber";
-	//nodeList.insert(*nodeInfo);
+	//RightBeamSaber
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
+	transform->SetTranslate(2.8, 27.3, -6);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	nodeInfo->second = "RightBeamSaber";
+	nodeList.insert(*nodeInfo);
 
 	////Left Rocket Launcher
 	//newModel = new CModel();

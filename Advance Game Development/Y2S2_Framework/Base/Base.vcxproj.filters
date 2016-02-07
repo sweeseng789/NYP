@@ -49,6 +49,9 @@
     <Filter Include="Asset\Level Loading">
       <UniqueIdentifier>{a161a8c0-a8a2-45c0-ad78-7bef532c05a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Asset\Lua">
+      <UniqueIdentifier>{b591a821-47eb-4a1d-84ff-c3f38d5f16e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -182,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="Source\SpatialPartition\Unit.cpp">
       <Filter>Asset\SpatialPartition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Lua\Lua.cpp">
+      <Filter>Asset\Lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\Unit.h">
       <Filter>Asset\SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\Lua.h">
+      <Filter>Asset\Lua</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

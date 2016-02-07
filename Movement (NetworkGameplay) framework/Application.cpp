@@ -162,14 +162,14 @@ bool Application::Update()
 		asteroid->Update(timedelta);
 		//asteroid->Update_Bomb(bombList);
 
-		if (asteroid->Update_Laser(missileList))
+		/*if (asteroid->Update_Laser(missileList))
 		{
 			RakNet::BitStream bs;
 			unsigned char msgid = ID_DELETEASTEOIRD;
 			bs.Write(msgid);
 			bs.Write(asteroid->id);
 			rakpeer_->Send(&bs, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_SYSTEM_ADDRESS, true);
-		}
+		}*/
 		
 		/*if (asteroid->Update_Explosion(explodeList))
 		{

@@ -8,6 +8,7 @@
 #include "PlayState.h"
 #include "IntroState.h"
 #include "MenuState.h"
+#include "Lua\Lua.h"
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -87,8 +88,8 @@ private:
 	const static int m_window_deadzone = 99999;
 	static int m_window_width;
 	static int m_window_height;
-	const static int init_window_width = 1080;
-	const static int init_window_height = 720;
+	static int init_window_width;
+	static int init_window_height;
 
 	//Declare a window object
 	StopWatch m_timer;
@@ -117,6 +118,8 @@ private:
 
 	//Game State Management
 	CGameStateManager* theGSM;
+	
+	static CLua* lua;
 };
 
 #endif

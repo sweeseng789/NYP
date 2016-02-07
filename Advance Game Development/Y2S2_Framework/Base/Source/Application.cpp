@@ -12,9 +12,14 @@
 #include <stdlib.h>
 
 GLFWwindow* m_window;
+CLua* Application::lua = new CLua("my");
+
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
-int Application::m_window_width = Application::init_window_width, Application::m_window_height = Application::init_window_height;
+int Application::init_window_width = Application::lua->getData<int>("SCREENWIDTH");
+int Application::init_window_height = Application::lua->getData<int>("SCREENHEIGHT");
+int Application::m_window_width = Application::init_window_width;
+int Application::m_window_height = Application::init_window_height;
 
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, 
 	   Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0,
@@ -398,6 +403,15 @@ void Application::Init()
 	}
 	setting.close();
 
+	
+	/*int a = lua->getData<int>("SCREENWIDTH");
+	std::cout << a << std::endl;
+
+	std::cout << lua->getData<int>("SCREENHEIGHT") << std::endl;
+
+	bool b = lua->getData<bool>("FULLSCREEN");
+	std::cout << b << std::endl;*/
+
 	//Create a window and create its OpenGL context
 	if (FULL_SCREEN)
 	{
@@ -584,6 +598,11 @@ void Application::Exit()
 		}
 	}
 	setting.close();
+
+	if (lua)
+	{
+		delete lua;
+	}
 
 	//Close OpenGL window and terminate GLFW
 	glfwDestroyWindow(m_window);

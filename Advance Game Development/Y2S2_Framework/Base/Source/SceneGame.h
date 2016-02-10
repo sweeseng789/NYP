@@ -166,6 +166,9 @@ public:
 	void RenderSkyplane();
 	void RenderDebugging();
 
+	//Level Of Details
+	void LODUpdate(CGameObject* go);
+
 	//Particle
 	std::vector<Particle*> particleList;
 	//Particle* fetchParticle(Vector3 pos, Vector3 vel, double timeLimit);
@@ -176,11 +179,13 @@ public:
 	Particle* fetchParticle();
 
 	//Collision
-	void collisionCheck(CGameObject* node1, CGameObject* node2);
-	void checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex);
+	void collisionCheck(const float &dt, CGameObject* node1, CGameObject* node2);
+	void checkCollision(const float &dt, CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex);
 	void Collision_PlayerToAi(AI* ai);
 	void Collision_BulletToAi(CBullet* bullet, AI*ai);
-	void Collision_PlayerToWorldObj(CWorldOBJ* worldObj);
+	void Collision_PlayerToWorldObj(const float &dt, CWorldOBJ* worldObj);
+	void Collision_BulletToWorldObj(CBullet* bullet, CWorldOBJ* worldObj);
+	void Collision_AiToWorldObj(AI * ai, CWorldOBJ* worldObj);
 	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, float bulletDamage, bool playerBullet = true);
 
 

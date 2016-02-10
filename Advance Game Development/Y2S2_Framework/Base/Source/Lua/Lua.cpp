@@ -2,13 +2,13 @@
 
 
 
-CLua::CLua(const std::string fileLoc)
+CLua::CLua(const std::string fileName)
 {
 	L = lua_open();
 	luaL_openlibs(L);
 
 	std::string fileDir = "Lua/";
-	fileDir += fileLoc + ".Lua";
+	fileDir += fileName + ".Lua";
 
 	if (luaL_loadfile(L, fileDir.c_str()) || lua_pcall(L, 0, 0, 0))
 	{

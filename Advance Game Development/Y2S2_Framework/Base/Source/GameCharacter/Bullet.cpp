@@ -16,7 +16,13 @@ CBullet::CBullet()
 	CModel* newModel = new CModel();
 	CTransform* transform = new CTransform();
 
-	newModel->Init(MeshBuilder::GenerateSphere("Player Bullet", Color(1, 1, 1), 18, 36, 1.f), NULL);
+	/*newModel->Init(MeshBuilder::GenerateSphere("Player Bullet", Color(1, 1, 1), 18, 36, 1.f), NULL);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	m_cSceneGraph->SetNode(transform, newModel);*/
+
+	newModel->setMesh(CModel::s_LOW, MeshBuilder::GenerateSphere("Player Bullet Low Res", Color(1, 1, 0), 2, 4, 1.f), NULL);
+	newModel->setMesh(CModel::s_MID, MeshBuilder::GenerateSphere("Player Bullet Mid Res", Color(1, 0, 1), 6, 12, 1.f), NULL);
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateSphere("Player Bullet High Res", Color(1, 1, 1), 18, 36, 1.f), NULL);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	m_cSceneGraph->SetNode(transform, newModel);
 }

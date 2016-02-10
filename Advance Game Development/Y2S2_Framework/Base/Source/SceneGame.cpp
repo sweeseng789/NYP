@@ -1113,6 +1113,38 @@ void SceneGame::UpdateGameplay(const double &dt)
 	PlayerUpdate(dt);
 	GridUpdate(dt);
 	ParticleUpdate(dt);
+
+	for (std::vector<CGameObject*>::iterator it = GOList.begin(); it != GOList.end(); ++it)
+	{
+
+		CGameObject* go = static_cast<CGameObject*>(*it);
+		if (go->getActive())
+		{
+			/*if (go != m_cAvatar)
+			{
+				Vector3 playerPos = m_cAvatar->getPos();
+				Vector3 objPos = go->getPos();
+
+				float dist = (playerPos - objPos).LengthSquared();
+
+				if (dist <= 1000000)
+				{
+					go->getNode()->switchResolution(CModel::s_HIGH);
+				}
+				else
+				{
+					if (dist <= 3000000)
+					{
+						go->getNode()->switchResolution(CModel::s_MID);
+					}
+					else
+					{
+						go->getNode()->switchResolution(CModel::s_LOW);
+					}
+				}
+			}*/
+		}
+	}
 }
 
 void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, float bulletDamage,bool playerBullet)
@@ -1402,6 +1434,15 @@ void SceneGame::RenderGameplay()
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(go->getPos().x, go->getPos().y, go->getPos().z);
+			if(b_Debug && dynamic_cast<CBullet*>(*it) != NULL)
+				modelStack.Scale(10, 10, 10);
+
+			if (dynamic_cast<AI*>(*it) != NULL)
+			{
+				AI* ai = dynamic_cast<AI*>(*it);
+				modelStack.Rotate(ai->getAngle(), 0, 1, 0);
+			}
+
 			go->getNode()->Draw(this);
 			modelStack.PopMatrix();
 		}
@@ -1422,7 +1463,7 @@ void SceneGame::RenderGameplay()
 	}
 }
 
-void SceneGame::checkCollision(CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex)
+void SceneGame::checkCollision(const float &dt, CGameObject* go, std::vector<CGameObject*>& goToCheck, int startingIndex)
 {
 	for (unsigned a = 0; a < goToCheck.size(); ++a)
 	{
@@ -1430,19 +1471,18 @@ void SceneGame::checkCollision(CGameObject* go, std::vector<CGameObject*>& goToC
 		{
 			//Always ensure player is the first parameters
 			if (goToCheck[a]->isPlayer() || goToCheck[a]->isPlayerBullet())
-			//if (dynamic_cast<CPlayInfo3PV*>(go) != NULL || dynamic_cast<CBullet*>(go))
 			{
 				CGameObject* temp = goToCheck[a];
 				goToCheck[a] = go;
 				go = temp;
 			} 
 
-			collisionCheck(go, goToCheck[a]);
+			collisionCheck(dt, go, goToCheck[a]);
 		}
 	}
 }
 
-void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
+void SceneGame::collisionCheck(const float &dt, CGameObject* go1, CGameObject* go2)
 {
 	if (go1->isPlayer() && go2->isEnemy())
 	{
@@ -1458,54 +1498,19 @@ void SceneGame::collisionCheck(CGameObject* go1, CGameObject* go2)
 	else if (go1->isPlayer() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
 	{
 		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
-		Collision_PlayerToWorldObj(worldObj);
+		Collision_PlayerToWorldObj(dt, worldObj);
 	}
 	else if (go1->isPlayerBullet() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
 	{
 		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
 		CBullet* bullet = dynamic_cast<CBullet*>(go1);
-
-		Vector3 topleft = go2->getPos() + go2->getScale() * 0.5;
-		Vector3 bottomRight = go2->getPos() - go2->getScale()  * 0.5;
-
-		if (SSDLC::intersect_LineAABB(bullet->getPos(), bullet->getDirection(), topleft, bottomRight))
-		{
-			for (unsigned a = 0; a < 3; ++a)
-			{
-				Vector3 pos = worldObj->getPos();
-
-				if (bullet->getDirection().x > 0)
-				{
-					//pos.x -= bullet->getDirection().x * 100;
-					pos.x -= worldObj->getScale().x * 0.5;
-				}
-				else if (bullet->getDirection().x < 0)
-				{
-					//pos.x += bullet->getDirection().x * 100;
-					pos.x += worldObj->getScale().x * 0.5;
-				}
-
-				if (bullet->getDirection().z > 0)
-				{
-					pos.z -= worldObj->getScale().z * 0.5;
-				}
-				else if (bullet->getDirection().z < 0)
-				{
-					pos.z += worldObj->getScale().z * 0.5;
-				}
-
-				
-				Vector3 direction = -bullet->getDirection();
-				direction.x += Math::RandFloatMinMax(direction.x * 200, direction.x * 400);
-				direction.y += Math::RandFloatMinMax(20, 100);
-				direction.z += Math::RandFloatMinMax(direction.z * 200, direction.z * 400);
-
-				generateParticle(0, pos, direction, 0.2, Particle::e_YELLOW);
-			}
-
-			//worldObj->newHealth -= bullet->damage;
-			bullet->setActive(false);
-		}
+		Collision_BulletToWorldObj(bullet, worldObj);
+	}
+	else if (go1->isEnemy() && dynamic_cast<CWorldOBJ*>(go2) != NULL)
+	{
+		AI* ai = dynamic_cast<AI*>(go1);
+		CWorldOBJ* worldObj = dynamic_cast<CWorldOBJ*>(go2);
+		Collision_AiToWorldObj(ai, worldObj);
 	}
 }
 
@@ -1514,23 +1519,29 @@ void SceneGame::Collision_PlayerToAi(AI* ai)
 
 }
 
-void SceneGame::Collision_PlayerToWorldObj(CWorldOBJ* worldObj)
+void SceneGame::Collision_PlayerToWorldObj(const float &dt, CWorldOBJ* worldObj)
 {
 	Vector3 topLeft = worldObj->getPos() + worldObj->getScale() * 0.5;
 	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale() * 0.5;
 
 	static float offset = 15.f;
-	static float test = -20.f;
+	static float collOffset = 45.f;
 
-	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset * 2, test, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset * 2, test, 0)) ||
-		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, test, offset * 2)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, test, -offset * 2)))
+	if (!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(offset * 2, -20.f, 0)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(-offset * 2, -20.f, 0)) ||
+		!SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -20.f, offset * 2)) && !SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -20.f, -offset * 2)))
 	{
-		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -45, 0)))
+		if (SSDLC::intersect(topLeft, bottomRight, m_cAvatar->getPos() + Vector3(0, -collOffset, 0)))
 		{
 			m_cAvatar->setIsOnOBj(true);
 			
 			if (m_cAvatar->getVel().y < 0)
 				m_cAvatar->getVel().y = 0;
+
+			if (m_cAvatar->getPos().y < topLeft.y + collOffset)
+			{
+				float diff = m_cAvatar->getPos().y - (topLeft.y + 45);
+				m_cAvatar->setPos_y(m_cAvatar->getPos().y - diff * dt * 10);
+			}
 		}
 		else
 		{
@@ -1606,6 +1617,90 @@ void SceneGame::Collision_BulletToAi(CBullet* bullet, AI* ai)
 			}
 		}
 	}
+}
+
+void SceneGame::Collision_BulletToWorldObj(CBullet* bullet, CWorldOBJ* worldObj)
+{
+	Vector3 topleft = worldObj->getPos() + worldObj->getScale() * 0.5;
+	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale()  * 0.5;
+
+	if (SSDLC::intersect_LineAABB(bullet->getPos(), bullet->getDirection(), topleft, bottomRight))
+	{
+		for (unsigned a = 0; a < 3; ++a)
+		{
+			Vector3 pos = worldObj->getPos();
+
+			if (bullet->getDirection().x > 0)
+			{
+				pos.x -= worldObj->getScale().x * 0.5;
+			}
+			else if (bullet->getDirection().x < 0)
+			{
+				pos.x += worldObj->getScale().x * 0.5;
+			}
+
+			if (bullet->getDirection().z > 0)
+			{
+				pos.z -= worldObj->getScale().z * 0.5;
+			}
+			else if (bullet->getDirection().z < 0)
+			{
+				pos.z += worldObj->getScale().z * 0.5;
+			}
+
+			Vector3 direction = -bullet->getDirection();
+			direction.x += Math::RandFloatMinMax(direction.x * 200, direction.x * 400);
+			direction.y += Math::RandFloatMinMax(20, 100);
+			direction.z += Math::RandFloatMinMax(direction.z * 200, direction.z * 400);
+
+			generateParticle(0, pos, direction, 0.2, Particle::e_YELLOW);
+		}
+
+		bullet->setActive(false);
+	}
+}
+
+void SceneGame::Collision_AiToWorldObj(AI* ai, CWorldOBJ* worldObj)
+{
+	Vector3 topLeft = worldObj->getPos() + worldObj->getScale() * 0.5;
+	Vector3 bottomRight = worldObj->getPos() - worldObj->getScale() * 0.5;
+
+	static float offset = 10.f;
+	//static float collOffset = 45.f;
+
+	/*if (!SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(offset * 2, -20.f, 0)) && !SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(-offset * 2, -20.f, 0)) ||
+		!SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(0, -20.f, offset * 2)) && !SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(0, -20.f, -offset * 2)))
+	{
+		std::cout << "Collided" << std::endl;
+	}*/
+
+	//X Axis
+	if (SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(offset, -10, 0)) || SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(-offset, -10, 0)) ||
+		SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(0, -10, offset)) || SSDLC::intersect(topLeft, bottomRight, ai->getPos() + Vector3(0, -10, -offset)))
+	{
+		if (ai->getVel().x != 0)
+		{
+			ai->setPos_x(ai->getPos().x - ai->getVel().Normalize().x * 20);
+			ai->switchState(AI::s_COLLIDED);
+			ai->getVel().SetZero();
+		}
+		else if (ai->getVel().z != 0)
+		{
+			ai->setPos_z(ai->getPos().z - ai->getVel().Normalize().z * 20);
+			ai->switchState(AI::s_COLLIDED);
+			ai->getVel().SetZero();
+		}
+	}
+
+	//Z Axis
+	//if ()
+	//{
+	//	/*std::cout << "Z Axis" << std::endl;*/
+	//	//ai->getVel().z = -ai->getVel().z;
+	//	//m_cAvatar->getVel().z = -m_cAvatar->getVel().z;
+	//	//ai->getVel().SetZero();
+	//	/*ai->switchState(AI::s_COLLIDED);*/
+	//}
 }
 
 /********************************************************************************
@@ -1768,6 +1863,10 @@ void SceneGame::GridUpdate(const double& dt)
 					}
 					bullet->setActive(false);
 				}*/
+				if (bullet->getPos().y < tempY)
+				{
+					bullet->setActive(false);
+				}
 			}
 
 			//Ai Update
@@ -1785,6 +1884,12 @@ void SceneGame::GridUpdate(const double& dt)
 				tempY += 10;
 				worldObj->update(dt, tempY);
 			}
+
+			//Level Of Detail
+			if (go != m_cAvatar)
+			{
+				LODUpdate(go);
+			}
 		}
 	}
 
@@ -1798,7 +1903,6 @@ void SceneGame::GridUpdate(const double& dt)
 
 		if (cell.GOList.size() > 0)
 		{
-			cell.isPlayerInit = true;
 			//Loop thought everything in a cell
 			for (unsigned i = 0; i < cell.GOList.size(); ++i)
 			{
@@ -1806,38 +1910,34 @@ void SceneGame::GridUpdate(const double& dt)
 
 				if (go->getActive())
 				{
-					checkCollision(go, cell.GOList, i + 1);
+					checkCollision(dt, go, cell.GOList, i + 1);
 
 					//Update Collision with neighbout cells
 					if (x > 0)
 					{
 						//Left Cell
-						checkCollision(go, m_grid->getCell(x - 1, z)->GOList, 0);
+						checkCollision(dt, go, m_grid->getCell(x - 1, z)->GOList, 0);
 
 						if (z > 0)
 						{
 							//Top Left Cell
-							checkCollision(go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
+							checkCollision(dt, go, m_grid->getCell(x - 1, z - 1)->GOList, 0);
 						}
 
 						//Bottom Left Cell
 						if (z < m_grid->m_numZCells - 1)
 						{
-							checkCollision(go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
+							checkCollision(dt, go, m_grid->getCell(x - 1, z + 1)->GOList, 0);
 						}
 					}
 
 					//Up cell
 					if (z > 0)
 					{
-						checkCollision(go, m_grid->getCell(x, z - 1)->GOList, 0);
+						checkCollision(dt, go, m_grid->getCell(x, z - 1)->GOList, 0);
 					}
 				}
 			}
-		}
-		else
-		{
-			cell.isPlayerInit = false;
 		}
 	}
 }
@@ -1882,7 +1982,7 @@ void SceneGame::RenderDebugging()
 		modelStack.PushMatrix();
 		modelStack.Translate(Application::getWindow_Width() * 0.9, Application::getWindow_Height() * 0.5, 0);
 		modelStack.Rotate(180, 0, 0, 1);
-		if (!cell.isPlayerInit)
+		if (cell.GOList.size() == 0)
 			RenderMeshIn2D(meshList[GEO_QUAD], false, size, x * size, z * -size);
 		else
 			RenderMeshIn2D(meshList[GEO_QUAD2], false, size, x * size, z * -size);
@@ -1891,7 +1991,7 @@ void SceneGame::RenderDebugging()
 		modelStack.PushMatrix();
 		modelStack.Translate(CELL_SIZE * 0.5 + x * CELL_SIZE, 0, CELL_SIZE * 0.5 + z * CELL_SIZE);
 		modelStack.Scale(CELL_SIZE - 0.5, CELL_SIZE, CELL_SIZE - 0.5);
-		if (!cell.isPlayerInit)
+		if (cell.GOList.size() == 0)
 			RenderMesh(meshList[GEO_REDCUBE], false);
 		else
 			RenderMesh(meshList[GEO_GREENCUBE], false);
@@ -2013,6 +2113,19 @@ void SceneGame::loadLevel(int level)
 
 						CWorldOBJ* newOBJ = new CWorldOBJ(pos, CELL_SIZE);
 						GOList.push_back(newOBJ);
+					}
+					else if (mapLoader.map_data[y][x] == "E")
+					{
+						Vector3 pos;
+						pos.y = 2000.f;
+						pos.x = x * CELL_SIZE;
+						pos.z = y * CELL_SIZE;
+
+						pos.x -= CELL_SIZE * 0.5;
+						pos.z -= CELL_SIZE * 0.5;
+
+						AI* ai = new AI(pos);
+						GOList.push_back(ai);
 					}
 				}
 			}
@@ -2153,4 +2266,28 @@ void SceneGame::InitVariables()
 	text->setText("Back");
 	text->setGamestate(LEVEL_SELECTION);
 	textList.push_back(text);
+}
+
+void SceneGame::LODUpdate(CGameObject* go)
+{
+	Vector3 playerPos = m_cAvatar->getPos();
+	Vector3 objPos = go->getPos();
+
+	float dist = (playerPos - objPos).LengthSquared();
+
+	if (dist <= 1000000)
+	{
+		go->getNode()->switchResolution(CModel::s_HIGH);
+	}
+	else
+	{
+		if (dist <= 5000000)
+		{
+			go->getNode()->switchResolution(CModel::s_MID);
+		}
+		else
+		{
+			go->getNode()->switchResolution(CModel::s_LOW);
+		}
+	}
 }

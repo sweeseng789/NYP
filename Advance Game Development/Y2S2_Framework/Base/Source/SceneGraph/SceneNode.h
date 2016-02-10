@@ -41,6 +41,7 @@ public:
 	// Get methods
 	int GetSceneNodeID(void);
 	CSceneNode* GetNode(const int sceneNodeID);
+	CSceneNode* getSelf();
 
 	// Apply transformation to this Node and its children
 	void ApplyTranslate( const float dx, const float dy, const float dz );
@@ -66,6 +67,9 @@ public:
 
 	void findChildById(int ID, CSceneNode* &node);
 	CTransform* getTransform();
+	CModel* getModel();
+
+	void switchResolution(CModel::RESOLUTION currRes);
 
 	/*Cell* ownerCell = nullptr;
 	int cellVectorIndex = -1;*/

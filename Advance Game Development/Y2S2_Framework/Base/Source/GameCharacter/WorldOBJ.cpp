@@ -30,7 +30,9 @@ CWorldOBJ::CWorldOBJ(Vector3 pos, float scale)
 	CTransform* transform = new CTransform();
 
 	//Church
-	newModel->Init(MeshBuilder::GenerateOBJ("Church", "OBJ//building.obj"), "Image//building.tga");
+	newModel->setMesh(CModel::s_LOW, MeshBuilder::GenerateOBJ("Church", "OBJ//building.obj"), "Image//building.tga");
+	newModel->setMesh(CModel::s_MID, MeshBuilder::GenerateOBJ("Church", "OBJ//building.obj"), "Image//building.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Church", "OBJ//building.obj"), "Image//building.tga");
 	transform->SetTranslate(0, 30.2, 0);
 	transform->SetScale(this->scale.x, this->scale.y, this->scale.z);
 	m_cSceneGraph->SetNode(transform, newModel);

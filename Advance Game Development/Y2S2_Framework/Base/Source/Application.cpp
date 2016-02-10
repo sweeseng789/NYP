@@ -409,13 +409,9 @@ void Application::Init()
 		std::cout << hello[a] << std::endl;
 	}
 	std::cout << "End" << std::endl;*/
-	std::vector<int> hello = lua->getVector<int>("TESTVECTOR2");
-	std::cout << "Start" << std::endl;
-	for (int a = 0; a < hello.size(); ++a)
-	{
-		std::cout << hello[a] << std::endl;
-	}
-	std::cout << "End" << std::endl;
+	/*std::vector<int> hello = lua->getVector<int>("TESTVECTOR");*/
+
+	lua->add(2, 2, 3);
 
 	/*int a = lua->getData<int>("SCREENWIDTH");
 	std::cout << a << std::endl;

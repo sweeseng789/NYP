@@ -43,7 +43,7 @@ void CPlayInfo3PV::Init()
 	std::pair<int, std::string>* nodeInfo = new std::pair<int, std::string>();
 
 	//Head
-	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Head", "OBJ//Unicorn_Head.obj"), "Image//Unicorn_Gundam//Unicorn_Head.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Unicorn Head", "OBJ//Unicorn_Head.obj"), "Image//Unicorn_Gundam//Unicorn_Head.tga");
 	transform->SetTranslate(0, 30.2, 0);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->SetNode(transform, newModel);
@@ -54,7 +54,7 @@ void CPlayInfo3PV::Init()
 	newModel = new CModel();
 	transform = new CTransform();
 	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Torso", "OBJ//Unicorn_Torso.obj"), "Image//Unicorn_Gundam//Unicorn_Torso.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Unicorn Torso", "OBJ//Unicorn_Torso.obj"), "Image//Unicorn_Gundam//Unicorn_Torso.tga");
 	transform->SetTranslate(0, 16.5, 0);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
@@ -65,7 +65,7 @@ void CPlayInfo3PV::Init()
 	newModel = new CModel();
 	transform = new CTransform();
 	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Left Arm", "OBJ//Unicorn_Arm.obj"), "Image//Unicorn_Gundam//Unicorn_ArmLeft.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Unicorn Left Arm", "OBJ//Unicorn_Arm.obj"), "Image//Unicorn_Gundam//Unicorn_ArmLeft.tga");
 	transform->SetTranslate(9.5, 16.5, 0);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
@@ -76,7 +76,7 @@ void CPlayInfo3PV::Init()
 	newModel = new CModel();
 	transform = new CTransform();
 	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Arm", "OBJ//Unicorn_Arm.obj"), "Image//Unicorn_Gundam//Unicorn_ArmRight.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Unicorn Right Arm", "OBJ//Unicorn_Arm.obj"), "Image//Unicorn_Gundam//Unicorn_ArmRight.tga");
 	transform->SetTranslate(-9.5, 16.5, 0);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
@@ -87,7 +87,7 @@ void CPlayInfo3PV::Init()
 	newModel = new CModel();
 	transform = new CTransform();
 	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Left Leg", "OBJ//Unicorn_Leg.obj"), "Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Unicorn Left Leg", "OBJ//Unicorn_Leg.obj"), "Image//Unicorn_Gundam//Unicorn_LegLeft.tga");
 	transform->SetTranslate(3.38, 0.5, 0);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
@@ -98,7 +98,7 @@ void CPlayInfo3PV::Init()
 	newModel = new CModel();
 	transform = new CTransform();
 	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Right Leg", "OBJ//Unicorn_Leg.obj"), "Image//Unicorn_Gundam//Unicorn_LegRight.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Unicorn Right Leg", "OBJ//Unicorn_Leg.obj"), "Image//Unicorn_Gundam//Unicorn_LegRight.tga");
 	transform->SetTranslate(-3.08, 0.5, 0);
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
@@ -108,7 +108,7 @@ void CPlayInfo3PV::Init()
 	//===============WEAPONS & SHIELD===============//
 
 	//Left Arm Shield
-	newModel = new CModel();
+	/*newModel = new CModel();
 	transform = new CTransform();
 	nodeInfo = new std::pair<int, std::string>();
 	newModel->Init(MeshBuilder::GenerateOBJ("Unicorn Shield", "OBJ//Unicorn_Shield.obj"), "Image//Unicorn_Gundam//Unicorn_Shield.tga");
@@ -116,7 +116,7 @@ void CPlayInfo3PV::Init()
 	transform->SetScale(scale.x, scale.y, scale.z);
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
 	nodeInfo->second = "LeftShield";
-	nodeList.insert(*nodeInfo);
+	nodeList.insert(*nodeInfo);*/
 
 	////Right Arm Shield
 	//newModel = new CModel();
@@ -144,37 +144,37 @@ void CPlayInfo3PV::Init()
 	//nodeList.insert(*nodeInfo);
 
 	//Right Beam Magnum
-	newModel = new CModel();
-	transform = new CTransform();
-	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
-	transform->SetTranslate(-9.5, 16.5, 0);
-	transform->SetScale(scale.x, scale.y, scale.z);
-	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	nodeInfo->second = "RightBeamMagnum";
-	nodeList.insert(*nodeInfo);
+	//newModel = new CModel();
+	//transform = new CTransform();
+	//nodeInfo = new std::pair<int, std::string>();
+	//newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
+	//transform->SetTranslate(-9.5, 16.5, 0);
+	//transform->SetScale(scale.x, scale.y, scale.z);
+	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	//nodeInfo->second = "RightBeamMagnum";
+	//nodeList.insert(*nodeInfo);
 
-	//Left Beam Saber
-	newModel = new CModel();
-	transform = new CTransform();
-	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
-	transform->SetTranslate(-3, 27.3, -6);
-	transform->SetScale(scale.x, scale.y, scale.z);
-	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	nodeInfo->second = "LeftBeamSaber";
-	nodeList.insert(*nodeInfo);
+	////Left Beam Saber
+	//newModel = new CModel();
+	//transform = new CTransform();
+	//nodeInfo = new std::pair<int, std::string>();
+	//newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
+	//transform->SetTranslate(-3, 27.3, -6);
+	//transform->SetScale(scale.x, scale.y, scale.z);
+	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	//nodeInfo->second = "LeftBeamSaber";
+	//nodeList.insert(*nodeInfo);
 
-	//RightBeamSaber
-	newModel = new CModel();
-	transform = new CTransform();
-	nodeInfo = new std::pair<int, std::string>();
-	newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
-	transform->SetTranslate(2.8, 27.3, -6);
-	transform->SetScale(scale.x, scale.y, scale.z);
-	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
-	nodeInfo->second = "RightBeamSaber";
-	nodeList.insert(*nodeInfo);
+	////RightBeamSaber
+	//newModel = new CModel();
+	//transform = new CTransform();
+	//nodeInfo = new std::pair<int, std::string>();
+	//newModel->Init(MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Saber.obj"), "Image//Unicorn_Gundam//Beam_Saber.tga");
+	//transform->SetTranslate(2.8, 27.3, -6);
+	//transform->SetScale(scale.x, scale.y, scale.z);
+	//nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	//nodeInfo->second = "RightBeamSaber";
+	//nodeList.insert(*nodeInfo);
 
 	////Left Rocket Launcher
 	//newModel = new CModel();

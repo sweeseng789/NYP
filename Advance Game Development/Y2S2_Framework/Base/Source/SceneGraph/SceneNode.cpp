@@ -55,7 +55,7 @@ void CSceneNode::Draw(void)
 	{
 		theTransform->PreRendering();
 		if (theModel)
-			theModel->Draw();
+			theModel->Draw(CModel::s_HIGH);
 
 		if (theChildren.size() != 0)
 		{
@@ -81,7 +81,7 @@ void CSceneNode::Draw(SceneGame* theSceneManager)
 
 		theSceneManager->PreRendering(theTransform, false, theModel->getMesh());
 		if (theModel)
-			theModel->Draw();
+			theModel->Draw(CModel::s_HIGH);
 		theSceneManager->PostRendering(theModel->getMesh());
 
 		if (theChildren.size() != 0)
@@ -114,7 +114,7 @@ void CSceneNode::Draw(SceneMenu* theSceneManager)
 
 		theSceneManager->PreRendering(theTransform, false, theModel->getMesh());
 		if (theModel)
-			theModel->Draw();
+			theModel->Draw(CModel::s_HIGH);
 		theSceneManager->PostRendering(theModel->getMesh());
 
 		if (theChildren.size() != 0)
@@ -193,6 +193,11 @@ CSceneNode* CSceneNode::GetNode(const int sceneNodeID)
 	}
 
 	return theTarget;
+}
+
+CSceneNode* CSceneNode::getSelf()
+{
+	return this;
 }
 
 void CSceneNode::ApplyTranslate( const float dx, const float dy, const float dz )
@@ -314,6 +319,31 @@ void CSceneNode::findChildById(int ID, CSceneNode* &node)
 CTransform* CSceneNode::getTransform()
 {
 	return theTransform;
+}
+
+CModel* CSceneNode::getModel()
+{
+	return theModel;
+}
+
+void CSceneNode::switchResolution(CModel::RESOLUTION currRes)
+{
+	/*CSceneNode* aChild = NULL;
+	for (unsigned i = 0; i < theChildren.size(); i++)
+	{
+		aChild = (CSceneNode*)theChildren[i];
+
+		if (aChild->GetSceneNodeID() == m_iChildIndex)
+		{
+			aChild->SetColor(red, green, blue);
+		}
+	}*/
+	theModel->switchRes(currRes);
+	for (int a = 0; a < theChildren.size(); ++a)
+	{
+		CSceneNode* child = (CSceneNode*)theChildren[a];
+		child->getModel()->switchRes(currRes);
+	}
 }
 
 

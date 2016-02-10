@@ -50,7 +50,7 @@
       <UniqueIdentifier>{a161a8c0-a8a2-45c0-ad78-7bef532c05a7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Asset\Lua">
-      <UniqueIdentifier>{b591a821-47eb-4a1d-84ff-c3f38d5f16e6}</UniqueIdentifier>
+      <UniqueIdentifier>{ea665a66-0a2c-4c66-991a-839cd4f687ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

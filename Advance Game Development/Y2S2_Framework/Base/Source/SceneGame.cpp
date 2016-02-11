@@ -1516,7 +1516,13 @@ void SceneGame::collisionCheck(const float &dt, CGameObject* go1, CGameObject* g
 
 void SceneGame::Collision_PlayerToAi(AI* ai)
 {
+	Vector3 playerPos = m_cAvatar->getPos();
+	Vector3 enemyPos = ai->getPos();
 
+	if ((playerPos - enemyPos).Length() < 50)
+	{
+		m_cAvatar->getVel() = -m_cAvatar->getVel();
+	}
 }
 
 void SceneGame::Collision_PlayerToWorldObj(const float &dt, CWorldOBJ* worldObj)
@@ -1874,6 +1880,28 @@ void SceneGame::GridUpdate(const double& dt)
 			if (ai != NULL)
 			{
 				ai->Update(dt, m_cAvatar->getPos(), tempY + 10);
+
+				if (ai->getPos().x < 0 || ai->getPos().x > WORLDSIZE ||
+					ai->getPos().z < 0 || ai->getPos().z > WORLDSIZE)
+				{
+					if (ai->getPos().x <= 0)
+					{
+						ai->setPos_x(ai->getPos().x + 10);
+					}
+					else if (ai->getPos().x >= WORLDSIZE)
+					{
+						ai->setPos_x(ai->getPos().x - 10);
+					}
+					else if (ai->getPos().z <= 0)
+					{
+						ai->setPos_z(ai->getPos().z + 10);
+					}
+					else if (ai->getPos().z >= WORLDSIZE)
+					{
+						ai->setPos_z(ai->getPos().z - 10);
+					}
+					ai->switchState(AI::s_COLLIDED);
+				}
 			}
 
 			//WorldObj

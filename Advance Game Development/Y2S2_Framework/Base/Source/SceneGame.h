@@ -186,6 +186,7 @@ public:
 	void Collision_PlayerToWorldObj(const float &dt, CWorldOBJ* worldObj);
 	void Collision_BulletToWorldObj(CBullet* bullet, CWorldOBJ* worldObj);
 	void Collision_AiToWorldObj(AI * ai, CWorldOBJ* worldObj);
+	void Collision_AiToAi(AI * ai1, AI* ai2);
 	void shootBullet(const Vector3& pos, const Vector3& direction, const double& timeLimit, float bulletDamage, bool playerBullet = true);
 
 

@@ -1,65 +1,65 @@
 ﻿  SceneGame.cpp
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\lua\lua.h(138): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\lua\lua.h(150): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(191): warning C4305: 'argument' : truncation from 'double' to 'float'
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(396): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(617): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(764): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1096): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1097): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1098): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1104): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1105): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1209): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1210): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1371): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1372): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1635): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1639): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1644): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1648): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1741): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1762): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1763): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1774): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1775): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1785): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1786): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1796): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1797): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1807): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1808): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1842): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1843): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1913): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1919): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1924): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1930): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1937): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1966): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1974): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1983): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1992): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1993): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1993): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2092): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2108): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2109): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2111): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2112): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2114): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2121): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2122): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2124): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2125): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2156): warning C4018: '<' : signed/unsigned mismatch
-d:\vs 2013\vc\include\memory(1639): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-          c:\users\ong\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(277) : see reference to function template instantiation 'std::unique_ptr<Grid,std::default_delete<_Ty>> std::make_unique<Grid,float&,float&,int&>(float &,float &,int &)' being compiled
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\lua\lua.h(138): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\lua\lua.h(150): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(191): warning C4305: 'argument' : truncation from 'double' to 'float'
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(396): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(617): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(764): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1096): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1097): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1098): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1104): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1105): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1209): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1210): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1371): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1372): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1641): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1645): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1650): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1654): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1747): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1768): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1769): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1780): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1781): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1791): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1792): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1802): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1803): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1813): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1814): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1848): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1849): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1941): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1947): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1952): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1958): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1965): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(1994): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2002): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2011): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2020): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2021): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2021): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2120): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2136): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2137): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2139): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2140): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2142): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2149): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2150): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2152): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2153): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(2184): warning C4018: '<' : signed/unsigned mismatch
+d:\vs2013\vc\include\memory(1639): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+          c:\users\annng\desktop\nyp\advance game development\y2s2_framework\base\source\scenegame.cpp(277) : see reference to function template instantiation 'std::unique_ptr<Grid,std::default_delete<_Ty>> std::make_unique<Grid,float&,float&,int&>(float &,float &,int &)' being compiled
           with
           [
               _Ty=Grid
           ]
 Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Base.vcxproj -> C:\Users\Ong\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Base.exe
+  Base.vcxproj -> C:\Users\AnnNg\Desktop\NYP\Advance Game Development\Y2S2_Framework\Debug\Base.exe

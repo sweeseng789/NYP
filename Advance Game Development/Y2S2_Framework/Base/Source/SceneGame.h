@@ -89,6 +89,8 @@ class SceneGame : public Scene
 		GEO_QUAD3,
 		GEO_CUBE,
 		GEO_RING,
+		GEO_RING2,
+		GEO_RING3,
 		GEO_CONE,
 		GEO_LEFT,
 		GEO_RIGHT,

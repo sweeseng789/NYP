@@ -69,3 +69,9 @@ bool CBullet::getDisplayBullet()
 {
 	return displayBullet;
 }
+
+void CBullet::setEnemyBullet()
+{
+	std::cout << "Enemy Bullet" << std::endl;
+	type = ENEMYBULLET;
+}

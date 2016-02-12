@@ -1,5 +1,9 @@
 #include "AI.h"
 
+float AI::ALERT_RANGE = 500;
+float AI::ATTACK_RANGE = 200;
+float AI::ESCAPE_RANGE = 600;
+
 AI::AI()
 {
 	this->pos.SetZero();
@@ -13,10 +17,6 @@ AI::AI()
 	CTransform* transform = new CTransform();
 	std::pair<int, std::string>* nodeInfo = new std::pair<int, std::string>();
 
-
-	movementTime = 0.f;
-	currentTime = 0.f;
-	moveDir.SetZero();
 	rotateAngle = 0.f;
 	/*newModel->Init(MeshBuilder::GenerateOBJ("Transient Head", "OBJ//Unicorn_Head.obj"), "Image//Transient//Transient_Head.tga");
 	transform->SetScale(10, 10, 10);
@@ -35,10 +35,10 @@ AI::AI(Vector3 pos)
 	type = CGameObject::ENEMY;
 	currentState = s_PATROL;
 
-	movementTime = 0.f;
-	currentTime = 0.f;
-	moveDir.SetZero();
 	rotateAngle = 0.f;
+	readyToShoot = false;
+	shootingTime = 0.5f;
+	currentTime_Shooting = 0.f;
 
 	m_cSceneGraph = new CSceneNode();
 	CModel* newModel = new CModel();
@@ -120,6 +120,19 @@ AI::AI(Vector3 pos)
 	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
 	nodeInfo->second = "RightLeg";
 	nodeList.insert(*nodeInfo);
+
+	//Right Beam Magnum
+	newModel = new CModel();
+	transform = new CTransform();
+	nodeInfo = new std::pair<int, std::string>();
+	newModel->setMesh(CModel::s_LOW, MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
+	newModel->setMesh(CModel::s_MID, MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
+	newModel->setMesh(CModel::s_HIGH, MeshBuilder::GenerateOBJ("Beam Magnum", "OBJ//Beam_Magnum.obj"), "Image//Unicorn_Gundam//Beam_Magnum.tga");
+	transform->SetTranslate(-9.5, 16.5, 0);
+	transform->SetScale(scale.x, scale.y, scale.z);
+	nodeInfo->first = m_cSceneGraph->AddChild(transform, newModel);
+	nodeInfo->second = "RightBeamMagnum";
+	nodeList.insert(*nodeInfo);
 }
 
 AI::~AI()
@@ -134,30 +147,44 @@ float AI::getAngle()
 void AI::Update(double dt, Vector3 playerPos, const float& terrainY)
 {
 	pos += vel;
+	playerPosition = playerPos;
 
 	//Ai To Terrain Code
 	float diff = terrainY - pos.y;
 	pos.y += diff * static_cast<float>(dt) * 10;
 
-	/*std::cout << currentState << std::endl;
+	animationUpdate(dt);
 
-	switch (currentState)
+	if ((playerPos - pos).Length() < ATTACK_RANGE)
 	{
-	s_PATROL:
-		patrolUpdate(dt);
-		break;
-
-	default:
-		break;
+		currentState = s_ATTACK;
 	}
-*/
+
 	if (currentState == s_PATROL)
 	{
 		patrolUpdate(dt);
+
+		float diff = (playerPos - pos).Length();
+		if (diff <= ALERT_RANGE)
+		{
+			currentState = s_ALERTED;
+			destination = playerPos;
+		}
 	}
-	else if (currentState == s_COLLIDED)
+	else if (currentState == s_ALERTED)
 	{
-		collideUpdate(dt);
+		alertUpdate(dt, playerPos);
+	}
+	else if (currentState == s_ATTACK)
+	{
+		attackUpdate(dt, playerPos);
+
+		float dist = (playerPos - pos).Length();
+		if (dist > ESCAPE_RANGE)
+		{
+			currentState = s_ALERTED;
+			destination = playerPos;
+		}
 	}
 
 	//Friction
@@ -186,7 +213,33 @@ void AI::Update(double dt, Vector3 playerPos, const float& terrainY)
 
 void AI::patrolUpdate(const double &dt)
 {
-	if (moveDir.IsZero())
+	if (destination.IsZero())
+	{
+		float distX = Math::RandFloatMinMax(100, worldSize - 100);
+		float distZ = Math::RandFloatMinMax(100, worldSize - 100);
+		destination.x = distX;
+		destination.z = distZ;
+	}
+	else
+	{
+		float diff = (destination - Vector3(pos.x, 0, pos.z)).LengthSquared();
+
+		if (diff > 3000)
+		{
+			Vector3 diff;
+			diff.x = destination.x - pos.x;
+			diff.z = destination.z - pos.z;
+			diff.Normalize();
+			vel += diff * dt * 10.f;
+
+			rotateAngle = SSDLC::findAngleFromPos(destination, pos);
+		}
+		else
+		{
+			destination.SetZero();
+		}
+	}
+	/*if (moveDir.IsZero())
 	{
 		float dir = (float)Math::RandIntMinMax(-1, 1);
 		while (dir == 0)
@@ -232,7 +285,7 @@ void AI::patrolUpdate(const double &dt)
 			moveDir.SetZero();
 			currentTime = 0.f;
 		}
-	}
+	}*/
 }
 
 void AI::animationUpdate(const double& dt)
@@ -248,9 +301,19 @@ void AI::animationUpdate(const double& dt)
 			{
 				node->getTransform()->SetRotate2(animation->vel_LeftArm, 1, 0, 0, 0, 1, 0);
 			}
-			else if (it->second == "RightArm")
+			else if (it->second == "RightArm" || it->second == "RightBeamMagnum")
 			{
-				node->getTransform()->SetRotate2(animation->vel_RightArm, 1, 0, 0, 0, 1, 0);
+				/*if(currentState != s_ALERTED)
+					node->getTransform()->SetRotate2(animation->vel_RightArm, 1, 0, 0, 0, 1, 0);
+				else*/
+				if (currentState == s_ATTACK)
+				{
+					node->getTransform()->SetRotate2(270 - SSDLC::findAngleFromPos(playerPosition, pos, false), 1, 0, 0, 0, 3, 0);
+				}
+				else
+				{
+					node->getTransform()->SetRotate2(animation->vel_RightArm, 1, 0, 0, 0, 3, 0);
+				}
 			}
 			else if (it->second == "LeftLeg")
 			{
@@ -271,7 +334,7 @@ void AI::switchState(AI::AI_STATES currentState)
 
 void AI::collideUpdate(const double &dt)
 {
-	Vector3 temp = moveDir;
+	/*Vector3 temp = moveDir;
 	moveDir.SetZero();
 	currentTime = 0.f;
 
@@ -294,5 +357,109 @@ void AI::collideUpdate(const double &dt)
 		moveDir.z = temp.x;
 	}
 
-	currentState = s_PATROL;
+	currentState = s_PATROL;*/
+}
+
+Vector3 AI::getDestination()
+{
+	return destination;
+}
+
+std::string AI::renderState()
+{
+	switch (currentState)
+	{
+	case s_PATROL:
+		return "Patrol";
+		break;
+
+	case s_ALERTED:
+		return "Alerted";
+		break;
+
+	case s_ATTACK:
+		return "Attack";
+		break;
+
+	default:
+		break;
+	}
+
+	return "";
+}
+
+float AI::getAttackRange()
+{
+	return ATTACK_RANGE;
+}
+float AI::getAlertRange()
+{
+	return ALERT_RANGE;
+}
+
+void AI::alertUpdate(const double &dt, Vector3 playerPos)
+{
+	float diff = (Vector3(destination.x, 0, destination.z) - Vector3(pos.x, 0, pos.z)).Length();
+	std::cout << diff << std::endl;
+	if (diff > 10)
+	{
+		Vector3 diff;
+		diff.x = destination.x - pos.x;
+		diff.z = destination.z - pos.z;
+		diff.Normalize();
+		vel += diff * dt * 10.f;
+
+		rotateAngle = SSDLC::findAngleFromPos(destination, pos);
+	}
+	else
+	{
+		diff = (playerPos - pos).Length();
+		if (diff < ALERT_RANGE)
+		{
+			currentState = s_ATTACK;
+		}
+		else
+		{
+			currentState = s_PATROL;
+		}
+		destination.SetZero();
+	}
+}
+
+void AI::attackUpdate(const double &dt, Vector3 playerPos)
+{
+	destination = playerPos;
+
+	float dist = (playerPos - pos).Length();
+	if (dist > 300)
+	{
+		Vector3 diff;
+		diff.x = destination.x - pos.x;
+		diff.z = destination.z - pos.z;
+		diff.Normalize();
+		vel += diff * dt * 10.f;
+	}
+	//else
+	{
+		if (currentTime_Shooting < shootingTime)
+		{
+			currentTime_Shooting += dt;
+		}
+		else
+		{
+			readyToShoot = true;
+		}
+	}
+	rotateAngle = SSDLC::findAngleFromPos(destination, pos);
+}
+
+bool AI::getShooting()
+{
+	return readyToShoot;
+}
+
+void AI::resetShooting()
+{
+	readyToShoot = false;
+	currentTime_Shooting = 0.f;
 }

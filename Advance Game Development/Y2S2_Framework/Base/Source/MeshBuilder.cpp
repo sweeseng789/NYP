@@ -410,6 +410,10 @@ Mesh* MeshBuilder::GenerateRing(const std::string &meshName, Color color, unsign
 	{
 		index_buffer_data.push_back(2 * slice + 0);
 		index_buffer_data.push_back(2 * slice + 1);
+
+		index_buffer_data.push_back(2 * slice + 2);
+		index_buffer_data.push_back(2 * slice + 3);
+
 		//index_buffer_data.push_back(2 * slice + 3);
 		//index_buffer_data.push_back(2 * slice + 4);
 		//index_buffer_data.push_back(2 * slice + 3);

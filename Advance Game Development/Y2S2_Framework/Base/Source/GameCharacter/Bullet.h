@@ -13,6 +13,7 @@ public:
 	//Setter
 	void setTimeLimit(double timeLimit);
 	void setDisplayBullet(bool displayBullet);
+	void setEnemyBullet();
 
 	//Getter
 	bool getDisplayBullet();

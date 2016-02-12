@@ -186,7 +186,9 @@ void SceneGame::InitMesh()
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//Unicorn_Arm.obj");//MeshBuilder::GenerateCube("cube", 1);
 	//meshList[GEO_OBJECT]->textureID = LoadTGA("Image//Unicorn_Gundam//Unicorn_Arm.tga");
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
+	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 0), 36, 1, 0.95f);
+	meshList[GEO_RING2] = MeshBuilder::GenerateRing("ring", Color(0, 1, 0), 36, 1, 0.95f);
+	meshList[GEO_RING3] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.95f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 10.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(0.43921568627, 0.74117647058, 0.81960784313), 18, 36, 10.f);
 	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
@@ -1159,6 +1161,11 @@ void SceneGame::shootBullet(const Vector3& pos, const Vector3& direction, const 
 		bullet->setTimeLimit(timeLimit);
 		bullet->setDisplayBullet(false);
 		bullet->startPos = pos;
+
+		if (!playerBullet)
+		{
+			bullet->setEnemyBullet();
+		}
 	}
 }
 
@@ -1611,11 +1618,6 @@ void SceneGame::Collision_BulletToAi(CBullet* bullet, AI* ai)
 
 			if (!bottomRight.IsZero() && !topLeft.IsZero())
 			{
-				/*if (SSDLC::intersect(topLeft, bottomRight, go1->getPos()))
-				{
-				go1->setActive(false);
-				cout << it->second << std::endl;
-				}*/
 				if (SSDLC::intersect_LineAABB(bullet->getPos(), bullet->getDirection(), topLeft, bottomRight))
 				{
 					bullet->setActive(false);
@@ -1881,26 +1883,13 @@ void SceneGame::GridUpdate(const double& dt)
 			{
 				ai->Update(dt, m_cAvatar->getPos(), tempY + 10);
 
-				if (ai->getPos().x < 0 || ai->getPos().x > WORLDSIZE ||
-					ai->getPos().z < 0 || ai->getPos().z > WORLDSIZE)
+				if (ai->getShooting())
 				{
-					if (ai->getPos().x <= 0)
-					{
-						ai->setPos_x(ai->getPos().x + 10);
-					}
-					else if (ai->getPos().x >= WORLDSIZE)
-					{
-						ai->setPos_x(ai->getPos().x - 10);
-					}
-					else if (ai->getPos().z <= 0)
-					{
-						ai->setPos_z(ai->getPos().z + 10);
-					}
-					else if (ai->getPos().z >= WORLDSIZE)
-					{
-						ai->setPos_z(ai->getPos().z - 10);
-					}
-					ai->switchState(AI::s_COLLIDED);
+					std::cout << "Bang" << std::endl;
+					Vector3 dir = (m_cAvatar->getPos() - ai->getPos()).Normalize();
+					shootBullet(ai->getPos() + Vector3(0, 15.f, 0), dir, 10.f, 0.f, false);
+					ai->resetShooting();
+					break;
 				}
 			}
 
@@ -2031,7 +2020,7 @@ void SceneGame::RenderDebugging()
 		CBullet* bullet = dynamic_cast<CBullet*>(go);
 		if (bullet != NULL)
 		{
-			if (bullet->getActive())
+			if (bullet->getActive() && bullet->isPlayerBullet())
 			{
 				Vector3 diff = bullet->getPos() - m_cAvatar->getPos();
 				modelStack.PushMatrix();
@@ -2041,6 +2030,52 @@ void SceneGame::RenderDebugging()
 				RenderMesh(meshList[GEO_LINE], false);
 				modelStack.PopMatrix();
 			}
+		}
+
+		AI* ai = dynamic_cast<AI*>(go);
+		if (ai != NULL)
+		{
+			float dist = (ai->getDestination() - ai->getPos()).Length();
+			Vector3 diff = ai->getDestination() - ai->getPos();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(ai->getPos().x, ai->getPos().y + 30, ai->getPos().z);
+			modelStack.Rotate(Math::RadianToDegree(atan2(diff.x, diff.z)), 0, 1, 0);
+			modelStack.Scale(0, 0, dist);
+			RenderMesh(meshList[GEO_LINE], false);
+			modelStack.PopMatrix();
+
+			if (ai->isPatrol() || ai->isAlerted())
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(ai->getPos().x, ai->getPos().y + 15, ai->getPos().z);
+				modelStack.Scale(ai->getAttackRange(), ai->getAttackRange(), ai->getAttackRange());
+				RenderMesh(meshList[GEO_RING], false);
+				modelStack.PopMatrix();
+
+				modelStack.PushMatrix();
+				modelStack.Translate(ai->getPos().x, ai->getPos().y + 15, ai->getPos().z);
+				modelStack.Scale(ai->getAlertRange(), ai->getAlertRange(), ai->getAlertRange());
+				RenderMesh(meshList[GEO_RING2], false);
+				modelStack.PopMatrix();
+			}
+			else if (ai->isAttacking())
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(ai->getPos().x, ai->getPos().y + 15, ai->getPos().z);
+				modelStack.Scale(ai->getEscapeRange(), ai->getEscapeRange(), ai->getEscapeRange());
+				RenderMesh(meshList[GEO_RING3], false);
+				modelStack.PopMatrix();
+			}
+
+			diff = m_cAvatar->getPos() - ai->getPos();
+
+			modelStack.PushMatrix();
+			modelStack.Translate(ai->getPos().x, ai->getPos().y + 50, ai->getPos().z);
+			modelStack.Rotate(Math::RadianToDegree(atan2(diff.x, diff.z)), 0, 1, 0);
+			modelStack.Scale(20, 20, 20);
+			RenderText(meshList[GEO_TEXT], ai->renderState(), Color(1, 1, 1));
+			modelStack.PopMatrix();
 		}
 	}
 }
@@ -2129,7 +2164,7 @@ void SceneGame::loadLevel(int level)
 						m_cAvatar->setPos(Vector3(x* (WORLDSIZE / mapLoader.map_width), 2000.f, y * (WORLDSIZE / mapLoader.map_height)));
 						GOList.push_back(m_cAvatar);
 					}
-					else if (mapLoader.map_data[y][x] == "B")
+					/*else if (mapLoader.map_data[y][x] == "B")
 					{
 						Vector3 pos;
 						pos.y = 100;
@@ -2141,18 +2176,16 @@ void SceneGame::loadLevel(int level)
 
 						CWorldOBJ* newOBJ = new CWorldOBJ(pos, CELL_SIZE);
 						GOList.push_back(newOBJ);
-					}
+					}*/
 					else if (mapLoader.map_data[y][x] == "E")
 					{
 						Vector3 pos;
 						pos.y = 2000.f;
-						pos.x = x * CELL_SIZE;
-						pos.z = y * CELL_SIZE;
-
-						pos.x -= CELL_SIZE * 0.5;
-						pos.z -= CELL_SIZE * 0.5;
+						pos.x = x * (WORLDSIZE / mapLoader.map_width);
+						pos.z = y * (WORLDSIZE / mapLoader.map_height);
 
 						AI* ai = new AI(pos);
+						ai->worldSize = WORLDSIZE;
 						GOList.push_back(ai);
 					}
 				}
